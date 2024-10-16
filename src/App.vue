@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import HomeView from './views/HomeView.vue';
+import version from '../package.json'
+
+// const vr = require('../package.json');
 </script>
 
 <template>
@@ -9,6 +12,8 @@ import HomeView from './views/HomeView.vue';
   </nav>
   <router-view/> -->
   <HomeView />
+
+  <span style="color: rgb(255, 255, 255); position: absolute; bottom: 15px; right: 15px;">{{version.version}}</span>
 </template>
 
 <style>
@@ -44,6 +49,7 @@ body {
   background-blend-mode: overlay;
 
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  width: 100%;
 }
 /* Dark teme */
 @media (prefers-color-scheme: dark) {
@@ -51,10 +57,6 @@ body {
     background-color: var(--dark-blue);
     color: --bs-white;
     background-image: url("assets/imagens/logo-tek-hub-fundo-transparente.png");
-    background-size: cover;
-    background-position: right;
-    background-repeat: repeat-x;
-    background-blend-mode: overlay;
   }
 }
 
