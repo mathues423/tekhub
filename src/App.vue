@@ -7,7 +7,7 @@
 </template>
 
 <style>
-#app {
+/* #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -26,28 +26,36 @@ nav a {
 
 nav a.router-link-exact-active {
   color: #42b983;
-}
+} */
 
-body {
-  background-color: #002140;
-  background-image: url("assets/imagens/logo-tek-hub-fundo-transparente.png");
+body { 
+  /* White teme */
+  background-color: var(--light-blue);
+  color: --bs-black;
+  background-image: url("assets/imagens/logo-tek-hub-branca.png");
   background-size: cover;
   background-position: right;
   background-repeat: repeat-x;
   background-blend-mode: overlay;
+
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --color-background: var(--vt-c-black);
-    --color-background-soft: var(--vt-c-black-soft);
-    --color-background-mute: var(--vt-c-black-mute);
-
-    --color-border: var(--vt-c-divider-dark-2);
-    --color-border-hover: var(--vt-c-divider-dark-1);
-
-    --color-heading: var(--vt-c-text-dark-1);
-    --color-text: var(--vt-c-text-dark-2);
+  body{
+    background-color: var(--dark-blue);
+    color: --bs-white;
+    background-image: url("assets/imagens/logo-tek-hub-fundo-transparente.png");
+    background-size: cover;
+    background-position: right;
+    background-repeat: repeat-x;
+    background-blend-mode: overlay;
   }
+}
+
+/* Themes */
+:root{
+  --light-blue:#0595e9;
+  --dark-blue:#002140;
 }
 </style>
