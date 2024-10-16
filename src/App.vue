@@ -1,9 +1,14 @@
+<script setup lang="ts">
+import HomeView from './views/HomeView.vue';
+</script>
+
 <template>
-  <nav>
+  <!-- <nav>
     <router-link to="/">Home</router-link> |
     <router-link to="/about">About</router-link>
   </nav>
-  <router-view/>
+  <router-view/> -->
+  <HomeView />
 </template>
 
 <style>
@@ -40,7 +45,7 @@ body {
 
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 }
-
+/* Dark teme */
 @media (prefers-color-scheme: dark) {
   body{
     background-color: var(--dark-blue);
