@@ -1,42 +1,20 @@
 <script setup lang="ts">
 import HomeView from './views/HomeView.vue';
-import pack from '../package.json'
-
-// const vr = require('../package.json');
+import { APPCONFIG } from '../src/components/constants/Config'; 
 </script>
 
 <template>
+  <!-- Navegaçao do site -->
   <!-- <nav>
     <router-link to="/">Home</router-link> |
     <router-link to="/about">About</router-link>
   </nav>
   <router-view/> -->
   <HomeView />
-
-  <span style="color: rgb(255, 255, 255); position: absolute; bottom: 15px; right: 15px;">{{pack.version}}</span>
+  <span style="color: rgb(255, 255, 255); position: absolute; bottom: 15px; right: 15px;">v{{ APPCONFIG.versao }}</span>
 </template>
 
 <style>
-/* #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-nav {
-  padding: 30px;
-}
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
-} */
 
 body { 
   /* White teme */
