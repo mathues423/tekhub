@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import HomeView from './views/HomeView.vue';
-import version from '../package.json'
+import pack from '../package.json'
 
 // const vr = require('../package.json');
 </script>
@@ -13,7 +13,7 @@ import version from '../package.json'
   <router-view/> -->
   <HomeView />
 
-  <span style="color: rgb(255, 255, 255); position: absolute; bottom: 15px; right: 15px;">{{version.version}}</span>
+  <span style="color: rgb(255, 255, 255); position: absolute; bottom: 15px; right: 15px;">{{pack.version}}</span>
 </template>
 
 <style>
