@@ -3,10 +3,11 @@
       <div class="Card col-md-4 col-sm-10 border rounded">
             <div class="Card-Header border-bottom">TekHub Integrações</div>
             <div>
-                  <img src="../../assets/imagens/logo-tek-hub.png" alt="logo" width="300">
+                  <img src="@/assets/imagens/logo-tek-hub.png" alt="logo" width="300">
             </div>
             <div class="Card-Body">
-                  <form @submit.prevent="loginReq()">
+                  <!-- Tirada a funçao loginReq() -->
+                  <form @submit.prevent="">
                         <div class="col-12">
                               <div class="input-group">
                                     <span class="input-group-text">
@@ -34,14 +35,17 @@
                                                 <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
                                                 <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
                                           </svg>
-                                    </button> 
+                                    </button>
                                </span>
                         </div>
                         <!-- Não funcional -->
                         <!-- <span v-html="Erroalertmodel"></span> -->
-                        <button style="margin-top: 16px; margin-bottom: 16px;" class="btn btn-primary col-12">
-                              <span>Entrar</span>
-                        </button>
+                        <!-- Sem nescessidade do router -->
+                        <router-link to="/content">
+                              <button style="margin-top: 16px; margin-bottom: 16px;" class="btn btn-primary col-12">
+                                    <span>Entrar</span>
+                              </button>
+                        </router-link> 
                   </form>
             </div>
       </div>
@@ -50,14 +54,14 @@
 
 <script lang="ts" setup>
       import { reactive } from 'vue';
-      import http from '@/services/http.js'
+      import http from '../../services/http.js';
+      import router from '@/router';
       const user = reactive({
             email: '',
             senha: '',
-            Erroalert: []
+            token: '',
+            perfilUsuario: ''
       });
-      let Erroalertmodel = '';
-      //let Erroalert= [];
 
       function showPassword(){
             if(document.querySelector('#userpass')?.getAttribute('type') == 'password'){
@@ -75,11 +79,15 @@
             try {
                   const { data } = await http.post('/auth', user);
                   console.log(data);
+                  user.token = data.token;
+                  user.perfilUsuario = data.perfilUsuario;
+                  router.push('/content');
                   // Avançar para a pagina conteudo
             } catch (error) {
-            //      console.log(error?.response?.data);
-                  user.Erroalert = error?.response?.data.errors;
-                  console.log(user.Erroalert)
+                 console.log(error?.response?.data);
+                  // Erroalert = error?.response?.data.errors;
+                  // console.log(Erroalert)
+                  
             }
       }
 </script>
