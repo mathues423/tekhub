@@ -1,16 +1,13 @@
 <script setup lang="ts">
-import HomeView from './views/HomeView.vue';
 import { APPCONFIG } from '../src/components/constants/Config'; 
 </script>
 
 <template>
-  <!-- Navegaçao do site -->
-  <!-- <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/> -->
-  <HomeView />
+  <!-- Pagina Base -->
+  <!-- <HomeView /> -->
+  <router-view/>
+
+  <!-- Trocar para um component -->
   <span style="color: rgb(255, 255, 255); position: absolute; bottom: 15px; right: 15px;">v{{ APPCONFIG.versao }}</span>
 </template>
 
@@ -19,7 +16,7 @@ import { APPCONFIG } from '../src/components/constants/Config';
 body { 
   /* White teme */
   background-color: var(--light-blue);
-  color: --bs-black;
+  color: var(--bs-black);
   background-image: url("assets/imagens/logo-tek-hub-branca.png");
   background-size: cover;
   background-position: right;
@@ -33,7 +30,7 @@ body {
 @media (prefers-color-scheme: dark) {
   body{
     background-color: var(--dark-blue);
-    color: --bs-white;
+    color: var(--bs-white);
     background-image: url("assets/imagens/logo-tek-hub-fundo-transparente.png");
   }
 }
