@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { APPCONFIG } from '../src/components/constants/Config'; 
 </script>
 
 <template>
@@ -8,7 +7,6 @@ import { APPCONFIG } from '../src/components/constants/Config';
   <router-view/>
 
   <!-- Trocar para um component -->
-  <span style="color: rgb(255, 255, 255); position: absolute; bottom: 15px; right: 15px;">v{{ APPCONFIG.versao }}</span>
 </template>
 
 <style>
