@@ -43,7 +43,7 @@
                   </div>
             </div>
       </div>
-      <div class="nav_lateral col-2" style="height: max-content">
+      <div class="nav_lateral col-2" style="height: 300px">
             <ul class="itens_nav" v-for="navitem in conteudo" v-bind:key="navitem.abrev">
                   <NavbarItem :nav_item="navitem"/>
             </ul>
@@ -61,12 +61,10 @@
 
 .itens_nav{
       padding-left: 24px;
-}
-
-.itens_nav{
       font-size: 14px;
       color: var(--bs-grey-100);
 }
+
 .itens_nav:focus{
       background-color: var(--bs-cyan);
       color: var(--bs-gray-700);
