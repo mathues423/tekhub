@@ -7,7 +7,7 @@
             </div>
             <div class="Card-Body">
                   <!-- Tirada a funçao loginReq() -->
-                  <form @submit.prevent="">
+                  <form @submit.prevent="loginReq()">
                         <div class="col-12">
                               <div class="input-group">
                                     <span class="input-group-text">
@@ -38,24 +38,25 @@
                                     </button>
                                </span>
                         </div>
-                        <!-- Não funcional -->
-                        <!-- <span v-html="Erroalertmodel"></span> -->
                         <!-- Sem nescessidade do router -->
-                        <router-link to="/content">
-                              <button style="margin-top: 16px; margin-bottom: 16px;" class="btn btn-primary col-12">
-                                    <span>Entrar</span>
-                              </button>
-                        </router-link> 
+                        <button style="margin-top: 16px; margin-bottom: 16px;" class="btn btn-primary col-12">
+                              <span>Entrar</span>
+                        </button>
                   </form>
             </div>
+      </div>
+      <div class="row">
+            <VersaoMinimisada />
       </div>
 </div>
 </template>
 
 <script lang="ts" setup>
       import { reactive } from 'vue';
+      // eslint-disable-next-line
       import http from '../../services/http.js';
       import router from '@/router';
+      import VersaoMinimisada from '../versionamento/VersaoMinimisada.vue';
       const user = reactive({
             email: '',
             senha: '',
@@ -77,10 +78,11 @@
 
       async function loginReq() {
             try {
-                  const { data } = await http.post('/auth', user);
-                  console.log(data);
-                  user.token = data.token;
-                  user.perfilUsuario = data.perfilUsuario;
+
+                  // const { data } = await http.post('/auth', user);
+                  // console.log(data);
+                  // user.token = data.token;
+                  // user.perfilUsuario = data.perfilUsuario;
                   router.push('/content');
                   // Avançar para a pagina conteudo
             } catch (error) {

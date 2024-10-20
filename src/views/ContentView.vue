@@ -1,16 +1,16 @@
 <script lang="ts">
-// import { Options, Vue } from "vue-class-component";
 import NavbarComplet from '../components/navbars/NavbarComplet.vue';
+import VersaoMaximisada from '@/components/versionamento/VersaoMaximisada.vue';
 
 export default{
       components: {
-            NavbarComplet
+            NavbarComplet,
+            VersaoMaximisada
       }
 }
 </script>
 
 <template>
-      
   <!-- <nav>
     <router-link to="/">Home</router-link> |
     <router-link to="/about">About</router-link>
@@ -19,8 +19,11 @@ export default{
   <div class="row">
       <NavbarComplet />
       conteudo
-  </div>
-
+      <VersaoMaximisada />
+    </div>
+    <div class="row" >
+      sdsa
+    </div>
 </template>
 
 <style scoped>
