@@ -83,7 +83,7 @@
                   // console.log(data);
                   // user.token = data.token;
                   // user.perfilUsuario = data.perfilUsuario;
-                  router.push('/content');
+                  router.push('/dashboard');
                   // Avançar para a pagina conteudo
             } catch (error) {
                  console.log(error?.response?.data);
