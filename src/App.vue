@@ -1,19 +1,19 @@
 <script setup lang="ts">
+// import HomeView from './views/HomeView.vue';
+
 </script>
 
 <template>
-  <!-- Pagina Base -->
-  <!-- <HomeView /> -->
   <router-view/>
-
-  <!-- Trocar para um component -->
+  <!-- <HomeView /> -->
 </template>
 
 <style>
 
 body { 
   /* White teme */
-  background-color: var(--light-blue);
+  /* background-color: var(--light-blue); */
+  background-color: var(--dark-blue);
   color: var(--bs-black);
   background-image: url("assets/imagens/logo-tek-hub-branca.png");
   background-size: cover;
@@ -25,13 +25,13 @@ body {
   width: 100%;
 }
 /* Dark teme */
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   body{
     background-color: var(--dark-blue);
     color: var(--bs-white);
     background-image: url("assets/imagens/logo-tek-hub-fundo-transparente.png");
   }
-}
+} */
 
 /* Themes */
 :root{
