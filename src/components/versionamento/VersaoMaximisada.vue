@@ -17,6 +17,5 @@
       background-color: var(--bs-white);
       font-size: 25px;
       padding: 10px;
-      
 }
 </style>

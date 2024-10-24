@@ -1,13 +1,11 @@
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
 import LoginCard from '../components/login/LoginCard.vue';
 
-@Options({
+export default{
   components: {
     LoginCard
   },
-})
-export default class HomeView extends Vue {}
+}
 </script>
 
 <template>
