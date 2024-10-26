@@ -1,15 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import DashboardView from '@/views/DashboardView.vue'
+import HomeView from '@/views/HomeView.vue'
 import PaginaNotFaundView from '@/views/PaginaNotFaundView.vue'
-import EmpresasView from '@/views/EmpresasView.vue'
-import CanaisView from '@/views/CanaisView.vue'
-import AmbienteView from '@/views/AmbienteView.vue'
-import MarketplaceEcommerceView from '@/views/MarketplaceEcommerceView.vue'
-import MapeamentoProdutoView from '@/views/MapeamentoProdutoView.vue'
-import UsuarioView from '@/views/UsuarioView.vue'
-import LogAtualizacaoView from '@/views/LogAtualizacaoView.vue'
-import LogRequisicaoView from '@/views/LogRequisicaoView.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -25,7 +16,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/dashboard',
     name: 'dashboard',
-    component: DashboardView,
+    component: () => import ('@/views/DashboardView.vue'),
     meta:{
       auth: true
     }
@@ -33,7 +24,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/empresas',
     name: 'empresas',
-    component: EmpresasView,
+    component: () => import ('@/views/EmpresasView.vue'),
     meta:{
       auth: true
     }
@@ -41,7 +32,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/canais',
     name: 'canais',
-    component: CanaisView,
+    component: () => import ('@/views/CanaisView.vue'),
     meta:{
       auth: true
     }
@@ -49,7 +40,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/ambiente',
     name: 'ambiente',
-    component: AmbienteView,
+    component: () => import ('@/views/AmbienteView.vue'),
     meta:{
       auth: true
     }
@@ -57,7 +48,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/marketplaceecommerce',
     name: 'marketplaceecommerce',
-    component: MarketplaceEcommerceView,
+    component: () => import ('@/views/MarketplaceEcommerceView.vue'),
     meta:{
       auth: true
     }
@@ -65,7 +56,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/mapeamentoprodutos',
     name: 'mapeamentoprodutos',
-    component: MapeamentoProdutoView,
+    component: () => import ('@/views/MapeamentoProdutoView.vue'),
     meta:{
       auth: true
     }
@@ -73,7 +64,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/usuario',
     name: 'usuario',
-    component: UsuarioView,
+    component: () => import ('@/views/UsuarioView.vue'),
     meta:{
       auth: true
     }
@@ -81,7 +72,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/atualizacao',
     name: 'atualizacao',
-    component: LogAtualizacaoView,
+    component: () => import ('@/views/LogAtualizacaoView.vue'),
     meta:{
       auth: true
     }
@@ -89,7 +80,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/requisicao',
     name: 'requisicao',
-    component: LogRequisicaoView,
+    component: () => import ('@/views/LogRequisicaoView.vue'),
     meta:{
       auth: true
     }
@@ -99,13 +90,12 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
-})
+});
 
-// Proteção das rotas
 router.beforeEach(async (to, from, next) => {
-  // console.log('to:  ', to); // TO Onde eu vou
-  // console.log('from:  ', from); //FROM Onde eu estava
-  // console.log('next:  ', next); //NEXT Passa para a pagina 
+  //TO Onde eu vou
+  //FROM Onde eu estava
+  //NEXT Passa para a pagina 
 
   // ERRO 404
   if(routes.map((x) => x.path).indexOf(to.path) == -1){
@@ -113,13 +103,6 @@ router.beforeEach(async (to, from, next) => {
   }
   
   next();
-  
-  // // eslint-disable-next-line
-  // if (true) {
-  //   next();
-  // } else {
-  //   next({name:'home'}); //ERRO 401
-  // }
 });
 
 export default router
