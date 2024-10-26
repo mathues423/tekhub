@@ -1,16 +1,14 @@
-let date = new Date();
-let ano = date.getFullYear();
+const date = new Date();
+const ano = date.getFullYear();
 
 export const APPCONFIG = {
   versao: '011.00',
-
   
-
   ano: ano,
   linkProducao: "http://tekapi.teksystemcloud.com.br:8090/api/v1", //window.location.protocol + "//" + window.location.hostname.replace("www.", "") + ":8090/api/v1",
   // linkProducao: "https://ecommerces.teksystem.com.br:8090/api/v1",
   authToken: 'auth-token',
-  lembrarme: 'lembrar-me',
+  // lembrarme: 'lembrar-me',
 
   //region Usuario
   // perfilUsuario: 'perfil-usuario',
