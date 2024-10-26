@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-// eslint-disable-next-line
-      import { APPCONFIG } from "../constants/Config.js";
+      import { APPCONFIG } from "../constants/Config";
 </script>
 
 <template>

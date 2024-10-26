@@ -38,7 +38,6 @@
                                     </button>
                                </span>
                         </div>
-                        <!-- Sem nescessidade do router -->
                         <button style="margin-top: 16px; margin-bottom: 16px;" class="btn btn-primary col-12">
                               <span>Entrar</span>
                         </button>
@@ -53,15 +52,11 @@
 
 <script lang="ts" setup>
       import { reactive } from 'vue';
-      // eslint-disable-next-line
-      import http from '../../services/http.js';
-      import router from '@/router';
+      import requisicaoLogin from '@/services/login/requisicao';
       import VersaoMinimisada from '../versionamento/VersaoMinimisada.vue';
       const user = reactive({
             email: '',
-            senha: '',
-            token: '',
-            perfilUsuario: ''
+            senha: ''
       });
 
       function showPassword(){
@@ -76,21 +71,8 @@
             }
       }
 
-      async function loginReq() {
-            try {
-
-                  // const { data } = await http.post('/auth', user);
-                  // console.log(data);
-                  // user.token = data.token;
-                  // user.perfilUsuario = data.perfilUsuario;
-                  router.push('/dashboard');
-                  // Avançar para a pagina conteudo
-            } catch (error) {
-                 console.log(error?.response?.data);
-                  // Erroalert = error?.response?.data.errors;
-                  // console.log(Erroalert)
-                  
-            }
+      async function loginReq(){
+            await requisicaoLogin.loginReq(user.email, user.senha);
       }
 </script>
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-      import router from '@/router';
+      import loginRequisicao from "@/services/login/requisicao"
       import NavbarLateral from "./NavbarLateral.vue";
       export default {
             data : () => ({
@@ -13,7 +13,7 @@
             methods:{
                   // Limpar cache
                   logout(){
-                        router.push('/');
+                        loginRequisicao.logOut(); 
                   }
             },
             props:{
