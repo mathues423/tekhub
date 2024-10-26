@@ -1,18 +1,14 @@
 <script setup lang="ts">
-// import HomeView from './views/HomeView.vue';
-
 </script>
 
 <template>
   <router-view/>
-  <!-- <HomeView /> -->
 </template>
 
 <style>
 
 body { 
   /* White teme */
-  /* background-color: var(--light-blue); */
   background-color: var(--dark-blue);
   color: var(--bs-black);
   background-image: url("assets/imagens/logo-tek-hub-branca.png");
