@@ -1,4 +1,5 @@
 <script lang="ts">
+import EmpresaComponent from '@/components/empresa/EmpresaComponent.vue';
 import NavbarComplet from '../components/navbars/NavbarComplet.vue';
 import VersaoMaximisada from '../components/versionamento/VersaoMaximisada.vue';
 
@@ -6,7 +7,7 @@ import VersaoMaximisada from '../components/versionamento/VersaoMaximisada.vue';
 export default{
       components:{
             NavbarComplet,
-            // DashboardComponent,
+            EmpresaComponent,
             VersaoMaximisada,
       }
 }
@@ -16,7 +17,7 @@ export default{
       <div class="row">
             <NavbarComplet :lateral="'empresas'"/>
             <div class="col-10" id="content">
-                  Empresa content
+                  <EmpresaComponent />
             </div>
             <VersaoMaximisada />
       </div>
