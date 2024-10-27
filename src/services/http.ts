@@ -5,9 +5,9 @@ const axiosIstance = axios.create({
       baseURL: APPCONFIG.linkProducao,
       headers: {
             'Content-type' : 'application/json',
-            // 'Authorization': APPCONFIG.authToken
       },
-      // auth: 'token'
 })
+
+
 
 export default axiosIstance;
