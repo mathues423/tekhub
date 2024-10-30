@@ -30,6 +30,22 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
+    path: '/empresas/0',
+    name: 'empresas_criacao',
+    component: () => import ('@/views/EmpresasNewView.vue'),
+    meta:{
+      auth: true
+    }
+  },
+  {
+    path: '/empresas/:id',
+    name: 'empresas_edicao',
+    component: () => import ('@/views/EmpresasEdicaoView.vue'),
+    meta:{
+      auth: true
+    }
+  },
+  {
     path: '/canais',
     name: 'canais',
     component: () => import ('@/views/CanaisView.vue'),
@@ -98,7 +114,7 @@ router.beforeEach(async (to, from, next) => {
   //NEXT Passa para a pagina 
 
   // ERRO 404
-  if(routes.map((x) => x.path).indexOf(to.path) == -1){
+  if(routes.map((x) => x.name).indexOf(to.name) == -1){
     next({name:'PageNotFaund'}); //Fazer a pagina erro 404
   }
   
