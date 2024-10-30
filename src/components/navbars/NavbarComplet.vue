@@ -28,7 +28,7 @@
             <div class="row">
                   <div style="padding-left: 12px;" class="col-11">
                         <img src="../../assets/imagens/logo-tek-hub-branca.png" alt="logo_white" width="64">
-                        <span style="font-size: 1.5em;">TekHub Integrações</span>
+                        <span style="font-size: 1.5em; color: var(--bs-white);">TekHub Integrações</span>
                   </div>
                   <div class="col-1" style="margin-top: auto; margin-bottom: auto;">
                         <button type="button" class="btn btn-outline-danger" style="margin-top: auto; margin-bottom: auto;" @click="logout()">

@@ -6,7 +6,6 @@
                   <img src="@/assets/imagens/logo-tek-hub.png" alt="logo" width="300">
             </div>
             <div class="Card-Body">
-                  <!-- Tirada a funçao loginReq() -->
                   <form @submit.prevent="loginReq()">
                         <div class="col-12">
                               <div class="input-group">
