@@ -1,4 +1,12 @@
-<script setup lang="ts">
+<script lang="ts">
+import user from './services/login/requisicao';
+
+export default{
+  mounted(){
+    user.getToken()
+  }
+}
+
 </script>
 
 <template>
