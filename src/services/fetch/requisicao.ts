@@ -9,13 +9,50 @@ http.interceptors.request.use(
 )
 
 class fetch_padrao{
-      async requisicao_empresa(){
+      // Gets
+      async getDado(path : string){
             try {
-                  const { data } = await http.get('/empresa');
+                  const { data } = await http.get(path);
                   return data.data;
             } catch (error) {
-                  console.warn("Erroalert")
-                  
+                  console.warn(error)
+            }
+      }
+      async getDado_ID(path : string, id : string){
+            try {
+                  const { data } = await http.get(path+'/'+id);
+                  return data.data;
+            } catch (error) {
+                  console.warn(error)
+            }
+      }
+      //Adição ao banco
+      async postDado(path : string, dado : object){
+            try {
+                  const { data } = await http.post(path, dado);
+                  return data.data;
+            } catch (error) {
+                  console.warn(error);
+                  const { data } = await http.post(path, dado);
+                  return data;
+            }
+      }
+      //Alteração no banco
+      async putDado(path : string, id : string, dado : object){
+            try {
+                  const { data } = await http.put(path+'/'+id, dado);
+                  return data.data;
+            } catch (error) {
+                  console.warn(error)
+            }
+      }
+      //Remoção do banco
+      async delDado(path : string, id : string){
+            try {
+                  const { data } = await http.delete(path+'/'+id);
+                  return data.data;
+            } catch (error) {
+                  console.warn(error)
             }
       }
 }

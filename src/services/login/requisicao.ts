@@ -1,7 +1,7 @@
 import http from '@/services/http';
 import router from '@/router';
 import { APPCONFIG } from '@/components/constants/Config'
-
+/* eslint-disable */
 class UserDados {
       usuario = {
             email: '',
@@ -24,10 +24,17 @@ class UserDados {
 
                   // Avançar para a pagina conteudo
             } catch (error) {
-                  // console.log(error?.response?.data.errors);
-                  // Erroalert = error?.response?.data.errors;
-                  console.warn("Erroalert")
-                  
+                  console.warn(error)
+            }
+      }
+
+      async getToken(){
+            if(localStorage.getItem('TOKEN') != null){
+                  this.usuario.token = (localStorage.getItem('TOKEN') || '');
+                  APPCONFIG.authToken = this.usuario.token;  
+                  router.push('/dashboard');
+            }else{
+                  router.push('/');
             }
       }
 
@@ -37,7 +44,6 @@ class UserDados {
       }
 }
 
-// eslint-disable-next-line
 const user = new UserDados();
 
 export default user;
