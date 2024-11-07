@@ -3,8 +3,9 @@ import router from '@/router';
 import NavbarComplet from '../components/navbars/NavbarComplet.vue';
 import VersaoMaximisada from '../components/versionamento/VersaoMaximisada.vue';
 import { defineComponent } from 'vue';
-import empresa from '@/services/regras_negocio/new_empresa';
 import ErroFormComponent from '@/components/mensagem/ErroFormComponent.vue';
+import empresa from '@/services/regras_negocio/regras_empresa';
+import store from '@/store';
 export default defineComponent({
       data(){
             return {
@@ -25,10 +26,16 @@ export default defineComponent({
       },
       methods:{
             criacaoRequest(){
-                  while (this.$data.errors.length) {
-                        console.log(this.$data.errors.pop());
+                  while (this.errors.length) {
+                        this.errors.pop();
                   }
-                  empresa._add('/empresa', this.$data.empresa, this.$data.errors);
+                  Promise.resolve(empresa._add('/empresa', this.empresa, this.errors))
+                  .then(()=>
+                        Promise.resolve(
+                              store.dispatch('putDados', {'roter_externa': 'empresa', 'dado': this.empresa, 'roter_interna': 'empresas'})
+                              .then(()=> router.push('/empresas'))
+                        ).catch((error)=> { console.warn(error) })
+                  )
             },
             voltarEmpresa(){
                   router.push('/empresas');

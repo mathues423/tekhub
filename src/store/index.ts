@@ -18,12 +18,11 @@ const store = createStore({
     marketplaceecommerce: Array<{}>(),
   },
   mutations:{
-
-    setDadosInterno(state, obj: {dado : Array<{}>, key: string}){
-      state[obj.key as keyof typeof state] = obj.dado;
+    setDadosInterno(state, obj: {dado : Array<{}>, roter_interna: string}){
+      state[obj.roter_interna as keyof typeof state] = obj.dado;
     }, 
-    setDadosInternoID(state, obj : {new_dado: object, id: string, key: string}){
-      state[obj.key as keyof typeof state].forEach((value,index) => {
+    setDadosInternoID(state, obj : {new_dado: object, id: string, roter_interna: string}){
+      state[obj.roter_interna as keyof typeof state].forEach((value,index) => {
         if (value['codigo' as keyof typeof value] == parseInt(obj.id)) {
           state.empresas[index] = obj.new_dado;
         }
@@ -35,6 +34,9 @@ const store = createStore({
           state[obj.roter_interna as keyof typeof state].splice(index, 1)
         }
       })      
+    },
+    putDadosInterno(state, obj: {dado: object, rota_interna: string}){
+      state[obj.rota_interna as keyof typeof state].push(obj.dado);
     }
   },
   getters: {
@@ -76,20 +78,27 @@ const store = createStore({
       })
       return retorno
     },
-    async delDadosID(contex, obj : {roter_externa: string, id: string, roter_interna: string}){
+    async delDadosID(context, obj : {roter_externa: string, id: string, roter_interna: string}){
       Promise.resolve(fetch_.delDado(obj.roter_externa,obj.id))
       .then(() => 
-        contex.commit('delDadosInternoID', {'id': obj.id, 'roter_interna': obj.roter_interna})
+        context.commit('delDadosInternoID', {'id': obj.id, 'roter_interna': obj.roter_interna})
       ); 
     },
-    async setDadosID(contex, obj: {roter_externa: string, id: string, roter_interna: string, new_dado: {codigo: number}}){
+    async setDadosID(context, obj: {roter_externa: string, id: string, roter_interna: string, new_dado: {codigo: number}}){
       obj.new_dado.codigo = parseInt(obj.id);
       Promise.resolve(fetch_.putDado('/'+obj.roter_externa, obj.id,obj.new_dado))
       .then(() =>
-        contex.commit('setDadosInternoID', {'new_dado': obj.new_dado, 'id':obj.id, 'key':obj.roter_interna} )
+        context.commit('setDadosInternoID', {'new_dado': obj.new_dado, 'id':obj.id, 'roter_interna':obj.roter_interna} )
       )
     },
-    //ADICAO DADO
+    async putDados(context, obj : {roter_externa: string, dado: object, roter_interna: string}){
+      let new_obj = {};
+      Promise.resolve(new_obj = await fetch_.postDado('/'+obj.roter_externa, obj.dado))
+      .then(()=> {
+        console.log(new_obj)
+        context.commit('putDadosInterno', {'dado': new_obj, 'rota_interna': obj.roter_interna})}
+      )
+    }
   }
 
 })

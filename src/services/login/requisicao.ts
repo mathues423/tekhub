@@ -52,10 +52,10 @@ class UserDados {
       }
 
       async getDados(){
-            store.commit('setDadosInterno', {'dado': await fetch_.getDado('/empresa'), 'key': 'empresas'});
-            store.commit('setDadosInterno', {'dado': await fetch_.getDado('/canal'), 'key': 'canais'});
-            store.commit('setDadosInterno', {'dado': await fetch_.getDado('/ambiente'), 'key': 'ambientes'});
-            store.commit('setDadosInterno', {'dado': await fetch_.getDado('/usuario'), 'key': 'usuarios'});
+            store.commit('setDadosInterno', {'dado': await fetch_.getDado('/empresa'), 'roter_interna': 'empresas'});
+            store.commit('setDadosInterno', {'dado': await fetch_.getDado('/canal'), 'roter_interna': 'canais'});
+            store.commit('setDadosInterno', {'dado': await fetch_.getDado('/ambiente'), 'roter_interna': 'ambientes'});
+            store.commit('setDadosInterno', {'dado': await fetch_.getDado('/usuario'), 'roter_interna': 'usuarios'});
 
             //  store.commit(log_att = await fetch_.getDado('/atualizacaoecommerce'));
             //  store.commit(log_req = await fetch_.getDado('/atualizacaoecommerce'));
