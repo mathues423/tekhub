@@ -54,12 +54,12 @@ export default{
                   </li>
                   <!-- Ambiente -->
                   <li :class="['navbar_itens', {'item_nav_act' :item_ativo === 'ambiente'}]">
-                        <button class="btn item_nav col-12" @click="changePage('ambiente')">
+                        <button class="btn item_nav col-12" @click="changePage('ambientes')">
                               <span>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-fill" viewBox="0 0 16 16">
                                           <path d="M4.406 3.342A5.53 5.53 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773 16 11.569 14.502 13 12.687 13H3.781C1.708 13 0 11.366 0 9.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383"/>
                                     </svg>
-                                    Ambiente
+                                    Ambientes
                               </span>
                         </button>
                   </li>
@@ -76,7 +76,7 @@ export default{
                         </button>
                         <ul class="list-group">
                               <li :class="['navbar_itens', {'item_nav_act' :item_ativo === 'mark_ecom'}]">
-                              <button class="btn item_nav col-12" @click="changePage('marketplaceecommerce')">
+                              <button class="btn item_nav col-12" @click="changePage('integracoesmarketplacesecommerces')">
                                     <span>
                                           Marketplace/Ecommerce
                                     </span>
@@ -93,7 +93,7 @@ export default{
                   </li>
                   <!-- Usuário -->
                   <li :class="['navbar_itens', {'item_nav_act' :item_ativo === 'usuario'}]">
-                        <button class="btn item_nav col-12" @click="changePage('usuario')">
+                        <button class="btn item_nav col-12" @click="changePage('usuarios')">
                               <span>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
                                           <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
@@ -104,7 +104,7 @@ export default{
                   </li>
                   <!-- LogATT -->
                   <li :class="['navbar_itens', {'item_nav_act' :item_ativo === 'log_att'}]">
-                        <button class="btn item_nav col-12" @click="changePage('atualizacao')">
+                        <button class="btn item_nav col-12" @click="changePage('atualizacoesecommerces')">
                               <span>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-journal-text" viewBox="0 0 16 16">
                                           <path d="M5 10.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5"/>
@@ -117,7 +117,7 @@ export default{
                   </li>
                   <!-- LogReq -->
                   <li :class="['navbar_itens', {'item_nav_act' :item_ativo === 'log_req'}]">
-                        <button class="btn item_nav col-12" @click="changePage('requisicao')">
+                        <button class="btn item_nav col-12" @click="changePage('logrequisicoes')">
                               <span>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-list" viewBox="0 0 16 16">
                                           <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2z"/>

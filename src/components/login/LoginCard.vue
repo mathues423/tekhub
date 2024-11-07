@@ -37,6 +37,10 @@
                                     </button>
                                </span>
                         </div>
+                        <ErroFormComponent
+                              :mensagem="erros.mensagem"
+                              :class="['alert-danger desativada',{'ativada' : erros.vericação == true}]"
+                              />
                         <button style="margin-top: 16px; margin-bottom: 16px;" class="btn btn-primary col-12">
                               <span>Entrar</span>
                         </button>
@@ -53,11 +57,16 @@
       import { reactive } from 'vue';
       import requisicaoLogin from '@/services/login/requisicao';
       import VersaoMinimisada from '../versionamento/VersaoMinimisada.vue';
+      import ErroFormComponent from '../mensagem/ErroFormComponent.vue';
+
       const user = reactive({
             email: '',
             senha: ''
       });
-
+      const erros = reactive({
+            vericação: false,
+            mensagem: 'errsa'
+      });
       function showPassword(){
             if(document.querySelector('#userpass')?.getAttribute('type') == 'password'){
                   document.querySelector('#userpass')?.setAttribute('type', 'text');
@@ -71,7 +80,7 @@
       }
 
       async function loginReq(){
-            await requisicaoLogin.loginReq(user.email, user.senha);
+            await requisicaoLogin.loginReq(user.email, user.senha, erros);
       }
 </script>
 

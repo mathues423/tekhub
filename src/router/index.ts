@@ -54,7 +54,7 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
-    path: '/ambiente',
+    path: '/ambientes',
     name: 'ambiente',
     component: () => import ('@/views/AmbienteView.vue'),
     meta:{
@@ -62,7 +62,7 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
-    path: '/marketplaceecommerce',
+    path: '/integracoesmarketplacesecommerces', 
     name: 'marketplaceecommerce',
     component: () => import ('@/views/MarketplaceEcommerceView.vue'),
     meta:{
@@ -78,24 +78,24 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
-    path: '/usuario',
-    name: 'usuario',
+    path: '/usuarios',
+    name: 'usuarios',
     component: () => import ('@/views/UsuarioView.vue'),
     meta:{
       auth: true
     }
   },
   {
-    path: '/atualizacao',
-    name: 'atualizacao',
+    path: '/atualizacoesecommerces',
+    name: 'atualizacoesecommerces',
     component: () => import ('@/views/LogAtualizacaoView.vue'),
     meta:{
       auth: true
     }
   },
   {
-    path: '/requisicao',
-    name: 'requisicao',
+    path: '/logrequisicoes',
+    name: 'logrequisicoes',
     component: () => import ('@/views/LogRequisicaoView.vue'),
     meta:{
       auth: true
