@@ -1,20 +1,37 @@
 <script lang="ts">
 import EdicaoExclusaoComponent from './EdicaoExclusaoComponent.vue';
 
-export default{
+export default {
       components:{
             EdicaoExclusaoComponent,
       },
       props:{
-            dados: [{
-                  index: ''
-            }],
             tradutor:{
-                  header: [''],
-                  header_to_dados: ['']
+                  header: {
+                        type: [String],
+                        require: true
+                  },
+                  header_to_dados: {
+                        type: [String],
+                        require: true
+                  }
             },
-            // eslint-disable-next-line
-            nome_rota_edicao: ''
+            nome_rota_para_edicao: {
+                  type: String,
+                  require: true
+            },
+            nome_rota_interna: {
+                  type: String,
+                  require: true
+            },
+            nome_rota_externa: {
+                  type: String,
+                  require: true
+            },
+            dados: {
+                  type: Array,
+                  require: true
+            }
       }
 }
 </script>
@@ -24,7 +41,7 @@ export default{
       <thead class="table-primary">
             <tr>
                   <th v-for="header in tradutor.header" :key="header" scope="col">
-                        {{ header }}
+                        {{ header.title }}
                   </th>
             </tr>
       </thead>
@@ -35,7 +52,11 @@ export default{
                               {{ dado[traduzido] }}
                         </span>
                         <span v-else>
-                              <EdicaoExclusaoComponent :nome_rota_edicao="nome_rota_edicao" :id_="dado['codigo']"/>
+                              <EdicaoExclusaoComponent 
+                              :nome_rota_interna="nome_rota_interna"
+                              :nome_rota_externa="nome_rota_externa"
+                              :nome_rota_para_edicao="nome_rota_para_edicao" 
+                              :id_="dado['codigo']"/>
                         </span>
                   </th>
             </tr>

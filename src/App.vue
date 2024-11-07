@@ -2,8 +2,8 @@
 import user from './services/login/requisicao';
 
 export default{
-  mounted(){
-    user.getToken()
+  async mounted(){
+    await user.getToken();
   }
 }
 

@@ -1,21 +1,35 @@
 <script lang="ts">
 import router from '@/router';
-import fetch_ from '@/services/fetch/requisicao';
+import store from '@/store';
+
 export default {
       methods:{
-            deletar(id: string){
-                  fetch_.delDado('/empresa',id);
+            deletar(roter_interna: string | undefined, roter_externa: string | undefined, id: string | undefined){
+                  store.dispatch('delDadosID', {'roter_interna': roter_interna, 'roter_externa': roter_externa, 'id': id})
             },
-            editar(roter_name : string ,id_component: string){
-                  console.log('Roter ',roter_name, '   id ' , id_component);
-                  router.push({ name:roter_name, params:{id : id_component}});
+            editar(roter_name : string | undefined ,id_component: string | undefined){
+                  if ( roter_name != undefined && id_component != undefined ) {
+                        router.push({ name:roter_name, params:{id : id_component}});
+                  }
             }
       },
       props:{
-            // eslint-disable-next-line
-            id_: 0,
-            // eslint-disable-next-line
-            nome_rota_edicao: ''
+            id_:{
+                  type: String,
+                  require: true
+            },
+            nome_rota_para_edicao:{
+                  type: String,
+                  require: true
+            },
+            nome_rota_interna:{
+                  type: String,
+                  require: true
+            },
+            nome_rota_externa:{
+                  type: String,
+                  require: true
+            }
       }
 }
 </script>
@@ -23,7 +37,7 @@ export default {
 <template>
       <div class="row">
             <div class="col-6">
-                  <button class="btn edit col-12" @click="editar(nome_rota_edicao,id_)"> 
+                  <button class="btn edit col-12" @click="editar(nome_rota_para_edicao,id_)"> 
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                               <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                               <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
@@ -34,7 +48,7 @@ export default {
                   <div class="alerta">
                         Alerta
                   </div>
-                  <button type="button" class="btn delete col-12">
+                  <button type="button" class="btn delete col-12" @click="deletar(nome_rota_interna, '/'+nome_rota_externa, id_)">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
                               <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
                         </svg>
@@ -75,5 +89,9 @@ export default {
       width: auto;
       background-color: var(--bs-white);
       height: auto;
+      /* top: 20px; */
+}
+.desativado{
+      display: none;
 }
 </style>
