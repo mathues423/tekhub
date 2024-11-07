@@ -8,7 +8,7 @@ import { defineComponent } from 'vue';
 export default defineComponent({
       data(){
             return{
-                  dados_lista_empresa: store.getters
+                  dados_lista_empresa: store.getters.getEmpresas as Array<object>
             }
       },
       components:{
