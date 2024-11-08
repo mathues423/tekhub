@@ -1,7 +1,7 @@
 <script lang="ts">
 import router from '@/router';
-import NavbarComplet from '../components/navbars/NavbarComplet.vue';
-import VersaoMaximisada from '../components/versionamento/VersaoMaximisada.vue';
+import NavbarComplet from '@/components/navbars/NavbarComplet.vue';
+import VersaoMaximisada from '@/components/versionamento/VersaoMaximisada.vue';
 import { defineComponent } from 'vue';
 import ErroFormComponent from '@/components/mensagem/ErroFormComponent.vue';
 import empresa from '@/services/regras_negocio/regras_empresa';

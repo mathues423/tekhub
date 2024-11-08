@@ -24,7 +24,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/empresas',
     name: 'empresas',
-    component: () => import ('@/views/EmpresasView.vue'),
+    component: () => import ('@/views/Empresa/EmpresasView.vue'),
     meta:{
       auth: true
     }
@@ -32,7 +32,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/empresas/0',
     name: 'empresas_criacao',
-    component: () => import ('@/views/EmpresasNewView.vue'),
+    component: () => import ('@/views/Empresa/EmpresasNewView.vue'),
     meta:{
       auth: true
     }
@@ -40,7 +40,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/empresas/:id',
     name: 'empresas_edicao',
-    component: () => import ('@/views/EmpresasEdicaoView.vue'),
+    component: () => import ('@/views/Empresa/EmpresasEdicaoView.vue'),
     meta:{
       auth: true
     }
@@ -48,7 +48,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/canais',
     name: 'canais',
-    component: () => import ('@/views/CanaisView.vue'),
+    component: () => import ('@/views/Canais/CanaisView.vue'),
     meta:{
       auth: true
     }

@@ -1,7 +1,10 @@
 <script lang="ts">
-import EmpresaComponent from '@/components/empresa/EmpresaComponent.vue';
-import NavbarComplet from '../components/navbars/NavbarComplet.vue';
-import VersaoMaximisada from '../components/versionamento/VersaoMaximisada.vue';
+
+import EmpresaComponent from "@/components/conteudos/EmpresaComponent.vue";
+import NavbarComplet from '@/components/navbars/NavbarComplet.vue';
+import CriarBotao from '@/components/util/CriarBotaoComponent.vue';
+import VersaoMaximisada from '@/components/versionamento/VersaoMaximisada.vue';
+import router from '@/router';
 import store from '@/store';
 import { defineComponent } from 'vue';
 
@@ -13,9 +16,15 @@ export default defineComponent({
       },
       components:{
             NavbarComplet,
+            CriarBotao,
             EmpresaComponent,
             VersaoMaximisada,
       },
+      methods:{
+            adicionarNewempresa(){
+                  router.push('/empresas/0');
+            }
+      }
 })
 </script>
 
@@ -23,6 +32,7 @@ export default defineComponent({
       <div class="row">
             <NavbarComplet :lateral="'empresas'"/>
             <div class="col-10" id="content">
+                  <CriarBotao @criar="adicionarNewempresa" />
                   <EmpresaComponent 
                   :dados_lista="dados_lista_empresa"/>
             </div>
