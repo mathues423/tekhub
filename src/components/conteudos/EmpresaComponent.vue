@@ -1,6 +1,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import ListaComponent from '../util/lista/ListaComponent.vue';
+import store from '@/store';
 
 
 export default defineComponent({
@@ -51,6 +52,13 @@ export default defineComponent({
             this.atualizarDadoPaginado();
       },
       methods:{
+            deletar(objeto: {codigo: string}){
+                  let aux = {'roter_externa': 'empresa', 'id': objeto.codigo, 'roter_interna': 'empresas'}
+                  Promise.resolve(store.dispatch('delDadosID', aux))
+                  .then(
+                        () => this.atualizarDadoPaginado()
+                  ).catch((error)=> { console.warn(error) })
+            },
             avancaPagina(){
                   this.pagina_atual++;
                   this.atualizarDadoPaginado();
@@ -78,6 +86,8 @@ export default defineComponent({
                   :dados="dado_paginado"
                   :pagina="pagina_atual"
                   :pagina_max="NUMERO_PAGINA"
+                  :rota_edicao="'empresas'"
+                  @deletarDadoPai="(arg) => deletar(arg)"
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina" />
       </div>
