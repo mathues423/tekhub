@@ -25,11 +25,11 @@ export default defineComponent({
             ErroFormComponent
       },
       methods:{
-            criacaoRequest(){
+            async criacaoRequest(){
                   while (this.errors.length) {
                         this.errors.pop();
                   }
-                  Promise.resolve(empresa._add('/empresa', this.empresa, this.errors))
+                  Promise.resolve(empresa._add(this.empresa, this.errors))
                   .then(()=>
                         Promise.resolve(
                               store.dispatch('putDados', {'roter_externa': 'empresa', 'dado': this.empresa, 'roter_interna': 'empresas'})

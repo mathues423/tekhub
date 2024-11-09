@@ -36,11 +36,14 @@ export default defineComponent({
       methods:{
             async editRequest(){
                   const id = (this.$route.params['id'] || '-1') as string;
-                  Promise.resolve(empresa._edit('/empresa', this.old_empresa, this.empresa, id, this.errors))
+                  Promise.resolve(empresa._edit(this.old_empresa, this.empresa, this.errors))
                   .then(() => 
                         Promise.resolve(
                               store.dispatch('setDadosID', {'roter_externa': 'empresa', 'id': id, 'roter_interna': 'empresas', 'new_dado': this.empresa}))
-                        .then(()=> router.push('/empresas'))
+                        .then(()=> 
+                              setTimeout(() => this.voltarEmpresa(), 100)
+
+                        ).catch((error)=> { console.warn(error) })
                   );
             },
             voltarEmpresa(){
@@ -68,13 +71,12 @@ export default defineComponent({
 
 <template>
       <div class="row">
-            {{ errors }}
             <NavbarComplet :lateral="'empresas'"/>
             <div class="col-10" id="content">
                   <div class="row">
                         <div class="col-1"></div>
                         <div class="Card-Body col-8">
-                              <form @submit.prevent="" class="row form_content" novalidate>
+                              <form @submit.prevent="editRequest" class="row form_content" novalidate>
                                     <!-- Razao -->
                                     <div class="col-2 form_text">
                                           *Razão social:
@@ -133,7 +135,7 @@ export default defineComponent({
                                           :mensagem="'Você precisa editar antes de salvar'"
                                           :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='igual') != -1}]"
                                           />
-                                          <button class="btn btn-primary col-2" @click="editRequest()">
+                                          <button class="btn btn-primary col-2">
                                                 <span>Iditar</span>
                                           </button>
                                           <button class="btn btn-light col-2" style="margin-left: 24px;" @click="voltarEmpresa()">
