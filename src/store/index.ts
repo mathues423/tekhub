@@ -17,7 +17,7 @@ const store = createStore({
     mapeamentoprodudo: Array<{}>(),
     marketplaceecommerce: Array<{}>(),
   },
-  mutations:{
+  mutations:{ ///Comit
     setDadosInterno(state, obj: {dado : Array<{}>, roter_interna: string}){
       state[obj.roter_interna as keyof typeof state] = obj.dado;
     }, 
@@ -37,6 +37,34 @@ const store = createStore({
     },
     putDadosInterno(state, obj: {dado: object, rota_interna: string}){
       state[obj.rota_interna as keyof typeof state].push(obj.dado);
+    },
+    ordenarDadosInterno(state, obj: {ordem: string, rota_interna: string, nome_dado: string, tipo: string}){
+      // console.log('State: ', state[obj.rota_interna as keyof typeof state]);
+      console.log('OBJ REQ: ', obj);
+
+      if(obj.tipo == 'number'){
+        if (obj.ordem == 'crescente') {
+          state[obj.rota_interna as keyof typeof state].sort((a: object , b: object) => 
+            a[obj.nome_dado as keyof typeof a] - b[obj.nome_dado as keyof typeof b]
+          )
+        }
+        if (obj.ordem == 'decrescente') {
+          state[obj.rota_interna as keyof typeof state].sort((a: object , b: object) => 
+            b[obj.nome_dado as keyof typeof b] - a[obj.nome_dado as keyof typeof a]
+          )
+        }
+      }
+
+      // let aux = state[obj.rota_interna as keyof typeof state] as Array<Object>
+
+      // aux.sort((a,b) => a[obj.key_dado as keyof typeof a]-b[obj.key_dado as keyof typeof b])
+      // if(obj.tipo_dado == 'number'){
+
+      // }
+      // if (obj.tipo_dado == 'string') {
+        
+      // }
+      // state[obj.rota_interna as keyof typeof state].sort()
     }
   },
   getters: {
@@ -68,7 +96,7 @@ const store = createStore({
       return state.marketplaceecommerce
     },
   },
-  actions: { //Asincrono
+  actions: { //Asincrono Dispacht
     getEmpresasID(context, id : string){
       let retorno;
       context.state.empresas.forEach((value) => {
