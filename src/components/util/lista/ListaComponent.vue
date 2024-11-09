@@ -60,7 +60,7 @@ export default defineComponent({
 </script>
 
 <template>
-      <ModalComponent :isAtivo="showModal" @close="showModal = !showModal" @deletar_item="deletarDado">
+      <ModalComponent :isAtivo="showModal" @deletar_item="deletarDado">
             <template v-slot:header> Exclusão de item </template>
             <template v-slot:body> 
                   <div class="aviso">Atenção essa ação não poderá ser desfeita.</div>

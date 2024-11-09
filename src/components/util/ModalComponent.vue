@@ -1,21 +1,33 @@
 <script lang="ts">
-// import { onClickOutside } from '@vue'
+import { onClickOutside } from '@vueuse/core';
+import { ref } from 'vue';
 export default {
+      setup(props){
+            const isAtivo_interno = ref(true);
+            const modal = ref(null);
+            onClickOutside(modal, ()=> isAtivo_interno.value = false);
+            console.log('PROPS: ', props);
+            console.log('Interno: ', isAtivo_interno);
+            return { isAtivo_interno }
+      },
       props:{
             isAtivo:{
                   type: Boolean,
                   retuire: true
             }
-      }
+      },
 }
 </script>
 
 <template>
       <Teleport to="body">
+            <div> PROPS: {{ isAtivo }} </div>
+            <div ref="modal"> INTERNO: {{ isAtivo_interno }} </div>
+            
       <transition name="modal" v-if="isAtivo">
-            <div class="modal-mask" >
+            <div class="modal-mask">
             <div class="modal-wrapper">
-            <div class="modal-container">
+            <div class="modal-container" ref="modal">
 
                   <div class="modal-header">
                         <slot name="header">
@@ -31,7 +43,7 @@ export default {
 
                   <div class="modal-footer">
                         <slot name="footer" class="row">
-                              <button class="btn btn-cancelar col-xs-6 col-md-2" @click="$emit('close')">
+                              <button class="btn btn-cancelar col-xs-6 col-md-2" @click="isAtivo_interno = false">
                                     Cancelar
                               </button>
                               <div class="col-md-1"></div>
