@@ -6,7 +6,8 @@ export default {
                   type: Boolean,
                   retuire: true
             }
-      }
+      },
+      emits:['close', 'deletar_item']
 }
 </script>
 

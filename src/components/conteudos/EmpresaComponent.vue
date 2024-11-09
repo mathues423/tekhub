@@ -14,20 +14,25 @@ export default defineComponent({
             dado_paginado:{
                   header:[
                         {'header': 'Código', 'key_body': 'codigo',
-                        'ordem':{'on': false, 'tipo': true}, //Ascendente => true | Descendente => false
+                        'ordem':{'on': false,'tipo_obj': 'Number', 'tipo_ordenacao': true}, //Ascendente => true | Descendente => false
                         'isfiltrable': true, 'isordenable':true},
+
                         {'header': 'Código Tek', 'key_body': 'codigoTek',
-                        'ordem':{'on': false, 'tipo': true}, //Ascendente => true | Descendente => false
+                        'ordem':{'on': false,'tipo_obj': 'Number', 'tipo_ordenacao': true}, //Ascendente => true | Descendente => false
                         'isfiltrable': true, 'isordenable':true},
+
                         {'header': 'Razão Social', 'key_body': 'descricao',
-                        'ordem':{'on': false, 'tipo': true}, //Ascendente => true | Descendente => false
+                        'ordem':{'on': false,'tipo_obj': 'String', 'tipo_ordenacao': true}, //Ascendente => true | Descendente => false
                         'isfiltrable': true, 'isordenable':true},
+
                         {'header': 'CNPJ', 'key_body': 'cnpj',
-                        'ordem':{'on': false, 'tipo': true}, //Ascendente => true | Descendente => false
+                        'ordem':{'on': false,'tipo_obj': 'Number', 'tipo_ordenacao': true}, //Ascendente => true | Descendente => false
                         'isfiltrable': true, 'isordenable':true},
+
                         {'header': 'Versão API', 'key_body': 'versaoApiTek',
-                        'ordem':{'on': false, 'tipo': true}, //Ascendente => true | Descendente => false
+                        'ordem':{'on': false,'tipo_obj': '', 'tipo_ordenacao': true}, //Ascendente => true | Descendente => false
                         'isfiltrable': true, 'isordenable':true},
+
                         {'header': 'Ações', 'key_body': 'button',
                         'isfiltrable': false, 'isordenable':false}
                   ],
@@ -45,9 +50,9 @@ export default defineComponent({
             }
       },
       created() {
-            let aux = this.dados_lista as Array<object>;
-            if (Object.keys(aux).length) {
-                  this.NUMERO_PAGINA = Math.ceil(Object.keys(aux).length / this.ITEM_PAGINA_MAX);
+            this.dado_paginado.body = this.dados_lista as Array<object>;
+            if (Object.keys(this.dado_paginado.body).length) {
+                  this.NUMERO_PAGINA = Math.ceil(Object.keys(this.dado_paginado.body).length / this.ITEM_PAGINA_MAX);
             }
             this.atualizarDadoPaginado();
       },
@@ -75,8 +80,18 @@ export default defineComponent({
                               return value
                               }
                   }) as Array<object>
+            },
+            ordenaEmpresa(title: any){
+                  if(!title.ordem.on){
+                        title.ordem.tipo_ordenacao = !title.ordem.tipo_ordenacao;
+                  }else{
+                        title.ordem.on = true;
+                  }
+                  this.$emit('ordenaEmpresaView', title);
+                  this.atualizarDadoPaginado();
             }
-      }
+      },
+      emits: ['ordenaEmpresaView']
 })
 </script>
 
@@ -88,8 +103,10 @@ export default defineComponent({
                   :pagina_max="NUMERO_PAGINA"
                   :rota_edicao="'empresas'"
                   @deletarDadoPai="(arg) => deletar(arg)"
+                  @ordenarDadoPai="(arg) => ordenaEmpresa(arg)"
                   @avancar="avancaPagina" 
-                  @recuar="recuarPagina" />
+                  @recuar="recuarPagina" 
+                  />
       </div>
 </template>
 

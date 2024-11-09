@@ -11,11 +11,8 @@ import { defineComponent } from 'vue';
 export default defineComponent({
       data(){
             return{
-                  dados_lista_empresa: store.getters.getEmpresas as Array<object>
+                  dados_lista_empresa: store.getters.getEmpresas
             }
-      },
-      mounted() {
-            this.dados_lista_empresa = store.getters.getEmpresas as Array<object>;
       },
       components:{
             NavbarComplet,
@@ -26,6 +23,13 @@ export default defineComponent({
       methods:{
             adicionarNewempresa(){
                   router.push('/empresas/0');
+            },
+            ordenaDados(obj: any){
+                  store.commit('ordenarDadosInterno',{
+                        'ordem': obj.ordem.tipo_ordenacao,
+                        'rota_interna': 'empresas',
+                        'nome_dado': obj.key_body,
+                        'tipo': obj.ordem.tipo_obj})
             }
       }
 })
@@ -37,7 +41,9 @@ export default defineComponent({
             <div class="col-10" id="content">
                   <CriarBotao @criar="adicionarNewempresa" />
                   <EmpresaComponent 
-                  :dados_lista="dados_lista_empresa"/>
+                  :dados_lista="dados_lista_empresa"
+                  @ordenaEmpresaView="(arg) => ordenaDados(arg)"
+                  />
             </div>
             <VersaoMaximisada />
       </div>

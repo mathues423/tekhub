@@ -38,22 +38,40 @@ const store = createStore({
     putDadosInterno(state, obj: {dado: object, rota_interna: string}){
       state[obj.rota_interna as keyof typeof state].push(obj.dado);
     },
-    ordenarDadosInterno(state, obj: {ordem: string, rota_interna: string, nome_dado: string, tipo: string}){
-      // console.log('State: ', state[obj.rota_interna as keyof typeof state]);
+    ordenarDadosInterno(state, obj: {ordem: boolean, rota_interna: string, nome_dado: string, tipo: string}){
       console.log('OBJ REQ: ', obj);
-
-      if(obj.tipo == 'number'){
-        if (obj.ordem == 'crescente') {
+      console.log('State.rota: ', state[obj.rota_interna as keyof typeof state]);
+      
+      if (obj.tipo == 'Number') {
+        console.log("ORDENA NUMBER");
+        
+        if(obj.ordem){ // Ascendente
           state[obj.rota_interna as keyof typeof state].sort((a: object , b: object) => 
             a[obj.nome_dado as keyof typeof a] - b[obj.nome_dado as keyof typeof b]
-          )
-        }
-        if (obj.ordem == 'decrescente') {
+        )
+        obj.ordem = !obj.ordem;
+      }else{ //Decrescente
           state[obj.rota_interna as keyof typeof state].sort((a: object , b: object) => 
             b[obj.nome_dado as keyof typeof b] - a[obj.nome_dado as keyof typeof a]
-          )
-        }
+        )
       }
+    }
+    
+    
+    console.log('State.rota: ', state[obj.rota_interna as keyof typeof state]);
+    console.log('ROTINA--------------FIM-------------------------------------------------');
+      // if(obj.tipo == 'number'){
+      //   if (obj.ordem == 'crescente') {
+      //     state[obj.rota_interna as keyof typeof state].sort((a: object , b: object) => 
+      //       a[obj.nome_dado as keyof typeof a] - b[obj.nome_dado as keyof typeof b]
+      //     )
+      //   }
+      //   if (obj.ordem == 'decrescente') {
+      //     state[obj.rota_interna as keyof typeof state].sort((a: object , b: object) => 
+      //       b[obj.nome_dado as keyof typeof b] - a[obj.nome_dado as keyof typeof a]
+      //     )
+      //   }
+      // }
 
       // let aux = state[obj.rota_interna as keyof typeof state] as Array<Object>
 

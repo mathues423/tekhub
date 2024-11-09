@@ -54,13 +54,17 @@ export default defineComponent({
             },
             deletarDado(){
                   this.$emit('deletarDadoPai', this.dado_modal);
+            },
+            ordenarDado(dadosObj : any){
+                  this.$emit('ordenarDadoPai', dadosObj);
             }
-      }
+      },
+      emits: ['avancar', 'recuar', 'deletarDadoPai', 'ordenarDadoPai']
 })
 </script>
 
 <template>
-      <ModalComponent :isAtivo="showModal" @close="showModal = !showModal" @deletar_item="deletarDado">
+      <ModalComponent :isAtivo="showModal" @close="showModal = false" @deletar_item="deletarDado">
             <template v-slot:header> Exclusão de item </template>
             <template v-slot:body> 
                   <div class="aviso">Atenção essa ação não poderá ser desfeita.</div>
@@ -77,8 +81,8 @@ export default defineComponent({
             <thead class="table-primary">
                   <tr>
                         <th v-for="title in dados?.header" :key="title.header" scope="col">
-                              <button v-if="title.isordenable"  class="btn" >
-                                    {{ title.header }}
+                              <button v-if="title.isordenable" class="btn" @click="ordenarDado(title)">
+                                    {{ title.header }} |Z| {{ title.ordem.tipo_ordenacao }}
                               </button>
                               <span v-else>
                                     {{ title.header }}
