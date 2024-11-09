@@ -1,11 +1,9 @@
 <script lang="ts">
       import loginRequisicao from "@/services/login/requisicao"
       import NavbarLateral from "./NavbarLateral.vue";
-      export default {
-            data : () => ({
-            
-            }),
+      import router from "@/router";
 
+      export default {
             components: {
                   NavbarLateral
             },
@@ -13,7 +11,8 @@
             methods:{
                   // Limpar cache
                   logout(){
-                        loginRequisicao.logOut(); 
+                        loginRequisicao.logOut();
+                        router.push('/');
                   }
             },
             props:{
@@ -42,7 +41,7 @@
             </div>
       </div>
       
-      <div class="nav_lateral col-2" style="<!--  height: 300px -->">
+      <div class="nav_lateral col-2">
             <NavbarLateral :item_ativo="lateral" />
       </div>
 </template>
