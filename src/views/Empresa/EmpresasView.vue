@@ -14,6 +14,9 @@ export default defineComponent({
                   dados_lista_empresa: store.getters.getEmpresas as Array<object>
             }
       },
+      mounted() {
+            this.dados_lista_empresa = store.getters.getEmpresas as Array<object>;
+      },
       components:{
             NavbarComplet,
             CriarBotao,
