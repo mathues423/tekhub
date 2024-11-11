@@ -36,25 +36,16 @@ export default defineComponent({
       methods:{
             async editRequest(){
                   const id = (this.$route.params['id'] || '-1') as string;
-                  Promise.resolve(empresa._edit(this.old_empresa, this.empresa, this.errors))
-                  .then(() => 
-                        Promise.resolve(
-                              store.dispatch('setDadosID', {'roter_externa': 'empresa', 'id': id, 'roter_interna': 'empresas', 'new_dado': this.empresa}))
-                        .then(()=> 
-                              setTimeout(() => this.voltarEmpresa(), 100)
-
-                        ).catch((error)=> { console.warn(error) })
-                  );
+                  empresa._edit(this.old_empresa, this.empresa, this.errors)
+                  Promise.resolve(
+                        store.dispatch('setDadosID', {'roter_externa': 'empresa', 'id': id, 'roter_interna': 'empresas', 'new_dado': this.empresa}))
+                  .then(()=> 
+                        this.voltarEmpresa
+                  ).catch((error)=> { console.warn(error) })
             },
             voltarEmpresa(){
                   router.push('/empresas');
             },
-      },
-      props:{
-            rota_id: {
-                  type: String,
-                  requered: true,
-            }
       },
       async mounted(){
             const rota = (this.$route.params['id'] || '-1') as string;

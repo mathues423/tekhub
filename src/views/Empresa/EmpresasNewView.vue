@@ -29,13 +29,12 @@ export default defineComponent({
                   while (this.errors.length) {
                         this.errors.pop();
                   }
-                  Promise.resolve(empresa._add(this.empresa, this.errors))
-                  .then(()=>
-                        Promise.resolve(
-                              store.dispatch('putDados', {'roter_externa': 'empresa', 'dado': this.empresa, 'roter_interna': 'empresas'})
-                              .then(()=> router.push('/empresas'))
-                        ).catch((error)=> { console.warn(error) })
-                  )
+                  empresa._add(this.empresa, this.errors)
+                  Promise.resolve(
+                        store.dispatch('putDados', {'roter_externa': 'empresa', 'dado': this.empresa, 'roter_interna': 'empresas'})
+                        .then(()=> this.voltarEmpresa)
+                  ).catch((error)=> { console.warn(error) })
+                  
             },
             voltarEmpresa(){
                   router.push('/empresas');
