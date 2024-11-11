@@ -1,6 +1,5 @@
 import fetch_ from '@/services/fetch/requisicao';
 import { createStore } from 'vuex'
-/* eslint-disable */
 
 // Cria uma nova instância do store.
 const store = createStore({
@@ -56,34 +55,24 @@ const store = createStore({
         )
       }
     }
+    if(obj.tipo == 'String'){
+      console.log("ORDENA STRING");
+        if(obj.ordem){ // Ascendente
+          state[obj.rota_interna as keyof typeof state].sort((a, b) => {
+            return (a[obj.nome_dado as keyof typeof a] as string).localeCompare(b[obj.nome_dado as keyof typeof b])
+          })
+          obj.ordem = !obj.ordem;
+      }else{ //Decrescente
+        state[obj.rota_interna as keyof typeof state].sort((a, b) => {
+          return (b[obj.nome_dado as keyof typeof b] as string).localeCompare(a[obj.nome_dado as keyof typeof a])
+        })
+      }
+    }
     
     
     console.log('State.rota: ', state[obj.rota_interna as keyof typeof state]);
     console.log('ROTINA--------------FIM-------------------------------------------------');
-      // if(obj.tipo == 'number'){
-      //   if (obj.ordem == 'crescente') {
-      //     state[obj.rota_interna as keyof typeof state].sort((a: object , b: object) => 
-      //       a[obj.nome_dado as keyof typeof a] - b[obj.nome_dado as keyof typeof b]
-      //     )
-      //   }
-      //   if (obj.ordem == 'decrescente') {
-      //     state[obj.rota_interna as keyof typeof state].sort((a: object , b: object) => 
-      //       b[obj.nome_dado as keyof typeof b] - a[obj.nome_dado as keyof typeof a]
-      //     )
-      //   }
-      // }
-
-      // let aux = state[obj.rota_interna as keyof typeof state] as Array<Object>
-
-      // aux.sort((a,b) => a[obj.key_dado as keyof typeof a]-b[obj.key_dado as keyof typeof b])
-      // if(obj.tipo_dado == 'number'){
-
-      // }
-      // if (obj.tipo_dado == 'string') {
-        
-      // }
-      // state[obj.rota_interna as keyof typeof state].sort()
-    }
+      }
   },
   getters: {
     getDashboard(state): Array<Object>{
