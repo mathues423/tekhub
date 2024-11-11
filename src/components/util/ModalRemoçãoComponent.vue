@@ -1,5 +1,4 @@
 <script lang="ts">
-// import { onClickOutside } from '@vue'
 export default {
       props:{
             isAtivo:{
@@ -14,14 +13,12 @@ export default {
 <template>
       <Teleport to="body">
       <transition name="modal" v-if="isAtivo">
-            <div class="modal-mask" >
+            <div class="modal-mask">
             <div class="modal-wrapper">
             <div class="modal-container">
 
                   <div class="modal-header">
-                        <slot name="header">
-                              default header
-                        </slot>
+                        Exclusão de item
                   </div>
 
                   <div class="modal-body">
