@@ -24,7 +24,7 @@ export default defineComponent({
             adicionarNewempresa(){
                   router.push('/empresas/0');
             },
-            ordenaDados(obj: any){
+            ordenaDados(obj: {key_body: string, ordem : {tipo_ordenacao: boolean, tipo_obj: string}}){
                   store.commit('ordenarDadosInterno',{
                         'ordem': obj.ordem.tipo_ordenacao,
                         'rota_interna': 'empresas',
