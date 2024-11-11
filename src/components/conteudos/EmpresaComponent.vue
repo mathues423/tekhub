@@ -30,8 +30,7 @@ export default defineComponent({
                         'isfiltrable': true, 'isordenable':true},
 
                         {'header': 'Versão API', 'key_body': 'versaoApiTek',
-                        'ordem':{'on': false,'tipo_obj': '', 'tipo_ordenacao': true}, //Ascendente => true | Descendente => false
-                        'isfiltrable': true, 'isordenable':true},
+                        'isfiltrable': true, 'isordenable':false},
 
                         {'header': 'Ações', 'key_body': 'button',
                         'isfiltrable': false, 'isordenable':false}
@@ -81,12 +80,15 @@ export default defineComponent({
                               }
                   }) as Array<object>
             },
-            ordenaEmpresa(title: any){
-                  if(!title.ordem.on){
-                        title.ordem.tipo_ordenacao = !title.ordem.tipo_ordenacao;
-                  }else{
-                        title.ordem.on = true;
-                  }
+            ordenaEmpresa(title: {ordem: {tipo_ordenacao : boolean, on: boolean}}){
+                  this.dado_paginado.header.forEach(
+                        (valor) => {
+                              if(valor.ordem?.on != undefined){
+                                    valor.ordem.on = false;
+                              }
+                        })
+                  title.ordem.tipo_ordenacao = !title.ordem.tipo_ordenacao;
+                  title.ordem.on = true;
                   this.$emit('ordenaEmpresaView', title);
                   this.atualizarDadoPaginado();
             }
