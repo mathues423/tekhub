@@ -1,5 +1,3 @@
-import fetch_ from "../fetch/requisicao";
-
 class DadoEmpresa {
       descricao= '';
       cnpj= '';
