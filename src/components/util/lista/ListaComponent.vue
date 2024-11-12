@@ -8,7 +8,7 @@ import ModalRemoçãoComponent from '../ModalRemoçãoComponent.vue';
 export default defineComponent({
       data() {
           return {
-            showModal: false,
+            showDeletModal: false,
             dado_modal: {
                   codigoTek: '',
                   descricao: '',
@@ -40,6 +40,11 @@ export default defineComponent({
                   type: String,
                   require: true
             },
+            ModalContent_Remocao:{
+                  type: Array,
+                  require: true
+            },
+            
       },
       methods:{
             up_lista(){
@@ -48,9 +53,9 @@ export default defineComponent({
             down_lista(){
                   this.$emit('recuar');
             },
-            mountModal(arg: {codigoTek: string, descricao: string, cnpj: number, versaoApiTek: string}){
+            mountDeletModal(arg: {codigoTek: string, descricao: string, cnpj: number, versaoApiTek: string}){
                   this.dado_modal = arg;
-                  this.showModal = true;
+                  this.showDeletModal = true;
             },
             deletarDado(){
                   this.$emit('deletarDadoPai', this.dado_modal);
@@ -58,24 +63,19 @@ export default defineComponent({
             ordenarDado(dadosObj : object){
                   this.$emit('ordenarDadoPai', dadosObj);
             },
-            filtrarDoda(dadosObj : object){
-                  this.$emit('filtrarDadoPai', dadosObj);
-            }
       },
-      emits: ['avancar', 'recuar', 'deletarDadoPai', 'ordenarDadoPai', 'filtrarDadoPai']
+      emits: ['avancar', 'recuar', 'deletarDadoPai', 'ordenarDadoPai']
 })
 </script>
 
 <template>
-      <ModalRemoçãoComponent :isAtivo="showModal" @close="showModal = false" @deletar_item="deletarDado">
+      <ModalRemoçãoComponent :isAtivo="showDeletModal" @close="showDeletModal = false" @deletar_item="deletarDado">
             <template v-slot:body> 
                   <div class="aviso">Atenção essa ação não poderá ser desfeita.</div>
                   <div style="padding-top: 5px;">Informações do item</div>
-                  <!-- "codigoTek" "descricao""cnpj""versaoApiTek" -->
-                  <div style="padding-top: 5px;">Código: {{ dado_modal.codigoTek }}</div>
-                  <div style="padding-top: 5px;">Razão Social: {{ dado_modal.descricao }}</div>
-                  <div style="padding-top: 5px;">CNPJ: {{ dado_modal.cnpj }}</div>
-                  <div style="padding-top: 5px;">Verção: {{ dado_modal.versaoApiTek }}</div>
+                  <div style="padding-top: 5px;" v-for="(value, index) in ModalContent_Remocao" :key="index">
+                        {{ value['nome' as keyof typeof value] }}: {{ dado_modal[value['key' as keyof typeof value] as keyof typeof dado_modal] }}
+                  </div>
             </template>
       </ModalRemoçãoComponent>
       <div class="row">
@@ -128,7 +128,7 @@ export default defineComponent({
                                           </button>
                                     </div>
                                     <div v-if="title.isfiltrable" :class="['col-3', `${title.ordem?.on === true  ? 'col-ativo' : ''}`]">
-                                          <button  class="btn btn-tabela-filtro" @click="filtrarDoda(title)">
+                                          <button  class="btn btn-tabela-filtro">
                                                 F
                                           </button>
                                     </div>
@@ -143,14 +143,16 @@ export default defineComponent({
                                     {{ dado[traduzido.key_body as keyof typeof dado] }}
                               </span>
                               <span v-else>
+                                    <div style="text-align: center;">
                                     <EdiçãoBotaoComponent
                                     :nome_rota_para_edicao="rota_edicao"
                                     :id_item="dado['codigo' as keyof typeof dado]"
                                     />
-                                    <RemoçãoBotaoComponent 
+                                    <RemoçãoBotaoComponent
                                     :dado="dado"
-                                    @deletarModal="(arg) => mountModal(arg)"
+                                    @deletarModal="(arg: any) => mountDeletModal(arg)"
                                     />
+                                    </div>
                               </span>
                         </th>
                   </tr>
