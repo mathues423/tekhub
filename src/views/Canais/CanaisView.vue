@@ -1,16 +1,23 @@
 <script lang="ts">
+import CanaisComponent from '@/components/conteudos/CanaisComponent.vue';
 import NavbarComplet from '@/components/navbars/NavbarComplet.vue';
 import CriarBotao from '@/components/util/CriarBotaoComponent.vue';
 import VersaoMaximisada from '@/components/versionamento/VersaoMaximisada.vue';
 import router from '@/router';
+import store from '@/store';
 import { defineComponent } from 'vue';
 
 
 export default defineComponent({
+      data(){
+            return{
+                  dados_lista_canal: store.getters.getCanais
+            }
+      },
       components:{
             NavbarComplet,
             CriarBotao,
-            // DashboardComponent,
+            CanaisComponent,
             VersaoMaximisada,
       },
       methods:{
@@ -26,7 +33,9 @@ export default defineComponent({
             <NavbarComplet :lateral="'canais'"/>
             <div class="col-10" id="content">
                   <CriarBotao @criar="adicionarNewcanal" />
-                  Canais content
+                  <CanaisComponent 
+                  :dados_lista="dados_lista_canal"
+                  />
             </div>
             <VersaoMaximisada />
       </div>
