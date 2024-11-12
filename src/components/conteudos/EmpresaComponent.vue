@@ -48,7 +48,7 @@ export default defineComponent({
                   require: true
             }
       },
-      created() {
+      mounted() {
             this.dado_paginado.body = this.dados_lista as Array<object>;
             if (Object.keys(this.dado_paginado.body).length) {
                   this.NUMERO_PAGINA = Math.ceil(Object.keys(this.dado_paginado.body).length / this.ITEM_PAGINA_MAX);
@@ -99,11 +99,23 @@ export default defineComponent({
 
 <template id="Empre_comp">
       <div class="row">
+            <!-- "codigoTek" "descricao""cnpj""versaoApiTek" Para empresa -->
+            
+            <!-- Duvida se ediçaõ seria um modal tbm ou so uma div msm -->
             <ListaComponent
                   :dados="dado_paginado"
                   :pagina="pagina_atual"
                   :pagina_max="NUMERO_PAGINA"
                   :rota_edicao="'empresas'"
+                  
+                  :ModalContent_Edicao="[]" 
+
+                  :ModalContent_Remocao="[
+                        {'nome': 'Código Tek', 'key': 'codigoTek'},
+                        {'nome': 'Razão Social', 'key': 'descricao'},
+                        {'nome': 'CNPJ', 'key': 'cnpj'},
+                        {'nome': 'Verção', 'key': 'versaoApiTek'},
+                        ]"
                   @deletarDadoPai="(arg) => deletar(arg)"
                   @ordenarDadoPai="(arg) => ordenaEmpresa(arg)"
                   @avancar="avancaPagina" 
