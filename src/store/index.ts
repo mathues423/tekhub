@@ -4,20 +4,20 @@ import { createStore } from 'vuex'
 // Cria uma nova instância do store.
 const store = createStore({
   state: {
-    dashboard: Array<{}>(),
+    dashboard: Array<object>(),
 
-    empresas: Array<{}>(),
-    ambientes: Array<{}>(),
-    usuarios: Array<{}>(),
-    canais: Array<{}>(),
+    empresas: Array<object>(),
+    ambientes: Array<object>(),
+    usuarios: Array<object>(),
+    canais: Array<object>(),
 
-    log_req: Array<{}>(),
-    log_att: Array<{}>(),
-    mapeamentoprodudo: Array<{}>(),
-    marketplaceecommerce: Array<{}>(),
+    log_req: Array<object>(),
+    log_att: Array<object>(),
+    mapeamentoprodudo: Array<object>(),
+    marketplaceecommerce: Array<object>(),
   },
   mutations:{ ///Comit
-    setDadosInterno(state, obj: {dado : Array<{}>, roter_interna: string}){
+    setDadosInterno(state, obj: {dado : Array<object>, roter_interna: string}){
       state[obj.roter_interna as keyof typeof state] = obj.dado;
     }, 
     setDadosInternoID(state, obj : {new_dado: object, id: string, roter_interna: string}){
@@ -43,63 +43,60 @@ const store = createStore({
       
       if (obj.tipo == 'Number') {
         console.log("ORDENA NUMBER");
-        
         if(obj.ordem){ // Ascendente
           state[obj.rota_interna as keyof typeof state].sort((a: object , b: object) => 
             a[obj.nome_dado as keyof typeof a] - b[obj.nome_dado as keyof typeof b]
-        )
+          )
         obj.ordem = !obj.ordem;
-      }else{ //Decrescente
+        }else{ //Decrescente
           state[obj.rota_interna as keyof typeof state].sort((a: object , b: object) => 
             b[obj.nome_dado as keyof typeof b] - a[obj.nome_dado as keyof typeof a]
-        )
+          )
+        }
       }
-    }
-    if(obj.tipo == 'String'){
-      console.log("ORDENA STRING");
+      if(obj.tipo == 'String'){
+        console.log("ORDENA STRING");
         if(obj.ordem){ // Ascendente
-          state[obj.rota_interna as keyof typeof state].sort((a, b) => {
-            return (a[obj.nome_dado as keyof typeof a] as string).localeCompare(b[obj.nome_dado as keyof typeof b])
-          })
+          state[obj.rota_interna as keyof typeof state].sort((a, b) => 
+            (a[obj.nome_dado as keyof typeof a] as string).localeCompare(b[obj.nome_dado as keyof typeof b])
+          )
           obj.ordem = !obj.ordem;
-      }else{ //Decrescente
-        state[obj.rota_interna as keyof typeof state].sort((a, b) => {
-          return (b[obj.nome_dado as keyof typeof b] as string).localeCompare(a[obj.nome_dado as keyof typeof a])
-        })
+        }else{ //Decrescente
+        state[obj.rota_interna as keyof typeof state].sort((a, b) =>
+          (b[obj.nome_dado as keyof typeof b] as string).localeCompare(a[obj.nome_dado as keyof typeof a])
+        )
+        }
       }
+      console.log('State.rota: ', state[obj.rota_interna as keyof typeof state]);
+      console.log('ROTINA--------------FIM-------------------------------------------------');
     }
-    
-    
-    console.log('State.rota: ', state[obj.rota_interna as keyof typeof state]);
-    console.log('ROTINA--------------FIM-------------------------------------------------');
-      }
   },
   getters: {
-    getDashboard(state): Array<Object>{
+    getDashboard(state): Array<object>{
       return state.dashboard
     },
-    getEmpresas(state): Array<Object>{
+    getEmpresas(state): Array<object>{
       return state.empresas
     },
-    getAmbientes(state): Array<Object>{
+    getAmbientes(state): Array<object>{
       return state.ambientes
     },
-    getUsuarios(state): Array<Object>{
+    getUsuarios(state): Array<object>{
       return state.usuarios
     },
-    getCanais(state): Array<Object>{
+    getCanais(state): Array<object>{
       return state.canais
     },
-    getLogAtt(state): Array<Object>{
+    getLogAtt(state): Array<object>{
       return state.log_att
     },
-    getLogReq(state): Array<Object>{
+    getLogReq(state): Array<object>{
       return state.log_req
     },
-    getMapeamentoProduto(state): Array<Object>{
+    getMapeamentoProduto(state): Array<object>{
       return state.mapeamentoprodudo
     },
-    getMarketplaceEcommerce(state): Array<Object>{
+    getMarketplaceEcommerce(state): Array<object>{
       return state.marketplaceecommerce
     },
   },
