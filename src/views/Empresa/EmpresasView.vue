@@ -42,7 +42,7 @@ export default defineComponent({
                   <CriarBotao @criar="adicionarNewempresa" />
                   <EmpresaComponent 
                   :dados_lista="dados_lista_empresa"
-                  @ordenaEmpresaView="(arg) => ordenaDados(arg)"
+                  @ordenaEmpresaView="(arg: any) => ordenaDados(arg)"
                   />
             </div>
             <VersaoMaximisada />

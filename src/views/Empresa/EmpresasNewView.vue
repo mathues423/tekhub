@@ -16,7 +16,7 @@ export default defineComponent({
                         versaoApiTek: '',
                         integracoes: []
                   },
-                  errors: []
+                  errors: [] as Array<string>
             }
       },
       components:{
@@ -30,10 +30,15 @@ export default defineComponent({
                         this.errors.pop();
                   }
                   empresa._add(this.empresa, this.errors)
-                  Promise.resolve(
-                        store.dispatch('putDados', {'roter_externa': 'empresa', 'dado': this.empresa, 'roter_interna': 'empresas'})
-                        .then(()=> this.voltarEmpresa)
-                  ).catch((error)=> { console.warn(error) })
+                  if(this.errors.length == 0){
+                        Promise.resolve(
+                              store.dispatch('putDados', {'roter_externa': 'empresa', 'dado': this.empresa, 'roter_interna': 'empresas'})
+                              .then(()=> this.voltarEmpresa())
+                        ).catch((error)=> {
+                              this.errors?.push('400')
+                              console.warn(error) 
+                        })
+                  }
                   
             },
             voltarEmpresa(){
