@@ -1,7 +1,7 @@
 <script lang="ts">
-import DashboardComponent from '../components/conteudos/DashboardComponent.vue';
-import NavbarComplet from '../components/navbars/NavbarComplet.vue';
-import VersaoMaximisada from '../components/versionamento/VersaoMaximisada.vue';
+import DashboardComponent from '@/components/conteudos/DashboardComponent.vue';
+import NavbarComplet from '@/components/navbars/NavbarComplet.vue';
+import VersaoMaximisada from '@/components/versionamento/VersaoMaximisada.vue';
 
 
 export default{

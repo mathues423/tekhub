@@ -1,5 +1,5 @@
 <script lang="ts">
-import LoginCard from '../components/login/LoginCard.vue';
+import LoginCard from '@/components/login/LoginCard.vue';
 
 export default{
   components: {
