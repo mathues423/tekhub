@@ -1,15 +1,24 @@
 <script lang="ts">
+import AmbienteComponent from '@/components/conteudos/AmbienteComponent.vue';
 import NavbarComplet from '@/components/navbars/NavbarComplet.vue';
+import CriarBotaoComponent from '@/components/util/CriarBotaoComponent.vue';
 import VersaoMaximisada from '@/components/versionamento/VersaoMaximisada.vue';
+import router from '@/router';
 import { defineComponent } from 'vue';
 
 
 export default defineComponent({
       components:{
             NavbarComplet,
-            // DashboardComponent,
+            AmbienteComponent,
             VersaoMaximisada,
+            CriarBotaoComponent
       },
+      methods:{
+            adicionarNewambiente(){
+                  router.push('/dashboard');
+            },
+      }
 })
 </script>
 
@@ -17,6 +26,8 @@ export default defineComponent({
       <div class="row">
             <NavbarComplet :lateral="'ambiente'"/>
             <div class="col-10" id="content">
+                  <CriarBotaoComponent @criar="adicionarNewambiente"/>
+                  <AmbienteComponent />
             </div>
             <VersaoMaximisada />
       </div>

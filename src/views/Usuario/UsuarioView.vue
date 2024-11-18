@@ -1,22 +1,33 @@
 <script lang="ts">
+import UsuarioComponent from '@/components/conteudos/UsuarioComponent.vue';
 import NavbarComplet from '@/components/navbars/NavbarComplet.vue';
+import CriarBotaoComponent from '@/components/util/CriarBotaoComponent.vue';
 import VersaoMaximisada from '@/components/versionamento/VersaoMaximisada.vue';
+import router from '@/router';
+import { defineComponent } from 'vue';
 
 
-export default{
+export default defineComponent({
       components:{
             NavbarComplet,
-            // DashboardComponent,
             VersaoMaximisada,
+            UsuarioComponent,
+            CriarBotaoComponent
+      },
+      methods:{
+            adicionarNewusuario(){
+                  router.push('/dashboard');
+            },
       }
-}
+})
 </script>
 
 <template>
       <div class="row">
             <NavbarComplet :lateral="'usuario'"/>
             <div class="col-10" id="content">
-                  Usuario content
+                  <CriarBotaoComponent @criar="adicionarNewusuario"/>
+                  <UsuarioComponent />
             </div>
             <VersaoMaximisada />
       </div>
