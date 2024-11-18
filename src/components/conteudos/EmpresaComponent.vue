@@ -3,6 +3,7 @@ import { defineComponent } from 'vue';
 import store from '@/store';
 import ListaComponent from '../util/lista/ListaComponent.vue';
 import LoaderListaComponent from '../util/LoaderListaComponent.vue';
+import FiltroComponent from '../util/FiltroComponent.vue';
 
 
 export default defineComponent({
@@ -10,10 +11,6 @@ export default defineComponent({
       data() {
           return {
             lista_estado: 'Loader',
-            component_obj : {
-                  'Loader': LoaderListaComponent,
-                  'Lista': ListaComponent
-            },
             ITEM_PAGINA_MAX : 10,
             NUMERO_PAGINA: 1,
             pagina_atual: 1,
@@ -48,6 +45,11 @@ export default defineComponent({
                   body: [] as Array<object>
             },
           }
+      },
+      components:{
+            LoaderListaComponent,
+            ListaComponent,
+            FiltroComponent
       },
       mounted() {
             this.requestDados()
@@ -111,11 +113,12 @@ export default defineComponent({
 
 <template id="Empre_comp">
       <div class="row">
-            <!-- Duvida se ediçaõ seria um modal tbm ou so uma div msm -->
-            <component :is="component_obj[lista_estado as keyof typeof component_obj]" 
+            <FiltroComponent />
+            <LoaderListaComponent v-if="lista_estado == 'Loader'"
                   :header="dado_paginado.header"
                   :quantidade_dados="ITEM_PAGINA_MAX"
-
+            />
+            <ListaComponent v-if="lista_estado == 'Lista'"
                   :dados="dado_paginado"
                   :pagina="pagina_atual"
                   :pagina_max="NUMERO_PAGINA"
