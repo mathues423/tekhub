@@ -5,15 +5,9 @@ import NavbarComplet from '@/components/navbars/NavbarComplet.vue';
 import CriarBotao from '@/components/util/CriarBotaoComponent.vue';
 import VersaoMaximisada from '@/components/versionamento/VersaoMaximisada.vue';
 import router from '@/router';
-import store from '@/store';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-      data(){
-            return{
-                  dados_lista_empresa: store.getters.getEmpresas
-            }
-      },
       components:{
             NavbarComplet,
             CriarBotao,
@@ -24,13 +18,6 @@ export default defineComponent({
             adicionarNewempresa(){
                   router.push('/empresas/0');
             },
-            ordenaDados(obj: {key_body: string, ordem : {tipo_ordenacao: boolean, tipo_obj: string}}){
-                  store.commit('ordenarDadosInterno',{
-                        'ordem': obj.ordem.tipo_ordenacao,
-                        'rota_interna': 'empresas',
-                        'nome_dado': obj.key_body,
-                        'tipo': obj.ordem.tipo_obj})
-            }
       }
 })
 </script>
@@ -40,10 +27,7 @@ export default defineComponent({
             <NavbarComplet :lateral="'empresas'"/>
             <div class="col-10" id="content">
                   <CriarBotao @criar="adicionarNewempresa" />
-                  <EmpresaComponent 
-                  :dados_lista="dados_lista_empresa"
-                  @ordenaEmpresaView="(arg: any) => ordenaDados(arg)"
-                  />
+                  <EmpresaComponent />
             </div>
             <VersaoMaximisada />
       </div>

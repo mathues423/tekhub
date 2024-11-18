@@ -26,7 +26,7 @@ class UserDados {
                   localStorage.setItem("TOKEN", this.usuario.token);
                   APPCONFIG.authToken = this.usuario.token;
                   //Requisição dos dados                    //Avanço para a pagina inicial
-                  await this.getDados();
+                  // await this.getDados();
                   router.push('/dashboard');
             } catch (error) {
                   erros.vericação = true;
@@ -38,7 +38,7 @@ class UserDados {
             if(localStorage.getItem('TOKEN') != null){
                   this.usuario.token = (localStorage.getItem('TOKEN') || '');
                   APPCONFIG.authToken = this.usuario.token;  
-                  this.getDados();
+                  // this.getDados();
                   router.push('/dashboard');
             }else{
                   router.push('/');

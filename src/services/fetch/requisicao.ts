@@ -22,7 +22,7 @@ class fetch_padrao{
       async getDado(path : string){
             try {
                   const { data } = await http.get(path);
-                  return data.data;
+                  return data;
             } catch (error) {
                   console.warn(error)
             }
@@ -42,7 +42,7 @@ class fetch_padrao{
       async getDado_ID(path : string, id : string){
             try {
                   const { data } = await http.get(path+'/'+id);
-                  return data.data;
+                  return data;
             } catch (error) {
                   console.warn(error)
             }
@@ -61,7 +61,7 @@ class fetch_padrao{
       async postDado(path : string, dado : object){
             try {
                   const { data } = await http.post(path, dado);
-                  return data.data;
+                  return data;
             } catch (error) {
                   console.warn(error);
                   const { data } = await http.post(path, dado);
@@ -85,7 +85,7 @@ class fetch_padrao{
       async putDado(path : string, id : string, dado : object){
             try {
                   const { data } = await http.put(path+'/'+id, dado);
-                  return data.data;
+                  return data;
             } catch (error) {
                   console.warn(error)
             }
@@ -105,9 +105,28 @@ class fetch_padrao{
       async delDado(path : string, id : string){
             try {
                   const { data } = await http.delete(path+'/'+id);
-                  return data.data;
+                  return data;
             } catch (error) {
                   console.warn(error)
+            }
+      }
+
+      /**
+       * Pega os dados do banco com paginação.
+       * 
+       * @example 
+       *   getDadoPaginado('/empresa', '?pagina=99&...') // object | null
+       * 
+       * @param   {string} path   
+       * @param   {string} request   
+       * @returns {object | null}
+       */
+      async getDadoPaginado(path : string, request : string){
+            try {
+                  const { data } = await http.get(path+request);
+                   return data;
+            } catch (error) {
+                  console.warn(error) 
             }
       }
 }

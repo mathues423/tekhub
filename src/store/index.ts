@@ -1,135 +1,171 @@
 import fetch_ from '@/services/fetch/requisicao';
 import { createStore } from 'vuex'
 
-// Cria uma nova instância do store.
 const store = createStore({
   state: {
-    dashboard: Array<object>(),
+    dashboard: Object,
 
-    empresas: Array<object>(),
-    ambientes: Array<object>(),
-    usuarios: Array<object>(),
-    canais: Array<object>(),
+    empresas: Object,
+    ambientes: Object,
+    usuarios: Object,
+    canais: Object,
 
-    log_req: Array<object>(),
-    log_att: Array<object>(),
-    mapeamentoprodudo: Array<object>(),
-    marketplaceecommerce: Array<object>(),
+    log_req: Object,
+    log_att: Object,
+    mapeamentoprodudo: Object,
+    marketplaceecommerce: Object,
   },
   mutations:{ ///Comit
-    setDadosInterno(state, obj: {dado : Array<object>, roter_interna: string}){
-      state[obj.roter_interna as keyof typeof state] = obj.dado;
+    setDadosInterno(state, obj: object){
+      state[obj['roter_interna' as keyof typeof obj] as keyof typeof state] = obj['dado' as keyof typeof obj];
+      console.log(state);
     }, 
-    setDadosInternoID(state, obj : {new_dado: object, id: string, roter_interna: string}){
-      state[obj.roter_interna as keyof typeof state].forEach((value,index) => {
-        if (value['codigo' as keyof typeof value] == parseInt(obj.id)) {
-          state.empresas[index] = obj.new_dado;
-        }
-      })
-    },
-    delDadosInternoID(state, obj : {id: string, roter_interna: string}){
-      state[obj.roter_interna as keyof typeof state].forEach((value,index) => {
-        if (value['codigo' as keyof typeof value] == parseInt(obj.id)) {
-          state[obj.roter_interna as keyof typeof state].splice(index, 1)
-        }
-      })      
-    },
-    putDadosInterno(state, obj: {dado: object, rota_interna: string}){
-      state[obj.rota_interna as keyof typeof state].push(obj.dado);
-    },
-    ordenarDadosInterno(state, obj: {ordem: boolean, rota_interna: string, nome_dado: string, tipo: string}){
-      console.log('OBJ REQ: ', obj);
-      console.log('State.rota: ', state[obj.rota_interna as keyof typeof state]);
-      
+    // setDadosInternoID(state, obj : {new_dado: object, id: string, roter_interna: string}){
+    //   const aux = state[obj.roter_interna as keyof typeof state]['data' as keyof typeof Object] as Array<object>;
+    //   aux.forEach((value,index) => {
+    //     if (value['codigo' as keyof typeof value] == parseInt(obj.id)) {
+    //       state.empresas[index] = obj.new_dado;
+    //     }
+    //   })
+    // },
+    // delDadosInternoID(state, obj : {id: string, roter_interna: string}){
+    //   const aux = state[obj.roter_interna as keyof typeof state]['data' as keyof typeof Object] as Array<object>;
+    //   aux.forEach((value,index) => {
+    //     if (value['codigo' as keyof typeof value] == parseInt(obj.id)) {
+    //       aux.splice(index, 1)
+    //     }
+    //   })      
+    // },
+    // putDadosInterno(state, obj: {dado: object, rota_interna: string}){
+    //   const aux = state[obj.rota_interna as keyof typeof state]['data' as keyof typeof Object] as Array<object>;
+    //   aux.push(obj.dado);
+    // },
+    ordenarDadosInterno(state, obj: {ordem: string, rota_interna: string, nome_dado: string, tipo: string}){
+      const aux = state[obj.rota_interna as keyof typeof state]['data' as keyof typeof Object] as Array<object>;
       if (obj.tipo == 'Number') {
-        console.log("ORDENA NUMBER");
-        if(obj.ordem){ // Ascendente
-          state[obj.rota_interna as keyof typeof state].sort((a: object , b: object) => 
+        if(obj.ordem == 'Asc'){ // Ascendente
+          aux.sort((a: object , b: object) => 
             a[obj.nome_dado as keyof typeof a] - b[obj.nome_dado as keyof typeof b]
           )
-        obj.ordem = !obj.ordem;
         }else{ //Decrescente
-          state[obj.rota_interna as keyof typeof state].sort((a: object , b: object) => 
+          aux.sort((a: object , b: object) => 
             b[obj.nome_dado as keyof typeof b] - a[obj.nome_dado as keyof typeof a]
           )
         }
       }
       if(obj.tipo == 'String'){
-        console.log("ORDENA STRING");
-        if(obj.ordem){ // Ascendente
-          state[obj.rota_interna as keyof typeof state].sort((a, b) => 
+        if(obj.ordem == 'Asc'){ // Ascendente
+          aux.sort((a, b) => 
             (a[obj.nome_dado as keyof typeof a] as string).localeCompare(b[obj.nome_dado as keyof typeof b])
           )
-          obj.ordem = !obj.ordem;
         }else{ //Decrescente
-        state[obj.rota_interna as keyof typeof state].sort((a, b) =>
+        aux.sort((a, b) =>
           (b[obj.nome_dado as keyof typeof b] as string).localeCompare(a[obj.nome_dado as keyof typeof a])
         )
         }
       }
-      console.log('State.rota: ', state[obj.rota_interna as keyof typeof state]);
-      console.log('ROTINA--------------FIM-------------------------------------------------');
     }
   },
   getters: {
-    getDashboard(state): Array<object>{
-      return state.dashboard
+    //Dashboard
+    getDashboard(state): any{
+      return state.dashboard['data' as keyof typeof state.dashboard]
     },
-    getEmpresas(state): Array<object>{
-      return state.empresas
+    getDashboardLength(state): any{
+      return state.dashboard['totalRegistros' as keyof typeof state.dashboard]
     },
-    getAmbientes(state): Array<object>{
-      return state.ambientes
+
+    //Empresas
+    getEmpresas(state): any{
+      return state.empresas['data' as keyof typeof state.empresas]
     },
-    getUsuarios(state): Array<object>{
-      return state.usuarios
+    getEmpresasLength(state): any{
+      return state.empresas['totalRegistros' as keyof typeof state.empresas]
     },
-    getCanais(state): Array<object>{
-      return state.canais
+
+    //Ambiente
+    getAmbientes(state): any{
+      return state.ambientes['data' as keyof typeof state.ambientes]
     },
-    getLogAtt(state): Array<object>{
-      return state.log_att
+    getAmbientesLength(state): any{
+      return state.ambientes['totalRegistros' as keyof typeof state.ambientes]
     },
-    getLogReq(state): Array<object>{
-      return state.log_req
+
+    //Usuario
+    getUsuarios(state): any{
+      return state.usuarios['data' as keyof typeof state.usuarios]
     },
-    getMapeamentoProduto(state): Array<object>{
-      return state.mapeamentoprodudo
+    getUsuariosLength(state): any{
+      return state.usuarios['totalRegistros' as keyof typeof state.usuarios]
     },
-    getMarketplaceEcommerce(state): Array<object>{
-      return state.marketplaceecommerce
+
+    //Canais
+    getCanais(state): any{
+      return state.canais['data' as keyof typeof state.canais]
+    },
+    getCanaisLength(state): any{
+      return state.canais['totalRegistros' as keyof typeof state.canais]
+    },
+
+    //LOG Atualização
+    getLogAtt(state): any{
+      return state.log_att['data' as keyof typeof state.log_att]
+    },
+    getLogAttLength(state): any{
+      return state.log_att['totalRegistros' as keyof typeof state.log_att]
+    },
+
+    //LOG Requisição
+    getLogReq(state): any{
+      return state.log_req['data' as keyof typeof state.log_req]
+    },
+    getLogReqLength(state): any{
+      return state.log_req['totalRegistros' as keyof typeof state.log_req]
+    },
+
+    //Mapeamento
+    getMapeamentoProduto(state): any{
+      return state.mapeamentoprodudo['data' as keyof typeof state.mapeamentoprodudo]
+    },
+    getMapeamentoProdutoLength(state): any{
+      return state.mapeamentoprodudo['totalRegistros' as keyof typeof state.mapeamentoprodudo]
+    },
+
+    //Market
+    getMarketplaceEcommerce(state): any{
+      return state.marketplaceecommerce['data' as keyof typeof state.marketplaceecommerce]
+    },
+    getMarketplaceEcommerceLength(state): any{
+      return state.marketplaceecommerce['totalRegistros' as keyof typeof state.marketplaceecommerce]
     },
   },
   actions: { //Asincrono Dispacht
     getEmpresasID(context, id : string){
-      let retorno;
-      context.state.empresas.forEach((value) => {
-        if (value['codigo' as keyof typeof context.state.empresas[0]] == parseInt(id)) {
-          retorno = value;
+      let retorno = undefined;
+      const aux = context.state.empresas['data' as keyof typeof context.state.empresas] as Array<object>;
+      aux.forEach((value) => {
+        if (value['codigo' as keyof typeof value] == parseInt(id)) {
+          retorno =  value;
         }
       })
       return retorno
     },
     async delDadosID(context, obj : {roter_externa: string, id: string, roter_interna: string}){
-      Promise.resolve(fetch_.delDado(obj.roter_externa,obj.id))
-      .then(() => 
-        context.commit('delDadosInternoID', {'id': obj.id, 'roter_interna': obj.roter_interna})
-      ); 
+      fetch_.delDado(obj.roter_externa,obj.id)
     },
     async setDadosID(context, obj: {roter_externa: string, id: string, roter_interna: string, new_dado: {codigo: number}}){
       obj.new_dado.codigo = parseInt(obj.id);
-      Promise.resolve(fetch_.putDado('/'+obj.roter_externa, obj.id,obj.new_dado))
-      .then(() =>
-        context.commit('setDadosInternoID', {'new_dado': obj.new_dado, 'id':obj.id, 'roter_interna':obj.roter_interna} )
-      )
+      fetch_.putDado('/'+obj.roter_externa, obj.id,obj.new_dado)
     },
     async putDados(context, obj : {roter_externa: string, dado: object, roter_interna: string}){
-      let new_obj = {};
-      Promise.resolve(new_obj = await fetch_.postDado('/'+obj.roter_externa, obj.dado))
-      .then(()=> {
-        console.log(new_obj)
-        context.commit('putDadosInterno', {'dado': new_obj, 'rota_interna': obj.roter_interna})}
-      )
+      await fetch_.postDado('/'+obj.roter_externa, obj.dado)
+    },
+    async getDadosPaginados(context, obj : {roter_interna: string, roter_externa: string, request: string}){
+      Promise.resolve(await fetch_.getDadoPaginado('/'+obj.roter_externa, obj.request))
+      .then((value) =>{
+        context.commit('setDadosInterno', {'dado': value , 'roter_interna': obj.roter_interna})
+        return value
+      })
     }
   }
 

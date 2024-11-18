@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-      import { APPCONFIG } from "../constants/Config";
+      import { APPCONFIG } from "@/components/constants/Config";
 </script>
 
 <template>

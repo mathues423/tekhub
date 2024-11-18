@@ -11,6 +11,7 @@ import store from '@/store';
 export default defineComponent({
       data(){
             return {
+                  isEditing: false,
                   empresa:{
                         descricao: '',
                         cnpj: '',
@@ -35,27 +36,36 @@ export default defineComponent({
       },
       methods:{
             async editRequest(){
+                  this.isEditing = true;
+                  for (const element of this.errors) {
+                        this.errors.pop()
+                  }
                   const id = (this.$route.params['id'] || '-1') as string;
                   empresa._edit(this.old_empresa, this.empresa, this.errors)
-                  Promise.resolve(
-                        store.dispatch('setDadosID', {'roter_externa': 'empresa', 'id': id, 'roter_interna': 'empresas', 'new_dado': this.empresa}))
-                  .then(()=> 
-                        this.voltarEmpresa
-                  ).catch((error)=> { console.warn(error) })
+                  if (this.errors.length == 0) {
+                        Promise.resolve(
+                              store.dispatch('setDadosID', {'roter_externa': 'empresa', 'id': id, 'roter_interna': 'empresas', 'new_dado': this.empresa}))
+                        .then(()=> 
+                              this.voltarEmpresa()
+                        )
+                  }else{
+                        this.isEditing = false;
+                  }
             },
             voltarEmpresa(){
                   router.push('/empresas');
             },
       },
       async mounted(){
-            const rota = (this.$route.params['id'] || '-1') as string;
-            const a = await fetch_.getDado_ID('/empresa', rota);
-            this.old_empresa.descricao = this.empresa.descricao = a.descricao;
-            this.old_empresa.cnpj = this.empresa.cnpj = a.cnpj;
-            this.old_empresa.codigoTek = this.empresa.codigoTek = a.codigoTek;
-            this.old_empresa.versaoApiTek = this.empresa.versaoApiTek = a.versaoApiTek;
-            this.old_empresa.integracoes = this.empresa.integracoes = a.integracoes;
-            // this.old_empresa = this.empresa;
+            const rota_id = (this.$route.params['id'] || '-1') as string;
+            Promise.resolve(store.dispatch('getEmpresasID', rota_id))
+            .then((value) => {
+                  this.old_empresa.descricao = this.empresa.descricao = value.descricao;
+                  this.old_empresa.cnpj = this.empresa.cnpj = value.cnpj;
+                  this.old_empresa.codigoTek = this.empresa.codigoTek = value.codigoTek;
+                  this.old_empresa.versaoApiTek = this.empresa.versaoApiTek = value.versaoApiTek;
+                  this.old_empresa.integracoes = this.empresa.integracoes = value.integracoes;
+            });
       }
 })
 </script>
@@ -126,7 +136,7 @@ export default defineComponent({
                                           :mensagem="'Você precisa editar antes de salvar'"
                                           :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='igual') != -1}]"
                                           />
-                                          <button class="btn btn-primary col-2">
+                                          <button class="btn btn-primary col-2" :disabled="isEditing">
                                                 <span>Iditar</span>
                                           </button>
                                           <button class="btn btn-light col-2" style="margin-left: 24px;" @click="voltarEmpresa()">
