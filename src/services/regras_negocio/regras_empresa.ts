@@ -38,13 +38,28 @@ class Empresa {
             if(new_dado.versaoApiTek == ''){
                   erros_msg.push('api');
             }
-            if(new_dado == old_dado){
+            if(this.compObject(old_dado, new_dado)){
                   erros_msg.push('igual');
             }
             
             if (erros_msg.length != 0) {
                   console.warn("ERRO: " , erros_msg);
             }
+            
+      }
+      private compObject(old_obj: object, new_ob: object): boolean {
+            const chave_old = Object.keys(old_obj),
+                  chave_new = Object.keys(new_ob);
+                  
+            if (chave_old.length != chave_new.length) {
+                  return true;
+            }
+            
+            const saoDiferentes = chave_old.some((chave) => {
+                  return old_obj[chave as keyof typeof old_obj] !== new_ob[chave as keyof typeof new_ob];
+            });
+            
+            return !saoDiferentes
       }
 }
 
