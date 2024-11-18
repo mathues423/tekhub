@@ -6,7 +6,7 @@ import LoaderListaComponent from '../util/LoaderListaComponent.vue';
 
 
 export default defineComponent({
-      template: '#Canl_comp',
+      template: '#Ambi_comp',
       data() {
           return {
             lista_estado: 'Loader',
@@ -19,20 +19,12 @@ export default defineComponent({
                         'filtro':{'on': false, 'tipo_obj': 'Number', 'tipo_filtro': 'all'},
                         'isfiltrable': true, 'isordenable':false},
 
-                        {'header': 'Descrição', 'key_body': 'descricao',
+                        {'header': 'Canal', 'key_body': 'canalAlias',
                         'filtro':{'on': false, 'tipo_obj': 'String', 'tipo_filtro': 'all'},
                         'isfiltrable': true, 'isordenable':false},
 
-                        {'header': 'Alias', 'key_body': 'alias',
-                        'filtro':{'on': false, 'tipo_obj': 'String', 'tipo_filtro': 'all'},
-                        'isfiltrable': true, 'isordenable':false},
-
-                        {'header': 'TIPO', 'key_body': 'tipo',
+                        {'header': 'Ambiente', 'key_body': 'ambiente',
                         'filtro':{'on': false, 'tipo_obj': 'String', 'tipo_filtro': 'pre'},
-                        'isfiltrable': true, 'isordenable':false},
-
-                        {'header': 'Canal associado', 'key_body': 'vazio',
-                        'filtro':{'on': false, 'tipo_obj': '????', 'tipo_filtro': 'all'},
                         'isfiltrable': true, 'isordenable':false},
 
                         {'header': 'Ações', 'key_body': 'button',
@@ -51,7 +43,7 @@ export default defineComponent({
       },
       methods:{
             deletar(objeto: {codigo: string}){
-                  let aux = {'roter_externa': 'canal', 'id': objeto.codigo, 'roter_interna': 'canais'}
+                  let aux = {'roter_externa': 'ambiente', 'id': objeto.codigo, 'roter_interna': 'ambientes'}
                   Promise.resolve(store.dispatch('delDadosID', aux))
                   .then(
                         () => this.requestDados()
@@ -72,13 +64,13 @@ export default defineComponent({
             async requestDados(){
                   this.lista_estado = 'Loader'
                   store.dispatch('getDadosPaginados', {
-                        'roter_interna': 'canais',
-                        'roter_externa': 'canal',
+                        'roter_interna': 'ambientes',
+                        'roter_externa': 'ambiente',
                         'request': `?pagina=${this.pagina_atual}&porPagina=${this.ITEM_PAGINA_MAX}&ordenacao=codigo&direcao=Asc`
                         })
                   .then(() => {
-                        this.dado_paginado.body = store.getters.getCanais;
-                        this.NUMERO_PAGINA = Math.ceil(store.getters.getCanaisLength / this.ITEM_PAGINA_MAX);
+                        this.dado_paginado.body = store.getters.getAmbientes;
+                        this.NUMERO_PAGINA = Math.ceil(store.getters.getAmbientesLength / this.ITEM_PAGINA_MAX);
                         this.lista_estado = 'Lista'
                   })
             },
@@ -86,7 +78,7 @@ export default defineComponent({
 })
 </script>
 
-<template id="Canl_comp">
+<template id="Ambi_comp">
       <div class="row">
             <!-- Duvida se ediçaõ seria um modal tbm ou so uma div msm -->
             <LoaderListaComponent v-if="lista_estado == 'Loader'"
@@ -97,12 +89,13 @@ export default defineComponent({
                   :dados="dado_paginado"
                   :pagina="pagina_atual"
                   :pagina_max="NUMERO_PAGINA"
-                  :rota_edicao="'canais'"
+                  :rota_edicao="'ambientes'"
                   :ModalContent_Remocao="[
-                        {'nome': 'Descrição', 'key': 'descricao'},
-                        {'nome': 'Alias', 'key': 'alias'},
-                        {'nome': 'TIPO', 'key': 'tipo'},
-                        ]"
+                        {'nome': 'Canal', 'key': 'canalAlias'},
+                        {'nome': 'Ambiente', 'key': 'ambiente'},
+                        {'nome': 'URL', 'key': 'url'},
+                        {'nome': 'Verção', 'key': 'versao'},
+                  ]"
                   @deletarDadoPai="(arg) => deletar(arg)"
                   @ordenarDadoPai="(arg) => {return null}"
                   @avancar="avancaPagina" 
