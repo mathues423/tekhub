@@ -47,7 +47,16 @@ export default defineComponent({
             ListaComponent
       },
       mounted() {
-            this.requestDados()
+            if(store.getters.getCanais != undefined){
+                  console.log("<DENTRO IF CANAL>", store);
+                  
+                  this.dado_paginado.body = store.getters.getCanais
+                  store.dispatch('getPaginas', 'canais').then((value) => this.pagina_atual = value)
+                  this.NUMERO_PAGINA = Math.ceil(store.getters.getCanaisLength / this.ITEM_PAGINA_MAX);
+                  this.lista_estado = 'Lista'
+            }else{
+                  this.requestDados()
+            }
       },
       methods:{
             deletar(objeto: {codigo: string}){
@@ -74,7 +83,8 @@ export default defineComponent({
                   store.dispatch('getDadosPaginados', {
                         'roter_interna': 'canais',
                         'roter_externa': 'canal',
-                        'request': `?pagina=${this.pagina_atual}&porPagina=${this.ITEM_PAGINA_MAX}&ordenacao=codigo&direcao=Asc`
+                        'request': `?pagina=${this.pagina_atual}&porPagina=${this.ITEM_PAGINA_MAX}&ordenacao=codigo&direcao=Asc`,
+                        'pagina_atual': this.pagina_atual
                         })
                   .then(() => {
                         this.dado_paginado.body = store.getters.getCanais;
@@ -102,7 +112,7 @@ export default defineComponent({
                         {'nome': 'Descrição', 'key': 'descricao'},
                         {'nome': 'Alias', 'key': 'alias'},
                         {'nome': 'TIPO', 'key': 'tipo'},
-                        ]"
+                  ]"
                   @deletarDadoPai="(arg) => deletar(arg)"
                   @ordenarDadoPai="(arg) => {return null}"
                   @avancar="avancaPagina" 

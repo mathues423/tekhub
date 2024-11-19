@@ -11,6 +11,7 @@ export default defineComponent({
       data() {
           return {
             lista_estado: 'Loader',
+            itsOnFilter: false,
             ITEM_PAGINA_MAX : 10,
             NUMERO_PAGINA: 1,
             pagina_atual: 1,
@@ -51,8 +52,15 @@ export default defineComponent({
             ListaComponent,
             FiltroComponent
       },
-      mounted() {
-            this.requestDados()
+      async mounted() {
+            if(store.getters.getEmpresas != undefined){
+                  this.dado_paginado.body = await store.getters.getEmpresas
+                  store.dispatch('getPaginas', 'empresas').then((value) => this.pagina_atual = value)
+                  this.NUMERO_PAGINA = Math.ceil(await store.getters.getEmpresasLength / this.ITEM_PAGINA_MAX);
+                  this.lista_estado = 'Lista'
+            }else{
+                  this.requestDados()
+            }
       },
       methods:{
             deletar(objeto: {codigo: string}){
@@ -79,7 +87,8 @@ export default defineComponent({
                   store.dispatch('getDadosPaginados', {
                         'roter_interna': 'empresas',
                         'roter_externa': 'empresa',
-                        'request': `?pagina=${this.pagina_atual}&porPagina=${this.ITEM_PAGINA_MAX}&ordenacao=codigo&direcao=Asc`
+                        'request': `?pagina=${this.pagina_atual}&porPagina=${this.ITEM_PAGINA_MAX}&ordenacao=codigo&direcao=Asc`,
+                        'pagina_atual': this.pagina_atual
                         })
                   .then(() => {
                         this.dado_paginado.body = store.getters.getEmpresas;
@@ -106,6 +115,11 @@ export default defineComponent({
                         'nome_dado': title.key_body,
                         'tipo': title.ordem.tipo_obj
                   })
+            },
+            filtraEmpresa(title: any){
+                  this.itsOnFilter = true;
+                  console.log(title);
+                  
             }
       },
 })
@@ -113,7 +127,9 @@ export default defineComponent({
 
 <template id="Empre_comp">
       <div class="row">
-            <FiltroComponent />
+            <FiltroComponent 
+            :isAtivo="itsOnFilter"
+            />
             <LoaderListaComponent v-if="lista_estado == 'Loader'"
                   :header="dado_paginado.header"
                   :quantidade_dados="ITEM_PAGINA_MAX"
@@ -131,8 +147,9 @@ export default defineComponent({
                   ]"
                   @deletarDadoPai="(arg : any) => deletar(arg)"
                   @ordenarDadoPai="(arg : any) => ordenaEmpresa(arg)"
+                  @filtrarDadoPai="(arg : any) => filtraEmpresa(arg)"
                   @avancar="avancaPagina" 
-                  @recuar="recuarPagina" 
+                  @recuar="recuarPagina"
             />
       </div>
 </template>

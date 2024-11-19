@@ -43,8 +43,15 @@ export default defineComponent({
             LoaderListaComponent,
             ListaComponent
       },
-      mounted() {
-            this.requestDados()
+      async mounted() {
+            if(store.getters.getUsuarios != undefined){
+                  this.lista_estado = 'Lista'
+                  this.dado_paginado.body = await store.getters.getUsuarios
+                  store.dispatch('getPaginas', 'usuarios').then((value) => this.pagina_atual = value)
+                  this.NUMERO_PAGINA = Math.ceil(await store.getters.getCanaisLength / this.ITEM_PAGINA_MAX);
+            }else{
+                  this.requestDados()
+            }
       },
       methods:{
             deletar(objeto: {codigo: string}){
@@ -71,7 +78,8 @@ export default defineComponent({
                   store.dispatch('getDadosPaginados', {
                         'roter_interna': 'usuarios',
                         'roter_externa': 'usuario',
-                        'request': `?pagina=${this.pagina_atual}&porPagina=${this.ITEM_PAGINA_MAX}&ordenacao=codigo&direcao=Asc`
+                        'request': `?pagina=${this.pagina_atual}&porPagina=${this.ITEM_PAGINA_MAX}&ordenacao=codigo&direcao=Asc`,
+                        'pagina_atual': this.pagina_atual
                         })
                   .then(() => {
                         this.dado_paginado.body = store.getters.getUsuarios;

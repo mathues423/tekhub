@@ -5,10 +5,15 @@ const store = createStore({
   state: {
     dashboard: Object,
 
+    pages_atual: Object,
     empresas: Object,
+    // empresa_page_atual: Number,
     ambientes: Object,
+    // ambientes_page_atual: Number,
     usuarios: Object,
+    // usuarios_page_atual: Number,
     canais: Object,
+    // canais_page_atual: Number,
 
     log_req: Object,
     log_att: Object,
@@ -18,28 +23,11 @@ const store = createStore({
   mutations:{ ///Comit
     setDadosInterno(state, obj: object){
       state[obj['roter_interna' as keyof typeof obj] as keyof typeof state] = obj['dado' as keyof typeof obj];
-      console.log(state);
     }, 
-    // setDadosInternoID(state, obj : {new_dado: object, id: string, roter_interna: string}){
-    //   const aux = state[obj.roter_interna as keyof typeof state]['data' as keyof typeof Object] as Array<object>;
-    //   aux.forEach((value,index) => {
-    //     if (value['codigo' as keyof typeof value] == parseInt(obj.id)) {
-    //       state.empresas[index] = obj.new_dado;
-    //     }
-    //   })
-    // },
-    // delDadosInternoID(state, obj : {id: string, roter_interna: string}){
-    //   const aux = state[obj.roter_interna as keyof typeof state]['data' as keyof typeof Object] as Array<object>;
-    //   aux.forEach((value,index) => {
-    //     if (value['codigo' as keyof typeof value] == parseInt(obj.id)) {
-    //       aux.splice(index, 1)
-    //     }
-    //   })      
-    // },
-    // putDadosInterno(state, obj: {dado: object, rota_interna: string}){
-    //   const aux = state[obj.rota_interna as keyof typeof state]['data' as keyof typeof Object] as Array<object>;
-    //   aux.push(obj.dado);
-    // },
+    setPageDadosInterno(state, obj: object){
+      console.log("SET STORE > ", obj);
+      state.pages_atual[obj['roter_interna' as keyof typeof obj]] = obj['page' as keyof typeof obj];
+    },
     ordenarDadosInterno(state, obj: {ordem: string, rota_interna: string, nome_dado: string, tipo: string}){
       const aux = state[obj.rota_interna as keyof typeof state]['data' as keyof typeof Object] as Array<object>;
       if (obj.tipo == 'Number') {
@@ -160,13 +148,17 @@ const store = createStore({
     async putDados(context, obj : {roter_externa: string, dado: object, roter_interna: string}){
       await fetch_.postDado('/'+obj.roter_externa, obj.dado)
     },
-    async getDadosPaginados(context, obj : {roter_interna: string, roter_externa: string, request: string}){
+    async getDadosPaginados(context, obj : {roter_interna: string, roter_externa: string, request: string, pagina_atual: number}){
       Promise.resolve(await fetch_.getDadoPaginado('/'+obj.roter_externa, obj.request))
       .then((value) =>{
+        context.commit('setPageDadosInterno', {'page': obj.pagina_atual,'roter_interna': obj.roter_interna})
         context.commit('setDadosInterno', {'dado': value , 'roter_interna': obj.roter_interna})
         return value
       })
-    }
+    },
+    getPaginas(context, rota_interna: string){
+      return context.state.pages_atual[rota_interna as keyof typeof context.state.pages_atual]
+    },
   }
 
 })
