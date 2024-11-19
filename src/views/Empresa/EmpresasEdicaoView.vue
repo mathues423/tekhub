@@ -3,7 +3,6 @@ import router from '@/router';
 import NavbarComplet from '@/components/navbars/NavbarComplet.vue';
 import VersaoMaximisada from '@/components/versionamento/VersaoMaximisada.vue';
 import ErroFormComponent from '@/components/mensagem/ErroFormComponent.vue';
-import fetch_ from '@/services/fetch/requisicao';
 import { defineComponent } from 'vue';
 import empresa from '@/services/regras_negocio/regras_empresa';
 import store from '@/store';
@@ -37,9 +36,7 @@ export default defineComponent({
       methods:{
             async editRequest(){
                   this.isEditing = true;
-                  for (const element of this.errors) {
-                        this.errors.pop()
-                  }
+                  this.errors = [];
                   const id = (this.$route.params['id'] || '-1') as string;
                   empresa._edit(this.old_empresa, this.empresa, this.errors)
                   if (this.errors.length == 0) {
