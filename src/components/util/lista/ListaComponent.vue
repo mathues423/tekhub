@@ -26,23 +26,23 @@ export default defineComponent({
       props:{
             pagina_max:{
                   type:Number,
-                  require:true
+                  required:true
             },
             pagina:{
                   type:Number,
-                  require:true
+                  required:true
             },
             dados:{
                   type: Object,
-                  require: true
+                  required: true
             },
             rota_edicao:{
                   type: String,
-                  require: true
+                  required: true
             },
             ModalContent_Remocao:{
                   type: Array,
-                  require: true
+                  required: true
             },
             
       },

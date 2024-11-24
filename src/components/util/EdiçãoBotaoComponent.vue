@@ -7,11 +7,11 @@ export default defineComponent({
       props:{
             nome_rota_para_edicao:{
                   type: String,
-                  require: true
+                  required: true
             },
             id_item:{
                   type: Number,
-                  require: true
+                  required: true
             }
       },
       methods:{

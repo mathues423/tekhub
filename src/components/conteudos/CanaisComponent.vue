@@ -48,8 +48,6 @@ export default defineComponent({
       },
       mounted() {
             if(store.getters.getCanais != undefined){
-                  console.log("<DENTRO IF CANAL>", store);
-                  
                   this.dado_paginado.body = store.getters.getCanais
                   store.dispatch('getPaginas', 'canais').then((value) => this.pagina_atual = value)
                   this.NUMERO_PAGINA = Math.ceil(store.getters.getCanaisLength / this.ITEM_PAGINA_MAX);

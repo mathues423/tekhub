@@ -10,11 +10,11 @@ export default defineComponent({
       props:{
             header:{
                   type: Array,
-                  require: true
+                  required: true
             },
             quantidade_dados:{
                   type: Number,
-                  require: true
+                  required: true
             },
             
       },
