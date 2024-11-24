@@ -7,12 +7,16 @@ const store = createStore({
 
     pages_atual: Object,
     empresas: Object,
+    empresas_pesquisa: Object,
     // empresa_page_atual: Number,
     ambientes: Object,
+    ambientes_pesquisa: Object,
     // ambientes_page_atual: Number,
     usuarios: Object,
+    usuarios_pesquisa: Object,
     // usuarios_page_atual: Number,
     canais: Object,
+    canais_pesquisa: Object,
     // canais_page_atual: Number,
 
     log_req: Object,
@@ -25,7 +29,6 @@ const store = createStore({
       state[obj['roter_interna' as keyof typeof obj] as keyof typeof state] = obj['dado' as keyof typeof obj];
     }, 
     setPageDadosInterno(state, obj: object){
-      console.log("SET STORE > ", obj);
       state.pages_atual[obj['roter_interna' as keyof typeof obj]] = obj['page' as keyof typeof obj];
     },
     ordenarDadosInterno(state, obj: {ordem: string, rota_interna: string, nome_dado: string, tipo: string}){
@@ -56,74 +59,77 @@ const store = createStore({
   },
   getters: {
     //Dashboard
-    getDashboard(state): any{
+    getDashboard(state): object{
       return state.dashboard['data' as keyof typeof state.dashboard]
     },
-    getDashboardLength(state): any{
+    getDashboardLength(state): object{
       return state.dashboard['totalRegistros' as keyof typeof state.dashboard]
     },
 
     //Empresas
-    getEmpresas(state): any{
+    getEmpresas(state): object{
       return state.empresas['data' as keyof typeof state.empresas]
     },
-    getEmpresasLength(state): any{
+    getEmpresas_pesquisa(state): object{
+      return state.empresas_pesquisa['data' as keyof typeof state.empresas_pesquisa]
+    },
+    getEmpresasLength(state): object{
       return state.empresas['totalRegistros' as keyof typeof state.empresas]
     },
 
     //Ambiente
-    getAmbientes(state): any{
+    getAmbientes(state): object{
       return state.ambientes['data' as keyof typeof state.ambientes]
     },
-    getAmbientesLength(state): any{
+    getAmbientesLength(state): object{
       return state.ambientes['totalRegistros' as keyof typeof state.ambientes]
     },
 
     //Usuario
-    getUsuarios(state): any{
+    getUsuarios(state): object{
       return state.usuarios['data' as keyof typeof state.usuarios]
     },
-    getUsuariosLength(state): any{
+    getUsuariosLength(state): object{
       return state.usuarios['totalRegistros' as keyof typeof state.usuarios]
     },
 
     //Canais
-    getCanais(state): any{
+    getCanais(state): object{
       return state.canais['data' as keyof typeof state.canais]
     },
-    getCanaisLength(state): any{
+    getCanaisLength(state): object{
       return state.canais['totalRegistros' as keyof typeof state.canais]
     },
 
     //LOG Atualização
-    getLogAtt(state): any{
+    getLogAtt(state): object{
       return state.log_att['data' as keyof typeof state.log_att]
     },
-    getLogAttLength(state): any{
+    getLogAttLength(state): object{
       return state.log_att['totalRegistros' as keyof typeof state.log_att]
     },
 
     //LOG Requisição
-    getLogReq(state): any{
+    getLogReq(state): object{
       return state.log_req['data' as keyof typeof state.log_req]
     },
-    getLogReqLength(state): any{
+    getLogReqLength(state): object{
       return state.log_req['totalRegistros' as keyof typeof state.log_req]
     },
 
     //Mapeamento
-    getMapeamentoProduto(state): any{
+    getMapeamentoProduto(state): object{
       return state.mapeamentoprodudo['data' as keyof typeof state.mapeamentoprodudo]
     },
-    getMapeamentoProdutoLength(state): any{
+    getMapeamentoProdutoLength(state): object{
       return state.mapeamentoprodudo['totalRegistros' as keyof typeof state.mapeamentoprodudo]
     },
 
     //Market
-    getMarketplaceEcommerce(state): any{
+    getMarketplaceEcommerce(state): object{
       return state.marketplaceecommerce['data' as keyof typeof state.marketplaceecommerce]
     },
-    getMarketplaceEcommerceLength(state): any{
+    getMarketplaceEcommerceLength(state): object{
       return state.marketplaceecommerce['totalRegistros' as keyof typeof state.marketplaceecommerce]
     },
   },

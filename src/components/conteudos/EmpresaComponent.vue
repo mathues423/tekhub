@@ -1,9 +1,9 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import store from '@/store';
-import ListaComponent from '../util/lista/ListaComponent.vue';
-import LoaderListaComponent from '../util/LoaderListaComponent.vue';
-import FiltroComponent from '../util/FiltroComponent.vue';
+import ListaComponent from '@/components//util/lista/ListaComponent.vue';
+import LoaderListaComponent from '@/components//util/LoaderListaComponent.vue';
+import FiltroPaiComponent from '../util/busca/FiltroPaiComponent.vue';
 
 
 export default defineComponent({
@@ -45,12 +45,38 @@ export default defineComponent({
                   ],
                   body: [] as Array<object>
             },
+            dado_pesquisa:{
+                  header:[
+                        {'header': 'Código', 'key_body': 'codigo',
+                        'ordem':{'on': true,'tipo_obj': 'Number', 'tipo_ordenacao': 'Asc'}, //Ascendente => true | Descendente => false
+                        'isfiltrable': false, 'isordenable':false},
+
+                        {'header': 'Código Tek', 'key_body': 'codigoTek',
+                        'ordem':{'on': false,'tipo_obj': 'Number', 'tipo_ordenacao': 'Asc'}, //Ascendente => true | Descendente => false
+                        'isfiltrable': false, 'isordenable':false},
+
+                        {'header': 'Razão Social', 'key_body': 'descricao',
+                        'ordem':{'on': false,'tipo_obj': 'String', 'tipo_ordenacao': 'Asc'}, //Ascendente => true | Descendente => false
+                        'isfiltrable': false, 'isordenable':false},
+
+                        {'header': 'CNPJ', 'key_body': 'cnpj',
+                        'ordem':{'on': false,'tipo_obj': 'Number', 'tipo_ordenacao': 'Asc'}, //Ascendente => true | Descendente => false
+                        'isfiltrable': false, 'isordenable':false},
+
+                        {'header': 'Versão API', 'key_body': 'versaoApiTek',
+                        'isfiltrable': false, 'isordenable':false},
+
+                        {'header': 'Ações', 'key_body': 'button',
+                        'isfiltrable': false, 'isordenable':false}
+                  ],
+                  body: [] as Array<object>
+            },
           }
       },
       components:{
             LoaderListaComponent,
             ListaComponent,
-            FiltroComponent
+            FiltroPaiComponent
       },
       async mounted() {
             if(store.getters.getEmpresas != undefined){
@@ -116,10 +142,23 @@ export default defineComponent({
                         'tipo': title.ordem.tipo_obj
                   })
             },
-            filtraEmpresa(title: any){
+            filtraEmpresa(title: {filtro:{on: boolean}}){
                   this.itsOnFilter = true;
-                  console.log(title);
-                  
+                  title.filtro.on = true;
+                  this.lista_estado = 'Vazio'
+            },
+            getPesquisa(request: string){
+                  this.lista_estado = 'Loader'
+                  store.dispatch('getDadosPaginados', {
+                        'roter_interna': 'empresas_pesquisa',
+                        'roter_externa': 'empresa',
+                        'request': request+`&pagina=1&porPagina=0&ordenacao=codigo&direcao=Asc`,
+                        'pagina_atual': 1
+                        })
+                  .then(() => {
+                        this.dado_pesquisa.body = store.getters.getEmpresas_pesquisa;
+                       this.lista_estado = 'Lista'
+                  })
             }
       },
 })
@@ -127,14 +166,31 @@ export default defineComponent({
 
 <template id="Empre_comp">
       <div class="row">
-            <FiltroComponent 
-            :isAtivo="itsOnFilter"
+            <FiltroPaiComponent 
+                  :itsOnFilter="itsOnFilter"
+                  :header="dado_paginado.header"
+                  @pesquisa_request="(args) => getPesquisa(args)"
             />
             <LoaderListaComponent v-if="lista_estado == 'Loader'"
                   :header="dado_paginado.header"
                   :quantidade_dados="ITEM_PAGINA_MAX"
             />
-            <ListaComponent v-if="lista_estado == 'Lista'"
+            <!-- Lista Empresas Pesquisa -->
+            <ListaComponent v-if="lista_estado == 'Lista' && itsOnFilter"
+                  :dados="dado_pesquisa"
+                  :pagina="1"
+                  :pagina_max="1"
+                  :rota_edicao="'empresas'"
+                  :ModalContent_Remocao="[
+                        {'nome': 'Código Tek', 'key': 'codigoTek'},
+                        {'nome': 'Razão Social', 'key': 'descricao'},
+                        {'nome': 'CNPJ', 'key': 'cnpj'},
+                        {'nome': 'Verção', 'key': 'versaoApiTek'},
+                  ]"
+                  @deletarDadoPai="(arg : any) => deletar(arg)"
+            />
+            <!-- Lista Empresas -->
+            <ListaComponent v-if="lista_estado == 'Lista' && !itsOnFilter"
                   :dados="dado_paginado"
                   :pagina="pagina_atual"
                   :pagina_max="NUMERO_PAGINA"
