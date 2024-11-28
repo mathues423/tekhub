@@ -54,9 +54,41 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
+    path: '/canais/0',
+    name: 'canais_criacao',
+    component: () => import ('@/views/Canais/CanaisNewView.vue'),
+    meta:{
+      auth: true
+    }
+  },
+  {
+    path: '/canais/:id',
+    name: 'canais_edicao',
+    component: () => import ('@/views/Canais/CanaisEdicaoView.vue'),
+    meta:{
+      auth: true
+    }
+  },
+  {
     path: '/ambientes',
     name: 'ambiente',
     component: () => import ('@/views/Ambiente/AmbienteView.vue'),
+    meta:{
+      auth: true
+    }
+  },
+  {
+    path: '/ambientes/0',
+    name: 'ambientes_criacao',
+    component: () => import ('@/views/Ambiente/AmbienteNewView.vue'),
+    meta:{
+      auth: true
+    }
+  },
+  {
+    path: '/ambientes/:id',
+    name: 'ambientes_criacao',
+    component: () => import ('@/views/Ambiente/AmbienteEdicaoView.vue'),
     meta:{
       auth: true
     }

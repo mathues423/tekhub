@@ -27,7 +27,13 @@ const store = createStore({
   mutations:{ ///Comit
     setDadosInterno(state, obj: object){
       state[obj['roter_interna' as keyof typeof obj] as keyof typeof state] = obj['dado' as keyof typeof obj];
-    }, 
+    },
+    // setDadosInternoID(state, obj: object){
+    //   console.log("SET DADOS ", obj);
+    //   state[obj['roter_interna' as keyof typeof obj] as keyof typeof state].forEach(
+    //     (value) => console.log(value) 
+    //   )
+    // },
     setPageDadosInterno(state, obj: object){
       state.pages_atual[obj['roter_interna' as keyof typeof obj]] = obj['page' as keyof typeof obj];
     },
@@ -55,6 +61,11 @@ const store = createStore({
         )
         }
       }
+    },
+    resetDadosInterno(state, key: string){
+      state[key as keyof typeof state] = Object;
+      console.log('STATE> ', state[key as keyof typeof state]);
+      
     }
   },
   getters: {
@@ -81,6 +92,9 @@ const store = createStore({
     getAmbientes(state): object{
       return state.ambientes['data' as keyof typeof state.ambientes]
     },
+    getAmbientes_pesquisa(state): object{
+      return state.ambientes_pesquisa['data' as keyof typeof state.ambientes_pesquisa]
+    },
     getAmbientesLength(state): object{
       return state.ambientes['totalRegistros' as keyof typeof state.ambientes]
     },
@@ -89,6 +103,9 @@ const store = createStore({
     getUsuarios(state): object{
       return state.usuarios['data' as keyof typeof state.usuarios]
     },
+    getUsuarios_pesquisa(state): object{
+      return state.usuarios_pesquisa['data' as keyof typeof state.usuarios_pesquisa]
+    },
     getUsuariosLength(state): object{
       return state.usuarios['totalRegistros' as keyof typeof state.usuarios]
     },
@@ -96,6 +113,9 @@ const store = createStore({
     //Canais
     getCanais(state): object{
       return state.canais['data' as keyof typeof state.canais]
+    },
+    getCanais_pesquisa(state): object{
+      return state.canais_pesquisa['data' as keyof typeof state.canais_pesquisa]
     },
     getCanaisLength(state): object{
       return state.canais['totalRegistros' as keyof typeof state.canais]
@@ -134,6 +154,7 @@ const store = createStore({
     },
   },
   actions: { //Asincrono Dispacht
+    // GETS BY ID ONLY
     getEmpresasID(context, id : string){
       let retorno = undefined;
       const aux = context.state.empresas['data' as keyof typeof context.state.empresas] as Array<object>;
@@ -144,15 +165,48 @@ const store = createStore({
       })
       return retorno
     },
+    getCanaisID(context, id: string){
+      let retorno = undefined;
+      const aux = context.state.canais['data' as keyof typeof context.state.canais] as Array<object>;
+      aux.forEach((value) => {
+        if (value['codigo' as keyof typeof value] == parseInt(id)) {
+          retorno =  value;
+        }
+      })
+      return retorno
+    },
+    getAmbientesID(context, id: string){
+      let retorno = undefined;
+      const aux = context.state.ambientes['data' as keyof typeof context.state.ambientes] as Array<object>;
+      aux.forEach((value) => {
+        if (value['codigo' as keyof typeof value] == parseInt(id)) {
+          retorno =  value;
+        }
+      })
+      return retorno
+    },
+
+
     async delDadosID(context, obj : {roter_externa: string, id: string, roter_interna: string}){
-      fetch_.delDado(obj.roter_externa,obj.id)
+      await fetch_.delDado(obj.roter_externa,obj.id)
+      .then(()=> context.commit('resetDadosInterno', obj.roter_interna))
     },
     async setDadosID(context, obj: {roter_externa: string, id: string, roter_interna: string, new_dado: {codigo: number}}){
+      /* eslint-disable */
       obj.new_dado.codigo = parseInt(obj.id);
-      fetch_.putDado('/'+obj.roter_externa, obj.id,obj.new_dado)
+      await fetch_.putDado('/'+obj.roter_externa, obj.id,obj.new_dado)
+      .then((args)=>{
+        let aux = context.state[obj.roter_interna as keyof typeof context.state]['data' as keyof typeof Object] as Array<object>;
+        aux.forEach((value, index)=>{
+          if (value['codigo' as keyof typeof value] == obj.new_dado.codigo) {
+            aux[index] =  obj.new_dado;
+          }
+        })
+      })
     },
     async putDados(context, obj : {roter_externa: string, dado: object, roter_interna: string}){
       await fetch_.postDado('/'+obj.roter_externa, obj.dado)
+      .then(() => context.commit('resetDadosInterno', obj.roter_interna))
     },
     async getDadosPaginados(context, obj : {roter_interna: string, roter_externa: string, request: string, pagina_atual: number}){
       Promise.resolve(await fetch_.getDadoPaginado('/'+obj.roter_externa, obj.request))

@@ -16,7 +16,7 @@ export default defineComponent({
       },
       methods:{
             adicionarNewambiente(){
-                  router.push('/dashboard');
+                  router.push('/ambientes/0');
             },
       }
 })
