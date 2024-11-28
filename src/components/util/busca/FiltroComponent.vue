@@ -1,7 +1,5 @@
 <script lang="ts">
-// import ErroFormComponent from '@/components/mensagem/ErroFormComponent.vue';
 import { defineComponent, PropType } from 'vue'
-// import { onClickOutside } from '@vue'
 export default defineComponent({
       name: 'FiltroComponent',
       data() {
@@ -63,7 +61,7 @@ export default defineComponent({
                         <div class="input-group-text">Campo</div>
                   </div>
                   <select class="custom-select" v-model="retorno_dados['campo' as keyof typeof retorno_dados]" required>
-                        <option disabled value=""> Selecione o campo</option>
+                        <option selected disabled value=""> Selecione o campo</option>
                         <option v-for="header in getDadosFiltraveis" :key="header" :value="header"> {{ header['header' as keyof typeof header] }}</option>
                   </select>
             </div>
@@ -74,12 +72,12 @@ export default defineComponent({
                         <div class="input-group-text">Operação</div>
                   </div>
                   <select class="custom-select" v-model="retorno_dados['operacao' as keyof typeof retorno_dados]" required>
-                        <option disabled value=""> Selecione o campo</option>
+                        <option selected disabled value=""> Selecione o campo</option>
                         <option v-for="operacao in operacoes" :key="operacao.nome" :value="operacao"> {{ operacao.nome }}</option>
                   </select>
             </div>
       </div>
-      <div class="w-50 my-1" v-show="dados_usuario.campo.filtro.tipo_filtro == ('all' as string)" style="padding-left: 10px;">
+      <div class="w-50 my-1" v-show="dados_usuario.campo.filtro.tipo_filtro == ('all' as string) || dados_usuario.campo.filtro.tipo_filtro == ('pre' as string)" style="padding-left: 10px;">
             <input type="text" placeholder="Valor" :class="['form-control',{'imput_value' : errors.valor} , {'imput_value_incompativel' : errors.valor_incompativel && !errors.valor}]" v-model="retorno_dados['valor' as keyof typeof retorno_dados]" required>
       </div>
 </template>
@@ -119,5 +117,19 @@ export default defineComponent({
 .imput_value_incompativel:focus{
       border-color: var(--bs-warning-border-subtle);
       box-shadow: 0 0 0 .25rem rgba(var(--bs-warning-rgb), .25);
+}
+.custom-select{
+      background: #fff url(data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E) no-repeat right .75rem center;
+      background-size: 8px 10px;
+      padding: .375rem .75rem .375rem .75rem;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      color: #495057;
+      vertical-align: middle;
+      border: 1px solid #ced4da;
+      border-radius: .25rem;
+      display: inline-block;
+      
 }
 </style>

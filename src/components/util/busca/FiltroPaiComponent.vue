@@ -60,7 +60,6 @@ export default defineComponent({
                   console.log('Algum erro', have_error);
                   if (!have_error) {
                         this.$emit('pesquisa_request', aux);
-                        console.log('Request > ', aux);
                   }
             }
       },

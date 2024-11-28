@@ -63,8 +63,8 @@ export default defineComponent({
             ordenarDado(dadosObj : object){
                   this.$emit('ordenarDadoPai', dadosObj);
             },
-            filtrarDado(header: object){
-                  this.$emit('filtrarDadoPai', header)
+            filtrarDado(){
+                  this.$emit('filtrarDadoPai')
             }
       },
       emits: ['avancar', 'recuar', 'deletarDadoPai', 'ordenarDadoPai', 'filtrarDadoPai']
@@ -126,12 +126,19 @@ export default defineComponent({
                                                       </span>
                                                 </span>
                                           </button>
-                                          <button v-else class="btn btn-tabela">
+                                          <span v-else class="btn-tabela" style="--bs-btn-padding-x: 0.75rem;
+                                                                              --bs-btn-padding-y: 0.375rem;
+                                                                              --bs-btn-font-family: ;
+                                                                              --bs-btn-font-size: 1rem;
+                                                                              --bs-btn-font-weight: 400;
+                                                                              --bs-btn-line-height: 1.5;
+                                                                              display: inline-block;
+                                                                              padding: var(--bs-btn-padding-y) var(--bs-btn-padding-x);">
                                                 {{ title.header }}
-                                          </button>
+                                          </span>
                                     </div>
                                     <div v-if="title.isfiltrable" :class="['col-3', `${title.ordem?.on === true  ? 'col-ativo' : ''}`]">
-                                          <button  class="btn btn-tabela-filtro" @click="filtrarDado(title)">
+                                          <button  class="btn btn-tabela-filtro" @click="filtrarDado">
                                                 <!-- Lupa -->
                                                 <span v-if="title.filtro.tipo_filtro == 'all'"> 
                                                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
@@ -159,12 +166,12 @@ export default defineComponent({
                               <span v-else-if="traduzido.key_body == 'button'">
                                     <div style="text-align: center;">
                                     <EdiçãoBotaoComponent
-                                    :nome_rota_para_edicao="rota_edicao"
-                                    :id_item="dado['codigo' as keyof typeof dado]"
+                                          :nome_rota_para_edicao="rota_edicao"
+                                          :id_item="dado['codigo' as keyof typeof dado]"
                                     />
                                     <RemoçãoBotaoComponent
-                                    :dado="dado"
-                                    @deletarModal="(arg: any) => mountDeletModal(arg)"
+                                          :dado="dado"
+                                          @deletarModal="(arg: any) => mountDeletModal(arg)"
                                     />
                                     </div>
                               </span>
@@ -203,7 +210,7 @@ export default defineComponent({
       font-size: 16px;
       border: none;
       width: 100%;
-      color: var(--bs-dark);
+      color: var(--bs-dark) !important;
 }
 .btn-tabela-filtro{
       width: 100%;

@@ -16,7 +16,7 @@ export default defineComponent({
       methods:{
             deletarItem(){
                   this.click_delete = true;
-                  // this.$emit('deletar_item')
+                  this.$emit('deletar_item')
             }
       },
       emits:['close', 'deletar_item']
