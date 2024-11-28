@@ -3,6 +3,7 @@ import { defineComponent } from 'vue';
 import store from '@/store';
 import ListaComponent from '../util/lista/ListaComponent.vue';
 import LoaderListaComponent from '../util/LoaderListaComponent.vue';
+import FiltroPaiComponent from '../util/busca/FiltroPaiComponent.vue';
 
 
 export default defineComponent({
@@ -10,6 +11,7 @@ export default defineComponent({
       data() {
           return {
             lista_estado: 'Loader',
+            itsOnFilter: false,
             ITEM_PAGINA_MAX : 10,
             NUMERO_PAGINA: 1,
             pagina_atual: 1,
@@ -17,20 +19,39 @@ export default defineComponent({
                   header:[
                         {'header': 'Código', 'key_body': 'codigo',
                         'ordem':{'on': true,'tipo_obj': 'Number', 'tipo_ordenacao': 'Asc'}, //Ascendente => true | Descendente => false
-                        'filtro':{'on': false, 'tipo_obj': 'Number', 'tipo_filtro': 'all'},
+                        'filtro':{'tipo_obj': 'Number', 'tipo_filtro': 'all'},
                         'isfiltrable': true, 'isordenable':true},
 
                         {'header': 'Email', 'key_body': 'email',
-                        'filtro':{'on': false, 'tipo_obj': 'String', 'tipo_filtro': 'all'},
+                        'filtro':{'tipo_obj': 'String', 'tipo_filtro': 'all'},
                         'isfiltrable': true, 'isordenable':false},
 
                         {'header': 'Perfil', 'key_body': 'perfil',
-                        'filtro':{'on': false, 'tipo_obj': 'String', 'tipo_filtro': 'pre'},
+                        'filtro':{'tipo_obj': 'String', 'tipo_filtro': 'pre'},
                         'isfiltrable': true, 'isordenable':false},
 
                         {'header': 'Empresa', 'key_body': 'empresaDescricao',
-                        'filtro':{'on': false, 'tipo_obj': 'String', 'tipo_filtro': 'all'},
+                        'filtro':{'tipo_obj': 'String', 'tipo_filtro': 'all'},
                         'isfiltrable': true, 'isordenable':false},
+                        
+                        {'header': 'Ações', 'key_body': 'button',
+                        'isfiltrable': false, 'isordenable':false}
+                  ],
+                  body: [] as Array<object>
+            },
+            dado_pesquisa:{
+                  header:[
+                        {'header': 'Código', 'key_body': 'codigo',
+                        'isfiltrable': false, 'isordenable':false},
+
+                        {'header': 'Email', 'key_body': 'email',
+                        'isfiltrable': false, 'isordenable':false},
+
+                        {'header': 'Perfil', 'key_body': 'perfil',
+                        'isfiltrable': false, 'isordenable':false},
+
+                        {'header': 'Empresa', 'key_body': 'empresaDescricao',
+                        'isfiltrable': false, 'isordenable':false},
                         
                         {'header': 'Ações', 'key_body': 'button',
                         'isfiltrable': false, 'isordenable':false}
@@ -41,6 +62,7 @@ export default defineComponent({
       },
       components:{
             LoaderListaComponent,
+            FiltroPaiComponent,
             ListaComponent
       },
       async mounted() {
@@ -106,6 +128,27 @@ export default defineComponent({
                         'nome_dado': title.key_body,
                         'tipo': title.ordem.tipo_obj
                   })
+            },
+            filtraEmpresa(){
+                  this.itsOnFilter = true;
+                  this.lista_estado = 'Vazio'
+            },
+            closefiltrarEmpresa(){
+                  this.itsOnFilter = false;
+                  this.lista_estado = 'Lista'
+            },
+            getPesquisa(request: string){
+                  this.lista_estado = 'Loader'
+                  store.dispatch('getDadosPaginados', {
+                        'roter_interna': 'usuarios_pesquisa',
+                        'roter_externa': 'usuario',
+                        'request': request+`&pagina=1&porPagina=0&ordenacao=codigo&direcao=Asc`,
+                        'pagina_atual': 1
+                        })
+                  .then(() => {
+                        this.dado_pesquisa.body = store.getters.getUsuarios_pesquisa;
+                       this.lista_estado = 'Lista'
+                  })
             }
       },
 })
@@ -113,12 +156,31 @@ export default defineComponent({
 
 <template id="Usua_comp">
       <div class="row">
-            <!-- Duvida se ediçaõ seria um modal tbm ou so uma div msm -->
+            <FiltroPaiComponent 
+                  :itsOnFilter="itsOnFilter"
+                  :header="dado_paginado.header"
+                  @pesquisa_request="(args: string) => getPesquisa(args)"
+                  @close_pesquisa="closefiltrarEmpresa"
+            />
             <LoaderListaComponent v-if="lista_estado == 'Loader'"
                   :header="dado_paginado.header"
                   :quantidade_dados="ITEM_PAGINA_MAX"
             />
-            <ListaComponent v-if="lista_estado == 'Lista'"
+            <!-- Lista Empresas Pesquisa -->
+            <ListaComponent v-if="lista_estado == 'Lista' && itsOnFilter"
+                  :dados="dado_pesquisa"
+                  :pagina="1"
+                  :pagina_max="1"
+                  :rota_edicao="'usuarios'"
+                  :ModalContent_Remocao="[
+                        {'nome': 'Email', 'key': 'email'},
+                        {'nome': 'Perfil', 'key': 'perfil'},
+                        {'nome': 'Empresa', 'key': 'empresaDescricao'},
+                  ]"
+                  @deletarDadoPai="(arg : any) => deletar(arg)"
+            />
+            <!-- Lista Empresas -->
+            <ListaComponent v-if="lista_estado == 'Lista' && !itsOnFilter"
                   :dados="dado_paginado"
                   :pagina="pagina_atual"
                   :pagina_max="NUMERO_PAGINA"
@@ -130,6 +192,7 @@ export default defineComponent({
                   ]"
                   @deletarDadoPai="(arg : any) => deletar(arg)"
                   @ordenarDadoPai="(arg : any) => ordenaUsuario(arg)"
+                  @filtrarDadoPai="filtraEmpresa"
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina" 
             />

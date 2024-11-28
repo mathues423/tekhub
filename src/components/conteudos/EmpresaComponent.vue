@@ -19,22 +19,22 @@ export default defineComponent({
                   header:[
                         {'header': 'Código', 'key_body': 'codigo',
                         'ordem':{'on': true,'tipo_obj': 'Number', 'tipo_ordenacao': 'Asc'}, //Ascendente => true | Descendente => false
-                        'filtro':{'on': false, 'tipo_obj': 'Number', 'tipo_filtro': 'all'},
+                        'filtro':{'tipo_obj': 'Number', 'tipo_filtro': 'all'},
                         'isfiltrable': true, 'isordenable':true},
 
                         {'header': 'Código Tek', 'key_body': 'codigoTek',
                         'ordem':{'on': false,'tipo_obj': 'Number', 'tipo_ordenacao': 'Asc'}, //Ascendente => true | Descendente => false
-                        'filtro':{'on': false, 'tipo_obj': 'Number', 'tipo_filtro': 'all'},
+                        'filtro':{'tipo_obj': 'Number', 'tipo_filtro': 'all'},
                         'isfiltrable': true, 'isordenable':true},
 
                         {'header': 'Razão Social', 'key_body': 'descricao',
                         'ordem':{'on': false,'tipo_obj': 'String', 'tipo_ordenacao': 'Asc'}, //Ascendente => true | Descendente => false
-                        'filtro':{'on': false, 'tipo_obj': 'String', 'tipo_filtro': 'all'},
+                        'filtro':{'tipo_obj': 'String', 'tipo_filtro': 'all'},
                         'isfiltrable': true, 'isordenable':true},
 
                         {'header': 'CNPJ', 'key_body': 'cnpj',
                         'ordem':{'on': false,'tipo_obj': 'Number', 'tipo_ordenacao': 'Asc'}, //Ascendente => true | Descendente => false
-                        'filtro':{'on': false, 'tipo_obj': 'Number', 'tipo_filtro': 'all'},
+                        'filtro':{'tipo_obj': 'Number', 'tipo_filtro': 'all'},
                         'isfiltrable': true, 'isordenable':true},
 
                         {'header': 'Versão API', 'key_body': 'versaoApiTek',
@@ -48,19 +48,15 @@ export default defineComponent({
             dado_pesquisa:{
                   header:[
                         {'header': 'Código', 'key_body': 'codigo',
-                        'ordem':{'on': true,'tipo_obj': 'Number', 'tipo_ordenacao': 'Asc'}, //Ascendente => true | Descendente => false
                         'isfiltrable': false, 'isordenable':false},
 
                         {'header': 'Código Tek', 'key_body': 'codigoTek',
-                        'ordem':{'on': false,'tipo_obj': 'Number', 'tipo_ordenacao': 'Asc'}, //Ascendente => true | Descendente => false
                         'isfiltrable': false, 'isordenable':false},
 
                         {'header': 'Razão Social', 'key_body': 'descricao',
-                        'ordem':{'on': false,'tipo_obj': 'String', 'tipo_ordenacao': 'Asc'}, //Ascendente => true | Descendente => false
                         'isfiltrable': false, 'isordenable':false},
 
                         {'header': 'CNPJ', 'key_body': 'cnpj',
-                        'ordem':{'on': false,'tipo_obj': 'Number', 'tipo_ordenacao': 'Asc'}, //Ascendente => true | Descendente => false
                         'isfiltrable': false, 'isordenable':false},
 
                         {'header': 'Versão API', 'key_body': 'versaoApiTek',
@@ -142,10 +138,13 @@ export default defineComponent({
                         'tipo': title.ordem.tipo_obj
                   })
             },
-            filtraEmpresa(title: {filtro:{on: boolean}}){
+            filtraEmpresa(){
                   this.itsOnFilter = true;
-                  title.filtro.on = true;
                   this.lista_estado = 'Vazio'
+            },
+            closefiltrarEmpresa(){
+                  this.itsOnFilter = false;
+                  this.lista_estado = 'Lista'
             },
             getPesquisa(request: string){
                   this.lista_estado = 'Loader'
@@ -169,7 +168,8 @@ export default defineComponent({
             <FiltroPaiComponent 
                   :itsOnFilter="itsOnFilter"
                   :header="dado_paginado.header"
-                  @pesquisa_request="(args) => getPesquisa(args)"
+                  @pesquisa_request="(args: string) => getPesquisa(args)"
+                  @close_pesquisa="closefiltrarEmpresa"
             />
             <LoaderListaComponent v-if="lista_estado == 'Loader'"
                   :header="dado_paginado.header"
@@ -203,7 +203,7 @@ export default defineComponent({
                   ]"
                   @deletarDadoPai="(arg : any) => deletar(arg)"
                   @ordenarDadoPai="(arg : any) => ordenaEmpresa(arg)"
-                  @filtrarDadoPai="(arg : any) => filtraEmpresa(arg)"
+                  @filtrarDadoPai="filtraEmpresa"
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina"
             />

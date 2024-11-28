@@ -3,6 +3,7 @@ import { defineComponent } from 'vue';
 import store from '@/store';
 import ListaComponent from '../util/lista/ListaComponent.vue';
 import LoaderListaComponent from '../util/LoaderListaComponent.vue';
+import FiltroPaiComponent from '../util/busca/FiltroPaiComponent.vue';
 
 
 export default defineComponent({
@@ -10,22 +11,39 @@ export default defineComponent({
       data() {
           return {
             lista_estado: 'Loader',
+            itsOnFilter: false,
             ITEM_PAGINA_MAX : 10,
             NUMERO_PAGINA: 1,
             pagina_atual: 1,
             dado_paginado:{
                   header:[
                         {'header': 'Código', 'key_body': 'codigo',
-                        'filtro':{'on': false, 'tipo_obj': 'Number', 'tipo_filtro': 'all'},
+                        'filtro':{'tipo_obj': 'Number', 'tipo_filtro': 'all'},
                         'isfiltrable': true, 'isordenable':false},
 
                         {'header': 'Canal', 'key_body': 'canalAlias',
-                        'filtro':{'on': false, 'tipo_obj': 'String', 'tipo_filtro': 'all'},
+                        'filtro':{'tipo_obj': 'String', 'tipo_filtro': 'all'},
                         'isfiltrable': true, 'isordenable':false},
 
                         {'header': 'Ambiente', 'key_body': 'ambiente',
-                        'filtro':{'on': false, 'tipo_obj': 'String', 'tipo_filtro': 'pre'},
+                        'filtro':{'tipo_obj': 'String', 'tipo_filtro': 'pre'},
                         'isfiltrable': true, 'isordenable':false},
+
+                        {'header': 'Ações', 'key_body': 'button',
+                        'isfiltrable': false, 'isordenable':false}
+                  ],
+                  body: [] as Array<object>
+            },
+            dado_pesquisa:{
+                  header:[
+                        {'header': 'Código', 'key_body': 'codigo',
+                        'isfiltrable': false, 'isordenable':false},
+
+                        {'header': 'Canal', 'key_body': 'canalAlias',
+                        'isfiltrable': false, 'isordenable':false},
+
+                        {'header': 'Ambiente', 'key_body': 'ambiente',
+                        'isfiltrable': false, 'isordenable':false},
 
                         {'header': 'Ações', 'key_body': 'button',
                         'isfiltrable': false, 'isordenable':false}
@@ -36,6 +54,7 @@ export default defineComponent({
       },
       components:{
             LoaderListaComponent,
+            FiltroPaiComponent,
             ListaComponent
       },
       async mounted() {
@@ -82,18 +101,59 @@ export default defineComponent({
                         this.lista_estado = 'Lista'
                   })
             },
+            filtraAmbiente(){
+                  this.itsOnFilter = true;
+                  this.lista_estado = 'Vazio'
+            },
+            closefiltrarAmbiente(){
+                  this.itsOnFilter = false;
+                  this.lista_estado = 'Lista'
+            },
+            getPesquisa(request: string){
+                  this.lista_estado = 'Loader'
+                  store.dispatch('getDadosPaginados', {
+                        'roter_interna': 'ambientes_pesquisa',
+                        'roter_externa': 'ambiente',
+                        'request': request+`&pagina=1&porPagina=0&ordenacao=codigo&direcao=Asc`,
+                        'pagina_atual': 1
+                        })
+                  .then(() => {
+                        this.dado_pesquisa.body = store.getters.getAmbientes_pesquisa;
+                       this.lista_estado = 'Lista'
+                  })
+            }
       },
 })
 </script>
 
 <template id="Ambi_comp">
       <div class="row">
-            <!-- Duvida se ediçaõ seria um modal tbm ou so uma div msm -->
+            <FiltroPaiComponent 
+                  :itsOnFilter="itsOnFilter"
+                  :header="dado_paginado.header"
+                  @pesquisa_request="(args: string) => getPesquisa(args)"
+                  @close_pesquisa="closefiltrarAmbiente"
+            />
             <LoaderListaComponent v-if="lista_estado == 'Loader'"
                   :header="dado_paginado.header"
                   :quantidade_dados="ITEM_PAGINA_MAX"
             />
-            <ListaComponent  v-if="lista_estado == 'Lista'"
+            <!-- Lista Ambientes Pesquisa -->
+            <ListaComponent v-if="lista_estado == 'Lista' && itsOnFilter"
+                  :dados="dado_pesquisa"
+                  :pagina="1"
+                  :pagina_max="1"
+                  :rota_edicao="'ambientes'"
+                  :ModalContent_Remocao="[
+                        {'nome': 'Canal', 'key': 'canalAlias'},
+                        {'nome': 'Ambiente', 'key': 'ambiente'},
+                        {'nome': 'URL', 'key': 'url'},
+                        {'nome': 'Verção', 'key': 'versao'},
+                  ]"
+                  @deletarDadoPai="(arg : any) => deletar(arg)"
+            />
+            <!-- Lista Ambientes -->
+            <ListaComponent  v-if="lista_estado == 'Lista' && !itsOnFilter"
                   :dados="dado_paginado"
                   :pagina="pagina_atual"
                   :pagina_max="NUMERO_PAGINA"
@@ -106,9 +166,10 @@ export default defineComponent({
                   ]"
                   @deletarDadoPai="(arg) => deletar(arg)"
                   @ordenarDadoPai="(arg) => {return null}"
+                  @filtrarDadoPai="filtraAmbiente"
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina" 
-                  />
+            />
       </div>
 </template>
 
