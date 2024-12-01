@@ -181,6 +181,7 @@ export default defineComponent({
                   // })
             },
             quantidadeItens(args: number){
+                  this.pagina_atual = 1;
                   this.ITEM_PAGINA_MAX = args;
                   if (this.itsOnEmpresa) {
                         this.request_empresa(this.id_empresa)

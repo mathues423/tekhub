@@ -105,7 +105,11 @@ export default defineComponent({
                         })
                   .then(() => {
                         this.dado_paginado.body = store.getters.getUsuarios;
-                        this.NUMERO_PAGINA = Math.ceil(store.getters.getUsuariosLength / this.ITEM_PAGINA_MAX);
+                        if(this.ITEM_PAGINA_MAX > 0){
+                              this.NUMERO_PAGINA = Math.ceil(store.getters.getUsuariosLength / this.ITEM_PAGINA_MAX);
+                        }else{
+                              this.NUMERO_PAGINA = 1;
+                        }
                         this.lista_estado = 'Lista'
                   })
             },
@@ -146,8 +150,9 @@ export default defineComponent({
                         'pagina_atual': 1
                         })
                   .then(() => {
+                        this.NUMERO_PAGINA = 1;
                         this.dado_pesquisa.body = store.getters.getUsuarios_pesquisa;
-                       this.lista_estado = 'Lista'
+                        this.lista_estado = 'Lista'
                   })
             }
       },

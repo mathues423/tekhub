@@ -128,6 +128,7 @@ export default defineComponent({
                   })
             },
             changeItemPagina(quantidade: number){
+                  this.pagina_atual = 1;
                   this.ITEM_PAGINA_MAX = quantidade;
                   this.requestDados()
             }
@@ -165,6 +166,7 @@ export default defineComponent({
             <!-- Lista Ambientes -->
             <ListaComponent  v-if="lista_estado == 'Lista' && !itsOnFilter"
                   :have_item_p_pagina="true"
+                  :have_pagination="true"
                   :dados="dado_paginado"
                   :pagina="pagina_atual"
                   :item_p_pagina="ITEM_PAGINA_MAX"

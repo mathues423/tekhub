@@ -143,6 +143,7 @@ export default defineComponent({
                   })
             },
             changeItemPagina(quantidade: number){
+                  this.pagina_atual = 1;
                   this.ITEM_PAGINA_MAX = quantidade;
                   this.requestDados()
             }
