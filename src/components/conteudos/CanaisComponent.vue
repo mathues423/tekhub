@@ -110,10 +110,13 @@ export default defineComponent({
                         'pagina_atual': this.pagina_atual
                         })
                   .then(() => {
-                        
                         this.dado_paginado.body = store.getters.getCanais;
                         console.log(this.dado_paginado.body);
-                        this.NUMERO_PAGINA = Math.ceil(store.getters.getCanaisLength / this.ITEM_PAGINA_MAX);
+                        if(this.ITEM_PAGINA_MAX != 0){
+                              this.NUMERO_PAGINA = Math.ceil(store.getters.getCanaisLength / this.ITEM_PAGINA_MAX);
+                        }else{
+                              this.NUMERO_PAGINA = 1;
+                        }
                         this.lista_estado = 'Lista'
                   })
             },
@@ -134,9 +137,14 @@ export default defineComponent({
                         'pagina_atual': 1
                         })
                   .then(() => {
+                        this.NUMERO_PAGINA = 1;
                         this.dado_pesquisa.body = store.getters.getCanais_pesquisa;
-                       this.lista_estado = 'Lista'
+                        this.lista_estado = 'Lista'
                   })
+            },
+            changeItemPagina(quantidade: number){
+                  this.ITEM_PAGINA_MAX = quantidade;
+                  this.requestDados()
             }
       },
 })
@@ -158,6 +166,7 @@ export default defineComponent({
             <ListaComponent v-if="lista_estado == 'Lista' && itsOnFilter"
                   :dados="dado_pesquisa"
                   :pagina="1"
+                  :item_p_pagina="0"
                   :pagina_max="1"
                   :rota_edicao="'canais'"
                   :ModalContent_Remocao="[
@@ -169,7 +178,10 @@ export default defineComponent({
             />
             <!-- Lista Canais -->
             <ListaComponent  v-if="lista_estado == 'Lista' && !itsOnFilter"
+                  :have_item_p_pagina="true"
+                  :have_pagination="true"
                   :dados="dado_paginado"
+                  :item_p_pagina="ITEM_PAGINA_MAX"
                   :pagina="pagina_atual"
                   :pagina_max="NUMERO_PAGINA"
                   :rota_edicao="'canais'"
@@ -181,6 +193,7 @@ export default defineComponent({
                   @deletarDadoPai="(arg) => deletar(arg)"
                   @ordenarDadoPai="(arg) => {return null}"
                   @filtrarDadoPai="filtraCanais"
+                  @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina" 
             />

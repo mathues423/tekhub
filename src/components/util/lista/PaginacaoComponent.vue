@@ -15,9 +15,13 @@ export default defineComponent({
           }
       },
       props:{
+            have_item_p_pagina:{
+                  type: Boolean,
+                  default: false
+            },
             pagina_atual:{
                   type: Number,
-                  defaut: 1,
+                  default: 1,
                   required: true
             },
             pagina_max:{
@@ -27,7 +31,7 @@ export default defineComponent({
             },
             item_p_pagina_old:{
                   type: Number,
-                  defaut: 10,
+                  default: 10,
                   required: true
             }
       },
@@ -51,14 +55,13 @@ export default defineComponent({
 
 <template>
 <div class="col-12 row">
-      <div class="col-6">
-            {{ item_p_pagina }}
+      <div v-if="have_item_p_pagina" class="col-6">
             Itens por pagina:
             <select class="custom-select" v-model.lazy="item_p_pagina" @click="change_item()">
                   <option v-for="(itempPag, index) in numero_itens_p_pagina" :key="index" :value="itempPag.value"> {{ itempPag.text }}</option>
             </select>
       </div>
-      <div class="col-6 row">
+      <div class="col row">
             <div class="col-3">
                   <button class="btn col-12" :disabled="pagina_atual == 1" @click="down_paginacao"> Retroceder </button>
             </div>

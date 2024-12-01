@@ -169,6 +169,7 @@ export default defineComponent({
             <!-- Lista Empresas Pesquisa -->
             <ListaComponent v-if="lista_estado == 'Lista' && itsOnFilter"
                   :dados="dado_pesquisa"
+                  :item_p_pagina="0"
                   :pagina="1"
                   :pagina_max="1"
                   :rota_edicao="'usuarios'"
@@ -181,7 +182,10 @@ export default defineComponent({
             />
             <!-- Lista Empresas -->
             <ListaComponent v-if="lista_estado == 'Lista' && !itsOnFilter"
+                  :have_item_p_pagina="false"
+                  :have_pagination="true"
                   :dados="dado_paginado"
+                  :item_p_pagina="10"
                   :pagina="pagina_atual"
                   :pagina_max="NUMERO_PAGINA"
                   :rota_edicao="'usuarios'"

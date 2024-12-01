@@ -98,10 +98,10 @@ export default defineComponent({
             closefiltrarMarketplaceEcommerce(){
                   this.$emit('closefiltrarMarketplaceEcommerce')
             },
-            deletar(arg: any){
+            deletar(arg: object){
                   this.$emit('deletar', arg)
             },
-            ordenaMarketplaceEcommerce(arg: any){
+            ordenaMarketplaceEcommerce(arg: object){
                   this.$emit('ordenaMarketplaceEcommerce', arg)
             },
             filtraMarketplaceEcommerce(){
@@ -151,6 +151,8 @@ export default defineComponent({
             />
             <!-- Lista MarketplaceEcommerces -->
             <ListaComponent v-if="lista_estado == 'Lista' && !itsOnFilter"
+                  :have_item_p_pagina="true"
+                  :have_pagination="true"
                   :dados="dado"
                   :pagina="pagina_atual"
                   :item_p_pagina="ITEM_PAGINA_MAX"

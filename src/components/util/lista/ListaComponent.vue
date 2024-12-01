@@ -24,6 +24,13 @@ export default defineComponent({
             ModalRemoçãoComponent
       },
       props:{
+            have_item_p_pagina:{
+                  type: Boolean
+            },
+            have_pagination:{
+                  type: Boolean,
+                  default: false
+            },
             pagina_max:{
                   type:Number,
                   defaut: 1,
@@ -210,7 +217,8 @@ export default defineComponent({
                         </tbody>
                   </table>
             </div>
-            <PaginacaoComponent class="col-12"
+            <PaginacaoComponent v-if="have_pagination" class="col-12"
+                  :have_item_p_pagina="have_item_p_pagina"
                   :pagina_atual="pagina"
                   :pagina_max="pagina_max"
                   :item_p_pagina_old="item_p_pagina"

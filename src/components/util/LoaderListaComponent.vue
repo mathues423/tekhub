@@ -2,11 +2,6 @@
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-      // data() {
-      //     return {
-      //       showDeletModal: false,
-      //     }
-      // },
       props:{
             header:{
                   type: Array,
@@ -32,8 +27,15 @@ export default defineComponent({
                         </th>
                   </tr>
             </thead>
-            <tbody>
+            <tbody v-if="quantidade_dados != 0">
                   <tr v-for="(dados,index_dado) in quantidade_dados" :key="index_dado">
+                        <th v-for="(traduzido, index_traduzido) in header" :key="index_traduzido" class="th_">
+                        <div class="th_content"></div>
+                        </th>
+                  </tr>
+            </tbody>
+            <tbody v-else>
+                  <tr v-for="(dados,index_dado) in 100" :key="index_dado">
                         <th v-for="(traduzido, index_traduzido) in header" :key="index_traduzido" class="th_">
                         <div class="th_content"></div>
                         </th>
