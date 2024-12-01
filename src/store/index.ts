@@ -19,10 +19,13 @@ const store = createStore({
     canais_pesquisa: Object,
     // canais_page_atual: Number,
 
+    marketplaceecommerce: Object,
+    marketplaceecommerce_pesquisa: Object,
+    
+
+    mapeamentoprodudo: Object,
     log_req: Object,
     log_att: Object,
-    mapeamentoprodudo: Object,
-    marketplaceecommerce: Object,
   },
   mutations:{ ///Comit
     setDadosInterno(state, obj: object){
