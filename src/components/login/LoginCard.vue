@@ -6,7 +6,7 @@
                   <img src="@/assets/imagens/logo-tek-hub.png" alt="logo" width="300">
             </div>
             <div class="Card-Body">
-                  <form @submit.prevent="loginReq()">
+                  <form @submit.prevent="loginReq">
                         <div class="col-12">
                               <div class="input-group">
                                     <span class="input-group-text">
@@ -38,9 +38,9 @@
                                </span>
                         </div>
                         <ErroFormComponent
-                              :mensagem="erros.mensagem"
-                              :class="['alert-danger desativada',{'ativada' : erros.vericação == true}]"
-                              />
+                              :mensagem="erros.message"
+                              :class="['my-2 alert-danger desativada',{'ativada' : erros.vericação == true}]"
+                        />
                         <button style="margin-top: 16px; margin-bottom: 16px;" class="btn btn-primary col-12" :disabled="isLogin">
                               <span>
                                     <span v-if="isLogin">
@@ -83,7 +83,7 @@
       });
       const erros = ref({
             vericação: false,
-            mensagem: 'errsa'
+            message: ''
       });
       function showPassword(){
             if(document.querySelector('#userpass')?.getAttribute('type') == 'password'){
@@ -99,7 +99,15 @@
 
       async function loginReq(){
             isLogin.value = true;
-            await requisicaoLogin.loginReq(user.value.email, user.value.senha, erros.value);
+            erros.value.vericação = false;
+            await requisicaoLogin.loginReq(user.value.email, user.value.senha, erros.value)
+            .then((returno) =>{
+                  if(erros.value.vericação)
+                        if(returno.response?.data?.errors)
+                              erros.value.message = returno.response.data.errors[0]
+                              
+                  isLogin.value = false;
+            });
       }
 </script>
 

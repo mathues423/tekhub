@@ -5,7 +5,7 @@ import fetch_ from '../fetch/requisicao';
 import store from '@/store';
 class ERRO{
       vericação = false;
-      mensagem = '';
+      message = '';
 }
 /* eslint-disable */
 class UserDados {
@@ -17,6 +17,16 @@ class UserDados {
       };
 
       async loginReq(email: string, senha: string, erros : ERRO) {
+            if (email == '') {
+                  erros.message = 'Forneça um email'
+                  erros.vericação = true;
+                  return erros
+            }
+            if (senha == '') {
+                  erros.message = 'Forneça uma senha'
+                  erros.vericação = true;
+                  return erros
+            }
             this.usuario.email = email;
             this.usuario.senha = senha;   
             try {
@@ -28,9 +38,10 @@ class UserDados {
                   //Requisição dos dados                    //Avanço para a pagina inicial
                   // await this.getDados();
                   router.push('/dashboard');
+                  return data
             } catch (error) {
                   erros.vericação = true;
-                  erros.mensagem = 'Usuário ou senha inválidos!'
+                  return error
             }
       }
 
