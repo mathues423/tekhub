@@ -123,7 +123,7 @@ class fetch_padrao{
        */
       async getDadoPaginado(path : string, request : string){
             try {
-                  const { data } = await http.get(path+request);
+                  const { data } = await http.get(path+'/'+request);
                    return data;
             } catch (error) {
                   console.warn(error) 

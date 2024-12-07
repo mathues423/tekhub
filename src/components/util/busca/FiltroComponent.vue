@@ -26,7 +26,7 @@ export default defineComponent({
                   required: true
             },
             dados_usuario:{
-                  type: Object as PropType<{campo: {key_body:string, filtro:{tipo_filtro: string}}, operacao: {opc: string}, valor: string}>,
+                  type: Object as PropType<{campo: {key_body:string, config_filtro:Array<object>, filtro:{tipo_filtro: string}}, operacao: {opc: string}, valor: string}>,
                   required: true
             },
             errors:{
@@ -55,6 +55,7 @@ export default defineComponent({
 </script>
 
 <template>
+      <!-- Dados {{ dados_usuario }} <br> -->
       <div :class="['w-25 my-1',{'invalido' : errors.campo}]">
             <div class="input-group">
                   <div class="input-group-prepend">
@@ -66,7 +67,7 @@ export default defineComponent({
                   </select>
             </div>
       </div>
-      <div :class="['w-25 my-1',{'invalido' : errors.operacao}]" v-show="dados_usuario.campo.filtro.tipo_filtro != ''">
+      <div :class="['w-25 my-1',{'invalido' : errors.operacao}]" v-show="dados_usuario.campo.filtro.tipo_filtro == 'all'">
             <div class="input-group" style="border-color: red; border: 2px">
                   <div class="input-group-prepend" style="padding-left: 10px;">
                         <div class="input-group-text">Operação</div>
@@ -77,8 +78,14 @@ export default defineComponent({
                   </select>
             </div>
       </div>
-      <div class="w-50 my-1" v-show="dados_usuario.campo.filtro.tipo_filtro == ('all' as string) || dados_usuario.campo.filtro.tipo_filtro == ('pre' as string)" style="padding-left: 10px;">
+      <div class="w-50 my-1" v-show="dados_usuario.campo.filtro.tipo_filtro == ('all' as string)" style="padding-left: 10px;">
             <input type="text" placeholder="Valor" :class="['form-control',{'imput_value' : errors.valor} , {'imput_value_incompativel' : errors.valor_incompativel && !errors.valor}]" v-model="retorno_dados['valor' as keyof typeof retorno_dados]" required>
+      </div>
+      <div class="w-50 my-1 row" v-show="dados_usuario.campo.filtro.tipo_filtro == ('pre' as string)"> 
+            <div class="custom-control custom-checkbox col" v-for="(item, index) in dados_usuario.campo.config_filtro" :key="index">
+                  <input type="checkbox" :class="['custom-control-input', {'imput_value' : errors.valor}]" :id="'check'+index" v-model="retorno_dados['campo' as keyof typeof retorno_dados]['config_filtro'][index]['isChecked']">
+                  <label class="custom-control-label" :for="'check'+index">{{ item['text' as keyof typeof item] }}</label>
+            </div>
       </div>
 </template>
 

@@ -38,7 +38,6 @@ export default defineComponent({
       methods:{
             change_item(){
                   if (this.item_p_pagina != this.item_p_pagina_old) {
-                        console.log(this.item_p_pagina);
                         this.$emit('trocar_quantidade', this.item_p_pagina)
                   }
             },

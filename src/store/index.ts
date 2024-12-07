@@ -6,6 +6,8 @@ const store = createStore({
     dashboard: Object,
 
     pages_atual: Object,
+    itens_page_atual: Object, //implementar
+    
     empresas: Object,
     empresas_pesquisa: Object,
     // empresa_page_atual: Number,
@@ -22,8 +24,9 @@ const store = createStore({
     marketplaceecommerce: Object,
     marketplaceecommerce_pesquisa: Object,
     
-
     mapeamentoprodudo: Object,
+    mapeamentoprodudo_pesquisa: Object,
+
     log_req: Object,
     log_att: Object,
   },
@@ -38,7 +41,36 @@ const store = createStore({
     //   )
     // },
     setPageDadosInterno(state, obj: object){
+      console.log('==========================================');
+      console.log('Befor set setPageDadosInterno');
+      console.log('state ', state);
+      console.log('state.itens ', state.itens_page_atual[obj['roter_interna' as keyof typeof obj]]);
       state.pages_atual[obj['roter_interna' as keyof typeof obj]] = obj['page' as keyof typeof obj];
+      console.log('after')
+      console.log('state ', state);
+      console.log('state.itens ', state.itens_page_atual[obj['roter_interna' as keyof typeof obj]]);
+      console.log('==========================================');
+    },
+    setItensPaginaInterno(state, obj: object){
+      const chave = obj['roter_interna' as keyof typeof obj];
+      const valor = obj['itens_page' as keyof typeof obj];
+      console.log('==========================================');
+      console.log('Befor set setItensPaginaInterno');
+      console.log('state ', state);
+      console.log('state.itens ', state.itens_page_atual[chave]);
+      state.itens_page_atual[chave] = valor;
+      console.log('after')
+      console.log('state ', state);
+      console.log('state.itens ', state.itens_page_atual[chave]);
+      console.log('==========================================');
+
+      // const objaux = new Object();
+      // objaux[obj['roter_interna' as keyof typeof obj] as keyof typeof objaux] = obj['itens_page' as keyof typeof obj];
+      // console.log('State Store ',state);
+      // console.log('rota interna ', obj['roter_interna' as keyof typeof obj]);
+      // console.log('itens ', obj['itens_page' as keyof typeof obj]);
+      // state['info_page' as keyof typeof state]['itens_page_atual' as keyof typeof state.itens_page_atual] = 
+      // console.log('State Store ',state.itens_page_atual[obj['roter_interna' as keyof typeof obj]]);
     },
     ordenarDadosInterno(state, obj: {ordem: string, rota_interna: string, nome_dado: string, tipo: string}){
       const aux = state[obj.rota_interna as keyof typeof state]['data' as keyof typeof Object] as Array<object>;
@@ -67,8 +99,7 @@ const store = createStore({
     },
     resetDadosInterno(state, key: string){
       state[key as keyof typeof state] = Object;
-      console.log('STATE> ', state[key as keyof typeof state]);
-      
+      console.log('RESET> ', state[key as keyof typeof state]);
     }
   },
   getters: {
@@ -144,6 +175,9 @@ const store = createStore({
     getMapeamentoProduto(state): object{
       return state.mapeamentoprodudo['data' as keyof typeof state.mapeamentoprodudo]
     },
+    getMapeamentoProduto_pesquisa(state): object{
+      return state.mapeamentoprodudo_pesquisa['data' as keyof typeof state.mapeamentoprodudo_pesquisa]
+    },
     getMapeamentoProdutoLength(state): object{
       return state.mapeamentoprodudo['totalRegistros' as keyof typeof state.mapeamentoprodudo]
     },
@@ -151,6 +185,9 @@ const store = createStore({
     //Market
     getMarketplaceEcommerce(state): object{
       return state.marketplaceecommerce['data' as keyof typeof state.marketplaceecommerce]
+    },
+    getMarketplaceEcommerce_pesquisa(state): object{
+      return state.marketplaceecommerce_pesquisa['data' as keyof typeof state.marketplaceecommerce_pesquisa]
     },
     getMarketplaceEcommerceLength(state): object{
       return state.marketplaceecommerce['totalRegistros' as keyof typeof state.marketplaceecommerce]
@@ -211,10 +248,11 @@ const store = createStore({
       await fetch_.postDado('/'+obj.roter_externa, obj.dado)
       .then(() => context.commit('resetDadosInterno', obj.roter_interna))
     },
-    async getDadosPaginados(context, obj : {roter_interna: string, roter_externa: string, request: string, pagina_atual: number}){
+    async getDadosPaginados(context, obj : {roter_interna: string, roter_externa: string, request: string, pagina_atual: number, item_page: number}){
+      // context.commit('setPageDadosInterno', {'page': obj.pagina_atual,'roter_interna': obj.roter_interna})
+      // context.commit('setItensPaginaInterno', {'roter_interna': obj.roter_interna, 'itens_page': obj.item_page})
       Promise.resolve(await fetch_.getDadoPaginado('/'+obj.roter_externa, obj.request))
       .then((value) =>{
-        context.commit('setPageDadosInterno', {'page': obj.pagina_atual,'roter_interna': obj.roter_interna})
         context.commit('setDadosInterno', {'dado': value , 'roter_interna': obj.roter_interna})
         return value
       })
@@ -222,6 +260,9 @@ const store = createStore({
     getPaginas(context, rota_interna: string){
       return context.state.pages_atual[rota_interna as keyof typeof context.state.pages_atual]
     },
+    getItensPagina(context, rota_interna: string){
+      return context.state.itens_page_atual[rota_interna as keyof typeof context.state.itens_page_atual]
+    }
   }
 
 })

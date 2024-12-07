@@ -6,10 +6,10 @@ import filtro from './regras_filtro';
 export default defineComponent({
       data() {
             return {
-                  request: '?filtro=',
+                  request: 'filtro=',
                   filhos: [{id:0 , componete: FiltroComponent,
                         opcs:{
-                              campo: {key_body: '', filtro:{tipo_obj: '', tipo_filtro: ''}},
+                              campo: {key_body: '', config_filtro:[{}], filtro:{tipo_obj: '', tipo_filtro: ''}},
                               operacao: {opc: ''},
                               valor: ''
                         }, erros: [], error_obj: {campo: false, operacao: false, valor: false, valor_incompativel: false}
@@ -32,7 +32,7 @@ export default defineComponent({
       methods:{
             adiciona_condicao(){
                   const newId = this.filhos.length ? this.filhos[this.filhos.length - 1].id + 1 : 1;
-                  this.filhos.push({id: newId, componete: FiltroComponent, opcs:{campo: {key_body: '', filtro:{tipo_obj: '', tipo_filtro: ''}}, operacao: {opc: ''}, valor: ''}, erros: [], error_obj:{campo: false, operacao: false, valor: false, valor_incompativel: false}});
+                  this.filhos.push({id: newId, componete: FiltroComponent, opcs:{campo: {key_body: '', config_filtro:[{}], filtro:{tipo_obj: '', tipo_filtro: ''}}, operacao: {opc: ''}, valor: ''}, erros: [], error_obj:{campo: false, operacao: false, valor: false, valor_incompativel: false}});
             },
             remove_condicao(index: number){
                   this.filhos.splice(index, 1);
@@ -54,7 +54,14 @@ export default defineComponent({
                               if (index >= 1) {
                                     aux += ','
                               }
-                              aux += `${this.filhos[index].opcs.campo.key_body}${this.filhos[index].opcs.operacao.opc}${this.filhos[index].opcs.valor}`
+                              if (this.filhos[index].opcs.campo.filtro.tipo_filtro == 'all') {
+                                    aux += `${this.filhos[index].opcs.campo.key_body}${this.filhos[index].opcs.operacao.opc}${this.filhos[index].opcs.valor}`
+                              }else{
+                                    for (const element of this.filhos[index].opcs.campo.config_filtro) {//Ver com ele como é a request 
+                                          if(element['isChecked' as keyof typeof element])
+                                                aux += `${this.filhos[index].opcs.campo.key_body}==${element['key' as keyof typeof element]}`
+                                    }
+                              }
                         }
                   }
                   console.log('Algum erro', have_error);

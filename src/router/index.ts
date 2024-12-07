@@ -104,7 +104,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/mapeamentoprodutos',
     name: 'mapeamentoprodutos',
-    component: () => import ('@/views/MapeamentoProdutoView.vue'),
+    component: () => import ('@/views/MapeamentoProduto/MapeamentoProdutoView.vue'),
     meta:{
       auth: true
     }
