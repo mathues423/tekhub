@@ -66,14 +66,15 @@ export default defineComponent({
             ListaComponent
       },
       async mounted() {
-            if(store.getters.getUsuarios != undefined){
-                  this.lista_estado = 'Lista'
-                  this.dado_paginado.body = await store.getters.getUsuarios
-                  store.dispatch('getPaginas', 'usuarios').then((value) => this.pagina_atual = value)
-                  this.NUMERO_PAGINA = Math.ceil(await store.getters.getCanaisLength / this.ITEM_PAGINA_MAX);
-            }else{
-                  this.requestDados()
-            }
+            this.requestDados()
+            // if(store.getters.getUsuarios != undefined){
+            //       this.lista_estado = 'Lista'
+            //       this.dado_paginado.body = await store.getters.getUsuarios
+            //       store.dispatch('getPaginas', 'usuarios').then((value) => this.pagina_atual = value)
+            //       this.NUMERO_PAGINA = Math.ceil(await store.getters.getCanaisLength / this.ITEM_PAGINA_MAX);
+            // }else{
+            //       this.requestDados()
+            // }
       },
       methods:{
             deletar(objeto: {codigo: string}){
@@ -101,9 +102,9 @@ export default defineComponent({
                         'roter_interna': 'usuarios',
                         'roter_externa': 'usuario',
                         'request': `?pagina=${this.pagina_atual}&porPagina=${this.ITEM_PAGINA_MAX}&ordenacao=codigo&direcao=Asc`,
-                        'pagina_atual': this.pagina_atual
-                        })
-                  .then(() => {
+                        'pagina_atual': this.pagina_atual,
+                        'item_page': this.ITEM_PAGINA_MAX
+                  }).then(() => {
                         this.dado_paginado.body = store.getters.getUsuarios;
                         if(this.ITEM_PAGINA_MAX > 0){
                               this.NUMERO_PAGINA = Math.ceil(store.getters.getUsuariosLength / this.ITEM_PAGINA_MAX);
@@ -146,10 +147,10 @@ export default defineComponent({
                   store.dispatch('getDadosPaginados', {
                         'roter_interna': 'usuarios_pesquisa',
                         'roter_externa': 'usuario',
-                        'request': request+`&pagina=1&porPagina=0&ordenacao=codigo&direcao=Asc`,
-                        'pagina_atual': 1
-                        })
-                  .then(() => {
+                        'request': `?pagina=1&porPagina=0&ordenacao=codigo&direcao=Asc`+request,
+                        'pagina_atual': 1,
+                        'item_page': this.ITEM_PAGINA_MAX
+                  }).then(() => {
                         this.NUMERO_PAGINA = 1;
                         this.dado_pesquisa.body = store.getters.getUsuarios_pesquisa;
                         this.lista_estado = 'Lista'

@@ -27,6 +27,10 @@ export default defineComponent({
 
                         {'header': 'Ambiente', 'key_body': 'ambiente',
                         'filtro':{'tipo_obj': 'String', 'tipo_filtro': 'pre'},
+                        'config_filtro': [
+                              {'key': 0, 'text': 'HOMOLOGAÇÃO', isChecked: false},
+                              {'key': 1, 'text': 'PRODUÇÃO', isChecked: false}
+                        ],
                         'isfiltrable': true, 'isordenable':false},
 
                         {'header': 'Ações', 'key_body': 'button',
@@ -58,14 +62,22 @@ export default defineComponent({
             ListaComponent
       },
       async mounted() {
-            if(store.getters.getAmbientes != undefined){
-                  this.lista_estado = 'Lista'
-                  this.dado_paginado.body = await store.getters.getAmbientes
-                  store.dispatch('getPaginas', 'ambientes').then((value) => this.pagina_atual = value)
-                  this.NUMERO_PAGINA = Math.ceil(await store.getters.getAmbientesLength / this.ITEM_PAGINA_MAX);
-            }else{
-                  this.requestDados()
-            }
+            this.requestDados()
+            // if(store.getters.getAmbientes != undefined){
+            //       this.lista_estado = 'Lista'
+            //       this.dado_paginado.body = await store.getters.getAmbientes
+            //       store.dispatch('getPaginas', 'ambientes')
+            //       .then((pagina_salvo)=>{
+            //             this.pagina_atual = pagina_salvo;
+            //       })
+            //       store.dispatch('getItensPagina', 'ambientes')
+            //       .then((itens_max)=> {
+            //             this.ITEM_PAGINA_MAX =  itens_max;
+            //             this.NUMERO_PAGINA = Math.ceil( store.getters.getAmbientesLength / itens_max);
+            //       })
+            // }else{
+            //       this.requestDados()
+            // }
       },
       methods:{
             deletar(objeto: {codigo: string}){
@@ -93,9 +105,9 @@ export default defineComponent({
                         'roter_interna': 'ambientes',
                         'roter_externa': 'ambiente',
                         'request': `?pagina=${this.pagina_atual}&porPagina=${this.ITEM_PAGINA_MAX}&ordenacao=codigo&direcao=Asc`,
-                        'pagina_atual': this.pagina_atual
-                        })
-                  .then(() => {
+                        'pagina_atual': this.pagina_atual,
+                        'item_page': this.ITEM_PAGINA_MAX      
+                  }).then((args) => {
                         this.dado_paginado.body = store.getters.getAmbientes;
                         if(this.ITEM_PAGINA_MAX != 0){
                               this.NUMERO_PAGINA = Math.ceil(store.getters.getAmbientesLength / this.ITEM_PAGINA_MAX);
@@ -103,6 +115,8 @@ export default defineComponent({
                               this.NUMERO_PAGINA = 1;
                         }
                         this.lista_estado = 'Lista'
+                        console.log(args);
+                        console.log('IN REQUEST ', store.state);
                   })
             },
             filtraAmbiente(){
@@ -118,10 +132,10 @@ export default defineComponent({
                   store.dispatch('getDadosPaginados', {
                         'roter_interna': 'ambientes_pesquisa',
                         'roter_externa': 'ambiente',
-                        'request': request+`&pagina=1&porPagina=0&ordenacao=codigo&direcao=Asc`,
-                        'pagina_atual': 1
-                        })
-                  .then(() => {
+                        'request': `?pagina=1&porPagina=0&ordenacao=codigo&direcao=Asc`+request,
+                        'pagina_atual': 1,
+                        'item_page': this.ITEM_PAGINA_MAX
+                  }).then(() => {
                         this.NUMERO_PAGINA = 1;
                         this.dado_pesquisa.body = store.getters.getAmbientes_pesquisa;
                         this.lista_estado = 'Lista'
