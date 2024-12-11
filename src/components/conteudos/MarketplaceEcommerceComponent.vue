@@ -7,59 +7,6 @@ import FiltroPaiComponent from '../util/busca/FiltroPaiComponent.vue';
 
 export default defineComponent({
       template: '#Empre_comp',
-      data() {
-          return {
-            // lista_estado: 'Loader',
-            // itsOnFilter: false,
-            // ITEM_PAGINA_MAX : 10,
-            // NUMERO_PAGINA: 1,
-            // pagina_atual: 1,
-            // dado_paginado:{
-            //       header:[
-            //             {'header': 'Código', 'key_body': 'codigo',
-            //             'ordem':{'on': true,'tipo_obj': 'Number', 'tipo_ordenacao': 'Asc'}, //Ascendente => true | Descendente => false
-            //             'filtro':{'tipo_obj': 'Number', 'tipo_filtro': 'all'},
-            //             'isfiltrable': true, 'isordenable':true},
-
-            //             {'header': 'Canal', 'key_body': 'ambienteCanalAlias',
-            //             'filtro':{'tipo_obj': 'Number', 'tipo_filtro': 'all'},
-            //             'isfiltrable': true, 'isordenable':false},
-
-            //             {'header': 'Código da Empresa', 'key_body': 'empresaCodigo',
-            //             'ordem':{'on': false,'tipo_obj': 'Number', 'tipo_ordenacao': 'Asc'}, //Ascendente => true | Descendente => false
-            //             'filtro':{'tipo_obj': 'Number', 'tipo_filtro': 'all'},
-            //             'isfiltrable': true, 'isordenable':true},
-
-            //             {'header': 'Descrição da Empresa', 'key_body': 'empresaDescricao',
-            //             'filtro':{'tipo_obj': 'Number', 'tipo_filtro': 'all'},
-            //             'isfiltrable': true, 'isordenable':false},
-
-            //             {'header': 'Ações', 'key_body': 'button',
-            //             'isfiltrable': false, 'isordenable':false}
-            //       ],
-            //       body: [] as Array<object>
-            // },
-            // dado_pesquisa:{
-            //       header:[
-            //       {'header': 'Código', 'key_body': 'codigo',
-            //             'isfiltrable': false, 'isordenable':false},
-
-            //             {'header': 'Canal', 'key_body': 'ambienteCanalAlias',
-            //             'isfiltrable': false, 'isordenable':false},
-
-            //             {'header': 'Código da Empresa', 'key_body': 'empresaCodigo',
-            //             'isfiltrable': false, 'isordenable':false},
-
-            //             {'header': 'Descrição da Empresa', 'key_body': 'empresaDescricao',
-            //             'isfiltrable': false, 'isordenable':false},
-
-            //             {'header': 'Ações', 'key_body': 'button',
-            //             'isfiltrable': false, 'isordenable':false}
-            //       ],
-            //       body: [] as Array<object>
-            // }
-          }
-      },
       props: {
             lista_estado:{
                   type: String,
@@ -140,7 +87,7 @@ export default defineComponent({
                   :pagina="1"
                   :item_p_pagina="0"
                   :pagina_max="1"
-                  :rota_edicao="'undefined'"
+                  :rota_edicao="'integracoesmarketplacesecommerces'"
                   :ModalContent_Remocao="[
                         {'nome': 'Código', 'key': 'codigo'},
                         {'nome': 'Canal', 'key': 'ambienteCanalAlias'},
@@ -157,7 +104,7 @@ export default defineComponent({
                   :pagina="pagina_atual"
                   :item_p_pagina="ITEM_PAGINA_MAX"
                   :pagina_max="NUMERO_PAGINA"
-                  :rota_edicao="'undefined'"
+                  :rota_edicao="'integracoesmarketplacesecommerces'"
                   :ModalContent_Remocao="[
                         {'nome': 'Código', 'key': 'codigo'},
                         {'nome': 'Canal', 'key': 'ambienteCanalAlias'},

@@ -79,19 +79,20 @@ export default defineComponent({
       },
       async mounted() {
             this.dado_parametro.header = this.dado_paginado.header;
-            if(store.getters.getMarketplaceEcommerce != undefined){
-                  this.dado_paginado.body = await store.getters.getMarketplaceEcommerce
-                  store.dispatch('getPaginas', 'marketplaceecommerce').then((value) => this.pagina_atual = value)
-                  this.NUMERO_PAGINA = Math.ceil(await store.getters.getMarketplaceEcommerceLength / this.ITEM_PAGINA_MAX);
-                  this.lista_estado = 'Lista'
-                  this.dado_parametro = this.dado_paginado;
-            }else{
-                  this.requestDados()
-            }
+            this.requestDados()
+            // if(store.getters.getMarketplaceEcommerce != undefined){
+            //       this.dado_paginado.body = await store.getters.getMarketplaceEcommerce
+            //       store.dispatch('getPaginas', 'marketplaceecommerce').then((value) => this.pagina_atual = value)
+            //       this.NUMERO_PAGINA = Math.ceil(await store.getters.getMarketplaceEcommerceLength / this.ITEM_PAGINA_MAX);
+            //       this.lista_estado = 'Lista'
+            //       this.dado_parametro = this.dado_paginado;
+            // }else{
+            //       this.requestDados()
+            // }
       },
       methods:{
             adicionarNewmarketplaceecommerce(){
-                  router.push('/dashboard');
+                  router.push('/integracoesmarketplacesecommerces/0');
             },
             request_empresa(id: number){
                   this.inRequestEmpresa = true
@@ -130,9 +131,9 @@ export default defineComponent({
                         'roter_interna': 'marketplaceecommerce',
                         'roter_externa': 'integracaomarketplaceecommerce',
                         'request': `?pagina=${this.pagina_atual}&porPagina=${this.ITEM_PAGINA_MAX}&ordenacao=codigo&direcao=Asc`,
-                        'pagina_atual': this.pagina_atual
-                        })
-                  .then(() => {
+                        'pagina_atual': this.pagina_atual,
+                        'item_page': this.ITEM_PAGINA_MAX
+                  }).then(() => {
                         this.dado_paginado.body = store.getters.getMarketplaceEcommerce;
                         this.NUMERO_PAGINA = Math.ceil(store.getters.getMarketplaceEcommerceLength / this.ITEM_PAGINA_MAX);
                         this.lista_estado = 'Lista';
@@ -169,16 +170,16 @@ export default defineComponent({
             },
             getPesquisa(request: string){
                   this.lista_estado = 'Loader'
-                  // store.dispatch('getDadosPaginados', {
-                  //       'roter_interna': 'empresas_pesquisa',
-                  //       'roter_externa': 'empresa',
-                  //       'request': request+`&pagina=1&porPagina=0&ordenacao=codigo&direcao=Asc`,
-                  //       'pagina_atual': 1
-                  //       })
-                  // .then(() => {
-                  //       this.dado_pesquisa.body = store.getters.getMarketplaceEcommerce_pesquisa;
-                  //      this.lista_estado = 'Lista'
-                  // })
+                  store.dispatch('getDadosPaginados', {
+                        'roter_interna': 'empresas_pesquisa',
+                        'roter_externa': 'empresa',
+                        'request': request+`&pagina=1&porPagina=0&ordenacao=codigo&direcao=Asc`,
+                        'pagina_atual': 1,
+                        'item_page': this.ITEM_PAGINA_MAX
+                  }).then(() => {
+                        this.dado_pesquisa.body = store.getters.getMarketplaceEcommerce_pesquisa;
+                       this.lista_estado = 'Lista'
+                  })
             },
             quantidadeItens(args: number){
                   this.pagina_atual = 1;
@@ -197,23 +198,25 @@ export default defineComponent({
       <div class="row">
             <NavbarComplet :lateral="'mark_ecom'"/>
             <div class="col-10" id="content">
-                  {{ dado_parametro }}
                   <BuscaEmpresaComponent 
-                        :in-request="inRequestEmpresa"
+                        :inRequest="inRequestEmpresa"
                         @id_empresa="(arg)=> request_empresa(arg)"
                   />
                   <CriarBotaoComponent @criar="adicionarNewmarketplaceecommerce"/>
                   <MarketplaceEcommerceComponent 
-                        :-i-t-e-m_-p-a-g-i-n-a_-m-a-x="ITEM_PAGINA_MAX"
-                        :-n-u-m-e-r-o_-p-a-g-i-n-a="NUMERO_PAGINA"
+                        :ITEM_PAGINA_MAX="ITEM_PAGINA_MAX"
+                        :NUMERO_PAGINA="NUMERO_PAGINA"
                         :dado="dado_parametro"
                         :its-on-filter="itsOnFilter"
                         :lista_estado="lista_estado"
                         :pagina_atual="pagina_atual"
-
+                        
                         @deletar="(arg : any) => deletar(arg)"
-                        @filtraMarketplaceEcommerce="(arg : any) => ordenaMarketplaceEcommerce(arg)"
-                        @ordenaMarketplaceEcommerce="filtraMarketplaceEcommerce"
+
+                        @filtraMarketplaceEcommerce="filtraMarketplaceEcommerce"
+                        @closefiltrarMarketplaceEcommerce="closefiltrarMarketplaceEcommerce"
+
+                        @ordenaMarketplaceEcommerce="(arg : any) => ordenaMarketplaceEcommerce(arg)"
                         @quantidadeItens="(args: number)=> quantidadeItens(args)"
                         @avancaPagina="avancaPagina" 
                         @recuarPagina="recuarPagina"
