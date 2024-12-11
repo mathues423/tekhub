@@ -52,7 +52,7 @@ export default defineComponent({
                               have_error = true;
                         }else{
                               if (index >= 1) {
-                                    aux += ','
+                                    aux += '&filtro='
                               }
                               if (this.filhos[index].opcs.campo.filtro.tipo_filtro == 'all') {
                                     aux += `${this.filhos[index].opcs.campo.key_body}${this.filhos[index].opcs.operacao.opc}${this.filhos[index].opcs.valor}`

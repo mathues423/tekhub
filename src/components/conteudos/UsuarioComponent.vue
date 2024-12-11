@@ -147,7 +147,7 @@ export default defineComponent({
                   store.dispatch('getDadosPaginados', {
                         'roter_interna': 'usuarios_pesquisa',
                         'roter_externa': 'usuario',
-                        'request': `?pagina=1&porPagina=0&ordenacao=codigo&direcao=Asc`+request,
+                        'request': `?pagina=1&porPagina=0&ordenacao=codigo&direcao=Asc&`+request,
                         'pagina_atual': 1,
                         'item_page': this.ITEM_PAGINA_MAX
                   }).then(() => {

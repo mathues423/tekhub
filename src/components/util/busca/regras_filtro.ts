@@ -8,6 +8,12 @@ class Filtro {
 
       _verifica(dado : DadoFiltro, erros_msg : Array<string>): {campo: boolean, operacao: boolean, valor: boolean, valor_incompativel: boolean}{
             this.erros_obj = {campo: false, operacao: false, valor: false, valor_incompativel: false};
+            
+            if(dado.campo.filtro.tipo_obj == ''){
+                  erros_msg.push('campo')
+                  this.erros_obj.campo = true;
+            }
+
             if (dado.campo.filtro['tipo_filtro' as  keyof typeof dado.campo.filtro] == 'all') {
                   if(dado.campo.key_body == ''){
                         erros_msg.push('campo');

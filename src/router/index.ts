@@ -87,7 +87,7 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/ambientes/:id',
-    name: 'ambientes_criacao',
+    name: 'ambientes_edicao',
     component: () => import ('@/views/Ambiente/AmbienteEdicaoView.vue'),
     meta:{
       auth: true
@@ -102,6 +102,22 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
+    path: '/integracoesmarketplacesecommerces/0', 
+    name: 'marketplaceecommerce_criacao',
+    component: () => import ('@/views/MarketplaceEcommerce/MarketplaceEcommerceNewView.vue'),
+    meta:{
+      auth: true
+    }
+  },
+  {
+    path: '/integracoesmarketplacesecommerces/:id', 
+    name: 'marketplaceecommerce_edicao',
+    component: () => import ('@/views/MarketplaceEcommerce/MarketplaceEcommerceEdicaoView.vue'),
+    meta:{
+      auth: true
+    }
+  },
+  {
     path: '/mapeamentoprodutos',
     name: 'mapeamentoprodutos',
     component: () => import ('@/views/MapeamentoProduto/MapeamentoProdutoView.vue'),
@@ -109,6 +125,23 @@ const routes: Array<RouteRecordRaw> = [
       auth: true
     }
   },
+  {
+    path: '/mapeamentoprodutos/0',
+    name: 'mapeamentoprodutos_criacao',
+    component: () => import ('@/views/MapeamentoProduto/MapeamentoProdutoNewView.vue'),
+    meta:{
+      auth: true
+    }
+  },
+  {
+    path: '/mapeamentoprodutos/:id',
+    name: 'mapeamentoprodutos_edicao',
+    component: () => import ('@/views/MapeamentoProduto/MapeamentoProdutoEdicaoView.vue'),
+    meta:{
+      auth: true
+    }
+  },
+  
   {
     path: '/usuarios',
     name: 'usuarios',
