@@ -225,18 +225,39 @@ const store = createStore({
       })
       return retorno
     },
+    getMapeamentoProdutosID(context, id: string){
+      let retorno = undefined;
+      const aux = context.state.mapeamentoprodudo['data' as keyof typeof context.state.mapeamentoprodudo] as Array<object>;
+      aux.forEach((value) => {
+        if (value['codigo' as keyof typeof value] == parseInt(id)) {
+          retorno =  value;
+        }
+      })
+      return retorno
+    },
 
 
     async delDadosID(context, obj : {roter_externa: string, id: string, roter_interna: string}){
       await fetch_.delDado(obj.roter_externa,obj.id)
       .then(()=> context.commit('resetDadosInterno', obj.roter_interna))
     },
-    async setDadosID(context, obj: {roter_externa: string, id: string, roter_interna: string, new_dado: {codigo: number}}){
-      /* eslint-disable */
-      obj.new_dado.codigo = parseInt(obj.id);
+    async setDadosID(context, obj: {roter_externa: string, id: string, roter_interna: string, new_dado: any}){
+      obj.new_dado['codigo' as keyof typeof Object] = parseInt(obj.id);
       await fetch_.putDado('/'+obj.roter_externa, obj.id,obj.new_dado)
       .then((args)=>{
-        let aux = context.state[obj.roter_interna as keyof typeof context.state]['data' as keyof typeof Object] as Array<object>;
+        const aux = context.state[obj.roter_interna as keyof typeof context.state]['data' as keyof typeof Object] as Array<object>;
+        aux.forEach((value, index)=>{
+          if (value['codigo' as keyof typeof value] == obj.new_dado.codigo) {
+            aux[index] =  obj.new_dado;
+          }
+        })
+      })
+    },
+    async setDadosID_notCodigo(context, obj: {roter_externa: string, id: string, roter_interna: string, new_dado: any}){
+      // obj.new_dado['codigo' as keyof typeof Object] = parseInt(obj.id);
+      await fetch_.putDado('/'+obj.roter_externa, obj.id,obj.new_dado)
+      .then((args)=>{
+        const aux = context.state[obj.roter_interna as keyof typeof context.state]['data' as keyof typeof Object] as Array<object>;
         aux.forEach((value, index)=>{
           if (value['codigo' as keyof typeof value] == obj.new_dado.codigo) {
             aux[index] =  obj.new_dado;
