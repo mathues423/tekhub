@@ -62,7 +62,7 @@ export default defineComponent({
                         <div class="input-group-text">Campo</div>
                   </div>
                   <select class="custom-select" v-model="retorno_dados['campo' as keyof typeof retorno_dados]" required>
-                        <option selected disabled value=""> Selecione o campo</option>
+                        <option selected disabled :value="{}"> Selecione o campo</option>
                         <option v-for="header in getDadosFiltraveis" :key="header" :value="header"> {{ header['header' as keyof typeof header] }}</option>
                   </select>
             </div>
@@ -73,7 +73,7 @@ export default defineComponent({
                         <div class="input-group-text">Operação</div>
                   </div>
                   <select class="custom-select" v-model="retorno_dados['operacao' as keyof typeof retorno_dados]" required>
-                        <option selected disabled value=""> Selecione o campo</option>
+                        <option selected disabled :value="{}"> Selecione o campo</option>
                         <option v-for="operacao in operacoes" :key="operacao.nome" :value="operacao"> {{ operacao.nome }}</option>
                   </select>
             </div>

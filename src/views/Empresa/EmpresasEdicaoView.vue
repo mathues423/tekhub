@@ -130,8 +130,8 @@ export default defineComponent({
 
                                     <div style="margin-top: 16px;" class="col-12">
                                           <ErroFormComponent
-                                          :mensagem="'Você precisa editar antes de salvar'"
-                                          :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='igual') != -1}]"
+                                          :mensagem="'Edite antes de salvar'"
+                                          :class="['alert-warning desativada',{'ativada' : errors.findIndex((x) => x =='igual') != -1}]"
                                           />
                                           <button class="btn btn-primary col-2" :disabled="isEditing">
                                                 <span>Iditar</span>

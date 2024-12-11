@@ -39,11 +39,11 @@ export default defineComponent({
       <div class="row my-1">
             <div class="col-4">
                   <select v-if="requested" class="custom-select" v-model="empresa_select" required>
-                        <option selected disabled value=""> Selecione o campo</option>
+                        <option selected disabled :value="{}"> Selecione o campo</option>
                         <option v-for="operacao in empresa_request" :key="operacao['codigo' as keyof typeof operacao]" :value="operacao"> {{ operacao['descricao' as keyof typeof operacao] }}</option>
                   </select>
                   <select v-else class="custom-select">
-                        <option selected disabled value=""> Selecione a empresa</option>
+                        <option selected disabled :value="{}"> Selecione a empresa</option>
                   </select>
             </div>
             <div class="col">

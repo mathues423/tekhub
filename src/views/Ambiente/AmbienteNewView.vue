@@ -85,13 +85,13 @@ export default defineComponent({
                                     <div class="col-8">
                                           <span v-if="requested">
                                                 <select class="custom-select" v-model="ambiente.canalAlias">
-                                                      <option selected disabled value=""> Selecione o campo</option>
+                                                      <option selected disabled :value="{}"> Selecione o campo</option>
                                                       <option v-for="header in canais_requested" :key="header['codigo' as keyof typeof header]" :value="header['alias' as keyof typeof header]"> {{ header['descricao' as keyof typeof header] }} | {{ header['tipo' as keyof typeof header] }}</option>
                                                 </select>
                                           </span>
                                           <span v-else>
                                                 <select class="custom-select">
-                                                      <option selected disabled value=""> Selecione o campo</option>
+                                                      <option selected disabled :value="{}"> Selecione o campo</option>
                                                 </select>
                                           </span>
                                           <ErroFormComponent
@@ -130,7 +130,7 @@ export default defineComponent({
                                     </div>
                                     <div class="col-8">
                                           <select class="custom-select" v-model="ambiente.ambiente">
-                                                <option selected disabled value=""> Selecione o campo</option>
+                                                <option selected disabled :value="{}"> Selecione o campo</option>
                                                 <option v-for="header in ambientes" :key="header.name" :value="header.value"> {{ header.name }}</option>
                                           </select>
                                           <ErroFormComponent
