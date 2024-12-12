@@ -1,6 +1,8 @@
 <script lang="ts">
 import fetch_ from '@/services/fetch/requisicao';
 import { defineComponent } from 'vue'
+import LoaderSkeleton from './LoaderSkeleton.vue';
+
 export default defineComponent({
       name: 'FiltroComponent',
       data() {
@@ -9,6 +11,9 @@ export default defineComponent({
             empresa_request: {},
             requested: false,
           }
+      },
+      components:{
+            LoaderSkeleton
       },
       props:{
             inRequest:{
@@ -42,9 +47,11 @@ export default defineComponent({
                         <option selected disabled :value="{}"> Selecione o campo</option>
                         <option v-for="operacao in empresa_request" :key="operacao['codigo' as keyof typeof operacao]" :value="operacao"> {{ operacao['descricao' as keyof typeof operacao] }}</option>
                   </select>
-                  <select v-else class="custom-select">
-                        <option selected disabled :value="{}"> Selecione a empresa</option>
-                  </select>
+                  <span v-else>
+                        <LoaderSkeleton 
+                              :tipo_loader="'select'"
+                        />
+                  </span>
             </div>
             <div class="col">
                   <button class='btn btn-primary' @click="returna_id_empresa(empresa_select['codigo' as keyof typeof empresa_select])" :disabled="inRequest">

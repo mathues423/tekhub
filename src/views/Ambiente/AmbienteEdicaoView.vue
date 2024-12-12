@@ -7,6 +7,7 @@ import { defineComponent } from 'vue';
 import ambiente from '@/services/regras_negocio/regras_ambientes';
 import store from '@/store';
 import fetch_ from '@/services/fetch/requisicao';
+import LoaderSkeleton from '@/components/util/LoaderSkeleton.vue';
 
 export default defineComponent({
       data(){
@@ -36,6 +37,7 @@ export default defineComponent({
       components:{
             NavbarComplet,
             VersaoMaximisada,
+            LoaderSkeleton,
             ErroFormComponent
       },
       methods:{
@@ -108,9 +110,9 @@ export default defineComponent({
                                                 </select>
                                           </span>
                                           <span v-else>
-                                                <select class="custom-select">
-                                                      <option selected disabled :value="{}"> Selecione o campo</option>
-                                                </select>
+                                                <LoaderSkeleton 
+                                                      :tipo_loader="'select'"
+                                                />
                                           </span>
                                           <ErroFormComponent
                                           :mensagem="'Por favor informe o canal.'"
