@@ -152,11 +152,12 @@ export default defineComponent({
             async criacaoRequest(){
                   this.editando = true;
                   this.errors = [];
+                  const id = (this.$route.params['id'] || '-1') as string;
                   regra_marketplace._edit(this.marketplaceecommerce_old, this.marketplaceecommerce_new, this.errors)
                   
                   if(this.errors.length == 0){
                         Promise.resolve(
-                              store.dispatch('putDados', {'roter_externa': 'integracaomarketplaceecommerce/', 'dado': this.marketplaceecommerce_new, 'roter_interna': 'marketplaceecommerce'})
+                              store.dispatch('setDadosID', {'roter_externa': 'integracaomarketplaceecommerce','id':id, 'new_dado': this.marketplaceecommerce_new, 'roter_interna': 'marketplaceecommerce'})
                               .then(()=> this.voltarMarktplaceEcommerce())
                         ).catch(()=> this.editando = false)
                   }else{

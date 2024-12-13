@@ -99,7 +99,7 @@ export default defineComponent({
                   :pagina="pagina_atual"
                   :item_p_pagina="ITEM_PAGINA_MAX"
                   :pagina_max="NUMERO_PAGINA"
-                  :rota_edicao="'dashboard'"
+                  :rota_edicao="'mapeamentoprodutos'"
                   :ModalContent_Remocao="[
                         {'nome': 'Produto ERP', 'key': 'produtoErp'},
                         {'nome': 'Produto Site', 'key': 'produtoSite'},
@@ -119,7 +119,7 @@ export default defineComponent({
                   :pagina="1"
                   :pagina_max="1"
                   :item_p_pagina="0"
-                  :rota_edicao="'dashboard'"
+                  :rota_edicao="'mapeamentoprodutos'"
                   :ModalContent_Remocao="[
                         {'nome': 'Produto ERP', 'key': 'produtoErp'},
                         {'nome': 'Produto Site', 'key': 'produtoSite'},
@@ -127,8 +127,6 @@ export default defineComponent({
                   ]"
                   @deletarDadoPai="(arg) => deletar(arg)"
             />
-            
-            Dado {{ dado }}<br><br>
 
       </div>
 </template>

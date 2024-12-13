@@ -8,6 +8,7 @@ import regra_marketplace from '@/services/regras_negocio/regras_merketplaceecomm
 import store from '@/store';
 import fetch_ from '@/services/fetch/requisicao';
 import LoaderSkeleton from '@/components/util/LoaderSkeleton.vue';
+import EmpresaSelectComponent from '@/components/util/selects/EmpresaSelectComponent.vue';
 
 export default defineComponent({
       data(){
@@ -44,10 +45,10 @@ export default defineComponent({
 
                               atributosDefault: "",
                   },
-                  empresa_aux:{},
-                  ambiente_aux:{},
                   empresas_select:{},
-                  inRequestEmpresa:false,
+                  erro_empresa: false,
+
+                  ambiente_aux:{},
                   ambiente_select:{},
                   inRequestAmbiente:false,
                   criando:false,
@@ -57,7 +58,7 @@ export default defineComponent({
             }
       },
       watch:{
-            empresa_aux(empresa_new){
+            empresas_select(empresa_new){
                   this.marketplaceecommerce_new.empresaCodigo = empresa_new.codigo;
                   Promise.resolve(fetch_.getDado(`/usuario/?filtro=empresa.codigo==${empresa_new.codigo}`))
                   .then((usuario)=>{
@@ -75,15 +76,10 @@ export default defineComponent({
             NavbarComplet,
             VersaoMaximisada,
             LoaderSkeleton,
-            ErroFormComponent
+            ErroFormComponent,
+            EmpresaSelectComponent
       },
       mounted(){
-            this.inRequestEmpresa = true;
-            Promise.resolve(fetch_.getDado('/empresa'))
-                  .then((arg)=>{
-                        this.inRequestEmpresa = false;
-                        this.empresas_select = arg.data;
-            })
             this.inRequestAmbiente = true;
             Promise.resolve(fetch_.getDado('/ambiente'))
                   .then((arg)=>{
@@ -96,7 +92,6 @@ export default defineComponent({
                   this.criando = true;
                   this.errors = [];
                   regra_marketplace._add(this.marketplaceecommerce_new, this.errors)
-                  console.log(this.marketplaceecommerce_new);
                   
                   if(this.errors.length == 0){
                         Promise.resolve(
@@ -139,16 +134,13 @@ export default defineComponent({
                                           *Empresa:
                                     </div>
                                     <div class="col-8">
-                                          <LoaderSkeleton v-if="inRequestEmpresa"
-                                                :tipo_loader="'select'"
+                                          <EmpresaSelectComponent 
+                                                :have_erro="errors.findIndex((x) => x =='empresa') != -1"
+                                                @empresa_escolhida="(arg: object)=> empresas_select = arg"
                                           />
-                                          <select class="custom-select w-100" v-model="empresa_aux" required v-if="!inRequestEmpresa">
-                                                <option selected disabled :value="{}"> Selecione o campo</option>
-                                                <option v-for="empresa in empresas_select" :key="empresa" :value="empresa"> {{ empresa['descricao' as keyof typeof empresa] }}</option>
-                                          </select>
                                           <ErroFormComponent
                                                 :mensagem="'Informe a empresa'"
-                                                :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='empresa') != -1}]"
+                                                :class="['my-1 alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='empresa') != -1}]"
                                           />
                                     </div>
                                     <div class="col-2"></div>

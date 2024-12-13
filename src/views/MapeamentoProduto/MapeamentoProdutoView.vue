@@ -3,17 +3,20 @@ import NavbarComplet from '@/components/navbars/NavbarComplet.vue';
 import VersaoMaximisada from '@/components/versionamento/VersaoMaximisada.vue';
 import router from '@/router';
 import CriarBotaoComponent from '@/components/util/CriarBotaoComponent.vue'
+import LoaderSkeleton from '@/components/util/LoaderSkeleton.vue'
 import fetch_ from '@/services/fetch/requisicao';
 import { defineComponent } from 'vue';
 import store from '@/store';
 import MapeamentoProdutoComponent from '@/components/conteudos/MapeamentoProdutoComponent.vue';
 import ErroFormComponent from '@/components/mensagem/ErroFormComponent.vue';
+import regra_map from '@/services/regras_negocio/regras_mapeamentoprodutos'
+import EmpresaSelectComponent from '@/components/util/selects/EmpresaSelectComponent.vue';
 
 export default defineComponent({
       data(){
             return {
                   lista_estado: 'Loader',
-                  inRequestEmpresa: false,
+                  inRequestCanal: false,
                   inRequestPesquisa: false,
                   itsOnFilter: false,
                   ITEM_PAGINA_MAX : 10,
@@ -57,11 +60,14 @@ export default defineComponent({
                         ],
                         body: [] as Array<object>
                   },
-                  dado_parametro:{'header': {}, 'body': {}},
-                  dado_empresas:{},
+                  dado_parametro:{'header': [{}], 'body': [{}]},
+                  dado_canais:{},
                   dado_empresa_selected:{},
                   canal_selected:{},
-                  erros_pesquisa: ['']
+                  escolheu_empresa: false,
+                  erros_pesquisa: [''],
+                  filtro_erp: '',
+                  filtro_site: ''
             }
       },
       components:{
@@ -69,22 +75,27 @@ export default defineComponent({
             ErroFormComponent,
             MapeamentoProdutoComponent,
             CriarBotaoComponent,
+            LoaderSkeleton,
+            EmpresaSelectComponent,
             VersaoMaximisada
       },
+      watch:{
+            dado_empresa_selected(){
+                  this.canal_selected = {}; 
+                  this.escolheu_empresa = true;
+            }
+      },
       async mounted() {
-            this.$watch('dado_empresa_selected', function(newD, oldD){
-                  this.canal_selected = {}
+            this.inRequestCanal = true;
+            Promise.resolve(fetch_.getDado('/integracaomarketplaceecommerce')).then(
+                  (canal)=>{
+                        this.dado_canais = canal.data;
+                        this.inRequestCanal = false;
             })
-            this.inRequestEmpresa = true;
-            Promise.resolve(fetch_.getDado('/empresa')).then(
-                  (empresas)=>{
-                        this.dado_empresas = empresas.data;
-                        this.inRequestEmpresa = false;
-                  })
       },
       methods:{
             adicionarMapeamentoProduto(){
-                  router.push('/dashboard');
+                  router.push('/mapeamentoprodutos/0');
             },
             deletar(objeto: {codigo: string}){
                   let aux = {'roter_externa': '', 'id': objeto.codigo, 'roter_interna': ''}
@@ -108,12 +119,22 @@ export default defineComponent({
             async requestDados(){
                   this.dado_parametro.header = this.dado_paginado.header;
                   this.erros_pesquisa = [];
-                  if(!this.dado_empresa_selected['codigo' as keyof typeof this.dado_empresa_selected] || !this.canal_selected['codigo' as keyof typeof this.canal_selected]){
-                        if(!this.dado_empresa_selected['codigo' as keyof typeof this.dado_empresa_selected])
-                              this.erros_pesquisa.push('empresa')
-                        if(!this.canal_selected['codigo' as keyof typeof this.canal_selected])
-                              this.erros_pesquisa.push('canal')
+                  regra_map._pesquisa(this.dado_empresa_selected, this.canal_selected, this.erros_pesquisa);
+                  if(this.erros_pesquisa.length != 0){
                         return
+                  }
+                  // Request
+                  const pagina = `?pagina=${this.pagina_atual}`;
+                  const porPagina = `&porPagina=${this.ITEM_PAGINA_MAX}`;
+                  const ordem = `&ordenacao=codigo&direcao=Asc`;
+                  const codigo_empresa = `&filtro=empresa.codigo==${this.dado_empresa_selected['codigo' as keyof typeof this.dado_empresa_selected]}`;
+                  const codigo_canal = `&filtro=canal.codigo==${this.canal_selected['ambienteCanalCodigo' as keyof typeof this.canal_selected]}`;
+                  let erp = '', site = '';
+                  if (this.filtro_erp != '') {
+                        erp = `&filtro=produtoErp==${this.filtro_erp}`
+                  }
+                  if (this.filtro_site != '') {
+                        erp = `&filtro=produtoSite==${this.filtro_site}`
                   }
 
                   this.inRequestPesquisa = true;
@@ -121,10 +142,10 @@ export default defineComponent({
                   store.dispatch('getDadosPaginados', {
                         'roter_interna': 'mapeamentoprodudo',
                         'roter_externa': 'mapeamentoproduto',
-                        'request': `?pagina=${this.pagina_atual}&porPagina=${this.ITEM_PAGINA_MAX}&ordenacao=codigo&direcao=Asc&filtro=empresa.codigo==${this.dado_empresa_selected['codigo' as keyof typeof this.dado_empresa_selected]}&filtro=canal.codigo==${this.canal_selected['ambienteCanalCodigo' as keyof typeof this.canal_selected]}`,
+                        'request': pagina+porPagina+ordem+codigo_empresa+codigo_canal+erp+site,
                         'pagina_atual': this.pagina_atual,
                         'item_page': this.ITEM_PAGINA_MAX
-                  }).then((ret) => {
+                  }).then(() => {
                         this.dado_parametro.body = store.getters.getMapeamentoProduto;
                         this.NUMERO_PAGINA = Math.ceil(store.getters.getMapeamentoProdutoLength / this.ITEM_PAGINA_MAX);
                         this.lista_estado = 'Lista';
@@ -207,10 +228,10 @@ export default defineComponent({
                                     *Empresa: 
                               </div>
                               <div class="col-6">
-                                    <select class="custom-select w-100" v-model="dado_empresa_selected" required>
-                                          <option selected disabled value=""> Selecione o campo</option>
-                                          <option v-for="empresa in dado_empresas" :key="empresa" :value="empresa"> {{ empresa['descricao' as keyof typeof empresa] }}</option>
-                                    </select>
+                                    <EmpresaSelectComponent
+                                          :have_erro="erros_pesquisa.findIndex((x) => x =='empresa') != -1"
+                                          @empresa_escolhida="(arg: object)=> dado_empresa_selected = arg"
+                                    />
                               </div>
                               <div class="col-4">
                                     <ErroFormComponent
@@ -224,9 +245,14 @@ export default defineComponent({
                               </div>
 
                               <div class="col-6">
-                                    <select class="custom-select w-100" v-model="canal_selected" required>
-                                          <option selected disabled value=""> Selecione o campo</option>
-                                          <option v-for="canal in dado_empresa_selected['integracoes' as keyof typeof dado_empresa_selected]" :key="canal" :value="canal"> {{ canal['ambienteCanalAlias' as keyof typeof canal] }}</option>
+                                    <div v-show="inRequestCanal || !escolheu_empresa">
+                                          <LoaderSkeleton 
+                                                :tipo_loader="'select'"
+                                          />
+                                    </div>
+                                    <select class="custom-select w-100" v-model="canal_selected" required v-show="!inRequestCanal && escolheu_empresa">
+                                          <option selected disabled :value="{}"> Selecione o campo</option>
+                                          <option v-for="canal in dado_canais" :key="canal" :value="canal"> {{ canal['ambienteCanalAlias' as keyof typeof canal] }}</option>
                                     </select>
                               </div>
                               <div class="col-4">
@@ -235,9 +261,37 @@ export default defineComponent({
                                           :class="['alert-danger desativada',{'ativada' : erros_pesquisa.indexOf('canal') != -1 }]"
                                     />
                               </div>
+                              <div class="divider">
+                                    <hr class="divider">
+                                    <span>Filtros</span>
+                              </div>
+                              <!-- Produto Erp -->
+                              <div class="col-2 form_text">
+                                    Produto Erp:
+                              </div>
+                              <div class="col-8">
+                                    <input type="text" class="form-control" v-model="filtro_erp">
+                                    <!-- <ErroFormComponent
+                                    :mensagem="''"
+                                    :class="['alert-danger desativada',{'ativada' : erros_pesquisa.indexOf('filtro_erp') != -1}]"
+                                    /> -->
+                              </div>
+                              <div class="col-2"></div>
+                              <!-- Produto Site -->
+                              <div class="col-2 form_text">
+                                    Produto Site:
+                              </div>
+                              <div class="col-8">
+                                    <input type="text" class="form-control" v-model="filtro_site">
+                                    <!-- <ErroFormComponent
+                                    :mensagem="''"
+                                    :class="['alert-danger desativada',{'ativada' : erros_pesquisa.indexOf('filtro_site') != -1}]"
+                                    /> -->
+                              </div>
+                              <div class="col-2"></div>
 
                               <div>
-                                    <button class="btn btn-info" @click="requestDados" :disabled="inRequestPesquisa">
+                                    <button class="btn btn-light" @click="requestDados" :disabled="inRequestPesquisa">
                                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                                                 <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
                                           </svg>
@@ -267,9 +321,6 @@ export default defineComponent({
                         @avancaPagina="avancaPagina"
                         @recuarPagina="recuarPagina"
                   />
-
-
-                  {{dado_parametro}}
             </div>
             <VersaoMaximisada />
       </div>
@@ -279,6 +330,18 @@ export default defineComponent({
 #content{
       background-color: var(--bs-white);
       color: var(--bs-gray-600);
+}
+div.divider{
+      text-align: center;
+      display: table;
+}
+div.divider > span{
+      display: inline-block;
+      color:black;
+      font-size: 20px;
+}
+hr.divider{
+      margin: auto;
 }
 .form_text{
       font-size: 14px;

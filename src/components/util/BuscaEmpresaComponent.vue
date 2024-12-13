@@ -1,19 +1,18 @@
 <script lang="ts">
-import fetch_ from '@/services/fetch/requisicao';
 import { defineComponent } from 'vue'
-import LoaderSkeleton from './LoaderSkeleton.vue';
+import EmpresaSelectComponent from './selects/EmpresaSelectComponent.vue';
 
 export default defineComponent({
-      name: 'FiltroComponent',
+      name: 'FiltroEmpresaComponent',
       data() {
           return{
             empresa_select: {},
             empresa_request: {},
-            requested: false,
+            isEscolhido: false,
           }
       },
       components:{
-            LoaderSkeleton
+            EmpresaSelectComponent
       },
       props:{
             inRequest:{
@@ -21,19 +20,15 @@ export default defineComponent({
                   required: true
             }
       },
-      mounted() {
-          this.requested = false;
-          Promise.resolve(fetch_.getDado('/empresa'))
-          .then((arg)=>{
-            this.empresa_request = arg.data;
-            this.requested = true;
-          })
-      },
       methods:{
             returna_id_empresa(id: number){
                   if(id != undefined){
                         this.$emit('id_empresa', id);
                   }
+            },
+            abilitaBusca(empresa: object){
+                  this.empresa_select = empresa;
+                  this.isEscolhido = true;
             }
       },
       emits:['id_empresa']
@@ -43,18 +38,13 @@ export default defineComponent({
 <template>
       <div class="row my-1">
             <div class="col-4">
-                  <select v-if="requested" class="custom-select" v-model="empresa_select" required>
-                        <option selected disabled :value="{}"> Selecione o campo</option>
-                        <option v-for="operacao in empresa_request" :key="operacao['codigo' as keyof typeof operacao]" :value="operacao"> {{ operacao['descricao' as keyof typeof operacao] }}</option>
-                  </select>
-                  <span v-else>
-                        <LoaderSkeleton 
-                              :tipo_loader="'select'"
-                        />
-                  </span>
+                  <EmpresaSelectComponent 
+                        :have_erro="false"
+                        @empresa_escolhida="(arg: object)=> abilitaBusca(arg)"
+                  />
             </div>
             <div class="col">
-                  <button class='btn btn-primary' @click="returna_id_empresa(empresa_select['codigo' as keyof typeof empresa_select])" :disabled="inRequest">
+                  <button class='btn btn-primary' @click="returna_id_empresa(empresa_select['codigo' as keyof typeof empresa_select])" :disabled="inRequest || !isEscolhido">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                               <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
                         </svg>        

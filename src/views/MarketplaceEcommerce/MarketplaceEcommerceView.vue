@@ -171,14 +171,17 @@ export default defineComponent({
             getPesquisa(request: string){
                   this.lista_estado = 'Loader'
                   store.dispatch('getDadosPaginados', {
-                        'roter_interna': 'empresas_pesquisa',
-                        'roter_externa': 'empresa',
-                        'request': request+`&pagina=1&porPagina=0&ordenacao=codigo&direcao=Asc`,
+                        'roter_interna': 'marketplaceecommerce_pesquisa',
+                        'roter_externa': 'integracaomarketplaceecommerce',
+                        'request': `?pagina=1&porPagina=0&ordenacao=codigo&direcao=Asc&`+request,
                         'pagina_atual': 1,
                         'item_page': this.ITEM_PAGINA_MAX
                   }).then(() => {
                         this.dado_pesquisa.body = store.getters.getMarketplaceEcommerce_pesquisa;
-                       this.lista_estado = 'Lista'
+                        this.lista_estado = 'Lista'
+                  }).catch(()=> {
+                        this.dado_pesquisa.body = []
+                        this.lista_estado = 'Lista'
                   })
             },
             quantidadeItens(args: number){
@@ -210,12 +213,12 @@ export default defineComponent({
                         :its-on-filter="itsOnFilter"
                         :lista_estado="lista_estado"
                         :pagina_atual="pagina_atual"
-                        
+
                         @deletar="(arg : any) => deletar(arg)"
 
                         @filtraMarketplaceEcommerce="filtraMarketplaceEcommerce"
                         @closefiltrarMarketplaceEcommerce="closefiltrarMarketplaceEcommerce"
-
+                        @getPesquisa="(arg: string)=> getPesquisa(arg)"
                         @ordenaMarketplaceEcommerce="(arg : any) => ordenaMarketplaceEcommerce(arg)"
                         @quantidadeItens="(args: number)=> quantidadeItens(args)"
                         @avancaPagina="avancaPagina" 

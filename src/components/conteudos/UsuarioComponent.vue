@@ -134,11 +134,11 @@ export default defineComponent({
                         'tipo': title.ordem.tipo_obj
                   })
             },
-            filtraEmpresa(){
+            filtraUsuario(){
                   this.itsOnFilter = true;
                   this.lista_estado = 'Vazio'
             },
-            closefiltrarEmpresa(){
+            closefiltrarUsuario(){
                   this.itsOnFilter = false;
                   this.lista_estado = 'Lista'
             },
@@ -166,13 +166,13 @@ export default defineComponent({
                   :itsOnFilter="itsOnFilter"
                   :header="dado_paginado.header"
                   @pesquisa_request="(args: string) => getPesquisa(args)"
-                  @close_pesquisa="closefiltrarEmpresa"
+                  @close_pesquisa="closefiltrarUsuario"
             />
             <LoaderListaComponent v-if="lista_estado == 'Loader'"
                   :header="dado_paginado.header"
                   :quantidade_dados="ITEM_PAGINA_MAX"
             />
-            <!-- Lista Empresas Pesquisa -->
+            <!-- Lista Usuarios Pesquisa -->
             <ListaComponent v-if="lista_estado == 'Lista' && itsOnFilter"
                   :dados="dado_pesquisa"
                   :item_p_pagina="0"
@@ -186,7 +186,7 @@ export default defineComponent({
                   ]"
                   @deletarDadoPai="(arg : any) => deletar(arg)"
             />
-            <!-- Lista Empresas -->
+            <!-- Lista Usuarios -->
             <ListaComponent v-if="lista_estado == 'Lista' && !itsOnFilter"
                   :have_item_p_pagina="false"
                   :have_pagination="true"
@@ -202,7 +202,7 @@ export default defineComponent({
                   ]"
                   @deletarDadoPai="(arg : any) => deletar(arg)"
                   @ordenarDadoPai="(arg : any) => ordenaUsuario(arg)"
-                  @filtrarDadoPai="filtraEmpresa"
+                  @filtrarDadoPai="filtraUsuario"
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina" 
             />
