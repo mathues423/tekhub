@@ -1,7 +1,7 @@
 class DadoCanal {
       alias= '';
       aliastekprot= ''; 
-      codigo= -1; //?
+      canalAssociado= -1; //?
       descricao= '';
       tipo= ''; 
 }
@@ -21,7 +21,7 @@ class Canal {
             if(dado.tipo == ''){
                   erros_msg.push('tipo');
             }
-            // if(dado.codigo < 1){
+            // if(dado.canalAssociado < 1){
             //       erros_msg.push('codigo')
             // }
             if (erros_msg.length != 0) {
@@ -42,7 +42,7 @@ class Canal {
             if(new_dado.tipo == ''){
                   erros_msg.push('tipo');
             }
-            // if(new_dado.codigo < 1){
+            // if(new_dado.canalAssociado < 1){
             //       erros_msg.push('codigo')
             // }
             if(this.compObject(old_dado, new_dado)){
