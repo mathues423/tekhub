@@ -9,12 +9,7 @@ export default defineComponent({
       data() {
           return {
             showDeletModal: false,
-            dado_modal: {
-                  codigoTek: '',
-                  descricao: '',
-                  cnpj: -1,
-                  versaoApiTek: ''
-            },
+            dado_modal: {}
           }
       },
       components:{
@@ -99,13 +94,14 @@ export default defineComponent({
             </template>
       </ModalRemoçãoComponent>
       <div class="row">
-            <div class="col-12">
+            <div class="col-12 table-responsive">
+
                   <table class="table table-hover table-bordered">
                         <thead class="table-primary">
                               <tr>
                                     <th v-for="title in dados?.header" :key="title.header" scope="col">
                                           <div class="row">
-                                                <div :class="[`${title.isfiltrable === true  ? 'col-9' : 'col-12'}`,`${title.ordem?.on === true  ? 'col-ativo' : ''}`]">
+                                                <div :class="[`${title.isfiltrable === true  ? 'col-9' : 'col-12'}`,`${title.ordem?.on === true  ? 'col-ordenada' : ''}`]">
                                                       <button v-if="title.isordenable" class="btn btn-tabela" @click="ordenarDado(title)">
                                                             {{ title.header }}
                                                             <span v-if="title.ordem.tipo_obj == 'Number' && title.ordem.on">
@@ -154,7 +150,7 @@ export default defineComponent({
                                                             {{ title.header }}
                                                       </span>
                                                 </div>
-                                                <div v-if="title.isfiltrable" :class="['col-3', `${title.ordem?.on === true  ? 'col-ativo' : ''}`]">
+                                                <div v-if="title.isfiltrable" :class="['col-3', `${title.ordem?.on === true  ? 'col-ordenada' : ''}`]">
                                                       <button  class="btn btn-tabela-filtro" @click="filtrarDado">
                                                             <!-- Lupa -->
                                                             <span v-if="title.filtro.tipo_filtro == 'all'"> 
@@ -253,7 +249,7 @@ export default defineComponent({
       border-radius: 0;
       border-color: var(--bs-dark);
 }
-.col-ativo{
+.col-ordenada{
       background-color: #abc4eb;
 }
 th .row{

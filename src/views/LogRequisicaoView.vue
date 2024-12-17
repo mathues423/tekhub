@@ -2,7 +2,7 @@
 import NavbarComplet from '@/components/navbars/NavbarComplet.vue';
 import BuscaEmpresaDateComponent from '@/components/util/BuscaEmpresaDateComponent.vue';
 import ListaComponent from '@/components/util/lista/ListaComponent.vue';
-import LoaderListaComponent from '@/components/util/LoaderListaComponent.vue';
+import LoaderListaComponent from '@/components/util/Loaders/LoaderListaComponent.vue';
 import VersaoMaximisada from '@/components/versionamento/VersaoMaximisada.vue';
 import store from '@/store';
 import { defineComponent } from 'vue';
@@ -49,19 +49,20 @@ export default defineComponent({
                   
                   this.lista_estado = 'Loader'
                   Promise.resolve(store.dispatch('getDadosPaginados',{
-                        'roter_interna': 'log_att',
+                        'roter_interna': 'log_req',
                         'roter_externa': 'logrequisicao',
                         'request': path,
                         'pagina_atual': this.pagina_atual,
                         'item_page': this.ITEM_PAGINA_MAX
                   })).then((dados)=>{
-                        if(dados.data){
-                              this.dado_paginado.body = dados.data
+                              this.dado_paginado.body = store.getters.getLogReq
+                              console.log(this.dado_paginado.body);
+                              if(this.ITEM_PAGINA_MAX != 0){
+                                    this.NUMERO_PAGINA = Math.ceil(store.getters.getLogReqLength / this.ITEM_PAGINA_MAX);
+                              }else{
+                                    this.NUMERO_PAGINA = 1;
+                              }
                               this.lista_estado = 'Lista'
-                        }
-                  }).catch((erro)=>{
-                        console.warn(erro);
-                        this.lista_estado = 'Empty'
                   })
             }
       }
@@ -81,16 +82,14 @@ export default defineComponent({
                         :quantidade_dados="ITEM_PAGINA_MAX"
                   />
                   <ListaComponent v-if="lista_estado == 'Lista'"
+                        :have_item_p_pagina="true"
+                        :have_pagination="true"     
                         :dados="dado_paginado"
                         :pagina="1"
-                        :item_p_pagina="0"
-                        :pagina_max="1"
+                        :item_p_pagina="ITEM_PAGINA_MAX"
+                        :pagina_max="NUMERO_PAGINA"
                         :rota_edicao="''"
-                        :ModalContent_Remocao="[
-                              {'nome': 'Descrição', 'key': 'descricao'},
-                              {'nome': 'Alias', 'key': 'alias'},
-                              {'nome': 'TIPO', 'key': 'tipo'},
-                        ]"
+                        :ModalContent_Remocao="[]"
                         
                   />
             </div>

@@ -7,7 +7,7 @@ import ErroFormComponent from '@/components/mensagem/ErroFormComponent.vue';
 import canal from '@/services/regras_negocio/regras_canais';
 import store from '@/store';
 import fetch_ from '@/services/fetch/requisicao';
-import LoaderSkeleton from '@/components/util/LoaderSkeleton.vue';
+import LoaderSkeleton from '@/components/util/Loaders/LoaderSkeleton.vue';
 
 export default defineComponent({
       data(){
@@ -17,7 +17,7 @@ export default defineComponent({
                         alias: '',
                         aliastekprot: '', 
                         tipo: '', 
-                        codigo: -1
+                        canalAssociado: -1
                   },
                   errors: [] as Array<string>,
                   tipo_canal: ['MARKETPLACE', 'ECOMMERCE', 'LOGISTICA', 'PAGAMENTO'],
@@ -133,7 +133,7 @@ export default defineComponent({
                                     <!-- Como linkar o canal associado ?? -->
                                     <div class="col-8">
                                           <span v-if="requested">
-                                                <select class="custom-select" v-model="canal_new.codigo">
+                                                <select class="custom-select" v-model="canal_new.canalAssociado">
                                                       <option selected disabled :value="{}"> Selecione o campo</option>
                                                       <option v-for="header in canal_assossiado_req" :key="header" :value="header['codigo' as keyof typeof header]"> {{ header['descricao' as keyof typeof header] }}</option>
                                                 </select>

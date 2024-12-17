@@ -7,7 +7,7 @@ import { defineComponent } from 'vue';
 import ambiente from '@/services/regras_negocio/regras_ambientes';
 import store from '@/store';
 import fetch_ from '@/services/fetch/requisicao';
-import LoaderSkeleton from '@/components/util/LoaderSkeleton.vue';
+import LoaderSkeleton from '@/components/util/Loaders/LoaderSkeleton.vue';
 
 export default defineComponent({
       data(){
@@ -185,8 +185,6 @@ export default defineComponent({
                               </form>
                         </div>
                         <div class="col-3"></div>
-                        {{ old_ambiente }} <br>
-                        {{ ambiente }}
                   </div>
             </div>
             <VersaoMaximisada />

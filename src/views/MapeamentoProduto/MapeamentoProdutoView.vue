@@ -3,7 +3,7 @@ import NavbarComplet from '@/components/navbars/NavbarComplet.vue';
 import VersaoMaximisada from '@/components/versionamento/VersaoMaximisada.vue';
 import router from '@/router';
 import CriarBotaoComponent from '@/components/util/CriarBotaoComponent.vue'
-import LoaderSkeleton from '@/components/util/LoaderSkeleton.vue'
+import LoaderSkeleton from '@/components/util/Loaders/LoaderSkeleton.vue'
 import fetch_ from '@/services/fetch/requisicao';
 import { defineComponent } from 'vue';
 import store from '@/store';
@@ -245,12 +245,12 @@ export default defineComponent({
                               </div>
 
                               <div class="col-6">
-                                    <div v-show="inRequestCanal || !escolheu_empresa">
+                                    <div v-show="inRequestCanal">
                                           <LoaderSkeleton 
                                                 :tipo_loader="'select'"
                                           />
                                     </div>
-                                    <select class="custom-select w-100" v-model="canal_selected" required v-show="!inRequestCanal && escolheu_empresa">
+                                    <select class="custom-select w-100" v-model="canal_selected" required v-show="!inRequestCanal" :disabled="!escolheu_empresa">
                                           <option selected disabled :value="{}"> Selecione o campo</option>
                                           <option v-for="canal in dado_canais" :key="canal" :value="canal"> {{ canal['ambienteCanalAlias' as keyof typeof canal] }}</option>
                                     </select>

@@ -7,7 +7,7 @@ import { defineComponent } from 'vue';
 import canal from '@/services/regras_negocio/regras_canais';
 import store from '@/store';
 import fetch_ from '@/services/fetch/requisicao';
-import LoaderSkeleton from '@/components/util/LoaderSkeleton.vue';
+import LoaderSkeleton from '@/components/util/Loaders/LoaderSkeleton.vue';
 
 export default defineComponent({
       data(){
@@ -18,14 +18,14 @@ export default defineComponent({
                         alias: '',
                         aliastekprot: '', 
                         tipo: '', 
-                        codigo: -1
+                        canalAssociado: -1
                   },
                   old_canal:{
                         descricao: '',
                         alias: '',
                         aliastekprot: '', 
                         tipo: '', 
-                        codigo: -1
+                        canalAssociado: -1
                   },
                   requested: false,
                   tipo_canal: ['MARKETPLACE', 'ECOMMERCE', 'LOGISTICA', 'PAGAMENTO'],
@@ -68,7 +68,7 @@ export default defineComponent({
                   this.old_canal.aliastekprot = this.canal.aliastekprot = value.aliastekprot;
                   this.old_canal.descricao = this.canal.descricao = value.descricao;
                   this.old_canal.tipo = this.canal.tipo = value.tipo;
-                  this.old_canal.codigo = this.canal.codigo = value.codigo;
+                  this.old_canal.canalAssociado = this.canal.canalAssociado = value.canalAssociado;
 
                   Promise.resolve(fetch_.getDado('/canal')).then(
                   (args) => {
@@ -147,7 +147,7 @@ export default defineComponent({
                                     <!-- Como linkar o canal associado ?? -->
                                     <div class="col-8">
                                           <span v-if="requested">
-                                                <select class="custom-select" v-model="canal.codigo">
+                                                <select class="custom-select" v-model="canal.canalAssociado">
                                                       <option selected disabled :value="{}"> Selecione o campo</option>
                                                       <option v-for="header in canal_assossiado_req" :key="header" :value="header['codigo' as keyof typeof header]"> {{ header['descricao' as keyof typeof header] }}</option>
                                                 </select>

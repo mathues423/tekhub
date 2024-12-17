@@ -5,6 +5,7 @@ export default defineComponent({
       props:{
             dado:{
                   type: Object,
+                  required: true
             }
       },
       methods:{

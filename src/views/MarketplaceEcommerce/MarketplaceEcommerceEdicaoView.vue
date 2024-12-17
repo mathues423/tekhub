@@ -7,7 +7,7 @@ import ErroFormComponent from '@/components/mensagem/ErroFormComponent.vue';
 import regra_marketplace from '@/services/regras_negocio/regras_merketplaceecommerce';
 import store from '@/store';
 import fetch_ from '@/services/fetch/requisicao';
-import LoaderSkeleton from '@/components/util/LoaderSkeleton.vue';
+import LoaderSkeleton from '@/components/util/Loaders/LoaderSkeleton.vue';
 
 export default defineComponent({
       data(){
