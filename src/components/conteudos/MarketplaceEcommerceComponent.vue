@@ -1,12 +1,20 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 import ListaComponent from '@/components//util/lista/ListaComponent.vue';
-import LoaderListaComponent from '@/components//util/LoaderListaComponent.vue';
+import LoaderListaComponent from '@/components/util/Loaders/LoaderListaComponent.vue';
 import FiltroPaiComponent from '../util/busca/FiltroPaiComponent.vue';
+import ListaCardComponent from '../util/lista/ListaCardComponent.vue';
+import LoaderListaCardComponent from '../util/Loaders/LoaderListaCardComponent.vue';
 
 
 export default defineComponent({
       template: '#Empre_comp',
+      data() {
+          return{
+            its_card: false,
+            largura: window.innerWidth
+          }
+      },
       props: {
             lista_estado:{
                   type: String,
@@ -36,9 +44,23 @@ export default defineComponent({
       components:{
             LoaderListaComponent,
             ListaComponent,
-            FiltroPaiComponent
+            FiltroPaiComponent,
+            ListaCardComponent,
+            LoaderListaCardComponent
+      },
+      mounted(){
+            this.onResize()
+            this.$nextTick(()=> window.addEventListener('resize', this.onResize))
       },
       methods:{
+            onResize(){
+                  this.largura = window.innerWidth
+                  if (this.largura <= 768) { //col-md
+                        this.its_card = true;
+                  }else{
+                        this.its_card = false;
+                  }
+            },
             getPesquisa(args: string){
                   this.$emit('getPesquisa', args)
             },
@@ -77,12 +99,12 @@ export default defineComponent({
                   @pesquisa_request="(args: string) => getPesquisa(args)"
                   @close_pesquisa="closefiltrarMarketplaceEcommerce"
             />
-            <LoaderListaComponent v-if="lista_estado == 'Loader'"
+            <LoaderListaComponent v-if="lista_estado == 'Loader' && !its_card"
                   :header="dado['header' as keyof typeof dado]"
                   :quantidade_dados="ITEM_PAGINA_MAX"
             />
             <!-- Lista MarketplaceEcommerces Pesquisa -->
-            <ListaComponent v-if="lista_estado == 'Lista' && itsOnFilter"
+            <ListaComponent v-if="lista_estado == 'Lista' && itsOnFilter && !its_card"
                   :dados="dado"
                   :pagina="1"
                   :item_p_pagina="0"
@@ -97,8 +119,50 @@ export default defineComponent({
                   @deletarDadoPai="(arg : any) => deletar(arg)"
             />
             <!-- Lista MarketplaceEcommerces -->
-            <ListaComponent v-if="lista_estado == 'Lista' && !itsOnFilter"
+            <ListaComponent v-if="lista_estado == 'Lista' && !itsOnFilter && !its_card"
                   :have_item_p_pagina="true"
+                  :have_pagination="true"
+                  :dados="dado"
+                  :pagina="pagina_atual"
+                  :item_p_pagina="ITEM_PAGINA_MAX"
+                  :pagina_max="NUMERO_PAGINA"
+                  :rota_edicao="'integracoesmarketplacesecommerces'"
+                  :ModalContent_Remocao="[
+                        {'nome': 'Código', 'key': 'codigo'},
+                        {'nome': 'Canal', 'key': 'ambienteCanalAlias'},
+                        {'nome': 'Código Empresa', 'key': 'empresaCodigo'},
+                        {'nome': 'Empresa', 'key': 'empresaDescricao'},
+                  ]"
+                  @deletarDadoPai="(arg : any) => deletar(arg)"
+                  @ordenarDadoPai="(arg : any) => ordenaMarketplaceEcommerce(arg)"
+                  @filtrarDadoPai="filtraMarketplaceEcommerce"
+                  @trocarQuandidadeDadoPai="(args: number)=> quantidadeItens(args)"
+                  @avancar="avancaPagina" 
+                  @recuar="recuarPagina"
+            />
+
+            <LoaderListaCardComponent v-if="lista_estado == 'Loader' && its_card"
+                  :header="dado.header"
+                  :quantidade_dados="ITEM_PAGINA_MAX"
+            />
+            <!-- Card Lista MarketplaceEcommerces Pesquisa -->
+            <ListaCardComponent v-if="lista_estado == 'Lista' && its_card"
+                  :dados="dado"
+                  :pagina="1"
+                  :item_p_pagina="0"
+                  :pagina_max="1"
+                  :rota_edicao="'integracoesmarketplacesecommerces'"
+                  :ModalContent_Remocao="[
+                        {'nome': 'Código', 'key': 'codigo'},
+                        {'nome': 'Canal', 'key': 'ambienteCanalAlias'},
+                        {'nome': 'Código Empresa', 'key': 'empresaCodigo'},
+                        {'nome': 'Empresa', 'key': 'empresaDescricao'},
+                  ]"
+                  @deletarDadoPai="(arg : any) => deletar(arg)"
+            />
+            <!-- Card Lista MarketplaceEcommerces -->
+            <ListaCardComponent v-if="lista_estado == 'Lista' && its_card"
+            :have_item_p_pagina="true"
                   :have_pagination="true"
                   :dados="dado"
                   :pagina="pagina_atual"

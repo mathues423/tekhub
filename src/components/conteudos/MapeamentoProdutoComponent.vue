@@ -1,14 +1,18 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 import ListaComponent from '@/components//util/lista/ListaComponent.vue';
-import LoaderListaComponent from '@/components//util/LoaderListaComponent.vue';
+import LoaderListaComponent from '@/components/util/Loaders/LoaderListaComponent.vue';
 import FiltroPaiComponent from '../util/busca/FiltroPaiComponent.vue';
+import ListaCardComponent from '../util/lista/ListaCardComponent.vue';
+import LoaderListaCardComponent from '../util/Loaders/LoaderListaCardComponent.vue';
 
 
 export default defineComponent({
       template: '#MapPro_comp',
       data() {
           return {
+            its_card: false,
+            largura: window.innerWidth
           }
       },
       props: {
@@ -44,9 +48,23 @@ export default defineComponent({
       components:{
             LoaderListaComponent,
             ListaComponent,
-            FiltroPaiComponent
+            FiltroPaiComponent,
+            ListaCardComponent,
+            LoaderListaCardComponent
+      },
+      mounted() {
+            this.onResize()
+            this.$nextTick(()=> window.addEventListener('resize', this.onResize))
       },
       methods:{
+            onResize(){
+                  this.largura = window.innerWidth
+                  if (this.largura <= 768) { //col-md
+                        this.its_card = true;
+                  }else{
+                        this.its_card = false;
+                  }
+            },
             getPesquisa(args: string){
                   this.$emit('getPesquisa', args)
             },
@@ -87,12 +105,12 @@ export default defineComponent({
             />
 
             <!-- Loader -->
-            <LoaderListaComponent v-if="lista_estado == 'Loader' && (itsOnRequestPesquisa || itsOnFilter)" 
+            <LoaderListaComponent v-if="lista_estado == 'Loader' && (itsOnRequestPesquisa || itsOnFilter) && !its_card" 
                   :header="dado.header"
                   :quantidade_dados="ITEM_PAGINA_MAX"
             />
             <!-- Lista Mapeamento não filtrada -->
-            <ListaComponent  v-if="lista_estado == 'Lista' && !itsOnFilter"
+            <ListaComponent  v-if="lista_estado == 'Lista' && !itsOnFilter && !its_card"
                   :have_item_p_pagina="true"
                   :have_pagination="true"
                   :dados="dado"
@@ -112,9 +130,8 @@ export default defineComponent({
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina" 
             />
-
             <!-- Lista fildrada -->
-            <ListaComponent  v-if="lista_estado == 'Lista_filtrada' && itsOnFilter"
+            <ListaComponent  v-if="lista_estado == 'Lista_filtrada' && itsOnFilter && !its_card"
                   :dados="dado"
                   :pagina="1"
                   :pagina_max="1"
@@ -125,9 +142,49 @@ export default defineComponent({
                         {'nome': 'Produto Site', 'key': 'produtoSite'},
                         {'nome': 'Produto Pai Site', 'key': 'produtoPaiSite'},
                   ]"
-                  @deletarDadoPai="(arg) => deletar(arg)"
+                  @deletarDadoPai="(arg: object) => deletar(arg)"
             />
 
+
+            <LoaderListaCardComponent v-if="lista_estado == 'Loader' && (itsOnRequestPesquisa || itsOnFilter) && its_card"
+                  :header="dado.header"
+                  :quantidade_dados="ITEM_PAGINA_MAX"
+            />
+            <!-- Card Lista Mapeamento Pesquisa -->
+            <ListaCardComponent v-if="lista_estado == 'Lista_filtrada' && itsOnFilter && its_card"
+                  :dados="dado"
+                  :pagina="1"
+                  :pagina_max="1"
+                  :item_p_pagina="0"
+                  :rota_edicao="'mapeamentoprodutos'"
+                  :ModalContent_Remocao="[
+                        {'nome': 'Produto ERP', 'key': 'produtoErp'},
+                        {'nome': 'Produto Site', 'key': 'produtoSite'},
+                        {'nome': 'Produto Pai Site', 'key': 'produtoPaiSite'},
+                  ]"
+                  @deletarDadoPai="(arg: object) => deletar(arg)"
+            />
+            <!-- Card Lista Mapeamento -->
+            <ListaCardComponent v-if="lista_estado == 'Lista' && !itsOnFilter && its_card"
+            :have_item_p_pagina="true"
+                  :have_pagination="true"
+                  :dados="dado"
+                  :pagina="pagina_atual"
+                  :item_p_pagina="ITEM_PAGINA_MAX"
+                  :pagina_max="NUMERO_PAGINA"
+                  :rota_edicao="'mapeamentoprodutos'"
+                  :ModalContent_Remocao="[
+                        {'nome': 'Produto ERP', 'key': 'produtoErp'},
+                        {'nome': 'Produto Site', 'key': 'produtoSite'},
+                        {'nome': 'Produto Pai Site', 'key': 'produtoPaiSite'},
+                  ]"
+                  @deletarDadoPai="(arg: object) => deletar(arg)"
+                  @ordenarDadoPai="(arg: object) => ordenaMapeamentoProduto(arg)"
+                  @filtrarDadoPai="filtraMapeamentoProduto"
+                  @trocarQuandidadeDadoPai="(args: number)=> quantidadeItens(args)"
+                  @avancar="avancaPagina" 
+                  @recuar="recuarPagina" 
+            />
       </div>
 </template>
 

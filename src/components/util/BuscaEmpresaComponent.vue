@@ -37,7 +37,7 @@ export default defineComponent({
 
 <template>
       <div class="row my-1">
-            <div class="col-4">
+            <div class="col-lg-4 col-sm-8">
                   <EmpresaSelectComponent 
                         :have_erro="false"
                         @empresa_escolhida="(arg: object)=> abilitaBusca(arg)"

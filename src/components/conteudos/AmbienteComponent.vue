@@ -2,8 +2,10 @@
 import { defineComponent } from 'vue';
 import store from '@/store';
 import ListaComponent from '../util/lista/ListaComponent.vue';
-import LoaderListaComponent from '../util/LoaderListaComponent.vue';
+import LoaderListaComponent from '../util/Loaders/LoaderListaComponent.vue';
 import FiltroPaiComponent from '../util/busca/FiltroPaiComponent.vue';
+import ListaCardComponent from '../util/lista/ListaCardComponent.vue';
+import LoaderListaCardComponent from '../util/Loaders/LoaderListaCardComponent.vue';
 
 
 export default defineComponent({
@@ -54,12 +56,16 @@ export default defineComponent({
                   ],
                   body: [] as Array<object>
             },
+            its_card: false,
+            largura: window.innerWidth
           }
       },
       components:{
             LoaderListaComponent,
             FiltroPaiComponent,
-            ListaComponent
+            ListaComponent,
+            ListaCardComponent,
+            LoaderListaCardComponent
       },
       async mounted() {
             this.requestDados()
@@ -78,8 +84,18 @@ export default defineComponent({
             // }else{
             //       this.requestDados()
             // }
+            this.onResize()
+            this.$nextTick(()=> window.addEventListener('resize', this.onResize))
       },
       methods:{
+            onResize(){
+                  this.largura = window.innerWidth
+                  if (this.largura <= 768) { //col-md
+                        this.its_card = true;
+                  }else{
+                        this.its_card = false;
+                  }
+            },
             deletar(objeto: {codigo: string}){
                   let aux = {'roter_externa': 'ambiente', 'id': objeto.codigo, 'roter_interna': 'ambientes'}
                   Promise.resolve(store.dispatch('delDadosID', aux))
@@ -158,12 +174,12 @@ export default defineComponent({
                   @pesquisa_request="(args: string) => getPesquisa(args)"
                   @close_pesquisa="closefiltrarAmbiente"
             />
-            <LoaderListaComponent v-if="lista_estado == 'Loader'"
+            <LoaderListaComponent v-if="lista_estado == 'Loader' && !its_card"
                   :header="dado_paginado.header"
                   :quantidade_dados="ITEM_PAGINA_MAX"
             />
             <!-- Lista Ambientes Pesquisa -->
-            <ListaComponent v-if="lista_estado == 'Lista' && itsOnFilter"
+            <ListaComponent v-if="lista_estado == 'Lista' && itsOnFilter && !its_card"
                   :dados="dado_pesquisa"
                   :pagina="1"
                   :item_p_pagina="0"
@@ -178,7 +194,50 @@ export default defineComponent({
                   @deletarDadoPai="(arg : any) => deletar(arg)"
             />
             <!-- Lista Ambientes -->
-            <ListaComponent  v-if="lista_estado == 'Lista' && !itsOnFilter"
+            <ListaComponent  v-if="lista_estado == 'Lista' && !itsOnFilter && !its_card"
+                  :have_item_p_pagina="true"
+                  :have_pagination="true"
+                  :dados="dado_paginado"
+                  :pagina="pagina_atual"
+                  :item_p_pagina="ITEM_PAGINA_MAX"
+                  :pagina_max="NUMERO_PAGINA"
+                  :rota_edicao="'ambientes'"
+                  :ModalContent_Remocao="[
+                        {'nome': 'Canal', 'key': 'canalAlias'},
+                        {'nome': 'Ambiente', 'key': 'ambiente'},
+                        {'nome': 'URL', 'key': 'url'},
+                        {'nome': 'Verção', 'key': 'versao'},
+                  ]"
+                  @deletarDadoPai="(arg) => deletar(arg)"
+                  @ordenarDadoPai="(arg) => {return null}"
+                  @filtrarDadoPai="filtraAmbiente"
+                  @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
+                  @avancar="avancaPagina" 
+                  @recuar="recuarPagina" 
+            />
+
+
+            <LoaderListaCardComponent v-if="lista_estado == 'Loader' && its_card"
+                  :header="dado_paginado.header"
+                  :quantidade_dados="ITEM_PAGINA_MAX"
+            />
+            <!-- Card Lista Ambientes Pesquisa -->
+            <ListaCardComponent v-if="lista_estado == 'Lista' && itsOnFilter && its_card"
+                  :dados="dado_pesquisa"
+                  :pagina="1"
+                  :item_p_pagina="0"
+                  :pagina_max="1"
+                  :rota_edicao="'ambientes'"
+                  :ModalContent_Remocao="[
+                        {'nome': 'Canal', 'key': 'canalAlias'},
+                        {'nome': 'Ambiente', 'key': 'ambiente'},
+                        {'nome': 'URL', 'key': 'url'},
+                        {'nome': 'Verção', 'key': 'versao'},
+                  ]"
+                  @deletarDadoPai="(arg : any) => deletar(arg)"
+            />
+            <!-- Card Lista Ambientes -->
+            <ListaCardComponent v-if="lista_estado == 'Lista' && !itsOnFilter && its_card"
                   :have_item_p_pagina="true"
                   :have_pagination="true"
                   :dados="dado_paginado"

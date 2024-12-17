@@ -1,7 +1,7 @@
 <script lang="ts">
 import fetch_ from '@/services/fetch/requisicao';
 import { defineComponent } from 'vue'
-import LoaderSkeleton from '@/components/util/LoaderSkeleton.vue';
+import LoaderSkeleton from '@/components/util/Loaders/LoaderSkeleton.vue';
 
 export default defineComponent({
       name: 'EmpresaSelectComponent',

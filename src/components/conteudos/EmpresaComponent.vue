@@ -2,8 +2,10 @@
 import { defineComponent } from 'vue';
 import store from '@/store';
 import ListaComponent from '@/components//util/lista/ListaComponent.vue';
-import LoaderListaComponent from '@/components//util/LoaderListaComponent.vue';
+import LoaderListaComponent from '@/components/util/Loaders/LoaderListaComponent.vue';
 import FiltroPaiComponent from '../util/busca/FiltroPaiComponent.vue';
+import ListaCardComponent from '../util/lista/ListaCardComponent.vue';
+import LoaderListaCardComponent from '../util/Loaders/LoaderListaCardComponent.vue';
 
 
 export default defineComponent({
@@ -67,12 +69,16 @@ export default defineComponent({
                   ],
                   body: [] as Array<object>
             },
+            its_card: false,
+            largura: window.innerWidth
           }
       },
       components:{
             LoaderListaComponent,
             ListaComponent,
-            FiltroPaiComponent
+            ListaCardComponent,
+            FiltroPaiComponent,
+            LoaderListaCardComponent
       },
       async mounted() {
             this.requestDados()
@@ -84,8 +90,19 @@ export default defineComponent({
             // }else{
             //       this.requestDados()
             // }
+            this.onResize()
+            this.$nextTick(()=> window.addEventListener('resize', this.onResize))
       },
       methods:{
+            onResize(){
+                  this.largura = window.innerWidth
+                  if (this.largura <= 768) { //col-md
+                        this.its_card = true;
+                  }else{
+                        this.its_card = false;
+                  }
+            },
+
             deletar(objeto: {codigo: string}){
                   let aux = {'roter_externa': 'empresa', 'id': objeto.codigo, 'roter_interna': 'empresas'}
                   Promise.resolve(store.dispatch('delDadosID', aux))
@@ -182,12 +199,12 @@ export default defineComponent({
                   @pesquisa_request="(args: string) => getPesquisa(args)"
                   @close_pesquisa="closefiltrarEmpresa"
             />
-            <LoaderListaComponent v-if="lista_estado == 'Loader'"
+            <LoaderListaComponent v-if="lista_estado == 'Loader' && !its_card"
                   :header="dado_paginado.header"
                   :quantidade_dados="ITEM_PAGINA_MAX"
             />
             <!-- Lista Empresas Pesquisa -->
-            <ListaComponent v-if="lista_estado == 'Lista' && itsOnFilter"
+            <ListaComponent v-if="lista_estado == 'Lista' && itsOnFilter && !its_card"
                   :dados="dado_pesquisa"
                   :pagina="1"
                   :item_p_pagina="0"
@@ -202,7 +219,49 @@ export default defineComponent({
                   @deletarDadoPai="(arg : any) => deletar(arg)"
             />
             <!-- Lista Empresas -->
-            <ListaComponent v-if="lista_estado == 'Lista' && !itsOnFilter"
+            <ListaComponent v-if="lista_estado == 'Lista' && !itsOnFilter && !its_card"
+                  :have_item_p_pagina="true"
+                  :have_pagination="true"
+                  :dados="dado_paginado"
+                  :pagina="pagina_atual"
+                  :item_p_pagina="ITEM_PAGINA_MAX"
+                  :pagina_max="NUMERO_PAGINA"
+                  :rota_edicao="'empresas'"
+                  :ModalContent_Remocao="[
+                        {'nome': 'Código Tek', 'key': 'codigoTek'},
+                        {'nome': 'Razão Social', 'key': 'descricao'},
+                        {'nome': 'CNPJ', 'key': 'cnpj'},
+                        {'nome': 'Verção', 'key': 'versaoApiTek'},
+                  ]"
+                  @deletarDadoPai="(arg : any) => deletar(arg)"
+                  @ordenarDadoPai="(arg : any) => ordenaEmpresa(arg)"
+                  @filtrarDadoPai="filtraEmpresa"
+                  @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
+                  @avancar="avancaPagina" 
+                  @recuar="recuarPagina"
+            />
+
+            <LoaderListaCardComponent v-if="lista_estado == 'Loader' && its_card"
+                  :header="dado_paginado.header"
+                  :quantidade_dados="ITEM_PAGINA_MAX"
+            />
+            <!-- Card Lista Empresa Pesquisa -->
+            <ListaCardComponent v-if="lista_estado == 'Lista' && its_card"
+                  :dados="dado_pesquisa"
+                  :pagina="1"
+                  :item_p_pagina="0"
+                  :pagina_max="1"
+                  :rota_edicao="'empresas'"
+                  :ModalContent_Remocao="[
+                        {'nome': 'Código Tek', 'key': 'codigoTek'},
+                        {'nome': 'Razão Social', 'key': 'descricao'},
+                        {'nome': 'CNPJ', 'key': 'cnpj'},
+                        {'nome': 'Verção', 'key': 'versaoApiTek'},
+                  ]"
+                  @deletarDadoPai="(arg : any) => deletar(arg)"
+            />
+            <!-- Card Lista Empresa -->
+            <ListaCardComponent v-if="lista_estado == 'Lista' && its_card"
                   :have_item_p_pagina="true"
                   :have_pagination="true"
                   :dados="dado_paginado"

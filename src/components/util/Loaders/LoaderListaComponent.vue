@@ -1,10 +1,10 @@
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, PropType } from 'vue';
 
 export default defineComponent({
       props:{
             header:{
-                  type: Array,
+                  type: Array as PropType<Array<object>>,
                   required: true
             },
             quantidade_dados:{
@@ -43,12 +43,6 @@ export default defineComponent({
             </tbody>
       </table>
       </div>
-      <!-- <PaginacaoComponent calss="col-12"
-            :pagina_atual="pagina"
-            :pagina_max="pagina_max"
-            @avancar="up_lista"
-            @recuar="down_lista"
-      /> -->
       </div>
 
 </template>

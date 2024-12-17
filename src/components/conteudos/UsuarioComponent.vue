@@ -2,8 +2,10 @@
 import { defineComponent } from 'vue';
 import store from '@/store';
 import ListaComponent from '../util/lista/ListaComponent.vue';
-import LoaderListaComponent from '../util/LoaderListaComponent.vue';
+import LoaderListaComponent from '../util/Loaders/LoaderListaComponent.vue';
 import FiltroPaiComponent from '../util/busca/FiltroPaiComponent.vue';
+import ListaCardComponent from '../util/lista/ListaCardComponent.vue';
+import LoaderListaCardComponent from '../util/Loaders/LoaderListaCardComponent.vue';
 
 
 export default defineComponent({
@@ -58,12 +60,16 @@ export default defineComponent({
                   ],
                   body: [] as Array<object>
             },
+            its_card: false,
+            largura: window.innerWidth
           }
       },
       components:{
             LoaderListaComponent,
             FiltroPaiComponent,
-            ListaComponent
+            ListaComponent,
+            ListaCardComponent,
+            LoaderListaCardComponent
       },
       async mounted() {
             this.requestDados()
@@ -75,8 +81,18 @@ export default defineComponent({
             // }else{
             //       this.requestDados()
             // }
+            this.onResize()
+            this.$nextTick(()=> window.addEventListener('resize', this.onResize))
       },
       methods:{
+            onResize(){
+                  this.largura = window.innerWidth
+                  if (this.largura <= 768) { //col-md
+                        this.its_card = true;
+                  }else{
+                        this.its_card = false;
+                  }
+            },
             deletar(objeto: {codigo: string}){
                   let aux = {'roter_externa': 'usuario', 'id': objeto.codigo, 'roter_interna': 'usuarios'}
                   Promise.resolve(store.dispatch('delDadosID', aux))
@@ -168,12 +184,12 @@ export default defineComponent({
                   @pesquisa_request="(args: string) => getPesquisa(args)"
                   @close_pesquisa="closefiltrarUsuario"
             />
-            <LoaderListaComponent v-if="lista_estado == 'Loader'"
+            <LoaderListaComponent v-if="lista_estado == 'Loader' && !its_card"
                   :header="dado_paginado.header"
                   :quantidade_dados="ITEM_PAGINA_MAX"
             />
             <!-- Lista Usuarios Pesquisa -->
-            <ListaComponent v-if="lista_estado == 'Lista' && itsOnFilter"
+            <ListaComponent v-if="lista_estado == 'Lista' && itsOnFilter && !its_card"
                   :dados="dado_pesquisa"
                   :item_p_pagina="0"
                   :pagina="1"
@@ -187,8 +203,47 @@ export default defineComponent({
                   @deletarDadoPai="(arg : any) => deletar(arg)"
             />
             <!-- Lista Usuarios -->
-            <ListaComponent v-if="lista_estado == 'Lista' && !itsOnFilter"
+            <ListaComponent v-if="lista_estado == 'Lista' && !itsOnFilter && !its_card"
                   :have_item_p_pagina="false"
+                  :have_pagination="true"
+                  :dados="dado_paginado"
+                  :item_p_pagina="10"
+                  :pagina="pagina_atual"
+                  :pagina_max="NUMERO_PAGINA"
+                  :rota_edicao="'usuarios'"
+                  :ModalContent_Remocao="[
+                        {'nome': 'Email', 'key': 'email'},
+                        {'nome': 'Perfil', 'key': 'perfil'},
+                        {'nome': 'Empresa', 'key': 'empresaDescricao'},
+                  ]"
+                  @deletarDadoPai="(arg : any) => deletar(arg)"
+                  @ordenarDadoPai="(arg : any) => ordenaUsuario(arg)"
+                  @filtrarDadoPai="filtraUsuario"
+                  @avancar="avancaPagina" 
+                  @recuar="recuarPagina" 
+            />
+
+            <LoaderListaCardComponent v-if="lista_estado == 'Loader' && its_card"
+                  :header="dado_paginado.header"
+                  :quantidade_dados="ITEM_PAGINA_MAX"
+            />
+            <!-- Card Lista Usuario Pesquisa -->
+            <ListaCardComponent v-if="lista_estado == 'Lista' && its_card"
+                  :dados="dado_pesquisa"
+                  :item_p_pagina="0"
+                  :pagina="1"
+                  :pagina_max="1"
+                  :rota_edicao="'usuarios'"
+                  :ModalContent_Remocao="[
+                        {'nome': 'Email', 'key': 'email'},
+                        {'nome': 'Perfil', 'key': 'perfil'},
+                        {'nome': 'Empresa', 'key': 'empresaDescricao'},
+                  ]"
+                  @deletarDadoPai="(arg : any) => deletar(arg)"
+            />
+            <!-- Card Lista Usuario -->
+            <ListaCardComponent v-if="lista_estado == 'Lista' && its_card"
+            :have_item_p_pagina="false"
                   :have_pagination="true"
                   :dados="dado_paginado"
                   :item_p_pagina="10"
