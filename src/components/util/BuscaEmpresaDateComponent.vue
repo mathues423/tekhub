@@ -18,42 +18,34 @@ export default defineComponent({
       components:{
             EmpresaSelectComponent,
       },
-      // watch:{ // Recursivo Erro
-      //       data_inicio(){
-      //             if (this.data_final == '') {
-      //                   return
-      //             }
-      //             const data_inicio_aux = new Date(this.data_inicio)
-      //             const data_final_aux = new Date(this.data_final)
-      //             let data_aux;
-      //             if (data_final_aux.getTime() < data_inicio_aux.getTime()) {
-      //                   data_aux = this.data_final;
-      //                   this.data_final = this.data_inicio
-      //                   this.data_inicio = data_aux
-      //             }else{
-      //                   data_aux = this.data_inicio;
-      //                   this.data_inicio = this.data_final
-      //                   this.data_final = data_aux
-      //             }
-      //       },
-      //       data_final(){
-      //             if (this.data_inicio == '') {
-      //                   return
-      //             }
-      //             const data_inicio_aux = new Date(this.data_inicio)
-      //             const data_final_aux = new Date(this.data_final)
-      //             let data_aux;
-      //             if (data_final_aux.getTime() < data_inicio_aux.getTime()) {
-      //                   data_aux = this.data_final;
-      //                   this.data_final = this.data_inicio
-      //                   this.data_inicio = data_aux
-      //             }else{
-      //                   data_aux = this.data_inicio;
-      //                   this.data_inicio = this.data_final
-      //                   this.data_final = data_aux
-      //             }
-      //       }
-      // },
+      watch:{ // Recursivo Erro
+            data_inicio(){
+                  if (this.data_final == '') {
+                        return
+                  }
+                  const data_inicio_aux = new Date(this.data_inicio)
+                  const data_final_aux = new Date(this.data_final)
+                  let data_aux;
+                  if (data_final_aux.getTime() < data_inicio_aux.getTime()) {
+                        data_aux = this.data_final;
+                        this.data_final = this.data_inicio
+                        this.data_inicio = data_aux
+                  }
+            },
+            data_final(){
+                  if (this.data_inicio == '') {
+                        return
+                  }
+                  const data_inicio_aux = new Date(this.data_inicio)
+                  const data_final_aux = new Date(this.data_final)
+                  let data_aux;
+                  if (data_final_aux.getTime() < data_inicio_aux.getTime()) {
+                        data_aux = this.data_final;
+                        this.data_final = this.data_inicio
+                        this.data_inicio = data_aux
+                  }
+            }
+      },
       methods:{
             buscar(){
                   let request_aux = ''
@@ -63,16 +55,10 @@ export default defineComponent({
 
                   const data_inicio_aux = new Date(this.data_inicio)
                   const data_final_aux = new Date(this.data_final)
-                  let data_aux;
-                  console.log('Inicio ', data_inicio_aux);
-                  console.log('Final ', data_final_aux);
-                  console.log('IF ', data_final_aux.getTime() < data_inicio_aux.getTime());
+
+                  console.log('inicio ', data_inicio_aux);
+                  console.log('final ', data_final_aux);
                   
-                  if (data_final_aux.getTime() < data_inicio_aux.getTime()) {
-                        data_aux = this.data_final;
-                        this.data_final = this.data_inicio
-                        this.data_inicio = data_aux
-                  }
                   
                   this.empresa_erro = this.data_final_erro = this.data_inicio_erro = false;
                   if(Object.keys(this.empresa_select).length == 0)
@@ -82,11 +68,11 @@ export default defineComponent({
                   if(this.data_inicio == '')
                         this.data_inicio_erro = true
                   else
-                        r_data_inicio = `&dataInicio=${this.data_inicio} 20:07:19`
+                        r_data_inicio = `&dataInicial=${this.data_inicio}`
                   if(this.data_final == '')
                         this.data_final_erro = true
                   else
-                        r_data_final = `&dataFinal=${this.data_final} 20:07:19`
+                        r_data_final = `&dataFinal=${this.data_final}`
 
                   request_aux += `?ordenacao=datahora&direcao=ASC&pagina=1&porPagina=10`+r_empresa+r_data_inicio+r_data_final
                   if (!this.empresa_erro && !this.data_inicio_erro && !this.data_final_erro ) {
@@ -104,6 +90,8 @@ export default defineComponent({
 </script>
 
 <template>
+      Inicio {{ data_inicio }}<br><br>
+      Final {{ data_final }}<br><br>
       <div class="row my-1">
             <div class="col-4">
                   <EmpresaSelectComponent 
@@ -112,11 +100,12 @@ export default defineComponent({
                   />
             </div>
             <div class="col-5 row">
-                  <div :class="['col', {'invalido': data_inicio_erro}]">
-                        <input class="form-control" type="date" v-model="data_inicio"/>
+                  <div :class="['col-6', {'invalido': data_inicio_erro}]">
+                        <input class="form-control" type="datetime-local" v-model="data_inicio"/>
                   </div>
-                  <div :class="['col', {'invalido': data_final_erro}]">
-                        <input class="form-control" type="date" v-model="data_final"/>
+                  <div :class="['col-6', {'invalido': data_final_erro}]">
+                        <!-- datetime-local -->
+                        <input class="form-control" type="datetime-local" v-model="data_final"/>
                   </div>
             </div>
             <div class="col">
