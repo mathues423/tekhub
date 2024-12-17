@@ -55,9 +55,6 @@ export default defineComponent({
 
                   const data_inicio_aux = new Date(this.data_inicio)
                   const data_final_aux = new Date(this.data_final)
-
-                  console.log('inicio ', data_inicio_aux);
-                  console.log('final ', data_final_aux);
                   
                   
                   this.empresa_erro = this.data_final_erro = this.data_inicio_erro = false;
@@ -65,14 +62,19 @@ export default defineComponent({
                         this.empresa_erro = true
                   else
                         r_empresa = `&empresa=${this.empresa_select['codigo' as keyof typeof this.empresa_select]}`
+                  
                   if(this.data_inicio == '')
                         this.data_inicio_erro = true
-                  else
-                        r_data_inicio = `&dataInicial=${this.data_inicio}`
+                  else{
+                        r_data_inicio = `&dataInicial=${data_inicio_aux.getUTCFullYear()}-${data_inicio_aux.getUTCMonth()}-${data_inicio_aux.getUTCDate()}`
+                        r_data_inicio += ` ${data_inicio_aux.getUTCHours()}:${data_inicio_aux.getUTCMinutes()}:${data_inicio_aux.getUTCSeconds()}`
+                  }
                   if(this.data_final == '')
                         this.data_final_erro = true
-                  else
-                        r_data_final = `&dataFinal=${this.data_final}`
+                  else{
+                        r_data_final = `&dataFinal=${data_final_aux.getUTCFullYear()}-${data_final_aux.getUTCMonth()}-${data_final_aux.getUTCDate()}`
+                        r_data_final += ` ${data_final_aux.getUTCHours()}:${data_final_aux.getUTCMinutes()}:${data_final_aux.getUTCSeconds()}`
+                  }
 
                   request_aux += `?ordenacao=datahora&direcao=ASC&pagina=1&porPagina=10`+r_empresa+r_data_inicio+r_data_final
                   if (!this.empresa_erro && !this.data_inicio_erro && !this.data_final_erro ) {
@@ -90,8 +92,6 @@ export default defineComponent({
 </script>
 
 <template>
-      Inicio {{ data_inicio }}<br><br>
-      Final {{ data_final }}<br><br>
       <div class="row my-1">
             <div class="col-4">
                   <EmpresaSelectComponent 
