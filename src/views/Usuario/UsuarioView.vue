@@ -16,7 +16,7 @@ export default defineComponent({
       },
       methods:{
             adicionarNewusuario(){
-                  router.push('/dashboard');
+                  router.push('/usuarios/0');
             },
       }
 })

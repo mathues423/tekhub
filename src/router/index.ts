@@ -151,6 +151,14 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
+    path: '/usuarios/0',
+    name: 'usuarios_criacao',
+    component: () => import ('@/views/Usuario/UsuarioNew.vue'),
+    meta:{
+      auth: true
+    }
+  },
+  {
     path: '/atualizacoesecommerces',
     name: 'atualizacoesecommerces',
     component: () => import ('@/views/LogAtualizacao/LogAtualizacaoView.vue'),
