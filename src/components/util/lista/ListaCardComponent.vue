@@ -54,7 +54,10 @@ export default defineComponent({
                   type: Array as PropType<Array<object>>,
                   required: true
             },
-            
+            lista_opc_paginas:{
+                  type: Array as PropType<Array<object>>,
+                  requeired: true
+            }
       },
       methods:{
             up_lista(){
@@ -147,6 +150,7 @@ export default defineComponent({
                   
             </div>
             <PaginacaoComponent v-if="have_pagination" class="col-12"
+                  :lista_opc_paginas="lista_opc_paginas"
                   :have_item_p_pagina="have_item_p_pagina"
                   :pagina_atual="pagina"
                   :pagina_max="pagina_max"

@@ -12,6 +12,19 @@ export default defineComponent({
       template: '#Ambi_comp',
       data() {
           return {
+            lista_opc_pagina_card: [
+                  {'text': '12', 'value': 12},
+                  {'text': '30', 'value': 30},
+                  {'text': '60', 'value': 60},
+                  {'text': 'all', 'value': 0},
+            ],
+            lista_opc_pagina_not_card: [
+                  {'text': '10', 'value': 10},
+                  {'text': '25', 'value': 25},
+                  {'text': '50', 'value': 50},
+                  {'text': '100', 'value': 100},
+                  {'text': 'all', 'value': 0},
+            ],
             lista_estado: 'Loader',
             itsOnFilter: false,
             ITEM_PAGINA_MAX : 10,
@@ -68,6 +81,8 @@ export default defineComponent({
             LoaderListaCardComponent
       },
       async mounted() {
+            this.onResize()
+            this.$nextTick(()=> window.addEventListener('resize', this.onResize))
             this.requestDados()
             // if(store.getters.getAmbientes != undefined){
             //       this.lista_estado = 'Lista'
@@ -84,13 +99,11 @@ export default defineComponent({
             // }else{
             //       this.requestDados()
             // }
-            this.onResize()
-            this.$nextTick(()=> window.addEventListener('resize', this.onResize))
       },
       methods:{
             onResize(){
                   this.largura = window.innerWidth
-                  if (this.largura <= 768) { //col-md
+                  if (this.largura <= 960) { //col-lg
                         this.its_card = true;
                   }else{
                         this.its_card = false;
@@ -180,6 +193,7 @@ export default defineComponent({
             />
             <!-- Lista Ambientes Pesquisa -->
             <ListaComponent v-if="lista_estado == 'Lista' && itsOnFilter && !its_card"
+                  :lista_opc_paginas="lista_opc_pagina_not_card"
                   :dados="dado_pesquisa"
                   :pagina="1"
                   :item_p_pagina="0"
@@ -195,6 +209,7 @@ export default defineComponent({
             />
             <!-- Lista Ambientes -->
             <ListaComponent  v-if="lista_estado == 'Lista' && !itsOnFilter && !its_card"
+                  :lista_opc_paginas="lista_opc_pagina_not_card"
                   :have_item_p_pagina="true"
                   :have_pagination="true"
                   :dados="dado_paginado"
@@ -223,6 +238,7 @@ export default defineComponent({
             />
             <!-- Card Lista Ambientes Pesquisa -->
             <ListaCardComponent v-if="lista_estado == 'Lista' && itsOnFilter && its_card"
+                  :lista_opc_paginas="lista_opc_pagina_card"
                   :dados="dado_pesquisa"
                   :pagina="1"
                   :item_p_pagina="0"
@@ -238,6 +254,7 @@ export default defineComponent({
             />
             <!-- Card Lista Ambientes -->
             <ListaCardComponent v-if="lista_estado == 'Lista' && !itsOnFilter && its_card"
+                  :lista_opc_paginas="lista_opc_pagina_card"
                   :have_item_p_pagina="true"
                   :have_pagination="true"
                   :dados="dado_paginado"
