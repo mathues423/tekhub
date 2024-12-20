@@ -10,7 +10,7 @@ export default defineComponent({
                   filhos: [{id:0 , componete: FiltroComponent,
                         opcs:{
                               campo: {key_body: '', config_filtro:[{}], filtro:{tipo_obj: '', tipo_filtro: ''}},
-                              operacao: {opc: ''},
+                              operacao: {opc: '', nome: ''},
                               valor: ''
                         }, erros: [], error_obj: {campo: false, operacao: false, valor: false, valor_incompativel: false}
                   }]
@@ -32,7 +32,7 @@ export default defineComponent({
       methods:{
             adiciona_condicao(){
                   const newId = this.filhos.length ? this.filhos[this.filhos.length - 1].id + 1 : 1;
-                  this.filhos.push({id: newId, componete: FiltroComponent, opcs:{campo: {key_body: '', config_filtro:[{}], filtro:{tipo_obj: '', tipo_filtro: ''}}, operacao: {opc: ''}, valor: ''}, erros: [], error_obj:{campo: false, operacao: false, valor: false, valor_incompativel: false}});
+                  this.filhos.push({id: newId, componete: FiltroComponent, opcs:{campo: {key_body: '', config_filtro:[{}], filtro:{tipo_obj: '', tipo_filtro: ''}}, operacao: {opc: '', nome: ''}, valor: ''}, erros: [], error_obj:{campo: false, operacao: false, valor: false, valor_incompativel: false}});
             },
             remove_condicao(index: number){
                   this.filhos.splice(index, 1);
@@ -78,7 +78,7 @@ export default defineComponent({
       <div class="col-12" v-if="itsOnFilter">
             <form>
                   <div class="form-row align-items-center" v-for="(item, index) in filhos" :key="item.id">
-                        <div class="col-12" v-show="index >= 1"> AND </div>
+                        <div class="col-12 my-3" v-show="index >= 1"> AND </div>
                         <FiltroComponent
                               :index="index"
                               :dado_header="header"
@@ -97,7 +97,7 @@ export default defineComponent({
                   <div class="col">
                         <button class="btn btn-danger" @click="$emit('close_pesquisa')"> Close</button>
                   </div>
-                  <div class="col-8"></div>
+                  <div class="col-9"></div>
             </div>
       </div>
 </template>

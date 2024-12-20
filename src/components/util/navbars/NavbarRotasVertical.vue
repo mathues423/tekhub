@@ -14,8 +14,10 @@ export default{
             }
       },
       props:{
-            // eslint-disable-next-line
-            item_ativo:'',
+            item_ativo:{
+                  type: String,
+                  required: true
+            },
       }
 }
 </script>
@@ -82,7 +84,7 @@ export default{
                                     ↨
                               </span>
                         </button>
-                        <ul class="list-group mask">
+                        <ul class="list-group nav_item_interno">
                               <li :class="['navbar_itens', {'item_nav_act' :item_ativo === 'mark_ecom'}, {'item_nav_des' : integracaoIsactive}]" @click="changePage('integracoesmarketplacesecommerces')">
                               <button class="btn item_nav col-12">
                                     <span>
@@ -150,6 +152,7 @@ export default{
 .nav_lateral{
       background-color: var(--bs-primary-text-emphasis);
       padding: 0;
+      list-style-type: none;
 }
 
 .item_nav{
@@ -183,7 +186,9 @@ export default{
 .navbar_itens{
       margin: 0;
 }
-li > ul > li{
+.nav_item_interno{
       background-color: #00000085;
+      list-style-type: none;
+      padding-left: 16px;
 }
 </style>

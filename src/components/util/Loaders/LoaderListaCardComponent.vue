@@ -21,28 +21,54 @@ export default defineComponent({
             <div class="col-12">
                   <div class="row">
                         <div class="col-12">
-                              Titles
+                              {{header}}
                         </div>
-
-                        <div class="my-1 col-md-4 col-sm-12 card-group" v-for="dado in quantidade_dados" :key="dado">
-                              <div class="card card-deck">
-                                    <div class="card-body">
-                                          <span v-for="(cabeca, index) in header" :key="index">
-                                                <div v-if="index == 0" class="card-title text-center th_content">
-                                                      <!-- Loader -->
+                        <span v-if="quantidade_dados !=0">
+                              <div class="row">
+                                    <div class="my-1 col-md-4 col-sm-12" v-for="dado in quantidade_dados" :key="dado">
+                                          <div class="card card-deck">
+                                                <div class="card-body">
+                                                      <span v-for="(cabeca, index) in header" :key="index">
+                                                            <div v-if="index == 0" class="card-title text-center th_content">
+                                                                  <!-- Loader -->
+                                                            </div>
+                                                            <div v-if="cabeca['key_body' as keyof typeof cabeca] != 'button' && index != 0">
+                                                                  <div :class="['row', 'mb-2', 'th_content', {'impar': index%2==0}]">
+                                                                        <!-- loader -->
+                                                                  </div>
+                                                            </div>
+                                                            <div v-if="cabeca['key_body' as keyof typeof cabeca] == 'button'" class="card-footer th_content">
+                                                                  <!-- loader -->
+                                                            </div>
+                                                      </span>
                                                 </div>
-                                                <div v-if="cabeca['key_body' as keyof typeof cabeca] != 'button' && index != 0">
-                                                      <div :class="['row', 'mb-2', 'th_content', {'impar': index%2==0}]">
-                                                            <!-- loader -->
-                                                      </div>
-                                                </div>
-                                                <div v-if="cabeca['key_body' as keyof typeof cabeca] == 'button'" class="card-footer th_content">
-                                                     <!-- loader -->
-                                                </div>
-                                          </span>
+                                          </div>
                                     </div>
                               </div>
-                        </div>
+                        </span>
+                        <span v-else>
+                              <div class="row">
+                                    <div class="my-1 col-lg-4 col-sm-12 card-group" v-for="(dado, index_dado) in 60" :key="index_dado">
+                                          <div class="card card-deck">
+                                                <div class="card-body">
+                                                      <span v-for="(cabeca, index) in header" :key="index">
+                                                            <div v-if="index == 0" class="card-title text-center th_content">
+                                                                  <!-- Loader -->
+                                                            </div>
+                                                            <div v-if="cabeca['key_body' as keyof typeof cabeca] != 'button' && index != 0">
+                                                                  <div :class="['row', 'mb-2', 'th_content', {'impar': index%2==0}]">
+                                                                        <!-- loader -->
+                                                                  </div>
+                                                            </div>
+                                                            <div v-if="cabeca['key_body' as keyof typeof cabeca] == 'button'" class="card-footer th_content">
+                                                                  <!-- loader -->
+                                                            </div>
+                                                      </span>
+                                                </div>
+                                          </div>
+                                    </div>
+                              </div>
+                        </span>
                   </div>
                   
             </div>

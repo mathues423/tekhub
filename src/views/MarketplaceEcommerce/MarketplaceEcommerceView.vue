@@ -1,6 +1,6 @@
 <script lang="ts">
 import MarketplaceEcommerceComponent from '@/components/conteudos/MarketplaceEcommerceComponent.vue';
-import NavbarComplet from '@/components/navbars/NavbarComplet.vue';
+import NavbarComplet from '@/components/util/navbars/NavbarComplet.vue';
 import VersaoMaximisada from '@/components/versionamento/VersaoMaximisada.vue';
 import router from '@/router';
 import CriarBotaoComponent from '@/components/util/CriarBotaoComponent.vue'
@@ -200,7 +200,7 @@ export default defineComponent({
 <template>
       <div class="row">
             <NavbarComplet :lateral="'mark_ecom'"/>
-            <div class="col-10" id="content">
+            <div class="col-12 col-lg-10" id="content">
                   <BuscaEmpresaComponent 
                         :inRequest="inRequestEmpresa"
                         @id_empresa="(arg)=> request_empresa(arg)"

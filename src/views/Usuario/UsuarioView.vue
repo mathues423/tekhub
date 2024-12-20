@@ -1,6 +1,6 @@
 <script lang="ts">
 import UsuarioComponent from '@/components/conteudos/UsuarioComponent.vue';
-import NavbarComplet from '@/components/navbars/NavbarComplet.vue';
+import NavbarComplet from '@/components/util/navbars/NavbarComplet.vue';
 import CriarBotaoComponent from '@/components/util/CriarBotaoComponent.vue';
 import VersaoMaximisada from '@/components/versionamento/VersaoMaximisada.vue';
 import router from '@/router';
@@ -25,7 +25,7 @@ export default defineComponent({
 <template>
       <div class="row">
             <NavbarComplet :lateral="'usuario'"/>
-            <div class="col-10" id="content">
+            <div class="col-12 col-lg-10" id="content">
                   <CriarBotaoComponent @criar="adicionarNewusuario"/>
                   <UsuarioComponent />
             </div>

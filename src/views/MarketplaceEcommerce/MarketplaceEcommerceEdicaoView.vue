@@ -1,6 +1,6 @@
 <script lang="ts">
 import router from '@/router';
-import NavbarComplet from '@/components/navbars/NavbarComplet.vue';
+import NavbarComplet from '@/components/util/navbars/NavbarComplet.vue';
 import VersaoMaximisada from '@/components/versionamento/VersaoMaximisada.vue';
 import { defineComponent } from 'vue';
 import ErroFormComponent from '@/components/mensagem/ErroFormComponent.vue';
@@ -186,7 +186,7 @@ export default defineComponent({
 <template>
       <div class="row">
             <NavbarComplet :lateral="'mark_ecom'"/>
-            <div class="col-10" id="content">
+            <div class="col-12 col-lg-10" id="content">
                   <div class="row">
                         <div class="col-1"></div>
                         <div class="Card-Body col-8">

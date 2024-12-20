@@ -18,7 +18,7 @@ export default defineComponent({
       components:{
             EmpresaSelectComponent,
       },
-      watch:{ // Recursivo Erro
+      watch:{
             data_inicio(){
                   if (this.data_final == '') {
                         return

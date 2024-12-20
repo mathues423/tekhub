@@ -1,6 +1,6 @@
 <script lang="ts">
 import DashboardComponent from '@/components/conteudos/DashboardComponent.vue';
-import NavbarComplet from '@/components/navbars/NavbarComplet.vue';
+import NavbarComplet from '@/components/util/navbars/NavbarComplet.vue';
 import VersaoMaximisada from '@/components/versionamento/VersaoMaximisada.vue';
 
 
@@ -16,7 +16,7 @@ export default{
 <template>
       <div class="row">
             <NavbarComplet :lateral="'dashboard'"/>
-            <div class="col-10" id="content">
+            <div class="col-12 col-lg-10" id="content">
                   <DashboardComponent />
             </div>
             <VersaoMaximisada />

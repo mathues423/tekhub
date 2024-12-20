@@ -1,5 +1,5 @@
 <script lang="ts">
-import NavbarComplet from '@/components/navbars/NavbarComplet.vue';
+import NavbarComplet from '@/components/util/navbars/NavbarComplet.vue';
 import VersaoMaximisada from '@/components/versionamento/VersaoMaximisada.vue';
 
 
@@ -15,7 +15,7 @@ export default{
 <template>
       <div class="row">
             <NavbarComplet :lateral="'log_att'"/>
-            <div class="col-10" id="content">
+            <div class="col-12 col-lg-10" id="content">
                   Log ATT content
             </div>
             <VersaoMaximisada />

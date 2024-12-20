@@ -1,5 +1,9 @@
+<script setup lang="ts">
+import NavbarComplet from '@/components/util/navbars/NavbarComplet.vue';
+</script>
+
 <template>
-      <div class="col-2"></div>
+      <NavbarComplet :lateral="'?'" />
       <div class="content " style="text-align: center; margin-top: auto; margin-bottom: auto;">
             ERRO 404
       </div>

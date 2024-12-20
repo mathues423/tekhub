@@ -1,5 +1,5 @@
 <script lang="ts">
-import NavbarComplet from '@/components/navbars/NavbarComplet.vue';
+import NavbarComplet from '@/components/util/navbars/NavbarComplet.vue';
 import VersaoMaximisada from '@/components/versionamento/VersaoMaximisada.vue';
 import router from '@/router';
 import CriarBotaoComponent from '@/components/util/CriarBotaoComponent.vue'
@@ -219,7 +219,7 @@ export default defineComponent({
 <template>
       <div class="row">
             <NavbarComplet :lateral="'map_pro'"/>
-            <div class="col-10" id="content">
+            <div class="col-12 col-lg-10" id="content">
                   <!-- Pesquisa Card -->
                   <div :class="['row', 'my-1']">
                         <div class="col-1"></div>
