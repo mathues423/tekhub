@@ -1,16 +1,10 @@
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, PropType } from 'vue';
 
 export default defineComponent({
       data() {
           return{
-            numero_itens_p_pagina:[
-                  {'text': '10', 'value': 10},
-                  {'text': '25', 'value': 25},
-                  {'text': '50', 'value': 50},
-                  {'text': '100', 'value': 100},
-                  {'text': 'all', 'value': 0},
-            ],
+            numero_itens_p_pagina: this.lista_opc_paginas,
             item_p_pagina: this.item_p_pagina_old
           }
       },
@@ -31,16 +25,19 @@ export default defineComponent({
             },
             item_p_pagina_old:{
                   type: Number,
-                  default: 10,
                   required: true
+            },
+            lista_opc_paginas:{
+                  type: Array as PropType<Array<object>>,
+                  requeired: true
+            }
+      },
+      watch:{
+            item_p_pagina(){
+                  this.$emit('trocar_quantidade', this.item_p_pagina)
             }
       },
       methods:{
-            change_item(){
-                  if (this.item_p_pagina != this.item_p_pagina_old) {
-                        this.$emit('trocar_quantidade', this.item_p_pagina)
-                  }
-            },
             up_paginacao(){
                   this.$emit('avancar');
             },
@@ -53,20 +50,32 @@ export default defineComponent({
 </script>
 
 <template>
-<div class="col-12 row">
-      <div v-if="have_item_p_pagina" class="col-6">
+<div class="col-12 row" v-if="have_item_p_pagina">
+      <div class="col-12 col-lg-6">
             Itens por pagina:
-            <select class="custom-select" v-model.lazy="item_p_pagina" @click="change_item()">
+            <select class="custom-select" v-model.lazy="item_p_pagina">
                   <option v-for="(itempPag, index) in numero_itens_p_pagina" :key="index" :value="itempPag.value"> {{ itempPag.text }}</option>
             </select>
       </div>
-      <div class="col row">
-            <div class="col-3">
-                  <button class="btn col-12" :disabled="pagina_atual == 1" @click="down_paginacao"> Retroceder </button>
+      <div class="col-12 col-lg-6 row">
+            <div class="col-5 col-lg-3">
+                  <button class="btn btn-light col-12" :disabled="pagina_atual == 1" @click="down_paginacao"> Retroceder </button>
             </div>
-            <div class="col-6 info" > {{ pagina_atual }} </div>
-            <div class="col-3">
-                  <button class="btn col-12" :disabled="pagina_atual == pagina_max" @click="up_paginacao"> Avancar </button>
+            <div class="col-2 col-lg-6 info" > {{ pagina_atual }} </div>
+            <div class="col-5 col-lg-3">
+                  <button class="btn btn-light col-12" :disabled="pagina_atual == pagina_max" @click="up_paginacao"> Avancar </button>
+            </div>
+      </div>
+</div>
+
+<div class="col-12 row" v-else>
+      <div class="col-12 row">
+            <div class="col-5 col-lg-3">
+                  <button class="btn btn-light col-12" :disabled="pagina_atual == 1" @click="down_paginacao"> Retroceder </button>
+            </div>
+            <div class="col-2 col-lg-6 info" > {{ pagina_atual }} </div>
+            <div class="col-5 col-lg-3">
+                  <button class="btn btn-light col-12" :disabled="pagina_atual == pagina_max" @click="up_paginacao"> Avancar </button>
             </div>
       </div>
 </div>

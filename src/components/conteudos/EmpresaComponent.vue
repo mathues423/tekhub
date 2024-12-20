@@ -12,6 +12,20 @@ export default defineComponent({
       template: '#Empre_comp',
       data() {
           return {
+            lista_opc_pagina_card: [
+                  {'text': '12', 'value': 12},
+                  {'text': '30', 'value': 30},
+                  {'text': '60', 'value': 60},
+                  {'text': '120', 'value': 120},
+            ],
+            lista_opc_pagina_not_card: [
+                  {'text': '10', 'value': 10},
+                  {'text': '25', 'value': 25},
+                  {'text': '50', 'value': 50},
+                  {'text': '100', 'value': 100},
+                  {'text': '200', 'value': 200},
+                  {'text': '300', 'value': 300},
+            ],
             lista_estado: 'Loader',
             itsOnFilter: false,
             ITEM_PAGINA_MAX : 10,
@@ -81,6 +95,8 @@ export default defineComponent({
             LoaderListaCardComponent
       },
       async mounted() {
+            this.onResize()
+            this.$nextTick(()=> window.addEventListener('resize', this.onResize))
             this.requestDados()
             // if(store.getters.getEmpresas != undefined){
             //       this.dado_paginado.body = await store.getters.getEmpresas
@@ -90,16 +106,16 @@ export default defineComponent({
             // }else{
             //       this.requestDados()
             // }
-            this.onResize()
-            this.$nextTick(()=> window.addEventListener('resize', this.onResize))
       },
       methods:{
             onResize(){
                   this.largura = window.innerWidth
-                  if (this.largura <= 768) { //col-md
+                  if (this.largura <= 960) { //col-lg
                         this.its_card = true;
+                        this.ITEM_PAGINA_MAX = 12;
                   }else{
                         this.its_card = false;
+                        this.ITEM_PAGINA_MAX = 10;
                   }
             },
 
@@ -205,6 +221,7 @@ export default defineComponent({
             />
             <!-- Lista Empresas Pesquisa -->
             <ListaComponent v-if="lista_estado == 'Lista' && itsOnFilter && !its_card"
+                  :lista_opc_paginas="lista_opc_pagina_not_card"
                   :dados="dado_pesquisa"
                   :pagina="1"
                   :item_p_pagina="0"
@@ -220,6 +237,7 @@ export default defineComponent({
             />
             <!-- Lista Empresas -->
             <ListaComponent v-if="lista_estado == 'Lista' && !itsOnFilter && !its_card"
+                  :lista_opc_paginas="lista_opc_pagina_not_card"
                   :have_item_p_pagina="true"
                   :have_pagination="true"
                   :dados="dado_paginado"
@@ -240,13 +258,13 @@ export default defineComponent({
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina"
             />
-
             <LoaderListaCardComponent v-if="lista_estado == 'Loader' && its_card"
                   :header="dado_paginado.header"
                   :quantidade_dados="ITEM_PAGINA_MAX"
             />
             <!-- Card Lista Empresa Pesquisa -->
             <ListaCardComponent v-if="lista_estado == 'Lista' && its_card"
+                  :lista_opc_paginas="lista_opc_pagina_card"
                   :dados="dado_pesquisa"
                   :pagina="1"
                   :item_p_pagina="0"
@@ -262,6 +280,7 @@ export default defineComponent({
             />
             <!-- Card Lista Empresa -->
             <ListaCardComponent v-if="lista_estado == 'Lista' && its_card"
+                  :lista_opc_paginas="lista_opc_pagina_card"
                   :have_item_p_pagina="true"
                   :have_pagination="true"
                   :dados="dado_paginado"

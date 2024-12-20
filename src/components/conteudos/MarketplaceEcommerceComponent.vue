@@ -11,6 +11,21 @@ export default defineComponent({
       template: '#Empre_comp',
       data() {
           return{
+            
+            lista_opc_pagina_card: [
+                  {'text': '12', 'value': 12},
+                  {'text': '30', 'value': 30},
+                  {'text': '60', 'value': 60},
+                  {'text': '120', 'value': 120},
+            ],
+            lista_opc_pagina_not_card: [
+                  {'text': '10', 'value': 10},
+                  {'text': '25', 'value': 25},
+                  {'text': '50', 'value': 50},
+                  {'text': '100', 'value': 100},
+                  {'text': '200', 'value': 200},
+                  {'text': '300', 'value': 300},
+            ],
             its_card: false,
             largura: window.innerWidth
           }
@@ -55,7 +70,7 @@ export default defineComponent({
       methods:{
             onResize(){
                   this.largura = window.innerWidth
-                  if (this.largura <= 768) { //col-md
+                  if (this.largura <= 960) { //col-lg
                         this.its_card = true;
                   }else{
                         this.its_card = false;
@@ -105,6 +120,7 @@ export default defineComponent({
             />
             <!-- Lista MarketplaceEcommerces Pesquisa -->
             <ListaComponent v-if="lista_estado == 'Lista' && itsOnFilter && !its_card"
+                  :lista_opc_paginas="lista_opc_pagina_not_card"
                   :dados="dado"
                   :pagina="1"
                   :item_p_pagina="0"
@@ -120,6 +136,7 @@ export default defineComponent({
             />
             <!-- Lista MarketplaceEcommerces -->
             <ListaComponent v-if="lista_estado == 'Lista' && !itsOnFilter && !its_card"
+                  :lista_opc_paginas="lista_opc_pagina_not_card"
                   :have_item_p_pagina="true"
                   :have_pagination="true"
                   :dados="dado"
@@ -147,6 +164,7 @@ export default defineComponent({
             />
             <!-- Card Lista MarketplaceEcommerces Pesquisa -->
             <ListaCardComponent v-if="lista_estado == 'Lista' && its_card"
+                  :lista_opc_paginas="lista_opc_pagina_card"
                   :dados="dado"
                   :pagina="1"
                   :item_p_pagina="0"
@@ -162,7 +180,8 @@ export default defineComponent({
             />
             <!-- Card Lista MarketplaceEcommerces -->
             <ListaCardComponent v-if="lista_estado == 'Lista' && its_card"
-            :have_item_p_pagina="true"
+                  :lista_opc_paginas="lista_opc_pagina_card"
+                  :have_item_p_pagina="true"
                   :have_pagination="true"
                   :dados="dado"
                   :pagina="pagina_atual"
