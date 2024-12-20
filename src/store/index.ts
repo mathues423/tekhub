@@ -244,7 +244,7 @@ const store = createStore({
     async setDadosID(context, obj: {roter_externa: string, id: string, roter_interna: string, new_dado: any}){
       obj.new_dado['codigo' as keyof typeof Object] = parseInt(obj.id);
       await fetch_.putDado('/'+obj.roter_externa, obj.id,obj.new_dado)
-      .then((args)=>{
+      .then(()=>{
         const aux = context.state[obj.roter_interna as keyof typeof context.state]['data' as keyof typeof Object] as Array<object>;
         aux.forEach((value, index)=>{
           if (value['codigo' as keyof typeof value] == obj.new_dado.codigo) {
@@ -256,7 +256,7 @@ const store = createStore({
     async setDadosID_notCodigo(context, obj: {roter_externa: string, id: string, roter_interna: string, new_dado: any}){
       // obj.new_dado['codigo' as keyof typeof Object] = parseInt(obj.id);
       await fetch_.putDado('/'+obj.roter_externa, obj.id,obj.new_dado)
-      .then((args)=>{
+      .then(()=>{
         const aux = context.state[obj.roter_interna as keyof typeof context.state]['data' as keyof typeof Object] as Array<object>;
         aux.forEach((value, index)=>{
           if (value['codigo' as keyof typeof value] == obj.new_dado.codigo) {

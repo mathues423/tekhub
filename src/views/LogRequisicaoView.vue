@@ -54,7 +54,7 @@ export default defineComponent({
                         'request': path,
                         'pagina_atual': this.pagina_atual,
                         'item_page': this.ITEM_PAGINA_MAX
-                  })).then((dados)=>{
+                  })).then(()=>{
                               this.dado_paginado.body = store.getters.getLogReq
                               console.log(this.dado_paginado.body);
                               if(this.ITEM_PAGINA_MAX != 0){

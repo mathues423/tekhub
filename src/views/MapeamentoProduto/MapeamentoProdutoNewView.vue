@@ -28,7 +28,7 @@ export default defineComponent({
             }
       },
       watch:{
-            'mapeamentoproduto.empresa'(newD, oldD){
+            'mapeamentoproduto.empresa'(newD){
                   this.inRequestCanal = true;
                   Promise.resolve(fetch_.getDado(`/integracaomarketplaceecommerce/?pagina=1&porPagina=0&ordenacao=codigo&direcao=ASC&filtro=empresa.codigo==${newD.codigo}`)).then(
                         (canal)=>{
