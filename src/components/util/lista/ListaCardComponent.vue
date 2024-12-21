@@ -148,14 +148,10 @@ export default defineComponent({
                   <div class="row">
                         <div :class="['col-12', (its_OnFilter || its_OnOrder) ? 'pesquisa_bg' : 'close_pesquisa_bg', animation ? 'on' : '']" style="margin-left: calc(.5* var(--bs-gutter-x));">
                               <button class="my-2 btn btn-info" @click="Filtro" :disabled="!have_filtravel">
-                                    <span>
-                                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-funnel-fill" viewBox="0 0 16 16">
-                                                <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5z"/>
-                                          </svg>
-                                    </span>
-                                    <span>
-                                          Filtrar
-                                    </span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-funnel-fill" viewBox="0 0 16 16">
+                                          <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5z"/>
+                                    </svg>
+                                    Filtrar
                               </button>
                               <button class="my-2 btn btn-info" @click="Ordem" :disabled="!have_ordenavel" style="margin-left: 15px;">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sort-down" viewBox="0 0 16 16">
