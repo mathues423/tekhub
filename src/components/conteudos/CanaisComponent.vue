@@ -143,7 +143,6 @@ export default defineComponent({
                         'item_page': this.ITEM_PAGINA_MAX      
                   }).then(() => {
                         this.dado_paginado.body = store.getters.getCanais;
-                        console.log(this.dado_paginado.body);
                         if(this.ITEM_PAGINA_MAX != 0){
                               this.NUMERO_PAGINA = Math.ceil(store.getters.getCanaisLength / this.ITEM_PAGINA_MAX);
                         }else{
@@ -185,7 +184,7 @@ export default defineComponent({
 
 <template id="Canl_comp">
       <div class="row">
-            <FiltroPaiComponent 
+            <FiltroPaiComponent v-if="!its_card"
                   :itsOnFilter="itsOnFilter"
                   :header="dado_paginado.header"
                   @pesquisa_request="(args: string) => getPesquisa(args)"
@@ -238,7 +237,7 @@ export default defineComponent({
                   :quantidade_dados="ITEM_PAGINA_MAX"
             />
             <!-- Card Lista Canais Pesquisa -->
-            <ListaCardComponent v-if="lista_estado == 'Lista' && its_card"
+            <ListaCardComponent v-if="lista_estado == 'Lista' && itsOnFilter && its_card"
                   :lista_opc_paginas="lista_opc_pagina_card"
                   :dados="dado_pesquisa"
                   :pagina="1"
@@ -253,7 +252,7 @@ export default defineComponent({
                   @deletarDadoPai="(arg : any) => deletar(arg)"
             />
             <!-- Card Lista Canais -->
-            <ListaCardComponent v-if="lista_estado == 'Lista' && its_card"
+            <ListaCardComponent v-if="lista_estado == 'Lista' && !itsOnFilter && its_card"
                   :lista_opc_paginas="lista_opc_pagina_card"
                   :have_item_p_pagina="true"
                   :have_pagination="true"

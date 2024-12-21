@@ -200,7 +200,7 @@ export default defineComponent({
 <template>
       <div class="row">
             <NavbarComplet :lateral="'mark_ecom'"/>
-            <div class="col-12 col-lg-10" id="content">
+            <div class="col-12 col-lg-10" id="content" style="padding-left: calc(var(--bs-gutter-x));">
                   <BuscaEmpresaComponent 
                         :inRequest="inRequestEmpresa"
                         @id_empresa="(arg)=> request_empresa(arg)"

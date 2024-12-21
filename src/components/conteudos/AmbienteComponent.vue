@@ -105,8 +105,10 @@ export default defineComponent({
                   this.largura = window.innerWidth
                   if (this.largura <= 960) { //col-lg
                         this.its_card = true;
+                        this.ITEM_PAGINA_MAX = 12;
                   }else{
                         this.its_card = false;
+                        this.ITEM_PAGINA_MAX = 10;
                   }
             },
             deletar(objeto: {codigo: string}){
@@ -181,7 +183,7 @@ export default defineComponent({
 
 <template id="Ambi_comp">
       <div class="row">
-            <FiltroPaiComponent 
+            <FiltroPaiComponent v-if="!its_card"
                   :itsOnFilter="itsOnFilter"
                   :header="dado_paginado.header"
                   @pesquisa_request="(args: string) => getPesquisa(args)"

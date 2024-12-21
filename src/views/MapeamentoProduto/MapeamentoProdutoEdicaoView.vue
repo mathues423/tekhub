@@ -90,8 +90,6 @@ export default defineComponent({
                               produtoPaiSite: this.mapeamentoproduto.produtoPai,
                               produtoSite: this.mapeamentoproduto.produtoSite,
                         }
-                        console.log('Dados ', aux);
-                        
                         Promise.resolve(
                               store.dispatch('setDadosID_notCodigo', {'roter_externa': 'mapeamentoprodudo','id': id, 'new_dado': aux, 'roter_interna': 'mapeamentoprodudo'})
                               .then(()=> this.voltarMapeamentoProduto())
@@ -110,7 +108,7 @@ export default defineComponent({
 <template>
       <div class="row">
             <NavbarComplet :lateral="'map_pro'"/>
-            <div class="col-12 col-lg-10" id="content">
+            <div class="col-12 col-lg-10" id="content" style="padding-left: calc(var(--bs-gutter-x));">
                   <div class="row">
                         <div class="col-1"></div>
                         <div class="Card-Body col-8">

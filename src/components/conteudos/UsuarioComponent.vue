@@ -102,8 +102,10 @@ export default defineComponent({
                   this.largura = window.innerWidth
                   if (this.largura <= 960) { //col-lg
                         this.its_card = true;
+                        this.ITEM_PAGINA_MAX = 12;
                   }else{
                         this.its_card = false;
+                        this.ITEM_PAGINA_MAX = 10;
                   }
             },
             deletar(objeto: {codigo: string}){
@@ -191,7 +193,7 @@ export default defineComponent({
 
 <template id="Usua_comp">
       <div class="row">
-            <FiltroPaiComponent 
+            <FiltroPaiComponent v-if="!its_card"
                   :itsOnFilter="itsOnFilter"
                   :header="dado_paginado.header"
                   @pesquisa_request="(args: string) => getPesquisa(args)"
@@ -243,7 +245,7 @@ export default defineComponent({
                   :quantidade_dados="ITEM_PAGINA_MAX"
             />
             <!-- Card Lista Usuario Pesquisa -->
-            <ListaCardComponent v-if="lista_estado == 'Lista' && its_card"
+            <ListaCardComponent v-if="lista_estado == 'Lista' && itsOnFilter && its_card"
                   :lista_opc_paginas="lista_opc_pagina_card"
                   :dados="dado_pesquisa"
                   :item_p_pagina="0"
@@ -258,7 +260,7 @@ export default defineComponent({
                   @deletarDadoPai="(arg : any) => deletar(arg)"
             />
             <!-- Card Lista Usuario -->
-            <ListaCardComponent v-if="lista_estado == 'Lista' && its_card"
+            <ListaCardComponent v-if="lista_estado == 'Lista' && !itsOnFilter && its_card"
                   :lista_opc_paginas="lista_opc_pagina_card"
                   :have_item_p_pagina="true"
                   :have_pagination="true"

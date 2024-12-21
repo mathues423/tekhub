@@ -209,7 +209,7 @@ export default defineComponent({
 
 <template id="Empre_comp">
       <div class="row">
-            <FiltroPaiComponent 
+            <FiltroPaiComponent v-if="!its_card"
                   :itsOnFilter="itsOnFilter"
                   :header="dado_paginado.header"
                   @pesquisa_request="(args: string) => getPesquisa(args)"
@@ -263,7 +263,7 @@ export default defineComponent({
                   :quantidade_dados="ITEM_PAGINA_MAX"
             />
             <!-- Card Lista Empresa Pesquisa -->
-            <ListaCardComponent v-if="lista_estado == 'Lista' && its_card"
+            <ListaCardComponent v-if="lista_estado == 'Lista' && itsOnFilter && its_card"
                   :lista_opc_paginas="lista_opc_pagina_card"
                   :dados="dado_pesquisa"
                   :pagina="1"
@@ -279,7 +279,7 @@ export default defineComponent({
                   @deletarDadoPai="(arg : any) => deletar(arg)"
             />
             <!-- Card Lista Empresa -->
-            <ListaCardComponent v-if="lista_estado == 'Lista' && its_card"
+            <ListaCardComponent v-if="lista_estado == 'Lista' && !itsOnFilter && its_card"
                   :lista_opc_paginas="lista_opc_pagina_card"
                   :have_item_p_pagina="true"
                   :have_pagination="true"

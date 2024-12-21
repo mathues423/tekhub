@@ -25,7 +25,7 @@ export default defineComponent({
 <template>
       <div class="row">
             <NavbarComplet :lateral="'canais'"/>
-            <div class="col-12 col-lg-10" id="content">
+            <div class="col-12 col-lg-10" id="content" style="padding-left: calc(var(--bs-gutter-x));">
                   <CriarBotao @criar="adicionarNewcanal"/>
                   <CanaisComponent />
             </div>

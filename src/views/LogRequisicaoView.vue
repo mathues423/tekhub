@@ -90,7 +90,6 @@ export default defineComponent({
                         :pagina_max="NUMERO_PAGINA"
                         :rota_edicao="''"
                         :ModalContent_Remocao="[]"
-                        
                   />
             </div>
             <VersaoMaximisada />

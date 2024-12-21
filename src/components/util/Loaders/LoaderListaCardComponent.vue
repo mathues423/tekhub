@@ -17,15 +17,15 @@ export default defineComponent({
 </script>
 
 <template>
-      <div class="row">
+      <div class="row teste">
             <div class="col-12">
                   <div class="row">
                         <div class="col-12">
-                              {{header}}
+                              Botoes
                         </div>
                         <span v-if="quantidade_dados !=0">
                               <div class="row">
-                                    <div class="my-1 col-md-4 col-sm-12" v-for="dado in quantidade_dados" :key="dado">
+                                    <div class="my-1 col-lg-4 col-sm-12" v-for="dado in quantidade_dados" :key="dado">
                                           <div class="card card-deck">
                                                 <div class="card-body">
                                                       <span v-for="(cabeca, index) in header" :key="index">

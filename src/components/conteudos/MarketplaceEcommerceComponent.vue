@@ -26,6 +26,7 @@ export default defineComponent({
                   {'text': '200', 'value': 200},
                   {'text': '300', 'value': 300},
             ],
+            ITEM_PAGINA_MAX_local: this.ITEM_PAGINA_MAX,
             its_card: false,
             largura: window.innerWidth
           }
@@ -72,8 +73,10 @@ export default defineComponent({
                   this.largura = window.innerWidth
                   if (this.largura <= 960) { //col-lg
                         this.its_card = true;
+                        this.ITEM_PAGINA_MAX_local = 12;
                   }else{
                         this.its_card = false;
+                        this.ITEM_PAGINA_MAX_local = 10;
                   }
             },
             getPesquisa(args: string){
@@ -108,7 +111,7 @@ export default defineComponent({
 
 <template id="Empre_comp">
       <div class="row">
-            <FiltroPaiComponent 
+            <FiltroPaiComponent v-if="!its_card"
                   :itsOnFilter="itsOnFilter"
                   :header="dado['header' as keyof typeof dado]"
                   @pesquisa_request="(args: string) => getPesquisa(args)"
@@ -116,7 +119,7 @@ export default defineComponent({
             />
             <LoaderListaComponent v-if="lista_estado == 'Loader' && !its_card"
                   :header="dado['header' as keyof typeof dado]"
-                  :quantidade_dados="ITEM_PAGINA_MAX"
+                  :quantidade_dados="ITEM_PAGINA_MAX_local"
             />
             <!-- Lista MarketplaceEcommerces Pesquisa -->
             <ListaComponent v-if="lista_estado == 'Lista' && itsOnFilter && !its_card"
@@ -141,7 +144,7 @@ export default defineComponent({
                   :have_pagination="true"
                   :dados="dado"
                   :pagina="pagina_atual"
-                  :item_p_pagina="ITEM_PAGINA_MAX"
+                  :item_p_pagina="ITEM_PAGINA_MAX_local"
                   :pagina_max="NUMERO_PAGINA"
                   :rota_edicao="'integracoesmarketplacesecommerces'"
                   :ModalContent_Remocao="[
@@ -160,10 +163,10 @@ export default defineComponent({
 
             <LoaderListaCardComponent v-if="lista_estado == 'Loader' && its_card"
                   :header="dado.header"
-                  :quantidade_dados="ITEM_PAGINA_MAX"
+                  :quantidade_dados="ITEM_PAGINA_MAX_local"
             />
             <!-- Card Lista MarketplaceEcommerces Pesquisa -->
-            <ListaCardComponent v-if="lista_estado == 'Lista' && its_card"
+            <ListaCardComponent v-if="lista_estado == 'Lista' && itsOnFilter && its_card"
                   :lista_opc_paginas="lista_opc_pagina_card"
                   :dados="dado"
                   :pagina="1"
@@ -179,13 +182,13 @@ export default defineComponent({
                   @deletarDadoPai="(arg : any) => deletar(arg)"
             />
             <!-- Card Lista MarketplaceEcommerces -->
-            <ListaCardComponent v-if="lista_estado == 'Lista' && its_card"
+            <ListaCardComponent v-if="lista_estado == 'Lista' && !itsOnFilter && its_card"
                   :lista_opc_paginas="lista_opc_pagina_card"
                   :have_item_p_pagina="true"
                   :have_pagination="true"
                   :dados="dado"
                   :pagina="pagina_atual"
-                  :item_p_pagina="ITEM_PAGINA_MAX"
+                  :item_p_pagina="ITEM_PAGINA_MAX_local"
                   :pagina_max="NUMERO_PAGINA"
                   :rota_edicao="'integracoesmarketplacesecommerces'"
                   :ModalContent_Remocao="[

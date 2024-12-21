@@ -15,7 +15,7 @@ export default{
 <template>
       <div class="row">
             <NavbarComplet :lateral="'log_att'"/>
-            <div class="col-12 col-lg-10" id="content">
+            <div class="col-12 col-lg-10" id="content" style="padding-left: calc(var(--bs-gutter-x));">
                   Log ATT content
             </div>
             <VersaoMaximisada />

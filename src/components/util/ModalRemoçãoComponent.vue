@@ -42,11 +42,11 @@ export default defineComponent({
 
                   <div class="modal-footer">
                         <slot name="footer" class="row">
-                              <button class="btn btn-cancelar col-xs-6 col-md-2" @click="$emit('close')">
+                              <button class="btn btn-cancelar col-5 col-lg-2" @click="$emit('close')">
                                     Cancelar
                               </button>
-                              <div class="col-md-1"></div>
-                              <button class="btn btn-primary col-xs-6 col-md-2" @click="deletarItem" :disabled="click_delete">
+                              <div class="col-2 col-lg-1"></div>
+                              <button class="btn btn-primary col-5 col-lg-2" @click="deletarItem" :disabled="click_delete">
                                     <span v-if="click_delete">
                                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
                                                 <radialGradient id="a12" cx=".66" fx=".66" cy=".3125" fy=".3125" gradientTransform="scale(1.5)">
@@ -97,7 +97,7 @@ export default defineComponent({
 .modal-container{
       background-color: var(--bs-white);
       top: 10%;
-      width: 500px;
+      width: min(500px, 75%);
 
       transition: all 0.9s ease;
       border-radius: 2px;
@@ -115,9 +115,7 @@ export default defineComponent({
 }
 
 .modal-footer{
-      padding-top: 10px;
-      padding-right: 10px;
-      padding-bottom: 10px;
+      padding: 10px;
 }
 
 .btn-cancelar{
