@@ -66,7 +66,6 @@ export default defineComponent({
             },
             item_p_pagina:{
                   type:Number,
-                  defaut: 10,
                   required:true
             },
             dados:{

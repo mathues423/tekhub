@@ -23,4 +23,8 @@ export default defineComponent({
 .ativada{
       display: block;
 }
+.alert{
+      margin-top: 5px;
+      padding: 5px;
+}
 </style>

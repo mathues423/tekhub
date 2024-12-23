@@ -183,7 +183,7 @@ export default defineComponent({
 </script>
 
 <template id="Canl_comp">
-      <div class="row">
+      <div class="row my-2">
             <FiltroPaiComponent v-if="!its_card"
                   :itsOnFilter="itsOnFilter"
                   :header="dado_paginado.header"
