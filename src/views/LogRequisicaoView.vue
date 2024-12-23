@@ -4,6 +4,8 @@ import BuscaEmpresaDateComponent from '@/components/util/BuscaEmpresaDateCompone
 import ListaComponent from '@/components/util/lista/ListaComponent.vue';
 import LoaderListaComponent from '@/components/util/Loaders/LoaderListaComponent.vue';
 import VersaoMaximisada from '@/components/versionamento/VersaoMaximisada.vue';
+import ListaCardComponent from '@/components/util/lista/ListaCardComponent.vue';
+import LoaderListaCardComponent from '@/components/util/Loaders/LoaderListaCardComponent.vue';
 import store from '@/store';
 import { defineComponent } from 'vue';
 
@@ -11,6 +13,19 @@ import { defineComponent } from 'vue';
 export default defineComponent({
       data() {
           return {
+            lista_opc_pagina_card: [
+                  {'text': '12', 'value': 12},
+                  {'text': '30', 'value': 30},
+                  {'text': '60', 'value': 60},
+                  {'text': 'all', 'value': 0},
+            ],
+            lista_opc_pagina_not_card: [
+                  {'text': '10', 'value': 10},
+                  {'text': '25', 'value': 25},
+                  {'text': '50', 'value': 50},
+                  {'text': '100', 'value': 100},
+                  {'text': 'all', 'value': 0},
+            ],
             lista_estado: 'Empty',
             ITEM_PAGINA_MAX : 10,
             NUMERO_PAGINA: 1,
@@ -33,7 +48,12 @@ export default defineComponent({
                         'isfiltrable': false, 'isordenable':false}
                   ],
                   body: [] as Array<object>
-            }
+            },
+            
+            query_request_pesquisa:'',
+
+            its_card: false,
+            largura: window.innerWidth
           }
       },
       components:{
@@ -41,17 +61,32 @@ export default defineComponent({
             BuscaEmpresaDateComponent,
             VersaoMaximisada,
             LoaderListaComponent,
-            ListaComponent
+            ListaComponent,
+            ListaCardComponent,
+            LoaderListaCardComponent
+      },
+      mounted() {
+            this.onResize()
+            this.$nextTick(()=> window.addEventListener('resize', this.onResize))
       },
       methods:{
+            onResize(){
+                  this.largura = window.innerWidth
+                  if (this.largura <= 960) { //col-lg
+                        this.its_card = true;
+                        this.ITEM_PAGINA_MAX = 12;
+                  }else{
+                        this.its_card = false;
+                        this.ITEM_PAGINA_MAX = 10;
+                  }
+            },
             requisicao(path: string){
-                  console.log('PATH ', path);
-                  
                   this.lista_estado = 'Loader'
+                  this.query_request_pesquisa = path;
                   Promise.resolve(store.dispatch('getDadosPaginados',{
                         'roter_interna': 'log_req',
                         'roter_externa': 'logrequisicao',
-                        'request': path,
+                        'request': `?ordenacao=datahora&direcao=ASC&pagina=${this.pagina_atual}&porPagina=${this.ITEM_PAGINA_MAX}`+path,
                         'pagina_atual': this.pagina_atual,
                         'item_page': this.ITEM_PAGINA_MAX
                   })).then(()=>{
@@ -64,6 +99,23 @@ export default defineComponent({
                               }
                               this.lista_estado = 'Lista'
                   })
+            },
+            avancaPagina(){
+                  if (this.pagina_atual < this.NUMERO_PAGINA) {
+                        this.pagina_atual++;
+                        this.requisicao(this.query_request_pesquisa);
+                  }
+            },
+            recuarPagina(){
+                  if (this.pagina_atual > 1) {
+                        this.pagina_atual--;
+                        this.requisicao(this.query_request_pesquisa);
+                  }
+            },
+            changeItemPagina(quantidade: number){
+                  this.pagina_atual = 1;
+                  this.ITEM_PAGINA_MAX = quantidade;
+                  this.requisicao(this.query_request_pesquisa)
             }
       }
 })
@@ -77,11 +129,12 @@ export default defineComponent({
                         :rota_externa="'logrequisicao'"
                         @request_filtro="(args: string)=> requisicao(args)"
                   />
-                  <LoaderListaComponent v-if="lista_estado == 'Loader'" 
+                  <LoaderListaComponent v-if="lista_estado == 'Loader' && !its_card" 
                         :header="dado_paginado.header"
                         :quantidade_dados="ITEM_PAGINA_MAX"
                   />
-                  <ListaComponent v-if="lista_estado == 'Lista'"
+                  <ListaComponent v-if="lista_estado == 'Lista' && !its_card"
+                        :lista_opc_paginas="lista_opc_pagina_not_card"
                         :have_item_p_pagina="true"
                         :have_pagination="true"     
                         :dados="dado_paginado"
@@ -90,6 +143,31 @@ export default defineComponent({
                         :pagina_max="NUMERO_PAGINA"
                         :rota_edicao="''"
                         :ModalContent_Remocao="[]"
+                        
+                        @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
+                        @avancaPagina="avancaPagina" 
+                        @recuarPagina="recuarPagina"
+                  />
+
+                  <LoaderListaCardComponent v-if="lista_estado == 'Loader' && its_card"
+                        :header="dado_paginado.header"
+                        :quantidade_dados="ITEM_PAGINA_MAX"
+                  />
+                  <!-- Card Lista Canais -->
+                  <ListaCardComponent v-if="lista_estado == 'Lista' && its_card"
+                        :lista_opc_paginas="lista_opc_pagina_card"
+                        :have_item_p_pagina="true"
+                        :have_pagination="true"     
+                        :dados="dado_paginado"
+                        :pagina="1"
+                        :item_p_pagina="ITEM_PAGINA_MAX"
+                        :pagina_max="NUMERO_PAGINA"
+                        :rota_edicao="''"
+                        :ModalContent_Remocao="[]"
+                        
+                        @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
+                        @avancaPagina="avancaPagina" 
+                        @recuarPagina="recuarPagina"
                   />
             </div>
             <VersaoMaximisada />
