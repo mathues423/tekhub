@@ -1,22 +1,34 @@
 <script lang="ts">
 import NavbarComplet from '@/components/util/navbars/NavbarComplet.vue';
 import VersaoMaximisada from '@/components/versionamento/VersaoMaximisada.vue';
+import fetch_ from '@/services/fetch/requisicao';
+import { defineComponent } from 'vue';
 
 
-export default{
+export default defineComponent({
+      data() {
+          return {
+                  teste:{}
+          }
+      },
+      mounted() {
+          Promise.resolve(fetch_.getDado('/atualizacaoecommerce'))
+          .then((ret)=> this.teste = ret)
+      },
       components:{
             NavbarComplet,
             // DashboardComponent,
             VersaoMaximisada,
       }
-}
+})
 </script>
 
 <template>
       <div class="row">
             <NavbarComplet :lateral="'log_att'"/>
             <div class="col-12 col-lg-10" id="content" style="padding-left: calc(var(--bs-gutter-x));">
-                  Log ATT content
+                  Placeholder <br>
+                  {{ teste }}
             </div>
             <VersaoMaximisada />
       </div>
