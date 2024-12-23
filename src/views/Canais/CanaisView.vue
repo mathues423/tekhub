@@ -1,7 +1,7 @@
 <script lang="ts">
 import CanaisComponent from '@/components/conteudos/CanaisComponent.vue';
 import NavbarComplet from '@/components/util/navbars/NavbarComplet.vue';
-import CriarBotao from '@/components/util/CriarBotaoComponent.vue';
+// import CriarBotao from '@/components/util/CriarBotaoComponent.vue';
 import VersaoMaximisada from '@/components/versionamento/VersaoMaximisada.vue';
 import router from '@/router';
 import { defineComponent } from 'vue';
@@ -10,7 +10,7 @@ import { defineComponent } from 'vue';
 export default defineComponent({
       components:{
             NavbarComplet,
-            CriarBotao,
+            // CriarBotao,
             CanaisComponent,
             VersaoMaximisada,
       },
@@ -26,7 +26,7 @@ export default defineComponent({
       <div class="row">
             <NavbarComplet :lateral="'canais'"/>
             <div class="col-12 col-lg-10" id="content" style="padding-left: calc(var(--bs-gutter-x));">
-                  <CriarBotao @criar="adicionarNewcanal"/>
+                  <!-- <CriarBotao @criar="adicionarNewcanal"/> -->
                   <CanaisComponent />
             </div>
             <VersaoMaximisada />
