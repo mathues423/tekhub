@@ -76,7 +76,7 @@ export default defineComponent({
                         r_data_final += ` ${data_final_aux.getUTCHours()}:${data_final_aux.getUTCMinutes()}:${data_final_aux.getUTCSeconds()}`
                   }
 
-                  request_aux += `?ordenacao=datahora&direcao=ASC&pagina=1&porPagina=10`+r_empresa+r_data_inicio+r_data_final
+                  request_aux += r_empresa+r_data_inicio+r_data_final
                   if (!this.empresa_erro && !this.data_inicio_erro && !this.data_final_erro ) {
                         this.$emit('request_filtro', request_aux);
                   }
