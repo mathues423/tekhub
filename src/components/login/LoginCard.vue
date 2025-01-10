@@ -71,44 +71,56 @@
 </div>
 </template>
 
-<script lang="ts" setup>
-      import { ref } from 'vue';
+<script lang="ts">
+      import { defineComponent, ref } from 'vue';
       import requisicaoLogin from '@/services/login/requisicao';
       import VersaoMinimisada from '../versionamento/VersaoMinimisada.vue';
       import ErroFormComponent from '../mensagem/ErroFormComponent.vue';
-      const isLogin = ref(false);
-      const user = ref({
-            email: '',
-            senha: ''
-      });
-      const erros = ref({
-            vericação: false,
-            message: ''
-      });
-      function showPassword(){
-            if(document.querySelector('#userpass')?.getAttribute('type') == 'password'){
-                  document.querySelector('#userpass')?.setAttribute('type', 'text');
-                  document.querySelector('#eyeclose')?.setAttribute('display','none');
-                  document.querySelector('#eyeopen')?.setAttribute('display','inline');
-            }else{
-                  document.querySelector('#userpass')?.setAttribute('type', 'password');
-                  document.querySelector('#eyeclose')?.setAttribute('display','inline'); 
-                  document.querySelector('#eyeopen')?.setAttribute('display','none');
-            }
-      }
 
-      async function loginReq(){
-            isLogin.value = true;
-            erros.value.vericação = false;
-            await requisicaoLogin.loginReq(user.value.email, user.value.senha, erros.value)
-            .then((returno) =>{
-                  if(erros.value.vericação)
-                        if(returno.response?.data?.errors)
-                              erros.value.message = returno.response.data.errors[0]
-                              
-                  isLogin.value = false;
-            });
-      }
+      export default defineComponent({
+            data() {
+                  return{
+                        isLogin: ref(false),
+                        user: ref({
+                              email: '',
+                              senha: ''
+                        }),
+                        erros: ref({
+                              vericação: false,
+                              message: ''
+                        })
+                  }
+            },
+            components:{
+                  VersaoMinimisada,
+                  ErroFormComponent
+            },
+            methods:{
+                  showPassword(){
+                        if(document.querySelector('#userpass')?.getAttribute('type') == 'password'){
+                              document.querySelector('#userpass')?.setAttribute('type', 'text');
+                              document.querySelector('#eyeclose')?.setAttribute('display','none');
+                              document.querySelector('#eyeopen')?.setAttribute('display','inline');
+                        }else{
+                              document.querySelector('#userpass')?.setAttribute('type', 'password');
+                              document.querySelector('#eyeclose')?.setAttribute('display','inline'); 
+                              document.querySelector('#eyeopen')?.setAttribute('display','none');
+                        }
+                  },
+                  async loginReq(){
+                        this.isLogin = true;
+                        this.erros.vericação = false;
+                        await requisicaoLogin.loginReq(this.user.email, this.user.senha, this.erros)
+                        .then((returno) =>{
+                              if(this.erros.vericação)
+                                    if(returno.response?.data?.errors)
+                                          this.erros.message = returno.response.data.errors[0]
+                                          
+                              this.isLogin = false;
+                        });
+                  }
+            },
+      })
 </script>
 
 <style lang="css" scoped>
