@@ -8,10 +8,13 @@ import ambiente from '@/services/regras_negocio/regras_ambientes';
 import store from '@/store';
 import fetch_ from '@/services/fetch/requisicao';
 import LoaderSkeleton from '@/components/util/Loaders/LoaderSkeleton.vue';
+import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
 
 export default defineComponent({
       data(){
             return {
+                  fetch_error_msg: {},
+                  have_fetch_error: false,
                   isEditing: false,
                   ambiente:{
                         ambiente : '',
@@ -38,7 +41,8 @@ export default defineComponent({
             NavbarComplet,
             VersaoMaximisada,
             LoaderSkeleton,
-            ErroFormComponent
+            ErroFormComponent,
+            ErroResponseComponent
       },
       methods:{
             async editRequest(){
@@ -56,7 +60,7 @@ export default defineComponent({
                               store.dispatch('setDadosID', {'roter_externa': 'ambiente', 'id': id, 'roter_interna': 'ambientes', 'new_dado': this.ambiente}))
                         .then(()=> 
                               this.voltarAmbiente()
-                        )
+                        ).catch((error_retorno)=> this.showError(error_retorno))
                   }else{
                         this.isEditing = false;
                   }
@@ -64,6 +68,10 @@ export default defineComponent({
             voltarAmbiente(){
                   router.push('/ambientes');
             },
+            showError(objeto_erro: object){
+                  this.fetch_error_msg = objeto_erro;
+                  this.have_fetch_error = true;
+            }
       },
       async mounted(){
             this.requested = false;
@@ -84,108 +92,118 @@ export default defineComponent({
                   .then((args)=> {
                         this.requested = true;
                         this.canais_requested = args.data
-                  })
-            });
+                  }).catch((error_retorno)=> this.showError(error_retorno))
+            }).catch((error_retorno)=> this.showError(error_retorno));
       }
 })
 </script>
 
 <template>
       <div class="row">
-            <NavbarComplet :lateral="'ambiente'"/>
+            <NavbarComplet 
+                  :lateral="'ambiente'"
+                  :have_erro="have_fetch_error"
+            />
             <div class="col-12 col-lg-10" id="content">
-                  <div class="row">
-                        <div class="col-1"></div>
-                        <div class="Card-Body col-8">
-                              <form @submit.prevent="editRequest" class="row form_content" novalidate>
-                                   <!-- Canal -->
-                                   <div class="col-2 form_text">
-                                          *Canal:
-                                    </div>
-                                    <div class="col-8">
-                                          <span v-if="requested">
-                                                <select class="custom-select" v-model="ambiente.canalAlias">
-                                                      <option selected disabled :value="{}"> Selecione o campo</option>
-                                                      <option v-for="header in canais_requested" :key="header['codigo' as keyof typeof header]" :value="header['alias' as keyof typeof header]"> {{ header['descricao' as keyof typeof header] }} | {{ header['tipo' as keyof typeof header] }}</option>
-                                                </select>
-                                          </span>
-                                          <span v-else>
-                                                <LoaderSkeleton 
-                                                      :tipo_loader="'select'"
-                                                />
-                                          </span>
-                                          <ErroFormComponent
-                                          :mensagem="'Por favor informe o canal.'"
-                                          :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='canalAlias') != -1}]"
-                                          />
-                                    </div>
-                                    <div class="col-2"></div>
-                                    <!-- Url -->
-                                    <div class="col-2 form_text">
-                                          *Url:
-                                    </div>
-                                    <div class="col-8">
-                                          <input type="text" class="form-control" v-model="ambiente.url">
-                                          <ErroFormComponent
-                                          :mensagem="'Por favor informe o URL.'"
-                                          :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='url') != -1}]"
-                                          />
-                                    </div>
-                                    <div class="col-2"></div>
-                                    <!-- Versão -->
-                                    <div class="col-2 form_text">
-                                          *Versão:
-                                    </div>
-                                    <div class="col-8">
-                                          <input type="text" class="form-control" v-model="ambiente.versao">
-                                          <ErroFormComponent
-                                          :mensagem="'Por favor informe o versão.'"
-                                          :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='versao') != -1}]"
-                                          />
-                                    </div>
-                                    <div class="col-2"></div>
-                                    <!-- Ambiente -->
-                                    <div class="col-2 form_text">
-                                          *Ambiente:
-                                    </div>
-                                    <div class="col-8">
-                                          <select class="custom-select" v-model="ambiente.ambiente">
-                                                <option selected disabled :value="{}"> Selecione o campo</option>
-                                                <option v-for="header in ambientes" :key="header.name" :value="header.value"> {{ header.name }}</option>
-                                          </select>
-                                          <ErroFormComponent
-                                          :mensagem="'Por favor informe o ambiente.'"
-                                          :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='ambiente') != -1}]"
-                                          />
-                                    </div>
-                                    <div class="col-2"></div>
-                                    <!-- Status -->
-                                    <div class="col-2 form_text">
-                                          *Status:
-                                    </div>
-                                    <div class="col-8">
-                                          <div class="form-check form-switch">
-                                                <input style="height: 1.75em; width: 3.5em;" class="form-check-input" type="checkbox" role="switch" v-model="status_aux" aria-checked="mixed">
+                  <span v-if="!have_fetch_error">
+                        <div class="row">
+                              <div class="col-1"></div>
+                              <div class="Card-Body col-8">
+                                    <form @submit.prevent="editRequest" class="row form_content" novalidate>
+                                         <!-- Canal -->
+                                         <div class="col-2 form_text">
+                                                *Canal:
                                           </div>
-                                    </div>
-                                    <div class="col-2"></div>
-
-                                    <div style="margin-top: 16px;" class="col-12">
-                                          <ErroFormComponent
-                                          :mensagem="'Edite antes de salvar'"
-                                          :class="['alert-warning desativada',{'ativada' : errors.findIndex((x) => x =='igual') != -1}]"
-                                          />
-                                          <button class="btn btn-primary col-2" :disabled="isEditing || !requested">
-                                                <span>Iditar</span>
-                                          </button>
-                                          <button class="btn btn-light col-2" style="margin-left: 24px;" @click="voltarAmbiente()">
-                                                <span>Cancelar</span>
-                                          </button>
-                                    </div>
-                              </form>
+                                          <div class="col-8">
+                                                <span v-if="requested">
+                                                      <select class="custom-select" v-model="ambiente.canalAlias">
+                                                            <option selected disabled :value="{}"> Selecione o campo</option>
+                                                            <option v-for="header in canais_requested" :key="header['codigo' as keyof typeof header]" :value="header['alias' as keyof typeof header]"> {{ header['descricao' as keyof typeof header] }} | {{ header['tipo' as keyof typeof header] }}</option>
+                                                      </select>
+                                                </span>
+                                                <span v-else>
+                                                      <LoaderSkeleton 
+                                                            :tipo_loader="'select'"
+                                                      />
+                                                </span>
+                                                <ErroFormComponent
+                                                :mensagem="'Por favor informe o canal.'"
+                                                :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='canalAlias') != -1}]"
+                                                />
+                                          </div>
+                                          <div class="col-2"></div>
+                                          <!-- Url -->
+                                          <div class="col-2 form_text">
+                                                *Url:
+                                          </div>
+                                          <div class="col-8">
+                                                <input type="text" class="form-control" v-model="ambiente.url">
+                                                <ErroFormComponent
+                                                :mensagem="'Por favor informe o URL.'"
+                                                :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='url') != -1}]"
+                                                />
+                                          </div>
+                                          <div class="col-2"></div>
+                                          <!-- Versão -->
+                                          <div class="col-2 form_text">
+                                                *Versão:
+                                          </div>
+                                          <div class="col-8">
+                                                <input type="text" class="form-control" v-model="ambiente.versao">
+                                                <ErroFormComponent
+                                                :mensagem="'Por favor informe o versão.'"
+                                                :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='versao') != -1}]"
+                                                />
+                                          </div>
+                                          <div class="col-2"></div>
+                                          <!-- Ambiente -->
+                                          <div class="col-2 form_text">
+                                                *Ambiente:
+                                          </div>
+                                          <div class="col-8">
+                                                <select class="custom-select" v-model="ambiente.ambiente">
+                                                      <option selected disabled :value="{}"> Selecione o campo</option>
+                                                      <option v-for="header in ambientes" :key="header.name" :value="header.value"> {{ header.name }}</option>
+                                                </select>
+                                                <ErroFormComponent
+                                                :mensagem="'Por favor informe o ambiente.'"
+                                                :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='ambiente') != -1}]"
+                                                />
+                                          </div>
+                                          <div class="col-2"></div>
+                                          <!-- Status -->
+                                          <div class="col-2 form_text">
+                                                *Status:
+                                          </div>
+                                          <div class="col-8">
+                                                <div class="form-check form-switch">
+                                                      <input style="height: 1.75em; width: 3.5em;" class="form-check-input" type="checkbox" role="switch" v-model="status_aux" aria-checked="mixed">
+                                                </div>
+                                          </div>
+                                          <div class="col-2"></div>
+      
+                                          <div style="margin-top: 16px;" class="col-12">
+                                                <ErroFormComponent
+                                                :mensagem="'Edite antes de salvar'"
+                                                :class="['alert-warning desativada',{'ativada' : errors.findIndex((x) => x =='igual') != -1}]"
+                                                />
+                                                <button class="btn btn-primary col-2" :disabled="isEditing || !requested">
+                                                      <span>Iditar</span>
+                                                </button>
+                                                <button class="btn btn-light col-2" style="margin-left: 24px;" @click="voltarAmbiente()">
+                                                      <span>Cancelar</span>
+                                                </button>
+                                          </div>
+                                    </form>
+                              </div>
+                              <div class="col-3"></div>
                         </div>
-                        <div class="col-3"></div>
-                  </div>
+                  </span>
+                  <span v-else>
+                        <ErroResponseComponent 
+                              :error_msg="fetch_error_msg"
+                        />
+                  </span>
             </div>
             <VersaoMaximisada />
       </div>

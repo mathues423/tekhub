@@ -6,28 +6,52 @@ import CriarBotao from '@/components/util/CriarBotaoComponent.vue';
 import VersaoMaximisada from '@/components/versionamento/VersaoMaximisada.vue';
 import router from '@/router';
 import { defineComponent } from 'vue';
+import ErroResponseComponent from "@/components/mensagem/ErroResponseComponent.vue";
 
 export default defineComponent({
+      data() {
+            return{
+                  fetch_error_msg : {},
+                  have_fetch_error : false,
+            }
+      },
       components:{
             NavbarComplet,
             CriarBotao,
             EmpresaComponent,
             VersaoMaximisada,
+            ErroResponseComponent
       },
       methods:{
             adicionarNewempresa(){
                   router.push('/empresas/0');
             },
+            showError(objeto_erro: object){
+                  this.fetch_error_msg = objeto_erro;
+                  this.have_fetch_error = true;
+            }
       }
 })
 </script>
 
 <template>
       <div class="row">
-            <NavbarComplet :lateral="'empresas'"/>
+            <NavbarComplet 
+                  :have_erro="have_fetch_error"
+                  :lateral="'empresas'"
+            />
             <div class="col-12 col-lg-10" id="content" style="padding-left: calc(var(--bs-gutter-x));">
-                  <CriarBotao @criar="adicionarNewempresa" />
-                  <EmpresaComponent />
+                  <span v-if="!have_fetch_error">
+                        <CriarBotao @criar="adicionarNewempresa" />
+                        <EmpresaComponent 
+                              @Erro_fetch="(ret)=> showError(ret)"
+                        />
+                  </span>
+                  <span v-else>
+                        <ErroResponseComponent 
+                              :error_msg="fetch_error_msg"
+                        />
+                  </span>
             </div>
             <VersaoMaximisada />
       </div>

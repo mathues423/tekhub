@@ -207,6 +207,7 @@ export default defineComponent({
                   @recuar="recuarPagina" 
             />
       </div>
+      
 </template>
 
 <style scoped>

@@ -7,81 +7,80 @@ import FiltroPaiComponent from '../util/busca/FiltroPaiComponent.vue';
 import ListaCardComponent from '../util/lista/ListaCardComponent.vue';
 import LoaderListaCardComponent from '../util/Loaders/LoaderListaCardComponent.vue';
 
-
 export default defineComponent({
       template: '#Canl_comp',
       data() {
-          return {
-            lista_opc_pagina_card: [
-                  {'text': '12', 'value': 12},
-                  {'text': '30', 'value': 30},
-                  {'text': '60', 'value': 60},
-                  {'text': 'all', 'value': 0},
-            ],
-            lista_opc_pagina_not_card: [
-                  {'text': '10', 'value': 10},
-                  {'text': '25', 'value': 25},
-                  {'text': '50', 'value': 50},
-                  {'text': '100', 'value': 100},
-                  {'text': 'all', 'value': 0},
-            ],
-            lista_estado: 'Loader',
-            itsOnFilter: false,
-            ITEM_PAGINA_MAX : 10,
-            NUMERO_PAGINA: 1,
-            pagina_atual: 1,
-            dado_paginado:{
-                  header:[
-                        {'header': 'Código', 'key_body': 'codigo',
-                        'filtro':{'tipo_obj': 'Number', 'tipo_filtro': 'all'},
-                        'isfiltrable': true, 'isordenable':false},
-
-                        {'header': 'Descrição', 'key_body': 'descricao',
-                        'filtro':{'tipo_obj': 'String', 'tipo_filtro': 'all'},
-                        'isfiltrable': true, 'isordenable':false},
-
-                        {'header': 'Alias', 'key_body': 'alias',
-                        'filtro':{'tipo_obj': 'String', 'tipo_filtro': 'all'},
-                        'isfiltrable': true, 'isordenable':false},
-
-                        {'header': 'TIPO', 'key_body': 'tipo',
-                        'filtro':{'tipo_obj': 'String', 'tipo_filtro': 'pre'},
-                        'isfiltrable': true, 'isordenable':false},
-
-                        {'header': 'Canal associado', 'key_body': 'vazio',
-                        'filtro':{'tipo_obj': '????', 'tipo_filtro': 'all'},
-                        'isfiltrable': true, 'isordenable':false},
-
-                        {'header': 'Ações', 'key_body': 'button',
-                        'isfiltrable': false, 'isordenable':false}
+            return {
+                  lista_opc_pagina_card: [
+                        {'text': '12', 'value': 12},
+                        {'text': '30', 'value': 30},
+                        {'text': '60', 'value': 60},
+                        {'text': 'all', 'value': 0},
                   ],
-                  body: [] as Array<object>
-            },
-            dado_pesquisa:{
-                  header:[
-                        {'header': 'Código', 'key_body': 'codigo',
-                        'isfiltrable': false, 'isordenable':false},
-
-                        {'header': 'Descrição', 'key_body': 'descricao',
-                        'isfiltrable': false, 'isordenable':false},
-
-                        {'header': 'Alias', 'key_body': 'alias',
-                        'isfiltrable': false, 'isordenable':false},
-
-                        {'header': 'TIPO', 'key_body': 'tipo',
-                        'isfiltrable': false, 'isordenable':false},
-
-                        {'header': 'Canal associado', 'key_body': 'vazio',
-                        'isfiltrable': false, 'isordenable':false},
-
-                        {'header': 'Ações', 'key_body': 'button',
-                        'isfiltrable': false, 'isordenable':false}
+                  lista_opc_pagina_not_card: [
+                        {'text': '10', 'value': 10},
+                        {'text': '25', 'value': 25},
+                        {'text': '50', 'value': 50},
+                        {'text': '100', 'value': 100},
+                        {'text': 'all', 'value': 0},
                   ],
-                  body: [] as Array<object>
-            },
-            its_card: false,
-            largura: window.innerWidth
-          }
+                  lista_estado: 'Loader',
+                  itsOnFilter: false,
+                  ITEM_PAGINA_MAX : 10,
+                  NUMERO_PAGINA: 1,
+                  pagina_atual: 1,
+                  dado_paginado:{
+                        header:[
+                              {'header': 'Código', 'key_body': 'codigo',
+                              'filtro':{'tipo_obj': 'Number', 'tipo_filtro': 'all'},
+                              'isfiltrable': true, 'isordenable':false},
+
+                              {'header': 'Descrição', 'key_body': 'descricao',
+                              'filtro':{'tipo_obj': 'String', 'tipo_filtro': 'all'},
+                              'isfiltrable': true, 'isordenable':false},
+
+                              {'header': 'Alias', 'key_body': 'alias',
+                              'filtro':{'tipo_obj': 'String', 'tipo_filtro': 'all'},
+                              'isfiltrable': true, 'isordenable':false},
+
+                              {'header': 'TIPO', 'key_body': 'tipo',
+                              'filtro':{'tipo_obj': 'String', 'tipo_filtro': 'pre'},
+                              'isfiltrable': true, 'isordenable':false},
+
+                              {'header': 'Canal associado', 'key_body': 'vazio',
+                              'filtro':{'tipo_obj': '????', 'tipo_filtro': 'all'},
+                              'isfiltrable': true, 'isordenable':false},
+
+                              {'header': 'Ações', 'key_body': 'button',
+                              'isfiltrable': false, 'isordenable':false}
+                        ],
+                        body: [] as Array<object>
+                  },
+                  dado_pesquisa:{
+                        header:[
+                              {'header': 'Código', 'key_body': 'codigo',
+                              'isfiltrable': false, 'isordenable':false},
+
+                              {'header': 'Descrição', 'key_body': 'descricao',
+                              'isfiltrable': false, 'isordenable':false},
+
+                              {'header': 'Alias', 'key_body': 'alias',
+                              'isfiltrable': false, 'isordenable':false},
+
+                              {'header': 'TIPO', 'key_body': 'tipo',
+                              'isfiltrable': false, 'isordenable':false},
+
+                              {'header': 'Canal associado', 'key_body': 'vazio',
+                              'isfiltrable': false, 'isordenable':false},
+
+                              {'header': 'Ações', 'key_body': 'button',
+                              'isfiltrable': false, 'isordenable':false}
+                        ],
+                        body: [] as Array<object>
+                  },
+                  its_card: false,
+                  largura: window.innerWidth
+            }
       },
       components:{
             LoaderListaComponent,
@@ -116,10 +115,10 @@ export default defineComponent({
             },
             deletar(objeto: {codigo: string}){
                   let aux = {'roter_externa': 'canal', 'id': objeto.codigo, 'roter_interna': 'canais'}
-                  Promise.resolve(store.dispatch('delDadosID', aux))
+                  store.dispatch('delDadosID', aux)
                   .then(
                         () => this.requestDados()
-                  ).catch((error)=> { console.warn(error) })
+                  ).catch((error_retorno)=> this.$emit('Erro_fetch', error_retorno))
             },
             avancaPagina(){
                   if (this.pagina_atual < this.NUMERO_PAGINA) {
@@ -149,7 +148,7 @@ export default defineComponent({
                               this.NUMERO_PAGINA = 1;
                         }
                         this.lista_estado = 'Lista'
-                  })
+                  }).catch((error_retorno)=> this.$emit('Erro_fetch', error_retorno))
             },
             filtraCanais(){
                   this.itsOnFilter = true;
@@ -171,7 +170,7 @@ export default defineComponent({
                         this.NUMERO_PAGINA = 1;
                         this.dado_pesquisa.body = store.getters.getCanais_pesquisa;
                         this.lista_estado = 'Lista'
-                  })
+                  }).catch((error_retorno)=> this.$emit('Erro_fetch', error_retorno))
             },
             changeItemPagina(quantidade: number){
                   this.pagina_atual = 1;
@@ -179,11 +178,12 @@ export default defineComponent({
                   this.requestDados()
             }
       },
+      emits:['Erro_fetch']
 })
 </script>
 
 <template id="Canl_comp">
-      <div class="row my-2">
+      <div class="row">
             <FiltroPaiComponent v-if="!its_card"
                   :itsOnFilter="itsOnFilter"
                   :header="dado_paginado.header"

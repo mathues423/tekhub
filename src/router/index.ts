@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
-import PaginaNotFaundView from '@/views/PaginaNotFaundView.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -8,11 +7,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'home',
     component: HomeView
   },
-  {
-    path: '/404',
-    name: 'PageNotFaund',
-    component: PaginaNotFaundView
-  },
+  // {
+  //   path: '/404',
+  //   name: 'PageNotFaund',
+  //   component: PaginaNotFaundView
+  // },
   {
     path: '/dashboard',
     name: 'dashboard',
@@ -153,7 +152,15 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/usuarios/0',
     name: 'usuarios_criacao',
-    component: () => import ('@/views/Usuario/UsuarioNew.vue'),
+    component: () => import ('@/views/Usuario/UsuarioNewView.vue'),
+    meta:{
+      auth: true
+    }
+  },
+  {
+    path: '/usuarios/:id',
+    name: 'usuarios_edicao',
+    component: () => import ('@/views/Usuario/UsuarioEdicaoView.vue'),
     meta:{
       auth: true
     }
@@ -186,10 +193,9 @@ router.beforeEach(async (to, from, next) => {
   //FROM Onde eu estava
   //NEXT Passa para a pagina 
 
-  // ERRO 404
-  if(routes.map((x) => x.name).indexOf(to.name) == -1){
-    next({name:'PageNotFaund'}); //Fazer a pagina erro 404
-  }
+  // if(routes.map((x) => x.name).indexOf(to.name) == -1){
+  //   next({name:'PageNotFaund'}); //Fazer a pagina erro 404
+  // }
   
   next();
 });

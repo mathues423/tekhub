@@ -1,4 +1,5 @@
 <script lang="ts">
+import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
 import NavbarComplet from '@/components/util/navbars/NavbarComplet.vue';
 import VersaoMaximisada from '@/components/versionamento/VersaoMaximisada.vue';
 import fetch_ from '@/services/fetch/requisicao';
@@ -7,28 +8,47 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
       data() {
-          return {
+            return {
+                  fetch_error_msg: {},
+                  have_fetch_error: false,
                   teste:{}
-          }
+            }
       },
       mounted() {
           Promise.resolve(fetch_.getDado('/atualizacaoecommerce'))
           .then((ret)=> this.teste = ret)
+          .catch((error_retorno)=> this.showError(error_retorno))
       },
       components:{
             NavbarComplet,
-            // DashboardComponent,
             VersaoMaximisada,
+            ErroResponseComponent,
+      },
+      methods:{
+            showError(objeto_erro: object){
+                  this.fetch_error_msg = objeto_erro;
+                  this.have_fetch_error = true;
+            }
       }
 })
 </script>
 
 <template>
       <div class="row">
-            <NavbarComplet :lateral="'log_att'"/>
+            <NavbarComplet 
+                  :have_erro="have_fetch_error"
+                  :lateral="'log_att'"
+            />
             <div class="col-12 col-lg-10" id="content" style="padding-left: calc(var(--bs-gutter-x));">
-                  Placeholder <br>
-                  {{ teste }}
+                  <span v-if="!have_fetch_error">
+                        Placeholder <br>
+                        {{ teste }}
+                  </span>
+                  <span v-else>
+                        <ErroResponseComponent
+                              :error_msg="fetch_error_msg" 
+                        />
+                  </span>
             </div>
             <VersaoMaximisada />
       </div>

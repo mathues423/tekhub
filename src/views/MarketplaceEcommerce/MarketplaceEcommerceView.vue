@@ -8,10 +8,13 @@ import BuscaEmpresaComponent from '@/components/util/BuscaEmpresaComponent.vue';
 import fetch_ from '@/services/fetch/requisicao';
 import { defineComponent } from 'vue';
 import store from '@/store';
+import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
 
 export default defineComponent({
       data(){
             return {
+                  fetch_error_msg: {},
+                  have_fetch_error: false,
                   lista_estado: 'Loader',
                   itsOnEmpresa: false,
                   id_empresa: -1,
@@ -75,7 +78,8 @@ export default defineComponent({
             MarketplaceEcommerceComponent,
             CriarBotaoComponent,
             VersaoMaximisada,
-            BuscaEmpresaComponent
+            BuscaEmpresaComponent,
+            ErroResponseComponent
       },
       async mounted() {
             this.dado_parametro.header = this.dado_paginado.header;
@@ -104,14 +108,14 @@ export default defineComponent({
                         this.lista_estado = 'Lista';
                         this.itsOnEmpresa = true;
                         this.id_empresa = id;
-                  })
+                  }).catch((error_retorno)=> this.showError(error_retorno))
             },
             deletar(objeto: {codigo: string}){
                   let aux = {'roter_externa': 'integracaomarketplaceecommerce', 'id': objeto.codigo, 'roter_interna': 'marketplaceecommerce'}
                   Promise.resolve(store.dispatch('delDadosID', aux))
                   .then(
                         () => this.requestDados()
-                  ).catch((error)=> { console.warn(error) })
+                  ).catch((error_retorno)=> this.showError(error_retorno))
             },
             avancaPagina(){
                   if (this.pagina_atual < this.NUMERO_PAGINA) {
@@ -138,7 +142,7 @@ export default defineComponent({
                         this.NUMERO_PAGINA = Math.ceil(store.getters.getMarketplaceEcommerceLength / this.ITEM_PAGINA_MAX);
                         this.lista_estado = 'Lista';
                         this.dado_parametro = this.dado_paginado;
-                  })
+                  }).catch((error_retorno)=> this.showError(error_retorno))
             },
             ordenaMarketplaceEcommerce(title: {ordem: {tipo_ordenacao : string, on: boolean, tipo_obj: string}, key_body: string}){
                   this.dado_paginado.header.forEach(
@@ -179,10 +183,7 @@ export default defineComponent({
                   }).then(() => {
                         this.dado_pesquisa.body = store.getters.getMarketplaceEcommerce_pesquisa;
                         this.lista_estado = 'Lista'
-                  }).catch(()=> {
-                        this.dado_pesquisa.body = []
-                        this.lista_estado = 'Lista'
-                  })
+                  }).catch((error_retorno)=> this.showError(error_retorno))
             },
             quantidadeItens(args: number){
                   this.pagina_atual = 1;
@@ -192,6 +193,10 @@ export default defineComponent({
                   }else{
                         this.requestDados()
                   }
+            },
+            showError(objeto_erro: object){
+                  this.fetch_error_msg = objeto_erro;
+                  this.have_fetch_error = true;
             }
       }
 })
@@ -199,31 +204,42 @@ export default defineComponent({
 
 <template>
       <div class="row">
-            <NavbarComplet :lateral="'mark_ecom'"/>
+            <NavbarComplet 
+                  :have_erro="have_fetch_error"
+                  :lateral="'mark_ecom'"
+            />
             <div class="col-12 col-lg-10" id="content" style="padding-left: calc(var(--bs-gutter-x));">
-                  <BuscaEmpresaComponent 
-                        :inRequest="inRequestEmpresa"
-                        @id_empresa="(arg)=> request_empresa(arg)"
-                  />
-                  <CriarBotaoComponent @criar="adicionarNewmarketplaceecommerce"/>
-                  <MarketplaceEcommerceComponent 
-                        :ITEM_PAGINA_MAX="ITEM_PAGINA_MAX"
-                        :NUMERO_PAGINA="NUMERO_PAGINA"
-                        :dado="dado_parametro"
-                        :its-on-filter="itsOnFilter"
-                        :lista_estado="lista_estado"
-                        :pagina_atual="pagina_atual"
-
-                        @deletar="(arg : any) => deletar(arg)"
-
-                        @filtraMarketplaceEcommerce="filtraMarketplaceEcommerce"
-                        @closefiltrarMarketplaceEcommerce="closefiltrarMarketplaceEcommerce"
-                        @getPesquisa="(arg: string)=> getPesquisa(arg)"
-                        @ordenaMarketplaceEcommerce="(arg : any) => ordenaMarketplaceEcommerce(arg)"
-                        @quantidadeItens="(args: number)=> quantidadeItens(args)"
-                        @avancaPagina="avancaPagina" 
-                        @recuarPagina="recuarPagina"
-                  />
+                  <span v-if="!have_fetch_error">
+                        <BuscaEmpresaComponent 
+                              :inRequest="inRequestEmpresa"
+                              @id_empresa="(arg)=> request_empresa(arg)"
+                              @Erro_fetch="(arg)=> showError(arg)"
+                        />
+                        <CriarBotaoComponent @criar="adicionarNewmarketplaceecommerce"/>
+                        <MarketplaceEcommerceComponent 
+                              :ITEM_PAGINA_MAX="ITEM_PAGINA_MAX"
+                              :NUMERO_PAGINA="NUMERO_PAGINA"
+                              :dado="dado_parametro"
+                              :its-on-filter="itsOnFilter"
+                              :lista_estado="lista_estado"
+                              :pagina_atual="pagina_atual"
+      
+                              @deletar="(arg : any) => deletar(arg)"
+      
+                              @filtraMarketplaceEcommerce="filtraMarketplaceEcommerce"
+                              @closefiltrarMarketplaceEcommerce="closefiltrarMarketplaceEcommerce"
+                              @getPesquisa="(arg: string)=> getPesquisa(arg)"
+                              @ordenaMarketplaceEcommerce="(arg : any) => ordenaMarketplaceEcommerce(arg)"
+                              @quantidadeItens="(args: number)=> quantidadeItens(args)"
+                              @avancaPagina="avancaPagina" 
+                              @recuarPagina="recuarPagina"
+                        />
+                  </span>
+                  <span v-else>
+                        <ErroResponseComponent 
+                              :error_msg="fetch_error_msg"
+                        />
+                  </span>
             </div>
             <VersaoMaximisada />
       </div>

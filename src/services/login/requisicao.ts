@@ -41,7 +41,7 @@ class UserDados {
                   return data
             } catch (error) {
                   erros.vericação = true;
-                  return error
+                  throw error
             }
       }
 

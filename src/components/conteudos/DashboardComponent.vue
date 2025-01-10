@@ -7,13 +7,17 @@ export default defineComponent({
       template: '#Dash_comp',
       data() {
             return{
-                  teste: {}
+                  teste: {},
+                  auth: ''
             }
       },
       mounted() {
-          Promise.resolve(fetch_.getDado('/atualizacaoecommerce/pendentes'))
-          .then((ret)=> this.teste = ret)
+            Promise.resolve(fetch_.getDado('/atualizacaoecommerce/pendentes'))
+            .then((ret)=> {
+                  this.teste = ret
+            }).catch((error_retorno)=> this.$emit('Erro_fetch', error_retorno))
       },
+      emits:['Erro_fetch']
 })
 </script>
 

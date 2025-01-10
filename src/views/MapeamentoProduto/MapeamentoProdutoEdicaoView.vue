@@ -8,10 +8,13 @@ import store from '@/store';
 import regra_mapeamento from '@/services/regras_negocio/regras_mapeamentoprodutos';
 import fetch_ from '@/services/fetch/requisicao';
 import LoaderSkeleton from '@/components/util/Loaders/LoaderSkeleton.vue';
+import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
 
 export default defineComponent({
       data(){
             return {
+                  fetch_error_msg: {},
+                  have_fetch_error: false,
                   mapeamentoproduto:{
                         empresa: {},
                         canal: {},
@@ -39,7 +42,8 @@ export default defineComponent({
             NavbarComplet,
             VersaoMaximisada,
             LoaderSkeleton,
-            ErroFormComponent
+            ErroFormComponent,
+            ErroResponseComponent
       },
       mounted() {
             const rota_id = (this.$route.params['id'] || '-1') as string;
@@ -56,25 +60,26 @@ export default defineComponent({
                                     }
                               })
                               this.inRequestCanal = false;
-                        })
-                  })
+                        }).catch((error_retorno)=> this.showError(error_retorno))
+                  }).catch((error_retorno)=> this.showError(error_retorno))
 
 
                   this.mapeamentoproduto.produtoErp = this.mapeamentoproduto_old.produtoErp = value.produtoErp;
                   this.mapeamentoproduto.produtoSite = this.mapeamentoproduto_old.produtoSite = value.produtoSite;
                   this.mapeamentoproduto.produtoPai = this.mapeamentoproduto_old.produtoPai = value.produtoPaiSite;
-            });
+            }).catch((error_retorno)=> this.showError(error_retorno));
+
             this.inRequestEmpresa = true;
             Promise.resolve(fetch_.getDado('/empresa')).then(
                   (empresas)=>{
                         this.empresa_request = empresas.data;
                         this.inRequestEmpresa = false;
-            })
+            }).catch((error_retorno)=> this.showError(error_retorno))
             this.inRequestCanal = true;
             Promise.resolve(fetch_.getDado(`/integracaomarketplaceecommerce/?pagina=1&porPagina=0&ordenacao=codigo&direcao=ASC`)).then(
                   (canal)=>{
                         this.canal_request = canal.data;
-            })
+            }).catch((error_retorno)=> this.showError(error_retorno))
       },
       methods:{
             async editRequest(){
@@ -93,13 +98,17 @@ export default defineComponent({
                         Promise.resolve(
                               store.dispatch('setDadosID_notCodigo', {'roter_externa': 'mapeamentoprodudo','id': id, 'new_dado': aux, 'roter_interna': 'mapeamentoprodudo'})
                               .then(()=> this.voltarMapeamentoProduto())
-                        )
+                        ).catch((error_retorno)=> this.showError(error_retorno))
                         this.editando = false;
                   }
                   
             },
             voltarMapeamentoProduto(){
                   router.push('/mapeamentoprodutos');
+            },
+            showError(objeto_erro: object){
+                  this.fetch_error_msg = objeto_erro;
+                  this.have_fetch_error = true;
             }
       }
 })
@@ -107,110 +116,120 @@ export default defineComponent({
 
 <template>
       <div class="row">
-            <NavbarComplet :lateral="'map_pro'"/>
+            <NavbarComplet 
+                  :have_erro="have_fetch_error"
+                  :lateral="'map_pro'"
+            />
             <div class="col-12 col-lg-10" id="content" style="padding-left: calc(var(--bs-gutter-x));">
-                  <div class="row">
-                        <div class="col-1"></div>
-                        <div class="Card-Body col-8">
-                              <form @submit.prevent="editRequest()" class="row form_content" novalidate>
-                                    <!-- Empresa -->
-                                    <div class="col-2 form_text">
-                                          *Empresa:
-                                    </div>
-                                    <div class="col-8">
-                                          <div v-show="inRequestEmpresa">
-                                                <LoaderSkeleton 
-                                                      :tipo_loader="'select'"
+                  <span v-if="!have_fetch_error">
+                        <div class="row">
+                              <div class="col-1"></div>
+                              <div class="Card-Body col-8">
+                                    <form @submit.prevent="editRequest()" class="row form_content" novalidate>
+                                          <!-- Empresa -->
+                                          <div class="col-2 form_text">
+                                                *Empresa:
+                                          </div>
+                                          <div class="col-8">
+                                                <div v-show="inRequestEmpresa">
+                                                      <LoaderSkeleton 
+                                                            :tipo_loader="'select'"
+                                                      />
+                                                </div>
+                                                <select class="custom-select w-100" v-model="mapeamentoproduto.empresa" required v-show="!inRequestEmpresa">
+                                                      <option selected disabled :value="{}"> Selecione o campo</option>
+                                                      <option v-for="empresa in empresa_request" :key="empresa" :value="empresa"> {{ empresa['descricao' as keyof typeof empresa] }}</option>
+                                                </select>
+                                                <ErroFormComponent
+                                                      :mensagem="'Por favor informe a Empresa.'"
+                                                      :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='empresa') != -1}]"
                                                 />
                                           </div>
-                                          <select class="custom-select w-100" v-model="mapeamentoproduto.empresa" required v-show="!inRequestEmpresa">
-                                                <option selected disabled :value="{}"> Selecione o campo</option>
-                                                <option v-for="empresa in empresa_request" :key="empresa" :value="empresa"> {{ empresa['descricao' as keyof typeof empresa] }}</option>
-                                          </select>
-                                          <ErroFormComponent
-                                                :mensagem="'Por favor informe a Empresa.'"
-                                                :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='empresa') != -1}]"
-                                          />
-                                    </div>
-                                    <div class="col-2"></div>
-                                    <!-- Canal -->
-                                    <div class="col-2 form_text">
-                                          *Canal de Venda:
-                                    </div>
-                                    <div class="col-8">
-                                          <div v-show="inRequestCanal">
-                                                <LoaderSkeleton 
-                                                      :tipo_loader="'select'"
+                                          <div class="col-2"></div>
+                                          <!-- Canal -->
+                                          <div class="col-2 form_text">
+                                                *Canal de Venda:
+                                          </div>
+                                          <div class="col-8">
+                                                <div v-show="inRequestCanal">
+                                                      <LoaderSkeleton 
+                                                            :tipo_loader="'select'"
+                                                      />
+                                                </div>
+                                                <select class="custom-select w-100" v-model="mapeamentoproduto.canal" required v-show="!inRequestCanal">
+                                                      <option selected disabled :value="{}"> Selecione o campo</option>
+                                                      <option v-for="canal in canal_request" :key="canal" :value="canal"> {{ canal['ambienteCanalAlias' as keyof typeof canal] }}</option>
+                                                </select>
+                                                <ErroFormComponent
+                                                      :mensagem="'Por favor informe a Canal.'"
+                                                      :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='canal') != -1}]"
                                                 />
                                           </div>
-                                          <select class="custom-select w-100" v-model="mapeamentoproduto.canal" required v-show="!inRequestCanal">
-                                                <option selected disabled :value="{}"> Selecione o campo</option>
-                                                <option v-for="canal in canal_request" :key="canal" :value="canal"> {{ canal['ambienteCanalAlias' as keyof typeof canal] }}</option>
-                                          </select>
-                                          <ErroFormComponent
-                                                :mensagem="'Por favor informe a Canal.'"
-                                                :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='canal') != -1}]"
-                                          />
-                                    </div>
-                                    <div class="col-2"></div>
-                                    <!-- ProdutoERP -->
-                                    <div class="col-2 form_text">
-                                          *Produto Erp:
-                                    </div>
-                                    <div class="col-8">
-                                          <input type="text" class="form-control" v-model="mapeamentoproduto.produtoErp" required>
-                                          <ErroFormComponent
-                                          :mensagem="'Por favor informe a Produto Erp.'"
-                                          :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='produtoErp') != -1}]"
-                                          />
-                                    </div>
-                                    <div class="col-2"></div>
-                                    <!-- ProdutoSite -->
-                                    <div class="col-2 form_text">
-                                          *Produto Site:
-                                    </div>
-                                    <div class="col-8">
-                                          <input type="text" class="form-control" v-model="mapeamentoproduto.produtoSite" required>
-                                          <ErroFormComponent
-                                          :mensagem="'Por favor informe a Produto Site.'"
-                                          :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='produtoSite') != -1}]"
-                                          />
-                                    </div>
-                                    <div class="col-2"></div>
-                                    <!-- ProdutoPai -->
-                                    <div class="col-2 form_text">
-                                          Produto Pai:
-                                    </div>
-                                    <div class="col-8">
-                                          <input type="text" class="form-control" v-model="mapeamentoproduto.produtoPai" required>
-                                          <ErroFormComponent
-                                          :mensagem="'Por favor informe a Produto Pai.'"
-                                          :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='produtoPai') != -1}]"
-                                          />
-                                    </div>
-                                    <div class="col-2"></div>
-                                    
-                                    <div class="my-2 col alert alert-warning">
-                                          <div style="color:black;"> Máscara do Produto ERP </div>
-                                          <span>{{ alert_mensag }}</span>
-                                    </div>
-
-                                    <div style="margin-top: 16px;" class="col-12">
-                                          <ErroFormComponent
-                                          :mensagem="'Edite antes de salvar.'"
-                                          :class="['alert-warning desativada',{'ativada' : errors.findIndex((x) => x =='igual') != -1}]"
-                                          />
-                                          <button class="btn btn-primary col-2" :disabled="inRequestCanal || inRequestEmpresa || editando">
-                                                <span>Editar</span>
-                                          </button>
-                                          <button class="btn btn-light col-2" style="margin-left: 24px;" @click="voltarMapeamentoProduto()">
-                                                <span>Voltar</span>
-                                          </button>
-                                    </div>
-                              </form>
+                                          <div class="col-2"></div>
+                                          <!-- ProdutoERP -->
+                                          <div class="col-2 form_text">
+                                                *Produto Erp:
+                                          </div>
+                                          <div class="col-8">
+                                                <input type="text" class="form-control" v-model="mapeamentoproduto.produtoErp" required>
+                                                <ErroFormComponent
+                                                :mensagem="'Por favor informe a Produto Erp.'"
+                                                :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='produtoErp') != -1}]"
+                                                />
+                                          </div>
+                                          <div class="col-2"></div>
+                                          <!-- ProdutoSite -->
+                                          <div class="col-2 form_text">
+                                                *Produto Site:
+                                          </div>
+                                          <div class="col-8">
+                                                <input type="text" class="form-control" v-model="mapeamentoproduto.produtoSite" required>
+                                                <ErroFormComponent
+                                                :mensagem="'Por favor informe a Produto Site.'"
+                                                :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='produtoSite') != -1}]"
+                                                />
+                                          </div>
+                                          <div class="col-2"></div>
+                                          <!-- ProdutoPai -->
+                                          <div class="col-2 form_text">
+                                                Produto Pai:
+                                          </div>
+                                          <div class="col-8">
+                                                <input type="text" class="form-control" v-model="mapeamentoproduto.produtoPai" required>
+                                                <ErroFormComponent
+                                                :mensagem="'Por favor informe a Produto Pai.'"
+                                                :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='produtoPai') != -1}]"
+                                                />
+                                          </div>
+                                          <div class="col-2"></div>
+                                          
+                                          <div class="my-2 col alert alert-warning">
+                                                <div style="color:black;"> Máscara do Produto ERP </div>
+                                                <span>{{ alert_mensag }}</span>
+                                          </div>
+      
+                                          <div style="margin-top: 16px;" class="col-12">
+                                                <ErroFormComponent
+                                                :mensagem="'Edite antes de salvar.'"
+                                                :class="['alert-warning desativada',{'ativada' : errors.findIndex((x) => x =='igual') != -1}]"
+                                                />
+                                                <button class="btn btn-primary col-2" :disabled="inRequestCanal || inRequestEmpresa || editando">
+                                                      <span>Editar</span>
+                                                </button>
+                                                <button class="btn btn-light col-2" style="margin-left: 24px;" @click="voltarMapeamentoProduto()">
+                                                      <span>Voltar</span>
+                                                </button>
+                                          </div>
+                                    </form>
+                              </div>
+                              <div class="col-3"></div>
                         </div>
-                        <div class="col-3"></div>
-                  </div>
+                  </span>
+                  <span v-else>
+                        <ErroResponseComponent 
+                              :error_msg="fetch_error_msg"
+                        />
+                  </span>
                   {{ mapeamentoproduto.canal }} <br><br>
                   {{ mapeamentoproduto.empresa }}<br><br>
                   <br><br>

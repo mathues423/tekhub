@@ -7,7 +7,6 @@ import FiltroPaiComponent from '../util/busca/FiltroPaiComponent.vue';
 import ListaCardComponent from '../util/lista/ListaCardComponent.vue';
 import LoaderListaCardComponent from '../util/Loaders/LoaderListaCardComponent.vue';
 
-
 export default defineComponent({
       template: '#Empre_comp',
       data() {
@@ -121,10 +120,10 @@ export default defineComponent({
 
             deletar(objeto: {codigo: string}){
                   let aux = {'roter_externa': 'empresa', 'id': objeto.codigo, 'roter_interna': 'empresas'}
-                  Promise.resolve(store.dispatch('delDadosID', aux))
+                  store.dispatch('delDadosID', aux)
                   .then(
                         () => this.requestDados()
-                  ).catch((error)=> { console.warn(error) })
+                  ).catch((error_retorno)=> this.$emit('Erro_fetch', error_retorno))
             },
             avancaPagina(){
                   if (this.pagina_atual < this.NUMERO_PAGINA) {
@@ -154,7 +153,7 @@ export default defineComponent({
                               this.NUMERO_PAGINA = 1;
                         }
                         this.lista_estado = 'Lista'
-                  })
+                  }).catch((error_retorno)=> this.$emit('Erro_fetch', error_retorno))
             },
             ordenaEmpresa(title: {ordem: {tipo_ordenacao : string, on: boolean, tipo_obj: string}, key_body: string}){
                   this.dado_paginado.header.forEach(
@@ -196,7 +195,7 @@ export default defineComponent({
                         this.NUMERO_PAGINA = 1;
                         this.dado_pesquisa.body = store.getters.getEmpresas_pesquisa;
                         this.lista_estado = 'Lista';
-                  })
+                  }).catch((error_retorno)=> this.$emit('Erro_fetch', error_retorno))
             },
             changeItemPagina(quantidade: number){
                   this.pagina_atual = 1;
@@ -204,6 +203,7 @@ export default defineComponent({
                   this.requestDados()
             }
       },
+      emits:['Erro_fetch']
 })
 </script>
 

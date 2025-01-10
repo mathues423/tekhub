@@ -7,7 +7,6 @@ import FiltroPaiComponent from '../util/busca/FiltroPaiComponent.vue';
 import ListaCardComponent from '../util/lista/ListaCardComponent.vue';
 import LoaderListaCardComponent from '../util/Loaders/LoaderListaCardComponent.vue';
 
-
 export default defineComponent({
       template: '#Ambi_comp',
       data() {
@@ -113,10 +112,10 @@ export default defineComponent({
             },
             deletar(objeto: {codigo: string}){
                   let aux = {'roter_externa': 'ambiente', 'id': objeto.codigo, 'roter_interna': 'ambientes'}
-                  Promise.resolve(store.dispatch('delDadosID', aux))
+                  store.dispatch('delDadosID', aux)
                   .then(
                         () => this.requestDados()
-                  ).catch((error)=> { console.warn(error) })
+                  ).catch((error_retorno)=> this.$emit('Erro_fetch', error_retorno))
             },
             avancaPagina(){
                   if (this.pagina_atual < this.NUMERO_PAGINA) {
@@ -148,7 +147,7 @@ export default defineComponent({
                         this.lista_estado = 'Lista'
                         console.log(args);
                         console.log('IN REQUEST ', store.state);
-                  })
+                  }).catch((error_retorno)=> this.$emit('Erro_fetch', error_retorno))
             },
             filtraAmbiente(){
                   this.itsOnFilter = true;
@@ -170,7 +169,7 @@ export default defineComponent({
                         this.NUMERO_PAGINA = 1;
                         this.dado_pesquisa.body = store.getters.getAmbientes_pesquisa;
                         this.lista_estado = 'Lista'
-                  })
+                  }).catch((error_retorno)=> this.$emit('Erro_fetch', error_retorno))
             },
             changeItemPagina(quantidade: number){
                   this.pagina_atual = 1;
@@ -178,6 +177,7 @@ export default defineComponent({
                   this.requestDados()
             }
       },
+      emits:['Erro_fetch']
 })
 </script>
 

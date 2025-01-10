@@ -31,7 +31,7 @@ export default defineComponent({
                   this.isEscolhido = true;
             }
       },
-      emits:['id_empresa']
+      emits:['id_empresa', 'Erro_fetch']
 })
 </script>
 
@@ -41,6 +41,7 @@ export default defineComponent({
                   <EmpresaSelectComponent 
                         :have_erro="false"
                         @empresa_escolhida="(arg: object)=> abilitaBusca(arg)"
+                        @Erro_fetch="(arg: object)=> $emit('Erro_fetch', arg)"
                   />
             </div>
             <div class="col">

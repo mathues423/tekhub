@@ -7,7 +7,7 @@ export default defineComponent({
       name: 'EmpresaSelectComponent',
       data() {
           return{
-            empresa_select: {},
+            empresa_select: this.valor_inicial,
             empresa_request: {},
             requested: false,
           }
@@ -19,11 +19,18 @@ export default defineComponent({
             have_erro:{
                   type: Boolean,
                   required: true
+            },
+            valor_inicial:{
+                  type: Object,
+                  required:false
             }
       },
       watch:{
             empresa_select(empresa_new){
                   this.$emit('empresa_escolhida', empresa_new)
+            },
+            valor_inicial(empresa_new){
+                  this.empresa_select = empresa_new
             }
       },
       mounted() {
@@ -32,9 +39,9 @@ export default defineComponent({
           .then((arg)=>{
             this.empresa_request = arg.data;
             this.requested = true;
-          })
+            }).catch((error_retorno)=> this.$emit('Erro_fetch', error_retorno))
       },
-      emits:['empresa_escolhida']
+      emits:['empresa_escolhida', 'Erro_fetch']
 })
 </script>
 
@@ -42,7 +49,7 @@ export default defineComponent({
       <div :class="['w-100', {'invalido': have_erro}]">
             <select v-if="requested" class="custom-select" v-model="empresa_select" required>
                   <option selected disabled :value="{}"> Selecione a empresa</option>
-                  <option v-for="operacao in empresa_request" :key="operacao['codigo' as keyof typeof operacao]" :value="operacao"> {{ operacao['descricao' as keyof typeof operacao] }}</option>
+                  <option v-for="operacao in empresa_request" :key="operacao['codigo' as keyof typeof operacao]" :value="operacao"> {{ operacao['descricao' as keyof typeof operacao] }} </option>
             </select>
             <span v-else>
                   <LoaderSkeleton 

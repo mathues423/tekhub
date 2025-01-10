@@ -66,13 +66,13 @@ export default defineComponent({
                   if(this.data_inicio == '')
                         this.data_inicio_erro = true
                   else{
-                        r_data_inicio = `&dataInicial=${data_inicio_aux.getUTCFullYear()}-${data_inicio_aux.getUTCMonth()}-${data_inicio_aux.getUTCDate()}`
+                        r_data_inicio = `&dataInicial=${data_inicio_aux.getUTCFullYear()}-${data_inicio_aux.getUTCMonth()+1}-${data_inicio_aux.getUTCDate()}`
                         r_data_inicio += ` ${data_inicio_aux.getUTCHours()}:${data_inicio_aux.getUTCMinutes()}:${data_inicio_aux.getUTCSeconds()}`
                   }
                   if(this.data_final == '')
                         this.data_final_erro = true
                   else{
-                        r_data_final = `&dataFinal=${data_final_aux.getUTCFullYear()}-${data_final_aux.getUTCMonth()}-${data_final_aux.getUTCDate()}`
+                        r_data_final = `&dataFinal=${data_final_aux.getUTCFullYear()}-${data_final_aux.getUTCMonth()+1}-${data_final_aux.getUTCDate()}`
                         r_data_final += ` ${data_final_aux.getUTCHours()}:${data_final_aux.getUTCMinutes()}:${data_final_aux.getUTCSeconds()}`
                   }
 
@@ -87,7 +87,7 @@ export default defineComponent({
                   this.empresa_select = empresa
             }
       },
-      emits:['request_filtro']
+      emits:['request_filtro', 'Erro_fetch']
 })
 </script>
 
@@ -97,6 +97,7 @@ export default defineComponent({
                   <EmpresaSelectComponent 
                         :have_erro="empresa_erro"
                         @empresa_escolhida="(args: object)=> escolha_empresa(args)"
+                        @erro_fetch="(arg)=> $emit('Erro_fetch', arg)"
                   />
             </div>
             <div class="col-5 row">
@@ -125,19 +126,5 @@ export default defineComponent({
 .invalido > input:focus{
       border-color: var(--bs-form-invalid-border-color);
       box-shadow: 0 0 0 .25rem rgba(var(--bs-danger-rgb), .25);
-}
-.custom-select{
-      background: #fff url(data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E) no-repeat right .75rem center;
-      background-size: 8px 10px;
-      padding: .375rem .75rem .375rem .75rem;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
-      color: #495057;
-      vertical-align: middle;
-      border: 1px solid #ced4da;
-      border-radius: .25rem;
-      display: inline-block;
-      width: 100%;
 }
 </style>

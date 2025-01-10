@@ -38,6 +38,11 @@ export default defineComponent({
             lateral:{
                   type: String,
                   required: true
+            },
+            have_erro:{
+                  type: Boolean,
+                  required: true,
+                  default: false
             }
       }
 })
@@ -63,13 +68,19 @@ export default defineComponent({
       </div>
       
       <div class="nav_lateral col-lg-2" v-if="!its_card">
-            <NavbarRotasVertical :item_ativo="lateral" />
+            <NavbarRotasVertical
+                  :have_fetch_erro="have_erro"
+                  :item_ativo="lateral" 
+            />
       </div>
 
       <span class="nav_lateral col-12" v-if="its_card">
             <div class="row navbar">
                   <div style="padding-left: 12px;" class="col-9 col-md-11">
-                        <NavbarRotasHorizontal :item_ativo="lateral" />
+                        <NavbarRotasHorizontal 
+                              :have_fetch_erro="have_erro"
+                              :item_ativo="lateral" 
+                        />
                   </div>
                   <div class="col-3 col-md-1" style="margin-top: auto; margin-bottom: auto; text-align: end;">
                         <button type="button" class="btn btn-outline-danger" style="margin-top: auto; margin-bottom: auto;" @click="logout()">

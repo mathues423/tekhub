@@ -6,9 +6,13 @@ import { defineComponent } from 'vue';
 import ErroFormComponent from '@/components/mensagem/ErroFormComponent.vue';
 import empresa from '@/services/regras_negocio/regras_empresa';
 import store from '@/store';
+import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
+
 export default defineComponent({
       data(){
             return {
+                  fetch_error_msg: {},
+                  have_fetch_error: false,
                   empresa:{
                         descricao: '',
                         cnpj: '',
@@ -22,7 +26,8 @@ export default defineComponent({
       components:{
             NavbarComplet,
             VersaoMaximisada,
-            ErroFormComponent
+            ErroFormComponent,
+            ErroResponseComponent
       },
       methods:{
             async criacaoRequest(){
@@ -31,18 +36,18 @@ export default defineComponent({
                   }
                   empresa._add(this.empresa, this.errors)
                   if(this.errors.length == 0){
-                        Promise.resolve(
-                              store.dispatch('putDados', {'roter_externa': 'empresa', 'dado': this.empresa, 'roter_interna': 'empresas'})
-                              .then(()=> this.voltarEmpresa())
-                        ).catch((error)=> {
-                              this.errors?.push('400')
-                              console.warn(error) 
-                        })
+                        store.dispatch('putDados', {'roter_externa': 'empresa', 'dado': this.empresa, 'roter_interna': 'empresas'})
+                        .then(()=> this.voltarEmpresa())
+                        .catch((error_retorno)=> this.showError(error_retorno))
                   }
                   
             },
             voltarEmpresa(){
                   router.push('/empresas');
+            },
+            showError(objeto_erro: object){
+                  this.fetch_error_msg = objeto_erro;
+                  this.have_fetch_error = true;
             }
       }
 })
@@ -50,77 +55,87 @@ export default defineComponent({
 
 <template>
       <div class="row">
-            <NavbarComplet :lateral="'empresas'"/>
+            <NavbarComplet 
+                  :have_erro="have_fetch_error"
+                  :lateral="'empresas'"
+            />
             <div class="col-12 col-lg-10" id="content">
-                  <div class="row">
-                        <div class="col-1"></div>
-                        <div class="Card-Body col-8">
-                              <form @submit.prevent="criacaoRequest()" class="row form_content" novalidate>
-                                    <!-- Razao -->
-                                    <div class="col-2 form_text">
-                                          *Razão social:
-                                    </div>
-                                    <div class="col-8">
-                                          <input type="text" class="form-control" v-model="empresa.descricao" required>
-                                          <ErroFormComponent
-                                          :mensagem="'Por favor informe a Razão social.'"
-                                          :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='razao') != -1}]"
-                                          />
-                                    </div>
-                                    <div class="col-2"></div>
-                                    <!-- CNPJ -->
-                                    <div class="col-2 form_text">
-                                          *CNPJ:
-                                    </div>
-                                    <div class="col-8">
-                                          <input type="text" class="form-control" v-model="empresa.cnpj" required>
-                                          <ErroFormComponent
-                                          :mensagem="'Por favor informe o CNPJ.'"
-                                          :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='cnpj') != -1}]"
-                                          />
-                                          <ErroFormComponent
-                                          :mensagem="'Por favor informe o CNPJ valido.'"
-                                          :class="['alert-warning desativada',{'ativada' : errors.findIndex((x) => x =='400') != -1}]"
-                                          />
-                                    </div>
-                                    <div class="col-2"></div>
-                                    <!-- Codigo -->
-                                    <div class="col-2 form_text">
-                                          *Codigo na Tek-System:
-                                    </div>
-                                    <div class="col-8">
-                                          <input type="number" class="form-control" v-model="empresa.codigoTek" required>
-                                          <ErroFormComponent
-                                          :mensagem="'Por favor informe um Codigo numerico.'"
-                                          :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='codigo') != -1}]"
-                                          />
-                                    </div>
-                                    <div class="col-2"></div>
-                                    <!-- Versao -->
-                                    <div class="col-2 form_text">
-                                          *Verção API:
-                                    </div>
-                                    <div class="col-8">
-                                          <input type="text" class="form-control" v-model="empresa.versaoApiTek" required>
-                                          <ErroFormComponent
-                                          :mensagem="'Por favor informe a Verção API.'"
-                                          :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='api') != -1}]"
-                                          />
-                                    </div>
-                                    <div class="col-2"></div>
-
-                                    <div style="margin-top: 16px;" class="col-12">
-                                          <button class="btn btn-primary col-2">
-                                                <span>Criar</span>
-                                          </button>
-                                          <button class="btn btn-light col-2" style="margin-left: 24px;" @click="voltarEmpresa()">
-                                                <span>Voltar</span>
-                                          </button>
-                                    </div>
-                              </form>
+                  <span v-if="!have_fetch_error">
+                        <div class="row">
+                              <div class="col-1"></div>
+                              <div class="Card-Body col-8">
+                                    <form @submit.prevent="criacaoRequest()" class="row form_content" novalidate>
+                                          <!-- Razao -->
+                                          <div class="col-2 form_text">
+                                                *Razão social:
+                                          </div>
+                                          <div class="col-8">
+                                                <input type="text" class="form-control" v-model="empresa.descricao" required>
+                                                <ErroFormComponent
+                                                :mensagem="'Por favor informe a Razão social.'"
+                                                :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='razao') != -1}]"
+                                                />
+                                          </div>
+                                          <div class="col-2"></div>
+                                          <!-- CNPJ -->
+                                          <div class="col-2 form_text">
+                                                *CNPJ:
+                                          </div>
+                                          <div class="col-8">
+                                                <input type="text" class="form-control" v-model="empresa.cnpj" required>
+                                                <ErroFormComponent
+                                                :mensagem="'Por favor informe o CNPJ.'"
+                                                :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='cnpj') != -1}]"
+                                                />
+                                                <ErroFormComponent
+                                                :mensagem="'Por favor informe o CNPJ valido.'"
+                                                :class="['alert-warning desativada',{'ativada' : errors.findIndex((x) => x =='400') != -1}]"
+                                                />
+                                          </div>
+                                          <div class="col-2"></div>
+                                          <!-- Codigo -->
+                                          <div class="col-2 form_text">
+                                                *Codigo na Tek-System:
+                                          </div>
+                                          <div class="col-8">
+                                                <input type="number" class="form-control" v-model="empresa.codigoTek" required>
+                                                <ErroFormComponent
+                                                :mensagem="'Por favor informe um Codigo numerico.'"
+                                                :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='codigo') != -1}]"
+                                                />
+                                          </div>
+                                          <div class="col-2"></div>
+                                          <!-- Versao -->
+                                          <div class="col-2 form_text">
+                                                *Verção API:
+                                          </div>
+                                          <div class="col-8">
+                                                <input type="text" class="form-control" v-model="empresa.versaoApiTek" required>
+                                                <ErroFormComponent
+                                                :mensagem="'Por favor informe a Verção API.'"
+                                                :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='api') != -1}]"
+                                                />
+                                          </div>
+                                          <div class="col-2"></div>
+      
+                                          <div style="margin-top: 16px;" class="col-12">
+                                                <button class="btn btn-primary col-2">
+                                                      <span>Criar</span>
+                                                </button>
+                                                <button class="btn btn-light col-2" style="margin-left: 24px;" @click="voltarEmpresa()">
+                                                      <span>Voltar</span>
+                                                </button>
+                                          </div>
+                                    </form>
+                              </div>
+                              <div class="col-3"></div>
                         </div>
-                        <div class="col-3"></div>
-                  </div>
+                  </span>
+                  <span v-else>
+                        <ErroResponseComponent 
+                              :error_msg="fetch_error_msg"
+                        />
+                  </span>
             </div>
             <VersaoMaximisada />
       </div>

@@ -1,8 +1,9 @@
 <script lang="ts">
 import router from '@/router';
+import { defineComponent } from 'vue';
 
-export default{
-      template: '#Nav_lat',
+export default defineComponent({
+      template: '#Nav_latV',
       data(){
             return{
                   integracaoIsactive : false
@@ -10,7 +11,8 @@ export default{
       },
       methods:{
             changePage(rota: string){
-                  router.push('/'+rota);
+                  if(!this.have_fetch_erro)
+                        router.push('/'+rota);
             }
       },
       props:{
@@ -18,15 +20,20 @@ export default{
                   type: String,
                   required: true
             },
+            have_fetch_erro:{
+                  type: Boolean,
+                  required: true,
+                  default: false
+            }
       }
-}
+})
 </script>
 <template id="Nav_lat">
       <div class="col-12">
             <ul class="list-group nav_lateral">
                   <!-- Dashboard -->
                   <li :class="['navbar_itens', {'item_nav_act' :item_ativo === 'dashboard'}]" @click="changePage('dashboard')">
-                        <button  class="btn item_nav col-12">
+                        <button  class="btn item_nav col-12" :disabled="have_fetch_erro">
                               <span>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-speedometer" viewBox="0 0 16 16">
                                           <path d="M8 2a.5.5 0 0 1 .5.5V4a.5.5 0 0 1-1 0V2.5A.5.5 0 0 1 8 2M3.732 3.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707M2 8a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8m9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5m.754-4.246a.39.39 0 0 0-.527-.02L7.547 7.31A.91.91 0 1 0 8.85 8.569l3.434-4.297a.39.39 0 0 0-.029-.518z"/>
@@ -38,7 +45,7 @@ export default{
                   </li>
                   <!-- Empresas -->
                   <li :class="['navbar_itens', {'item_nav_act' :item_ativo === 'empresas'}]" @click="changePage('empresas')">
-                        <button class="btn item_nav col-12">
+                        <button class="btn item_nav col-12" :disabled="have_fetch_erro">
                               <span>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-shop" viewBox="0 0 16 16">
                                           <path d="M2.97 1.35A1 1 0 0 1 3.73 1h8.54a1 1 0 0 1 .76.35l2.609 3.044A1.5 1.5 0 0 1 16 5.37v.255a2.375 2.375 0 0 1-4.25 1.458A2.37 2.37 0 0 1 9.875 8 2.37 2.37 0 0 1 8 7.083 2.37 2.37 0 0 1 6.125 8a2.37 2.37 0 0 1-1.875-.917A2.375 2.375 0 0 1 0 5.625V5.37a1.5 1.5 0 0 1 .361-.976zm1.78 4.275a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 1 0 2.75 0V5.37a.5.5 0 0 0-.12-.325L12.27 2H3.73L1.12 5.045A.5.5 0 0 0 1 5.37v.255a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0M1.5 8.5A.5.5 0 0 1 2 9v6h1v-5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v5h6V9a.5.5 0 0 1 1 0v6h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1V9a.5.5 0 0 1 .5-.5M4 15h3v-5H4zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1zm3 0h-2v3h2z"/>
@@ -49,7 +56,7 @@ export default{
                   </li>
                   <!-- Canais -->
                   <li :class="['navbar_itens', {'item_nav_act' :item_ativo === 'canais'}]" @click="changePage('canais')">
-                        <button class="btn item_nav col-12">
+                        <button class="btn item_nav col-12" :disabled="have_fetch_erro">
                               <span>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-grid-fill" viewBox="0 0 16 16">
                                           <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5zm8 0A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5zm-8 8A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5zm8 0A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5z"/>
@@ -60,7 +67,7 @@ export default{
                   </li>
                   <!-- Ambiente -->
                   <li :class="['navbar_itens', {'item_nav_act' :item_ativo === 'ambiente'}]" @click="changePage('ambientes')">
-                        <button class="btn item_nav col-12">
+                        <button class="btn item_nav col-12" :disabled="have_fetch_erro">
                               <span>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-fill" viewBox="0 0 16 16">
                                           <path d="M4.406 3.342A5.53 5.53 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773 16 11.569 14.502 13 12.687 13H3.781C1.708 13 0 11.366 0 9.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383"/>
@@ -86,7 +93,7 @@ export default{
                         </button>
                         <ul class="list-group nav_item_interno">
                               <li :class="['navbar_itens', {'item_nav_act' :item_ativo === 'mark_ecom'}, {'item_nav_des' : integracaoIsactive}]" @click="changePage('integracoesmarketplacesecommerces')">
-                              <button class="btn item_nav col-12">
+                              <button class="btn item_nav col-12" :disabled="have_fetch_erro">
                                     <span>
                                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-database" viewBox="0 0 16 16">
                                                 <path d="M4.318 2.687C5.234 2.271 6.536 2 8 2s2.766.27 3.682.687C12.644 3.125 13 3.627 13 4c0 .374-.356.875-1.318 1.313C10.766 5.729 9.464 6 8 6s-2.766-.27-3.682-.687C3.356 4.875 3 4.373 3 4c0-.374.356-.875 1.318-1.313M13 5.698V7c0 .374-.356.875-1.318 1.313C10.766 8.729 9.464 9 8 9s-2.766-.27-3.682-.687C3.356 7.875 3 7.373 3 7V5.698c.271.202.58.378.904.525C4.978 6.711 6.427 7 8 7s3.022-.289 4.096-.777A5 5 0 0 0 13 5.698M14 4c0-1.007-.875-1.755-1.904-2.223C11.022 1.289 9.573 1 8 1s-3.022.289-4.096.777C2.875 2.245 2 2.993 2 4v9c0 1.007.875 1.755 1.904 2.223C4.978 15.71 6.427 16 8 16s3.022-.289 4.096-.777C13.125 14.755 14 14.007 14 13zm-1 4.698V10c0 .374-.356.875-1.318 1.313C10.766 11.729 9.464 12 8 12s-2.766-.27-3.682-.687C3.356 10.875 3 10.373 3 10V8.698c.271.202.58.378.904.525C4.978 9.71 6.427 10 8 10s3.022-.289 4.096-.777A5 5 0 0 0 13 8.698m0 3V13c0 .374-.356.875-1.318 1.313C10.766 14.729 9.464 15 8 15s-2.766-.27-3.682-.687C3.356 13.875 3 13.373 3 13v-1.302c.271.202.58.378.904.525C4.978 12.71 6.427 13 8 13s3.022-.289 4.096-.777c.324-.147.633-.323.904-.525"/>
@@ -96,7 +103,7 @@ export default{
                               </button>
                               </li>
                               <li :class="['navbar_itens', {'item_nav_act' :item_ativo === 'map_pro'}, {'item_nav_des' : integracaoIsactive}]" @click="changePage('mapeamentoprodutos')">
-                                    <button class="btn item_nav col-12">
+                                    <button class="btn item_nav col-12" :disabled="have_fetch_erro">
                                           <span>
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-right" viewBox="0 0 16 16">
                                                       <path fill-rule="evenodd" d="M1 11.5a.5.5 0 0 0 .5.5h11.793l-3.147 3.146a.5.5 0 0 0 .708.708l4-4a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 11H1.5a.5.5 0 0 0-.5.5m14-7a.5.5 0 0 1-.5.5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H14.5a.5.5 0 0 1 .5.5"/>
@@ -110,7 +117,7 @@ export default{
 
                   <!-- Usuário -->
                   <li :class="['navbar_itens', {'item_nav_act' :item_ativo === 'usuario'}]" @click="changePage('usuarios')">
-                        <button class="btn item_nav col-12">
+                        <button class="btn item_nav col-12" :disabled="have_fetch_erro">
                               <span>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
                                           <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
@@ -121,7 +128,7 @@ export default{
                   </li>
                   <!-- LogATT -->
                   <li :class="['navbar_itens', {'item_nav_act' :item_ativo === 'log_att'}]" @click="changePage('atualizacoesecommerces')">
-                        <button class="btn item_nav col-12">
+                        <button class="btn item_nav col-12" :disabled="have_fetch_erro">
                               <span>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-journal-text" viewBox="0 0 16 16">
                                           <path d="M5 10.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5"/>
@@ -134,7 +141,7 @@ export default{
                   </li>
                   <!-- LogReq -->
                   <li :class="['navbar_itens', {'item_nav_act' :item_ativo === 'log_req'}]" @click="changePage('logrequisicoes')">
-                        <button class="btn item_nav col-12">
+                        <button class="btn item_nav col-12" :disabled="have_fetch_erro">
                               <span>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-list" viewBox="0 0 16 16">
                                           <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2z"/>
@@ -172,8 +179,9 @@ export default{
 .item_nav:hover{
       color: var(--bs-gray-100);
 }
-
-
+.item_nav:disabled{
+      border: 0px;
+}
 .item_nav_act{
       background-color: var(--bs-cyan);
 }

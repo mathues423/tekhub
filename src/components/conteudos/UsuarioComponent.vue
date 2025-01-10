@@ -113,7 +113,7 @@ export default defineComponent({
                   Promise.resolve(store.dispatch('delDadosID', aux))
                   .then(
                         () => this.requestDados()
-                  ).catch((error)=> { console.warn(error) })
+                  ).catch((error_retorno)=> this.$emit('Erro_fetch', error_retorno))
             },
             avancaPagina(){
                   if (this.pagina_atual < this.NUMERO_PAGINA) {
@@ -143,7 +143,7 @@ export default defineComponent({
                               this.NUMERO_PAGINA = 1;
                         }
                         this.lista_estado = 'Lista'
-                  })
+                  }).catch((error_retorno)=> this.$emit('Erro_fetch', error_retorno))
             },
             ordenaUsuario(title: {ordem: {tipo_ordenacao : string, on: boolean, tipo_obj: string}, key_body: string}){
                   this.dado_paginado.header.forEach(
@@ -185,9 +185,10 @@ export default defineComponent({
                         this.NUMERO_PAGINA = 1;
                         this.dado_pesquisa.body = store.getters.getUsuarios_pesquisa;
                         this.lista_estado = 'Lista'
-                  })
+                  }).catch((error_retorno)=> this.$emit('Erro_fetch', error_retorno))
             }
       },
+      emits:['Erro_fetch']
 })
 </script>
 

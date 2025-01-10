@@ -1,12 +1,4 @@
 import http from '@/services/http';
-import { APPCONFIG } from '@/components/constants/Config'
-
-http.interceptors.request.use(
-      config => {
-            config.headers.authorization = `Bearer ${APPCONFIG.authToken}`
-            return config;
-      }
-)
 
 class fetch_padrao{
 
@@ -24,7 +16,8 @@ class fetch_padrao{
                   const { data } = await http.get(path);
                   return data;
             } catch (error) {
-                  console.warn(error)
+                  console.warn(error);                  
+                  throw error;
             }
       }
 
@@ -44,7 +37,8 @@ class fetch_padrao{
                   const { data } = await http.get(path+'/'+id);
                   return data;
             } catch (error) {
-                  console.warn(error)
+                  console.warn(error);                  
+                  throw error;
             }
       }
 
@@ -63,9 +57,8 @@ class fetch_padrao{
                   const { data } = await http.post(path, dado);
                   return data;
             } catch (error) {
-                  console.warn(error);
-                  const { data } = await http.post(path, dado);
-                  return data;
+                  console.warn(error);                  
+                  throw error;
             }
       }
 
@@ -87,7 +80,8 @@ class fetch_padrao{
                   const { data } = await http.put(path+'/'+id, dado);
                   return data;
             } catch (error) {
-                  console.warn(error)
+                  console.warn(error);                  
+                  throw error;
             }
       }
 
@@ -107,7 +101,8 @@ class fetch_padrao{
                   const { data } = await http.delete(path+'/'+id);
                   return data;
             } catch (error) {
-                  console.warn(error)
+                  console.warn(error);                  
+                  throw error;
             }
       }
 
@@ -124,9 +119,10 @@ class fetch_padrao{
       async getDadoPaginado(path : string, request : string){
             try {
                   const { data } = await http.get(path+'/'+request);
-                   return data;
-            } catch (error) {
-                  console.warn(error) 
+                  return data;
+            } catch (error) { 
+                  console.warn(error);                  
+                  throw error;
             }
       }
 }
