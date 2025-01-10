@@ -22,7 +22,8 @@ export default defineComponent({
             },
             valor_inicial:{
                   type: Object,
-                  required:false
+                  required:true,
+                  default: new Object({})
             }
       },
       watch:{
