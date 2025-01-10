@@ -225,6 +225,16 @@ const store = createStore({
       })
       return retorno
     },
+    getUsuariosID(context, id: string){
+      let retorno = undefined;
+      const aux = context.state.usuarios['data' as keyof typeof context.state.usuarios] as Array<object>;
+      aux.forEach((value) => {
+        if (value['codigo' as keyof typeof value] == parseInt(id)) {
+          retorno =  value;
+        }
+      })
+      return retorno
+    },
     getMapeamentoProdutosID(context, id: string){
       let retorno = undefined;
       const aux = context.state.mapeamentoprodudo['data' as keyof typeof context.state.mapeamentoprodudo] as Array<object>;
@@ -276,6 +286,8 @@ const store = createStore({
       .then((value) =>{
         context.commit('setDadosInterno', {'dado': value , 'roter_interna': obj.roter_interna})
         return value
+      }).catch((error)=>{
+        throw error;
       })
     },
     getPaginas(context, rota_interna: string){
