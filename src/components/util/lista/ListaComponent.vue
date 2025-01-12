@@ -62,8 +62,8 @@ export default defineComponent({
             },
             have_expancion:{
                   type: Boolean,
-                  required:true,
-                  default: false
+                  default: Boolean(false),
+                  required:true
             }
       },
       mounted() {

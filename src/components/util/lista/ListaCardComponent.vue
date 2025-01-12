@@ -98,7 +98,7 @@ export default defineComponent({
             have_expancion:{
                   type: Boolean,
                   required:true,
-                  default: false
+                  default: Boolean(false)
             }
       },
       methods:{
@@ -279,8 +279,8 @@ export default defineComponent({
                                                                                     @deletarModal="(arg: any) => mountDeletModal(arg)"
                                                                               />
                                                                         </div>
-                                                                        <button v-if="!dado_expandido[index_dado]" class="btn btn-light col-12 text-center" @click="expandir(index_dado)">+</button>
-                                                                        <button v-else class="btn btn-light col-12 text-center" @click="fechar(index_dado)">-</button>
+                                                                        <button v-if="have_expancion && !dado_expandido[index_dado]" class="btn btn-light col-12 text-center" @click="expandir(index_dado)">+</button>
+                                                                        <button v-if="have_expancion && dado_expandido[index_dado]" class="btn btn-light col-12 text-center" @click="fechar(index_dado)">-</button>
                                                                   </div>
                                                                   <!-- <footer>{{ dados.header[dados.header.length - 1].header }}    {{ dado[dados.header[dados.header.length - 1].key_body] }}</footer> -->
                                                             </div>
