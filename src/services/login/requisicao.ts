@@ -40,7 +40,6 @@ class UserDados {
                   router.push('/dashboard');
                   return data
             } catch (error) {
-                  erros.vericação = true;
                   throw error
             }
       }

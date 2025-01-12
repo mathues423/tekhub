@@ -117,6 +117,12 @@
                                           this.erros.message = returno.response.data.errors[0]
                                           
                               this.isLogin = false;
+                        }).catch((erro)=>{
+                              this.erros.vericação = true;
+                              if (erro.errors) {
+                                    this.erros.message = erro.errors;
+                                    this.isLogin = false;
+                              }
                         });
                   }
             },
