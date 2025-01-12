@@ -92,15 +92,15 @@ export default defineComponent({
 </script>
 
 <template>
-      <div class="row my-1">
-            <div class="col-4">
+      <div class="row">
+            <div class="col-md-4 col-sm-12 my-1">
                   <EmpresaSelectComponent 
                         :have_erro="empresa_erro"
                         @empresa_escolhida="(args: object)=> escolha_empresa(args)"
                         @erro_fetch="(arg)=> $emit('Erro_fetch', arg)"
                   />
             </div>
-            <div class="col-5 row">
+            <div class="col-md-6 col row my-1">
                   <div :class="['col-6', {'invalido': data_inicio_erro}]">
                         <input class="form-control" type="datetime-local" v-model="data_inicio"/>
                   </div>
@@ -109,8 +109,8 @@ export default defineComponent({
                         <input class="form-control" type="datetime-local" v-model="data_final"/>
                   </div>
             </div>
-            <div class="col">
-                  <button class="btn btn-primary" @click="buscar">
+            <div class="col-md-2 my-1">
+                  <button class="w-100 btn btn-primary" @click="buscar">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                               <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
                         </svg>
