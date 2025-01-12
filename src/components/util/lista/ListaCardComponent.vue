@@ -12,6 +12,8 @@ export default defineComponent({
             showDeletModal: false,
             dado_modal: {
             },
+            dado_expandido: [false],
+            dado_json: [''],
             animation:false,
             its_OnFilter:false,
             its_OnOrder:false,
@@ -21,8 +23,8 @@ export default defineComponent({
       },
       components:{
             PaginacaoComponent,
-            EdiçãoBotaoComponent,
             FiltroPaiComponent,
+            EdiçãoBotaoComponent,
             RemoçãoBotaoComponent,
             ModalRemoçãoComponent
       },
@@ -32,6 +34,15 @@ export default defineComponent({
             }
             if (this.getDadosFiltraveis.length != 0) {
                   this.have_filtravel = true;
+            }
+            if (this.have_expancion) {
+                  this.dado_expandido = []
+                  this.dado_json = []
+                  for (let index = 0; index < this.item_p_pagina; index++) {
+                        this.dado_expandido.push(false)
+                        // this.dado_json.push(this.custumise_json(JSON.stringify(this.dados?.body[index])))
+                        this.dado_json.push(this.dados?.body[index])
+                  }
             }
       },
       computed:{
@@ -82,10 +93,21 @@ export default defineComponent({
             },
             lista_opc_paginas:{
                   type: Array as PropType<Array<object>>,
-                  requeired: true
+                  required: true
+            },
+            have_expancion:{
+                  type: Boolean,
+                  required:true,
+                  default: false
             }
       },
       methods:{
+            expandir(linha: number){
+                  this.dado_expandido[linha] = true;
+            },
+            fechar(linha: number){
+                  this.dado_expandido[linha] = false;
+            },
             up_lista(){
                   this.$emit('avancar');
             },
@@ -212,7 +234,65 @@ export default defineComponent({
                               </div>
                         </div>
 
-                        <div class="my-1 col-md-4 col-sm-12 card-group" v-for="dado in dados.body" :key="dado">
+                        <div class="row" style="margin:0 auto;">
+                              <div class="col-12">
+                                    <div class="row">
+                                          <div class="col-md-4 col-sm-12" v-for="(dado,index_dado) in dados.body" :key="dado">
+                                                <div class="card-group  align-center">
+                                                      <div class="card my-1">
+                                                            <div class="card-header">
+                                                                  <h5 class="card-title text-center">{{ dados.header[0].header }}    {{ dado[dados.header[0].key_body] }}</h5>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                  <span v-if="!have_expancion && !dado_expandido[index_dado]">
+                                                                        <div :class="['row', {'impar' : index%2==0}]" v-for="(traduzido,index) in  dados.header" :key="traduzido" v-show="index>0 && index<dados.header.length-1">
+                                                                              <div class="col-6 align-center">{{ traduzido.header }}</div>
+                                                                              <div class="col-6 align-center text-right">{{ dado[traduzido.key_body] }}</div>
+                                                                        </div>
+                                                                  </span>
+                                                                  <span v-if="have_expancion && !dado_expandido[index_dado]">
+                                                                        <div :class="['row', {'impar' : index%2==0}]" v-for="(traduzido,index) in  dados.header" :key="traduzido" v-show="index>0">
+                                                                              <div class="col-6 align-center">{{ traduzido.header }}</div>
+                                                                              <div class="col-6 align-center text-right">{{ dado[traduzido.key_body] }}</div>
+                                                                        </div>
+                                                                  </span>
+                                                                  <span v-if="have_expancion && dado_expandido[index_dado]">
+<pre v-show="dado_json[index_dado] != ''">
+{{ dado_json[index_dado] }}
+</pre>
+<pre v-show="dado_json[index_dado] == ''">
+{}
+</pre>
+                                                                  </span>
+                                                            </div>
+                                                            <div class="card-footer">
+                                                                  <div class="row">
+                                                                        <div class="col-6 text-center" v-if="dados.header[dados.header.length - 1].key_body == 'button'">
+                                                                              <EdiçãoBotaoComponent 
+                                                                                    :nome_rota_para_edicao="rota_edicao"
+                                                                                    :id_item="dado['codigo' as keyof typeof dado]"
+                                                                              />
+                                                                        </div>
+                                                                        <div class="col-6 text-center" v-if="dados.header[dados.header.length - 1].key_body == 'button'">
+                                                                              <RemoçãoBotaoComponent 
+                                                                                    :dado="dado"
+                                                                                    @deletarModal="(arg: any) => mountDeletModal(arg)"
+                                                                              />
+                                                                        </div>
+                                                                        <button v-if="!dado_expandido[index_dado]" class="btn btn-light col-12 text-center" @click="expandir(index_dado)">+</button>
+                                                                        <button v-else class="btn btn-light col-12 text-center" @click="fechar(index_dado)">-</button>
+                                                                  </div>
+                                                                  <!-- <footer>{{ dados.header[dados.header.length - 1].header }}    {{ dado[dados.header[dados.header.length - 1].key_body] }}</footer> -->
+                                                            </div>
+                                                            <!-- {{dado}} {{ index }} -->
+                                                      </div>
+                                                </div>
+                                          </div>
+                                    </div>
+                              </div>
+                        </div>
+
+                        <!-- <div class="my-1 col-md-4 col-sm-12 card-group" v-for="dado in dados.body" :key="dado">
                               <div class="card card-deck">
                                     <div class="card-body">
                                           <span v-for="(header, index) in dados.header" :key="index">
@@ -233,17 +313,16 @@ export default defineComponent({
                                                             </div>
                                                       </div>
                                                       <span v-if="header.key_body == 'vazio'">
-                                                            <!-- vazio -->
                                                       </span>
                                                 </div>
-                                                <div v-if="header.key_body == 'button'" class="card-footer row text-center">
-                                                      <div class="col">
+                                                <div class="card-footer row text-center">
+                                                      <div class="col" v-if="header.key_body == 'button'">
                                                             <EdiçãoBotaoComponent 
                                                                   :nome_rota_para_edicao="rota_edicao"
                                                                   :id_item="dado['codigo' as keyof typeof dado]"
                                                             />
                                                       </div>
-                                                      <div class="col">
+                                                      <div class="col" v-if="header.key_body == 'button'">
                                                             <RemoçãoBotaoComponent 
                                                                   :dado="dado"
                                                                   @deletarModal="(arg: any) => mountDeletModal(arg)"
@@ -253,7 +332,9 @@ export default defineComponent({
                                           </span>
                                     </div>
                               </div>
-                        </div>
+                        </div> -->
+
+
                   </div>
                   
             </div>
@@ -272,13 +353,33 @@ export default defineComponent({
 </template>
 
 <style lang="css" scoped>
+pre{
+      background-color: #222;
+      color: white;
+      line-height:1.2em;
+      border-left:8px solid green;
+      border-radius:5px;
+      /* background:linear-gradient(180deg,#ccc 0,#ccc 1.2em,#eee 0);
+      background-size:2.4em 2.4em;
+      background-origin:content-box; */
+      padding:5px 20px;
+      text-align:justify;
+      font-size: 16px;
+      font-family:calibri,arial,sans-serif;
+}
+.text-right{
+      text-align: right
+}
+.align-center{
+      align-content: center
+}
 .aviso{
       background-color: #eec1c5;
 }
 .col-ordenada{
       background-color: #abc4eb;
 }
-h5.card-title{
+.card-header{
       background-color: rgba(var(--bs-primary-rgb), 0.5);
 }
 .impar{

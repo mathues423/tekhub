@@ -9,7 +9,9 @@ export default defineComponent({
       data() {
           return {
             showDeletModal: false,
-            dado_modal: {}
+            dado_modal: {},
+            dado_expandido: [false],
+            dado_json: ['']
           }
       },
       components:{
@@ -24,6 +26,7 @@ export default defineComponent({
             },
             have_pagination:{
                   type: Boolean,
+                  required:true,
                   default: false
             },
             pagina_max:{
@@ -55,11 +58,40 @@ export default defineComponent({
             },
             lista_opc_paginas:{
                   type: Array as PropType<Array<object>>,
-                  requeired: true
+                  required: true
+            },
+            have_expancion:{
+                  type: Boolean,
+                  required:true,
+                  default: false
             }
-            
+      },
+      mounted() {
+            if (this.have_expancion) {
+                  this.dado_expandido = []
+                  this.dado_json = []
+                  for (let index = 0; index < this.item_p_pagina; index++) {
+                        this.dado_expandido.push(false)
+                        // this.dado_json.push(this.custumise_json(JSON.stringify(this.dados?.body[index])))
+                        this.dado_json.push(this.dados?.body[index])
+                  }
+            }
       },
       methods:{
+            expandir(linha: number){
+                  this.dado_expandido[linha] = true;
+                  // this.custumise_json(JSON.stringify(this.dados?.body[linha]))
+            },
+            fechar(linha: number){
+                  this.dado_expandido[linha] = false;
+            },
+            // custumise_json(data: string){
+            //       let its_in_str = false;
+            //       return data
+            //       .replaceAll('{','<span class="parentesis">{</span> sdafads')
+            //       .replaceAll('}','<span class="parentesis">}</span> sdafads')
+            // },
+
             up_lista(){
                   this.$emit('avancar');
             },
@@ -80,6 +112,12 @@ export default defineComponent({
                   this.$emit('filtrarDadoPai')
             },
             dado_quantidade(args: number){
+                  if (this.have_expancion) {
+                        this.dado_expandido = []
+                        for (let index = 0; index < args; index++) {
+                              this.dado_expandido.push(false)
+                        }
+                  }
                   this.$emit('trocarQuandidadeDadoPai', args)
             }
       },
@@ -99,7 +137,6 @@ export default defineComponent({
       </ModalRemoçãoComponent>
       <div class="row">
             <div class="col-12 table-responsive">
-
                   <table class="table table-hover table-bordered">
                         <thead class="table-primary">
                               <tr>
@@ -176,29 +213,45 @@ export default defineComponent({
                         </thead>
                         <tbody v-if="dados?.body.length > 0">
                               <tr v-for="(dado,index_dado) in dados?.body" :key="index_dado">
-                                    <th v-for="(traduzido, index_traduzido) in dados?.header" :key="traduzido" :class="`${index_traduzido === 0  ? 'important' : 'not_important'}`">
-                                          <span v-if="traduzido.key_body != 'button' && traduzido.key_body != 'vazio'">
-                                                {{ dado[traduzido.key_body as keyof typeof dado] }}
-                                          </span>
-                                          <span v-else-if="traduzido.key_body == 'button'">
-                                                <div style="text-align: center;">
-                                                <EdiçãoBotaoComponent
-                                                      :nome_rota_para_edicao="rota_edicao"
-                                                      :id_item="dado['codigo' as keyof typeof dado]"
-                                                />
-                                                <RemoçãoBotaoComponent
-                                                      :dado="dado"
-                                                      @deletarModal="(arg: any) => mountDeletModal(arg)"
-                                                />
-                                                </div>
-                                          </span>
-                                          <span v-else-if="traduzido.key_body == 'vazio'">
-                                                <!-- Vazio -->
-                                          </span>
-                                          <span v-else>
-                                                404
-                                          </span>
-                                    </th>
+                                          <td v-show="!dado_expandido[index_dado]" v-for="(traduzido, index_traduzido) in dados?.header" :key="traduzido" :class="`${index_traduzido === 0  ? 'important' : 'not_important'}`">
+                                                <span v-if="traduzido.key_body != 'button' && traduzido.key_body != 'vazio'">
+                                                      <button class="btn btn-light" v-if="traduzido['expandible' as keyof typeof traduzido]" @click="expandir(index_dado)">
+                                                            +
+                                                      </button>
+                                                      {{ dado[traduzido.key_body as keyof typeof dado] }}
+                                                </span>
+                                                <span v-else-if="traduzido.key_body == 'button'">
+                                                      <div style="text-align: center;">
+                                                      <EdiçãoBotaoComponent
+                                                            :nome_rota_para_edicao="rota_edicao"
+                                                            :id_item="dado['codigo' as keyof typeof dado]"
+                                                      />
+                                                      <RemoçãoBotaoComponent
+                                                            :dado="dado"
+                                                            @deletarModal="(arg: any) => mountDeletModal(arg)"
+                                                      />
+                                                      </div>
+                                                </span>
+                                                <span v-else-if="traduzido.key_body == 'vazio'">
+                                                      
+                                                </span>
+                                                <span v-else>
+                                                      404
+                                                </span>
+                                          </td> 
+                                          <td v-show="dado_expandido[index_dado]" :colspan="dados?.header.length">
+                                                <button class="btn btn-light" @click="fechar(index_dado)">
+                                                      -
+                                                </button>
+<pre style="padding-left:30px" v-show="dado_json[index_dado] != ''">
+{{ dado_json[index_dado] }}
+</pre>
+<pre v-show="dado_json[index_dado] == ''">
+<!-- {} -->
+{{ dado_json[index_dado] }}
+</pre>
+                                          </td>
+                                    
                               </tr>
                         </tbody>
                         <tbody v-else>
@@ -232,6 +285,20 @@ export default defineComponent({
 </template>
 
 <style lang="css" scoped>
+pre{
+      background-color: #222;
+      color: white;
+      line-height:1.2em;
+      border-left:8px solid green;
+      border-radius:5px;
+      /* background:linear-gradient(180deg,#ccc 0,#ccc 1.2em,#eee 0);
+      background-size:2.4em 2.4em;
+      background-origin:content-box; */
+      padding:5px 20px;
+      text-align:justify;
+      font-size: 16px;
+      font-family:calibri,arial,sans-serif;
+}
 .aviso{
       background-color: #eec1c5;
 }
@@ -263,5 +330,15 @@ th .row{
 }
 th{
       padding: 0;
+}
+
+.parentesis{
+      color: yellow;
+}
+.string{
+      color: orangered;
+}
+.number{
+      color:blue;
 }
 </style>

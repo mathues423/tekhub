@@ -20,7 +20,6 @@ export default defineComponent({
                   {'text': '12', 'value': 12},
                   {'text': '30', 'value': 30},
                   {'text': '60', 'value': 60},
-                  {'text': 'all', 'value': 0},
             ],
             lista_opc_pagina_not_card: [
                   {'text': '10', 'value': 10},
@@ -36,6 +35,7 @@ export default defineComponent({
             dado_paginado:{
                   header:[
                         {'header': 'Status http', 'key_body': 'codigoestatus',
+                        'expandible':true,
                         'isfiltrable': false, 'isordenable':false},
 
                         {'header': 'Data e hora', 'key_body': 'datahora',
@@ -85,6 +85,8 @@ export default defineComponent({
                   }
             },
             requisicao(path: string){
+                  console.log(path);
+                  
                   this.lista_estado = 'Loader'
                   this.query_request_pesquisa = path;
                   Promise.resolve(store.dispatch('getDadosPaginados',{
@@ -137,7 +139,6 @@ export default defineComponent({
             />
             <div class="col-12 col-lg-10" id="content">
                   <span v-if="!have_fetch_error">
-
                         <BuscaEmpresaDateComponent
                               :rota_externa="'logrequisicao'"
                               @request_filtro="(args: string)=> requisicao(args)"
@@ -150,17 +151,18 @@ export default defineComponent({
                         <ListaComponent v-if="lista_estado == 'Lista' && !its_card"
                               :lista_opc_paginas="lista_opc_pagina_not_card"
                               :have_item_p_pagina="true"
-                              :have_pagination="true"     
+                              :have_pagination="true" 
+                              :have_expancion="true"    
                               :dados="dado_paginado"
-                              :pagina="1"
+                              :pagina="pagina_atual"
                               :item_p_pagina="ITEM_PAGINA_MAX"
                               :pagina_max="NUMERO_PAGINA"
                               :rota_edicao="''"
                               :ModalContent_Remocao="[]"
                               
                               @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
-                              @avancaPagina="avancaPagina" 
-                              @recuarPagina="recuarPagina"
+                              @avancar="avancaPagina" 
+                              @recuar="recuarPagina"
                         />
       
                         <LoaderListaCardComponent v-if="lista_estado == 'Loader' && its_card"
@@ -171,17 +173,18 @@ export default defineComponent({
                         <ListaCardComponent v-if="lista_estado == 'Lista' && its_card"
                               :lista_opc_paginas="lista_opc_pagina_card"
                               :have_item_p_pagina="true"
-                              :have_pagination="true"     
+                              :have_pagination="true"
+                              :have_expancion="true"
                               :dados="dado_paginado"
-                              :pagina="1"
+                              :pagina="pagina_atual"
                               :item_p_pagina="ITEM_PAGINA_MAX"
                               :pagina_max="NUMERO_PAGINA"
                               :rota_edicao="''"
                               :ModalContent_Remocao="[]"
                               
                               @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
-                              @avancaPagina="avancaPagina" 
-                              @recuarPagina="recuarPagina"
+                              @avancar="avancaPagina" 
+                              @recuar="recuarPagina"
                         />
                   </span>
                   <span v-else>

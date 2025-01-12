@@ -29,7 +29,7 @@ export default defineComponent({
             },
             lista_opc_paginas:{
                   type: Array as PropType<Array<object>>,
-                  requeired: true
+                  required: true
             }
       },
       watch:{
