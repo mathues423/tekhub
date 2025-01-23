@@ -9,54 +9,57 @@ import LoaderListaCardComponent from '@/components/util/Loaders/LoaderListaCardC
 import store from '@/store';
 import { defineComponent } from 'vue';
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
+import { APPCONFIG } from '@/components/constants/Config';
 
 
 export default defineComponent({
       data() {
           return {
+                  auth_type: APPCONFIG.authType,
+
                   fetch_error_msg: {},
                   have_fetch_error: false,
-            lista_opc_pagina_card: [
-                  {'text': '12', 'value': 12},
-                  {'text': '30', 'value': 30},
-                  {'text': '60', 'value': 60},
-            ],
-            lista_opc_pagina_not_card: [
-                  {'text': '10', 'value': 10},
-                  {'text': '25', 'value': 25},
-                  {'text': '50', 'value': 50},
-                  {'text': '100', 'value': 100},
-                  {'text': 'all', 'value': 0},
-            ],
-            lista_estado: 'Empty',
-            ITEM_PAGINA_MAX : 10,
-            NUMERO_PAGINA: 1,
-            pagina_atual: 1,
-            dado_paginado:{
-                  header:[
-                        {'header': 'Status http', 'key_body': 'codigoestatus',
-                        'expandible':true,
-                        'isfiltrable': false, 'isordenable':false},
-
-                        {'header': 'Data e hora', 'key_body': 'datahora',
-                        'isfiltrable': false, 'isordenable':false},
-
-                        {'header': 'Entrada/saída', 'key_body': 'entradasaida',
-                        'isfiltrable': false, 'isordenable':false},
-
-                        {'header': 'Recurso', 'key_body': 'recurso',
-                        'isfiltrable': false, 'isordenable':false},
-
-                        {'header': 'Tipo de Requisição', 'key_body': 'tiporequisicao',
-                        'isfiltrable': false, 'isordenable':false}
+                  lista_opc_pagina_card: [
+                        {'text': '12', 'value': 12},
+                        {'text': '30', 'value': 30},
+                        {'text': '60', 'value': 60},
                   ],
-                  body: [] as Array<object>
-            },
-            
-            query_request_pesquisa:'',
+                  lista_opc_pagina_not_card: [
+                        {'text': '10', 'value': 10},
+                        {'text': '25', 'value': 25},
+                        {'text': '50', 'value': 50},
+                        {'text': '100', 'value': 100},
+                        {'text': 'all', 'value': 0},
+                  ],
+                  lista_estado: 'Empty',
+                  ITEM_PAGINA_MAX : 10,
+                  NUMERO_PAGINA: 1,
+                  pagina_atual: 1,
+                  dado_paginado:{
+                        header:[
+                              {'header': 'Status http', 'key_body': 'codigoestatus',
+                              'expandible':true,
+                              'isfiltrable': false, 'isordenable':false},
 
-            its_card: false,
-            largura: window.innerWidth
+                              {'header': 'Data e hora', 'key_body': 'datahora',
+                              'isfiltrable': false, 'isordenable':false},
+
+                              {'header': 'Entrada/saída', 'key_body': 'entradasaida',
+                              'isfiltrable': false, 'isordenable':false},
+
+                              {'header': 'Recurso', 'key_body': 'recurso',
+                              'isfiltrable': false, 'isordenable':false},
+
+                              {'header': 'Tipo de Requisição', 'key_body': 'tiporequisicao',
+                              'isfiltrable': false, 'isordenable':false}
+                        ],
+                        body: [] as Array<object>
+                  },
+            
+                  query_request_pesquisa:'',
+
+                  its_card: false,
+                  largura: window.innerWidth
           }
       },
       components:{
@@ -133,6 +136,7 @@ export default defineComponent({
             <NavbarComplet 
                   :have_erro="have_fetch_error"
                   :lateral="'log_req'"
+                  :user_type="auth_type"
             />
             <div class="col-12 col-lg-10" id="content">
                   <span v-if="!have_fetch_error">

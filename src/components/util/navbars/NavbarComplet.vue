@@ -43,6 +43,10 @@ export default defineComponent({
                   type: Boolean,
                   required: true,
                   default: false
+            },
+            user_type:{
+                  type: String,
+                  required: true
             }
       }
 })
@@ -70,7 +74,8 @@ export default defineComponent({
       <div class="nav_lateral col-lg-2" v-if="!its_card">
             <NavbarRotasVertical
                   :have_fetch_erro="have_erro"
-                  :item_ativo="lateral" 
+                  :item_ativo="lateral"
+                  :user_type="user_type"
             />
       </div>
 
@@ -79,7 +84,8 @@ export default defineComponent({
                   <div style="padding-left: 12px;" class="col-9 col-md-11">
                         <NavbarRotasHorizontal 
                               :have_fetch_erro="have_erro"
-                              :item_ativo="lateral" 
+                              :item_ativo="lateral"
+                              :user_type="user_type"
                         />
                   </div>
                   <div class="col-3 col-md-1" style="margin-top: auto; margin-bottom: auto; text-align: end;">

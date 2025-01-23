@@ -24,6 +24,10 @@ export default defineComponent({
                   type: Boolean,
                   required: true,
                   default: false
+            },
+            user_type:{
+                  type: String,
+                  required: true
             }
       }
 })
@@ -39,7 +43,7 @@ export default defineComponent({
                   <span></span>
                   <ul class="list-group nav_lateral" id="menu">
                         <!-- Dashboard -->
-                        <li :class="['navbar_itens', {'item_nav_act' :item_ativo === 'dashboard'}]" @click="changePage('dashboard')">
+                        <li v-show="user_type == 'ROLE_USER' || user_type == 'ROLE_SUP' || user_type == 'ROLE_ADMIN'" :class="['navbar_itens', {'item_nav_act' :item_ativo === 'dashboard'}]" @click="changePage('dashboard')">
                               <button  class="btn item_nav col-12" :disabled="have_fetch_erro">
                                     <div>
                                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-speedometer" viewBox="0 0 16 16">
@@ -51,7 +55,7 @@ export default defineComponent({
                               </button>
                         </li>
                         <!-- Empresas -->
-                        <li :class="['navbar_itens', {'item_nav_act' :item_ativo === 'empresas'}]" @click="changePage('empresas')">
+                        <li v-show="user_type == 'ROLE_ADMIN'" :class="['navbar_itens', {'item_nav_act' :item_ativo === 'empresas'}]" @click="changePage('empresas')">
                               <button class="btn item_nav col-12" :disabled="have_fetch_erro">
                                     <div>
                                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-shop" viewBox="0 0 16 16">
@@ -62,7 +66,7 @@ export default defineComponent({
                               </button>
                         </li>
                         <!-- Canais -->
-                        <li :class="['navbar_itens', {'item_nav_act' :item_ativo === 'canais'}]" @click="changePage('canais')">
+                        <li v-show="user_type == 'ROLE_ADMIN'" :class="['navbar_itens', {'item_nav_act' :item_ativo === 'canais'}]" @click="changePage('canais')">
                               <button class="btn item_nav col-12" :disabled="have_fetch_erro">
                                     <div>
                                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-grid-fill" viewBox="0 0 16 16">
@@ -73,7 +77,7 @@ export default defineComponent({
                               </button>
                         </li>
                         <!-- Ambiente -->
-                        <li :class="['navbar_itens', {'item_nav_act' :item_ativo === 'ambiente'}]" @click="changePage('ambientes')">
+                        <li v-show="user_type == 'ROLE_ADMIN'" :class="['navbar_itens', {'item_nav_act' :item_ativo === 'ambiente'}]" @click="changePage('ambientes')">
                               <button class="btn item_nav col-12" :disabled="have_fetch_erro">
                                     <div>
                                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-fill" viewBox="0 0 16 16">
@@ -85,7 +89,7 @@ export default defineComponent({
                         </li>
 
                         <!-- Integrações -->
-                        <li class="navbar_itens" @click="integracaoIsactive = !integracaoIsactive">
+                        <li v-show="user_type == 'ROLE_USER' || user_type == 'ROLE_ADMIN'" class="navbar_itens" @click="integracaoIsactive = !integracaoIsactive">
                               <button class="btn item_nav col-12">
                                     <div>
                                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
@@ -98,7 +102,7 @@ export default defineComponent({
                                     
                               </button>
                               <ul :class="['list-group item_nav_interno']">
-                                    <li :class="['navbar_itens', {'item_nav_act' :item_ativo === 'mark_ecom'}, {'item_nav_des' : integracaoIsactive}]" @click="changePage('integracoesmarketplacesecommerces')">
+                                    <li v-show="user_type == 'ROLE_ADMIN'" :class="['navbar_itens', {'item_nav_act' :item_ativo === 'mark_ecom'}, {'item_nav_des' : integracaoIsactive}]" @click="changePage('integracoesmarketplacesecommerces')">
                                     <button class="btn item_nav col-12" :disabled="have_fetch_erro">
                                           <div>
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-database" viewBox="0 0 16 16">
@@ -108,7 +112,7 @@ export default defineComponent({
                                           </div>
                                     </button>
                                     </li>
-                                    <li :class="['navbar_itens', {'item_nav_act' :item_ativo === 'map_pro'}, {'item_nav_des' : integracaoIsactive}]" @click="changePage('mapeamentoprodutos')">
+                                    <li v-show="user_type == 'ROLE_USER' || user_type == 'ROLE_ADMIN'" :class="['navbar_itens', {'item_nav_act' :item_ativo === 'map_pro'}, {'item_nav_des' : integracaoIsactive}]" @click="changePage('mapeamentoprodutos')">
                                           <button class="btn item_nav col-12" :disabled="have_fetch_erro">
                                                 <div>
                                                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-right" viewBox="0 0 16 16">
@@ -122,7 +126,7 @@ export default defineComponent({
                         </li>
 
                         <!-- Usuário -->
-                        <li :class="['navbar_itens', {'item_nav_act' :item_ativo === 'usuario'}]" @click="changePage('usuarios')">
+                        <li v-show="user_type == 'ROLE_ADMIN'" :class="['navbar_itens', {'item_nav_act' :item_ativo === 'usuario'}]" @click="changePage('usuarios')">
                               <button class="btn item_nav col-12" :disabled="have_fetch_erro">
                                     <div>
                                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
@@ -133,7 +137,7 @@ export default defineComponent({
                               </button>
                         </li>
                         <!-- LogATT -->
-                        <li :class="['navbar_itens', {'item_nav_act' :item_ativo === 'log_att'}]" @click="changePage('atualizacoesecommerces')">
+                        <li v-show="user_type == 'ROLE_SUP' || user_type == 'ROLE_ADMIN'" :class="['navbar_itens', {'item_nav_act' :item_ativo === 'log_att'}]" @click="changePage('atualizacoesecommerces')">
                               <button class="btn item_nav col-12" :disabled="have_fetch_erro">
                                     <div>
                                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-journal-text" viewBox="0 0 16 16">
@@ -146,7 +150,7 @@ export default defineComponent({
                               </button>
                         </li>
                         <!-- LogReq -->
-                        <li :class="['navbar_itens', {'item_nav_act' :item_ativo === 'log_req'}]" @click="changePage('logrequisicoes')">
+                        <li v-show="user_type == 'ROLE_ADMIN'" :class="['navbar_itens', {'item_nav_act' :item_ativo === 'log_req'}]" @click="changePage('logrequisicoes')">
                               <button class="btn item_nav col-12" :disabled="have_fetch_erro">
                                     <div>
                                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-list" viewBox="0 0 16 16">

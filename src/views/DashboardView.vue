@@ -1,4 +1,5 @@
 <script lang="ts">
+import { APPCONFIG } from '@/components/constants/Config';
 import DashboardComponent from '@/components/conteudos/DashboardComponent.vue';
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
 import NavbarComplet from '@/components/util/navbars/NavbarComplet.vue';
@@ -9,7 +10,8 @@ export default defineComponent({
       data() {
             return{
                   have_erro: false,
-                  mensage_erro: {}
+                  mensage_erro: {},
+                  auth_type: APPCONFIG.authType
             }
       },
       components:{
@@ -29,13 +31,17 @@ export default defineComponent({
 
 <template>
       <div class="row">
+            <!-- ERRO USER LOGIN -->
             <NavbarComplet
                   :have_erro="have_erro"
                   :lateral="'dashboard'"
+                  :user_type="auth_type"
             />
             <div class="col-12 col-lg-10" id="content" style="padding-left: calc(var(--bs-gutter-x));">
+                  {{ auth_type }}
                   <span v-if="!have_erro">
                         <DashboardComponent 
+                              :user_type="auth_type"
                               @Erro_fetch="(ret)=> checkErro(ret)"
                         />
                   </span>

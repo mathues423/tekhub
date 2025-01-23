@@ -1,4 +1,5 @@
 <script lang="ts">
+import { APPCONFIG } from '@/components/constants/Config';
 import AmbienteComponent from '@/components/conteudos/AmbienteComponent.vue';
 import NavbarComplet from '@/components/util/navbars/NavbarComplet.vue';
 import CriarBotaoComponent from '@/components/util/CriarBotaoComponent.vue';
@@ -13,6 +14,7 @@ export default defineComponent({
             return{
                   fetch_error_msg : {},
                   have_fetch_error : false,
+                  auth_type: APPCONFIG.authType
             }
       },
       components:{
@@ -39,6 +41,7 @@ export default defineComponent({
             <NavbarComplet 
                   :lateral="'ambiente'"
                   :have_erro="have_fetch_error"
+                  :user_type="auth_type"
             />
             <div class="col-12 col-lg-10" id="content" style="padding-left: calc(var(--bs-gutter-x));">
                   <span v-if="!have_fetch_error">

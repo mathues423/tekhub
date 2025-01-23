@@ -1,5 +1,5 @@
 import http from '@/services/http';
-
+/* eslint-disable */
 class fetch_padrao{
 
       /**
@@ -15,7 +15,7 @@ class fetch_padrao{
             try {
                   const { data } = await http.get(path);
                   return data;
-            } catch (error) {                
+            } catch (error) {             
                   throw error;
             }
       }
@@ -35,7 +35,7 @@ class fetch_padrao{
             try {
                   const { data } = await http.get(path+'/'+id);
                   return data;
-            } catch (error) {                 
+            } catch (error) {                
                   throw error;
             }
       }
@@ -54,7 +54,7 @@ class fetch_padrao{
             try {
                   const { data } = await http.post(path, dado);
                   return data;
-            } catch (error) {                 
+            } catch (error) {               
                   throw error;
             }
       }
@@ -76,7 +76,7 @@ class fetch_padrao{
             try {
                   const { data } = await http.put(path+'/'+id, dado);
                   return data;
-            } catch (error) {               
+            } catch (error) {              
                   throw error;
             }
       }

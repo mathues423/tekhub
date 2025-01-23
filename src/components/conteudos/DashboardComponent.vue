@@ -17,6 +17,12 @@ export default defineComponent({
                   this.teste = ret
             }).catch((error_retorno)=> this.$emit('Erro_fetch', error_retorno))
       },
+      props:{
+            user_type:{
+                  type: String,
+                  required: true
+            }
+      },
       emits:['Erro_fetch']
 })
 </script>
@@ -26,7 +32,7 @@ export default defineComponent({
             <div class="col-12">
                   PlaceHolder
             </div>
-            <div class="col-12">{{ teste }}</div>
+            <!-- <div class="col-12">{{ teste }}</div> -->
       </div>
 </template>
 

@@ -1,5 +1,12 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
+import { APPCONFIG } from '@/components/constants/Config';
+
+/*
+ADMIN [ALL]  
+SUP [Dashboard, Log Att]
+USER [Dashboard, Map Prod]
+*/
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -17,7 +24,8 @@ const routes: Array<RouteRecordRaw> = [
     name: 'dashboard',
     component: () => import ('@/views/DashboardView.vue'),
     meta:{
-      auth: true
+      auth: true,
+      user_type: ['ROLE_USER', 'ROLE_SUP', 'ROLE_ADMIN']
     }
   },
   {
@@ -25,7 +33,8 @@ const routes: Array<RouteRecordRaw> = [
     name: 'empresas',
     component: () => import ('@/views/Empresa/EmpresasView.vue'),
     meta:{
-      auth: true
+      auth: true,
+      user_type: ['ROLE_ADMIN']
     }
   },
   {
@@ -33,7 +42,8 @@ const routes: Array<RouteRecordRaw> = [
     name: 'empresas_criacao',
     component: () => import ('@/views/Empresa/EmpresasNewView.vue'),
     meta:{
-      auth: true
+      auth: true,
+      user_type: ['ROLE_ADMIN']
     }
   },
   {
@@ -41,7 +51,8 @@ const routes: Array<RouteRecordRaw> = [
     name: 'empresas_edicao',
     component: () => import ('@/views/Empresa/EmpresasEdicaoView.vue'),
     meta:{
-      auth: true
+      auth: true,
+      user_type: ['ROLE_ADMIN']
     }
   },
   {
@@ -49,7 +60,8 @@ const routes: Array<RouteRecordRaw> = [
     name: 'canais',
     component: () => import ('@/views/Canais/CanaisView.vue'),
     meta:{
-      auth: true
+      auth: true,
+      user_type: ['ROLE_ADMIN']
     }
   },
   {
@@ -57,7 +69,8 @@ const routes: Array<RouteRecordRaw> = [
     name: 'canais_criacao',
     component: () => import ('@/views/Canais/CanaisNewView.vue'),
     meta:{
-      auth: true
+      auth: true,
+      user_type: ['ROLE_ADMIN']
     }
   },
   {
@@ -65,7 +78,8 @@ const routes: Array<RouteRecordRaw> = [
     name: 'canais_edicao',
     component: () => import ('@/views/Canais/CanaisEdicaoView.vue'),
     meta:{
-      auth: true
+      auth: true,
+      user_type: ['ROLE_ADMIN']
     }
   },
   {
@@ -73,7 +87,8 @@ const routes: Array<RouteRecordRaw> = [
     name: 'ambiente',
     component: () => import ('@/views/Ambiente/AmbienteView.vue'),
     meta:{
-      auth: true
+      auth: true,
+      user_type: ['ROLE_ADMIN']
     }
   },
   {
@@ -81,7 +96,8 @@ const routes: Array<RouteRecordRaw> = [
     name: 'ambientes_criacao',
     component: () => import ('@/views/Ambiente/AmbienteNewView.vue'),
     meta:{
-      auth: true
+      auth: true,
+      user_type: ['ROLE_ADMIN']
     }
   },
   {
@@ -89,7 +105,8 @@ const routes: Array<RouteRecordRaw> = [
     name: 'ambientes_edicao',
     component: () => import ('@/views/Ambiente/AmbienteEdicaoView.vue'),
     meta:{
-      auth: true
+      auth: true,
+      user_type: ['ROLE_ADMIN']
     }
   },
   {
@@ -97,7 +114,8 @@ const routes: Array<RouteRecordRaw> = [
     name: 'marketplaceecommerce',
     component: () => import ('@/views/MarketplaceEcommerce/MarketplaceEcommerceView.vue'),
     meta:{
-      auth: true
+      auth: true,
+      user_type: ['ROLE_ADMIN']
     }
   },
   {
@@ -105,7 +123,8 @@ const routes: Array<RouteRecordRaw> = [
     name: 'marketplaceecommerce_criacao',
     component: () => import ('@/views/MarketplaceEcommerce/MarketplaceEcommerceNewView.vue'),
     meta:{
-      auth: true
+      auth: true,
+      user_type: ['ROLE_ADMIN']
     }
   },
   {
@@ -113,7 +132,8 @@ const routes: Array<RouteRecordRaw> = [
     name: 'marketplaceecommerce_edicao',
     component: () => import ('@/views/MarketplaceEcommerce/MarketplaceEcommerceEdicaoView.vue'),
     meta:{
-      auth: true
+      auth: true,
+      user_type: ['ROLE_ADMIN']
     }
   },
   {
@@ -121,7 +141,8 @@ const routes: Array<RouteRecordRaw> = [
     name: 'mapeamentoprodutos',
     component: () => import ('@/views/MapeamentoProduto/MapeamentoProdutoView.vue'),
     meta:{
-      auth: true
+      auth: true,
+      user_type: ['ROLE_USER', 'ROLE_ADMIN']
     }
   },
   {
@@ -129,7 +150,8 @@ const routes: Array<RouteRecordRaw> = [
     name: 'mapeamentoprodutos_criacao',
     component: () => import ('@/views/MapeamentoProduto/MapeamentoProdutoNewView.vue'),
     meta:{
-      auth: true
+      auth: true,
+      user_type: ['ROLE_USER', 'ROLE_ADMIN']
     }
   },
   {
@@ -137,16 +159,17 @@ const routes: Array<RouteRecordRaw> = [
     name: 'mapeamentoprodutos_edicao',
     component: () => import ('@/views/MapeamentoProduto/MapeamentoProdutoEdicaoView.vue'),
     meta:{
-      auth: true
+      auth: true,
+      user_type: ['ROLE_USER', 'ROLE_ADMIN']
     }
   },
-  
   {
     path: '/usuarios',
     name: 'usuarios',
     component: () => import ('@/views/Usuario/UsuarioView.vue'),
     meta:{
-      auth: true
+      auth: true,
+      user_type: ['ROLE_ADMIN']
     }
   },
   {
@@ -154,7 +177,8 @@ const routes: Array<RouteRecordRaw> = [
     name: 'usuarios_criacao',
     component: () => import ('@/views/Usuario/UsuarioNewView.vue'),
     meta:{
-      auth: true
+      auth: true,
+      user_type: ['ROLE_ADMIN']
     }
   },
   {
@@ -162,7 +186,8 @@ const routes: Array<RouteRecordRaw> = [
     name: 'usuarios_edicao',
     component: () => import ('@/views/Usuario/UsuarioEdicaoView.vue'),
     meta:{
-      auth: true
+      auth: true,
+      user_type: ['ROLE_ADMIN']
     }
   },
   {
@@ -170,7 +195,8 @@ const routes: Array<RouteRecordRaw> = [
     name: 'atualizacoesecommerces',
     component: () => import ('@/views/LogAtualizacao/LogAtualizacaoView.vue'),
     meta:{
-      auth: true
+      auth: true,
+      user_type: ['ROLE_SUP', 'ROLE_ADMIN']
     }
   },
   {
@@ -178,7 +204,8 @@ const routes: Array<RouteRecordRaw> = [
     name: 'logrequisicoes',
     component: () => import ('@/views/LogRequisicaoView.vue'),
     meta:{
-      auth: true
+      auth: true,
+      user_type: ['ROLE_ADMIN']
     }
   },
 ]
@@ -193,11 +220,25 @@ router.beforeEach(async (to, from, next) => {
   //FROM Onde eu estava
   //NEXT Passa para a pagina 
 
+  console.log('to', to);
+  console.log('from', from);
+  const required_type = to.meta.user_type as Array<string>;
+  console.log('Req', required_type);
+  
+  if (required_type) {
+    if (required_type.includes(APPCONFIG.authType)) {
+      next();
+    }else{
+      console.log('ERRO REQUEST');
+    }
+  }else{
+    next();
+  }
+
   // if(routes.map((x) => x.name).indexOf(to.name) == -1){
   //   next({name:'PageNotFaund'}); //Fazer a pagina erro 404
   // }
   
-  next();
 });
 
 export default router

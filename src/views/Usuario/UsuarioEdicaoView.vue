@@ -1,4 +1,5 @@
 <script lang="ts">
+import { APPCONFIG } from '@/components/constants/Config';
 import NavbarComplet from '@/components/util/navbars/NavbarComplet.vue';
 import VersaoMaximisada from '@/components/versionamento/VersaoMaximisada.vue';
 import router from '@/router';
@@ -13,6 +14,7 @@ import fetch_ from '@/services/fetch/requisicao';
 export default defineComponent({
       data(){
             return {
+                  auth_type: APPCONFIG.authType,
                   fetch_error_msg: {},
                   have_fetch_error: false,
                   empresa_escolhida:{},
@@ -81,8 +83,8 @@ export default defineComponent({
                   if(this.errors.length == 0){
                         Promise.resolve(
                               store.dispatch('setDadosID', {'roter_externa': 'usuario', 'id': id, 'roter_interna': 'usuarios', 'new_dado': this.usuario})
-                              .then(()=> {
-                                  this.new_user_reqest = false;  
+                              .then((ret)=> {
+                                  this.new_user_reqest = false;
                               })
                         ).catch((error_retorno)=> this.showError(error_retorno));
                   }else{
@@ -132,6 +134,7 @@ export default defineComponent({
             <NavbarComplet 
                   :have_erro="have_fetch_error"
                   :lateral="'usuario'"
+                  :user_type="auth_type"
             />
             <div class="col-12 col-lg-10" id="content">
                   <span v-if="!have_fetch_error">

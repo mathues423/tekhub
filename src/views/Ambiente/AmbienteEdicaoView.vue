@@ -1,4 +1,5 @@
 <script lang="ts">
+import { APPCONFIG } from '@/components/constants/Config';
 import router from '@/router';
 import NavbarComplet from '@/components/util/navbars/NavbarComplet.vue';
 import VersaoMaximisada from '@/components/versionamento/VersaoMaximisada.vue';
@@ -13,6 +14,7 @@ import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.v
 export default defineComponent({
       data(){
             return {
+                  auth_type: APPCONFIG.authType,
                   fetch_error_msg: {},
                   have_fetch_error: false,
                   isEditing: false,
@@ -103,6 +105,7 @@ export default defineComponent({
             <NavbarComplet 
                   :lateral="'ambiente'"
                   :have_erro="have_fetch_error"
+                  :user_type="auth_type"
             />
             <div class="col-12 col-lg-10" id="content">
                   <span v-if="!have_fetch_error">

@@ -15,6 +15,7 @@ class UserDados {
             token: '',
             perfilUsuario: ''
       };
+      user_type = '';
 
       async loginReq(email: string, senha: string, erros : ERRO) {
             if (email == '') {
@@ -31,10 +32,16 @@ class UserDados {
             this.usuario.senha = senha;   
             try {
                   const { data } = await http.post('/auth', this.usuario);
+                  console.log('data', data);
+                  
                   this.usuario.token = data.data.token;
                   this.usuario.perfilUsuario = data.data.perfilUsuario;
                   localStorage.setItem("TOKEN", this.usuario.token);
                   APPCONFIG.authToken = this.usuario.token;
+
+                  this.user_type = data.data.perfilUsuario;
+                  localStorage.setItem("USER_TYPE", this.user_type);
+                  APPCONFIG.authType = this.user_type;
                   //Requisição dos dados                    //Avanço para a pagina inicial
                   // await this.getDados();
                   router.push('/dashboard');
@@ -48,6 +55,9 @@ class UserDados {
             if(localStorage.getItem('TOKEN') != null){
                   this.usuario.token = (localStorage.getItem('TOKEN') || '');
                   APPCONFIG.authToken = this.usuario.token;  
+
+                  this.user_type = (localStorage.getItem('USER_TYPE') || '');
+                  APPCONFIG.authType = this.user_type;
                   // this.getDados();
                   router.push('/dashboard');
             }else{
@@ -57,6 +67,7 @@ class UserDados {
 
       async logOut(){
             localStorage.removeItem('TOKEN');
+            localStorage.removeItem('USER_TYPE');
             router.push('/');
       }
 

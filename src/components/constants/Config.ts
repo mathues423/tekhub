@@ -8,6 +8,7 @@ export const APPCONFIG = {
   linkProducao: "http://tekapi.teksystemcloud.com.br:8090/api/v1", //window.location.protocol + "//" + window.location.hostname.replace("www.", "") + ":8090/api/v1",
   // linkProducao: "https://ecommerces.teksystem.com.br:8090/api/v1",
   authToken: '',
+  authType: '',
   // lembrarme: 'lembrar-me',
 
   //region Usuario
