@@ -85,8 +85,6 @@ export default defineComponent({
                   }
             },
             requisicao(path: string){
-                  console.log(path);
-                  
                   this.lista_estado = 'Loader'
                   this.query_request_pesquisa = path;
                   Promise.resolve(store.dispatch('getDadosPaginados',{
@@ -97,7 +95,6 @@ export default defineComponent({
                         'item_page': this.ITEM_PAGINA_MAX
                   })).then(()=>{
                               this.dado_paginado.body = store.getters.getLogReq
-                              console.log(this.dado_paginado.body);
                               if(this.ITEM_PAGINA_MAX != 0){
                                     this.NUMERO_PAGINA = Math.ceil(store.getters.getLogReqLength / this.ITEM_PAGINA_MAX);
                               }else{

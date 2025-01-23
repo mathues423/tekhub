@@ -8,14 +8,6 @@ class DadoMapeamento {
 
 class Mapeamento {
       public async _add(dado : DadoMapeamento, erros_msg : Array<string>){
-            console.log('Dado ',dado);
-            console.log('Erro ', erros_msg);
-            
-            console.log('1if ',Object.keys(dado.empresa).length == 0);
-            console.log('2if ',Object.keys(dado.canal).length == 0);
-            console.log('3if ',dado.produtoErp == '');
-            console.log('4if ',dado.produtoSite == '');
-            
             if(Object.keys(dado.empresa).length == 0){
                   erros_msg.push('empresa');
             }
@@ -31,20 +23,9 @@ class Mapeamento {
             if(dado.produtoSite == ''){
                   erros_msg.push('produtoSite');
             }
-
-            if (erros_msg.length != 0) {
-                  console.warn("ERRO: " , erros_msg);
-            }
       }
 
       public async _edit(old_dado : DadoMapeamento, new_dado : DadoMapeamento, erros_msg : Array<string>){
-            // console.log('newEmpresa ', new_dado.empresa);
-            // console.log('oldEmpresa ', old_dado.empresa);
-            // console.log('obj_vazio ', obj_vazio);
-            // console.log('if_empresa ', Object.keys(new_dado.empresa).length);
-            // console.log('if_canal ', Object.keys(new_dado.canal).length);
-            // console.log('if_igual ', this.compObject(new_dado, old_dado));
-            
             if(Object.keys(new_dado.empresa).length == 0){
                   erros_msg.push('empresa');
             }
@@ -63,10 +44,6 @@ class Mapeamento {
             if(this.compObject(new_dado, old_dado)){
                   erros_msg.push('igual');
             }
-            if (erros_msg.length != 0) {
-                  console.warn("ERRO: " , erros_msg);
-            }
-            
       }
       public async _pesquisa(empresa: object, canal: object, erros: Array<string>){
             if(!empresa['codigo' as keyof typeof empresa] || !canal['codigo' as keyof typeof canal]){

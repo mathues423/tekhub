@@ -35,8 +35,6 @@ class Filtro {
                   }
             }
 
-            console.log('Teste', dado.campo);
-            
             if (dado.campo.filtro.tipo_obj == 'Number' && Number.isNaN(parseInt(dado.valor))) {
                   erros_msg.push('valor');
                   this.erros_obj.valor_incompativel = true;

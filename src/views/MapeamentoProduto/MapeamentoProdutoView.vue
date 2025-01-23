@@ -204,13 +204,8 @@ export default defineComponent({
                         'pagina_atual': 1,
                         'item_page': this.ITEM_PAGINA_MAX
                   }).then((le) => {
-                        if(le){
-                              this.dado_parametro.body = store.getters.getMapeamentoProduto_pesquisa;
-                              this.lista_estado = 'Lista_filtrada'
-                        }else{
-                              console.log(le);
-                              console.log("ERRO FILTRO");
-                        }
+                        this.dado_parametro.body = store.getters.getMapeamentoProduto_pesquisa;
+                        this.lista_estado = 'Lista_filtrada'
                   }).catch((error_retorno)=> this.showError(error_retorno))
             },
             quantidadeItens(args: number){

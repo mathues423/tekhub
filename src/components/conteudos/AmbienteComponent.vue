@@ -145,8 +145,6 @@ export default defineComponent({
                               this.NUMERO_PAGINA = 1;
                         }
                         this.lista_estado = 'Lista'
-                        console.log(args);
-                        console.log('IN REQUEST ', store.state);
                   }).catch((error_retorno)=> this.$emit('Erro_fetch', error_retorno))
             },
             filtraAmbiente(){

@@ -15,8 +15,7 @@ class fetch_padrao{
             try {
                   const { data } = await http.get(path);
                   return data;
-            } catch (error) {
-                  console.warn(error);                  
+            } catch (error) {                
                   throw error;
             }
       }
@@ -36,8 +35,7 @@ class fetch_padrao{
             try {
                   const { data } = await http.get(path+'/'+id);
                   return data;
-            } catch (error) {
-                  console.warn(error);                  
+            } catch (error) {                 
                   throw error;
             }
       }
@@ -56,8 +54,7 @@ class fetch_padrao{
             try {
                   const { data } = await http.post(path, dado);
                   return data;
-            } catch (error) {
-                  console.warn(error);                  
+            } catch (error) {                 
                   throw error;
             }
       }
@@ -79,8 +76,7 @@ class fetch_padrao{
             try {
                   const { data } = await http.put(path+'/'+id, dado);
                   return data;
-            } catch (error) {
-                  console.warn(error);                  
+            } catch (error) {               
                   throw error;
             }
       }
@@ -100,8 +96,7 @@ class fetch_padrao{
             try {
                   const { data } = await http.delete(path+'/'+id);
                   return data;
-            } catch (error) {
-                  console.warn(error);                  
+            } catch (error) {              
                   throw error;
             }
       }
@@ -120,8 +115,7 @@ class fetch_padrao{
             try {
                   const { data } = await http.get(path+'/'+request);
                   return data;
-            } catch (error) { 
-                  console.warn(error);                  
+            } catch (error) {                
                   throw error;
             }
       }

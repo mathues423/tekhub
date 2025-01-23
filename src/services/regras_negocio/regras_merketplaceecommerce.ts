@@ -67,10 +67,6 @@ class MarketplaceEcommerce {
             if (dado['atributosDefault' as keyof typeof dado]== "") {
                   delete dado['atributosDefault' as keyof typeof dado];
             }
-            
-            if (erros_msg.length != 0) {
-                  console.warn("ERRO: " , erros_msg);
-            }
       }
 
       public async _edit(old_dado : object, new_dado : object, erros_msg : Array<string>){
@@ -112,10 +108,6 @@ class MarketplaceEcommerce {
             if(this.compObject(new_dado, old_dado)){
                   erros_msg.push('igual');
             }
-            if (erros_msg.length != 0) {
-                  console.warn("ERRO: " , erros_msg);
-            }
-            
       }
       private compObject(old_obj: object, new_ob: object): boolean {
             const chave_old = Object.keys(old_obj),

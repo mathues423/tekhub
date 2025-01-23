@@ -19,9 +19,6 @@ class Usuario {
             if (dado.empresaCodigo == -1) {
                   erros_msg.push('empresa');
             }
-            if (erros_msg.length != 0) {
-                  console.warn("ERRO: " , erros_msg);
-            }
       }
 
       async _edit(old_dado : DadoUsuario, new_dado : DadoUsuario, erros_msg : Array<string>){
@@ -41,11 +38,6 @@ class Usuario {
             if(this.compObject(old_dado, new_dado)){
                   erros_msg.push('igual');
             }
-            
-            if (erros_msg.length != 0) {
-                  console.warn("ERRO: " , erros_msg);
-            }
-            
       }
       private compObject(old_obj: object, new_ob: object): boolean {
             const chave_old = Object.keys(old_obj),

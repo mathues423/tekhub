@@ -41,36 +41,12 @@ const store = createStore({
     //   )
     // },
     setPageDadosInterno(state, obj: object){
-      console.log('==========================================');
-      console.log('Befor set setPageDadosInterno');
-      console.log('state ', state);
-      console.log('state.itens ', state.itens_page_atual[obj['roter_interna' as keyof typeof obj]]);
       state.pages_atual[obj['roter_interna' as keyof typeof obj]] = obj['page' as keyof typeof obj];
-      console.log('after')
-      console.log('state ', state);
-      console.log('state.itens ', state.itens_page_atual[obj['roter_interna' as keyof typeof obj]]);
-      console.log('==========================================');
     },
     setItensPaginaInterno(state, obj: object){
       const chave = obj['roter_interna' as keyof typeof obj];
       const valor = obj['itens_page' as keyof typeof obj];
-      console.log('==========================================');
-      console.log('Befor set setItensPaginaInterno');
-      console.log('state ', state);
-      console.log('state.itens ', state.itens_page_atual[chave]);
       state.itens_page_atual[chave] = valor;
-      console.log('after')
-      console.log('state ', state);
-      console.log('state.itens ', state.itens_page_atual[chave]);
-      console.log('==========================================');
-
-      // const objaux = new Object();
-      // objaux[obj['roter_interna' as keyof typeof obj] as keyof typeof objaux] = obj['itens_page' as keyof typeof obj];
-      // console.log('State Store ',state);
-      // console.log('rota interna ', obj['roter_interna' as keyof typeof obj]);
-      // console.log('itens ', obj['itens_page' as keyof typeof obj]);
-      // state['info_page' as keyof typeof state]['itens_page_atual' as keyof typeof state.itens_page_atual] = 
-      // console.log('State Store ',state.itens_page_atual[obj['roter_interna' as keyof typeof obj]]);
     },
     ordenarDadosInterno(state, obj: {ordem: string, rota_interna: string, nome_dado: string, tipo: string}){
       const aux = state[obj.rota_interna as keyof typeof state]['data' as keyof typeof Object] as Array<object>;
@@ -99,7 +75,6 @@ const store = createStore({
     },
     resetDadosInterno(state, key: string){
       state[key as keyof typeof state] = Object;
-      console.log('RESET> ', state[key as keyof typeof state]);
     }
   },
   getters: {
