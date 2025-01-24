@@ -8,14 +8,19 @@ export default defineComponent({
       data() {
             return{
                   teste: {},
-                  auth: ''
+                  auth: '',
+                  is_user: false,
             }
       },
       mounted() {
-            Promise.resolve(fetch_.getDado('/atualizacaoecommerce/pendentes'))
-            .then((ret)=> {
-                  this.teste = ret
-            }).catch((error_retorno)=> this.$emit('Erro_fetch', error_retorno))
+            if (this.user_type != 'ROLE_USER') {
+                  Promise.resolve(fetch_.getDado('/atualizacaoecommerce/pendentes'))
+                  .then((ret)=> {
+                        this.teste = ret
+                  }).catch((error_retorno)=> this.$emit('Erro_fetch', error_retorno))
+            }else{
+                  this.is_user = true
+            }
       },
       props:{
             user_type:{
@@ -29,8 +34,12 @@ export default defineComponent({
 
 <template id="Dash_comp">
       <div class="row">
-            <div class="col-12">
-                  PlaceHolder
+            <!-- ROLE_USER -->
+            <div v-if="is_user" class="col-12">
+                  USER ROLE
+            </div>
+            <div v-else class="col-12">
+                  ADMIN | SUP ROLE
             </div>
             <!-- <div class="col-12">{{ teste }}</div> -->
       </div>
