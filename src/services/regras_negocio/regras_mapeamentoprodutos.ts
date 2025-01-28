@@ -45,9 +45,9 @@ class Mapeamento {
                   erros_msg.push('igual');
             }
       }
-      public async _pesquisa(empresa: object, canal: object, erros: Array<string>){
+      public async _pesquisa(empresa: object, canal: object, erros: Array<string>, user_type: string){
             if(!empresa['codigo' as keyof typeof empresa] || !canal['codigo' as keyof typeof canal]){
-                  if(!empresa['codigo' as keyof typeof empresa])
+                  if(!empresa['codigo' as keyof typeof empresa] && user_type != 'ROLE_USER')
                         erros.push('empresa')
                   if(!canal['codigo' as keyof typeof canal])
                         erros.push('canal')

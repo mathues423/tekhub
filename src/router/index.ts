@@ -220,10 +220,7 @@ router.beforeEach(async (to, from, next) => {
   //FROM Onde eu estava
   //NEXT Passa para a pagina 
 
-  console.log('to', to);
-  console.log('from', from);
   const required_type = to.meta.user_type as Array<string>;
-  console.log('Req', required_type);
   
   if (required_type) {
     if (required_type.includes(APPCONFIG.authType)) {

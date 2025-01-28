@@ -40,6 +40,7 @@ export default defineComponent({
             </div>
             <div v-else class="col-12">
                   ADMIN | SUP ROLE
+                  {{ teste }}
             </div>
             <!-- <div class="col-12">{{ teste }}</div> -->
       </div>

@@ -59,7 +59,12 @@ class UserDados {
                   this.user_type = (localStorage.getItem('USER_TYPE') || '');
                   APPCONFIG.authType = this.user_type;
                   // this.getDados();
-                  router.push('/dashboard');
+                  if (router.options.history.state['current' as keyof typeof router.options.history.state]) {
+                        const rota = (router.options.history.state['current' as keyof typeof router.options.history.state] || '/dashboard') as string;
+                        router.push(rota);
+                  }else{
+                        router.push('/dashboard')
+                  }
             }else{
                   router.push('/');
             }

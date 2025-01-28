@@ -127,7 +127,7 @@ export default defineComponent({
             async requestDados(){
                   this.dado_parametro.header = this.dado_paginado.header;
                   this.erros_pesquisa = [];
-                  regra_map._pesquisa(this.dado_empresa_selected, this.canal_selected, this.erros_pesquisa);
+                  regra_map._pesquisa(this.dado_empresa_selected, this.canal_selected, this.erros_pesquisa, this.auth_type);
                   if(this.erros_pesquisa.length != 0){
                         return
                   }
@@ -236,17 +236,17 @@ export default defineComponent({
                         <div :class="['row', 'my-1']">
                               <div class="col-1"></div>
                               <div class="Card-Body col-10 row">
-                                    <div class="col-2 form_text">
+                                    <div class="col-2 form_text" v-if="auth_type != 'ROLE_USER'">
                                           *Empresa: 
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-6" v-if="auth_type != 'ROLE_USER'">
                                           <EmpresaSelectComponent
                                                 :have_erro="erros_pesquisa.findIndex((x) => x =='empresa') != -1"
                                                 @empresa_escolhida="(arg: object)=> dado_empresa_selected = arg"
                                                 @erro_fetch="(ret)=> showError(ret)"
                                           />
                                     </div>
-                                    <div class="col-4">
+                                    <div class="col-4" v-if="auth_type != 'ROLE_USER'">
                                           <ErroFormComponent
                                                 :mensagem="'Informe a Empresa'"
                                                 :class="['alert-danger desativada',{'ativada' : erros_pesquisa.indexOf('empresa') != -1 }]"
@@ -254,7 +254,7 @@ export default defineComponent({
                                     </div>
       
                                     <div class="col-2 form_text">
-                                          *Canal de venda: 
+                                          *Canal de venda:
                                     </div>
       
                                     <div class="col-6">
@@ -263,7 +263,7 @@ export default defineComponent({
                                                       :tipo_loader="'select'"
                                                 />
                                           </div>
-                                          <select class="custom-select w-100" v-model="canal_selected" required v-show="!inRequestCanal" :disabled="!escolheu_empresa">
+                                          <select class="custom-select w-100" v-model="canal_selected" required v-show="!inRequestCanal">
                                                 <option selected disabled :value="{}"> Selecione o campo</option>
                                                 <option v-for="canal in dado_canais" :key="canal" :value="canal"> {{ canal['ambienteCanalAlias' as keyof typeof canal] }}</option>
                                           </select>
@@ -338,6 +338,7 @@ export default defineComponent({
                   <span v-else>
                         <ErroResponseComponent 
                               :error_msg="fetch_error_msg"
+                              @voltar="have_fetch_error = false"
                         />
                   </span>
             </div>
