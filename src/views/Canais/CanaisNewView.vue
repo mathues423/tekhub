@@ -95,7 +95,7 @@ export default defineComponent({
                         <!-- ERRO no servidor mensagem -->
                         <TimeMensageComponent v-if="fetch_error_msg['data' as keyof typeof fetch_error_msg]"
                               :mensagem="'Houve algum erro no servidor'"
-                              @fechar_erro="()=> voltarErroServer"
+                              @fechar_erro="voltarErroServer"
                         />
                         <div class="row">
                               <div class="col-1"></div>

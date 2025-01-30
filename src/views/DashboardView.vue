@@ -48,7 +48,7 @@ export default defineComponent({
                         <!-- ERRO no servidor mensagem -->
                         <TimeMensageComponent v-if="mensage_erro['data' as keyof typeof mensage_erro]"
                               :mensagem="'Houve algum erro no servidor'"
-                              @fechar_erro="()=> voltarErroServer"
+                              @fechar_erro="voltarErroServer"
                         />
                         <DashboardComponent 
                               :user_type="auth_type"

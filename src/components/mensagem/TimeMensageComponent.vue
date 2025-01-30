@@ -15,7 +15,7 @@ export default defineComponent({
             time_duration:{
                   type: Number,
                   required: true,
-                  default: 5
+                  default: 10
             }
       },
       mounted() {
@@ -40,6 +40,7 @@ export default defineComponent({
 
 <template>
       <Teleport to="body">
+            {{ mensagem }}
             <div class="page_mask" v-if="!is_closed">
                   <div class="row">
                         <div class="col-1 col-lg-2"></div>
@@ -47,8 +48,12 @@ export default defineComponent({
                               <div class="col" style="align-content: center;">
                                     {{ mensagem }}
                               </div>
-                              <div class="col-2">
-                                    <button class="btn btn-light w-100" @click="is_closed = true">
+                              <div class="col-2" style="align-content: center;">
+                                    <button class="btn btn-info w-100" @click="()=>{
+                                          time_mensage = 0;
+                                          is_closed= true;
+                                          $emit('fechar_erro');
+                                    }">
                                           Fechar ( {{ time_mensage }} )
                                     </button>
                               </div>
