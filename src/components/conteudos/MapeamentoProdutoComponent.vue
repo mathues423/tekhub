@@ -66,6 +66,10 @@ export default defineComponent({
             header_info:{
                   type: Object,
                   required: true
+            },
+            is_deletando:{
+                  type: Boolean,
+                  required: true
             }
       },
       components:{
@@ -152,6 +156,7 @@ export default defineComponent({
                         {'nome': 'Produto Pai Site', 'key': 'produtoPaiSite'},
                   ]"
                   @deletarDadoPai="(arg) => deletar(arg)"
+                  :deletando="is_deletando"
                   @ordenarDadoPai="(arg) => ordenaMapeamentoProduto(arg)"
                   @filtrarDadoPai="filtraMapeamentoProduto"
                   @trocarQuandidadeDadoPai="(args: number)=> quantidadeItens(args)"
@@ -179,6 +184,7 @@ export default defineComponent({
                         {'nome': 'Produto Pai Site', 'key': 'produtoPaiSite'},
                   ]"
                   @deletarDadoPai="(arg: object) => deletar(arg)"
+                  :deletando="is_deletando"
                   @trocarQuandidadeDadoPai="(args: number)=> quantidadeItens(args)"
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina" 
@@ -211,6 +217,7 @@ export default defineComponent({
                         {'nome': 'Produto Pai Site', 'key': 'produtoPaiSite'},
                   ]"
                   @deletarDadoPai="(arg: object) => deletar(arg)"
+                  :deletando="is_deletando"
                   @trocarQuandidadeDadoPai="(args: number)=> quantidadeItens(args)"
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina" 
@@ -237,6 +244,7 @@ export default defineComponent({
                         {'nome': 'Produto Pai Site', 'key': 'produtoPaiSite'},
                   ]"
                   @deletarDadoPai="(arg: object) => deletar(arg)"
+                  :deletando="is_deletando"
                   @ordenarDadoPai="(arg: object) => ordenaMapeamentoProduto(arg)"
                   @filtrarDadoPai="filtraMapeamentoProduto"
                   @trocarQuandidadeDadoPai="(args: number)=> quantidadeItens(args)"

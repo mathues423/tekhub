@@ -72,7 +72,8 @@ export default defineComponent({
             largura: window.innerWidth,
 
             request_pesquisa: '',
-            is_in_DeletModal: false
+            is_in_DeletModal: false,
+            is_deletando: false
           }
       },
       components:{
@@ -115,6 +116,7 @@ export default defineComponent({
             },
             deletar(objeto: {codigo: string}){
                   this.is_in_DeletModal = true;
+                  this.is_deletando = true;
                   const rota_interna = this.itsOnFilter ? 'ambientes_pesquisa' : 'ambientes';
                   let aux = {'roter_externa': 'ambiente', 'id': objeto.codigo, 'roter_interna': rota_interna}
                   store.dispatch('delDadosID', aux)
@@ -125,9 +127,11 @@ export default defineComponent({
                               }else{
                                     this.requestDados();
                               }
+                              this.is_deletando = false;
                         }
                   ).catch((error_retorno)=> {
                         this.is_in_DeletModal = false;
+                        this.is_deletando = false;
                         this.$emit('Erro_fetch', error_retorno)
                   })
             },
@@ -247,6 +251,7 @@ export default defineComponent({
                         {'nome': 'Verção', 'key': 'versao'},
                   ]"
                   @deletarDadoPai="(arg : any) => deletar(arg)"
+                  :deletando="is_deletando"
                   @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina"
@@ -273,6 +278,7 @@ export default defineComponent({
                         {'nome': 'Verção', 'key': 'versao'},
                   ]"
                   @deletarDadoPai="(arg) => deletar(arg)"
+                  :deletando="is_deletando"
                   @ordenarDadoPai="(arg) => {return null}"
                   @filtrarDadoPai="filtraAmbiente"
                   @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
@@ -308,6 +314,7 @@ export default defineComponent({
                         {'nome': 'Verção', 'key': 'versao'},
                   ]"
                   @deletarDadoPai="(arg : any) => deletar(arg)"
+                  :deletando="is_deletando"
                   @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina"
@@ -335,6 +342,7 @@ export default defineComponent({
                         {'nome': 'Verção', 'key': 'versao'},
                   ]"
                   @deletarDadoPai="(arg) => deletar(arg)"
+                  :deletando="is_deletando"
                   @ordenarDadoPai="(arg) => {return null}"
                   @filtrarDadoPai="filtraAmbiente"
                   @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"

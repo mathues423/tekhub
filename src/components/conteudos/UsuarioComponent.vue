@@ -77,7 +77,8 @@ export default defineComponent({
             largura: window.innerWidth,
 
             request_pesquisa: '',
-            is_in_DeletModal: false
+            is_in_DeletModal: false,
+            is_deletando:false
           }
       },
       components:{
@@ -112,6 +113,8 @@ export default defineComponent({
                   }
             },
             deletar(objeto: {codigo: string}){
+                  this.is_in_DeletModal = true;
+                  this.is_deletando = true;
                   const rota_interna = this.itsOnFilter ? 'usuarios_pesquisa' : 'usuarios';
                   let aux = {'roter_externa': 'usuario', 'id': objeto.codigo, 'roter_interna': rota_interna}
                   Promise.resolve(store.dispatch('delDadosID', aux))
@@ -121,7 +124,12 @@ export default defineComponent({
                         }else{
                               this.requestDados()
                         }
-                  }).catch((error_retorno)=> this.$emit('Erro_fetch', error_retorno))
+                        this.is_deletando = true;
+                  }).catch((error_retorno)=> {
+                        this.$emit('Erro_fetch', error_retorno)
+                        this.is_deletando = false;
+                        this.is_in_DeletModal = false;
+                  })
             },
             avancaPagina(){
                   if (this.pagina_atual < this.NUMERO_PAGINA) {
@@ -253,6 +261,7 @@ export default defineComponent({
                         {'nome': 'Empresa', 'key': 'empresaDescricao'},
                   ]"
                   @deletarDadoPai="(arg : any) => deletar(arg)"
+                  :deletando="is_deletando"
                   @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina"
@@ -278,6 +287,7 @@ export default defineComponent({
                         {'nome': 'Empresa', 'key': 'empresaDescricao'},
                   ]"
                   @deletarDadoPai="(arg : any) => deletar(arg)"
+                  :deletando="is_deletando"
                   @ordenarDadoPai="(arg : any) => ordenaUsuario(arg)"
                   @filtrarDadoPai="filtraUsuario"
                   @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
@@ -311,6 +321,7 @@ export default defineComponent({
                         {'nome': 'Empresa', 'key': 'empresaDescricao'},
                   ]"
                   @deletarDadoPai="(arg : any) => deletar(arg)"
+                  :deletando="is_deletando"
                   
                   @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
                   @avancar="avancaPagina" 
@@ -337,6 +348,7 @@ export default defineComponent({
                         {'nome': 'Empresa', 'key': 'empresaDescricao'},
                   ]"
                   @deletarDadoPai="(arg : any) => deletar(arg)"
+                  :deletando="is_deletando"
                   @ordenarDadoPai="(arg : any) => ordenaUsuario(arg)"
                   @filtrarDadoPai="filtraUsuario"
                   @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"

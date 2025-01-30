@@ -66,6 +66,10 @@ export default defineComponent({
             showDeletModal:{
                   type: Boolean,
                   required: true
+            },
+            deletando:{
+                  type: Boolean,
+                  required: true
             }
       },
       mounted() {
@@ -120,7 +124,7 @@ export default defineComponent({
 </script>
 
 <template>
-      <ModalRemoçãoComponent :isAtivo="showDeletModal" @close="$emit('fecharModal')" @deletar_item="deletarDado">
+      <ModalRemoçãoComponent :isInDelet="deletando" :isAtivo="showDeletModal" @close="$emit('fecharModal')" @deletar_item="deletarDado">
             <template v-slot:body> 
                   <div class="aviso">Atenção essa ação não poderá ser desfeita.</div>
                   <div style="padding-top: 5px;">Informações do item</div>

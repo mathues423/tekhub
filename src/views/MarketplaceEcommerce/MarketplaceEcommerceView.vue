@@ -80,7 +80,8 @@ export default defineComponent({
                   inRequestEmpresa: false,
 
                   request_pesquisa: '',
-                  is_in_DeletModal: false
+                  is_in_DeletModal: false,
+                  is_deletando: false
             }
       },
       components:{
@@ -122,6 +123,8 @@ export default defineComponent({
                   }).catch((error_retorno)=> this.showError(error_retorno))
             },
             deletar(objeto: {codigo: string}){
+                  this.is_deletando = false;
+                  this.is_in_DeletModal = true;
                   const rota_interna = this.itsOnFilter ? 'marketplaceecommerce_pesquisa' : 'marketplaceecommerce';
                   let aux = {'roter_externa': 'integracaomarketplaceecommerce', 'id': objeto.codigo, 'roter_interna': rota_interna}
                   Promise.resolve(store.dispatch('delDadosID', aux))
@@ -131,7 +134,12 @@ export default defineComponent({
                         }else{
                               this.requestDados()
                         }
-                  }).catch((error_retorno)=> this.showError(error_retorno))
+                        this.is_deletando = false;
+                  }).catch((error_retorno)=> {
+                        this.is_deletando = false;
+                        this.is_in_DeletModal = false;
+                        this.showError(error_retorno)
+                  })
             },
             avancaPagina(){
                   if (this.pagina_atual < this.NUMERO_PAGINA) {
@@ -260,8 +268,10 @@ export default defineComponent({
                               @Erro_fetch="(arg)=> showError(arg)"
                         />
                         <CriarBotaoComponent @criar="adicionarNewmarketplaceecommerce"/>
-                        <MarketplaceEcommerceComponent 
+                        <MarketplaceEcommerceComponent
+                              :is_deletando="is_deletando"
                               :header_info="dado_paginado.header"
+
                               :ITEM_PAGINA_MAX="ITEM_PAGINA_MAX"
                               :NUMERO_PAGINA="NUMERO_PAGINA"
                               :pagina_atual="pagina_atual"

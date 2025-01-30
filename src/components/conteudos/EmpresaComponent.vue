@@ -86,7 +86,8 @@ export default defineComponent({
             largura: window.innerWidth,
 
             request_pesquisa: '',
-            is_in_DeletModal: false
+            is_in_DeletModal: false,
+            is_deletando: false
           }
       },
       components:{
@@ -122,6 +123,7 @@ export default defineComponent({
             },
 
             deletar(objeto: {codigo: string}){
+                  this.is_deletando = true;
                   this.is_in_DeletModal = true;
                   const rota_interna = this.itsOnFilter ? 'empresas_pesquisa' : 'empresas';
                   let aux = {'roter_externa': 'empresa', 'id': objeto.codigo, 'roter_interna': rota_interna}
@@ -133,10 +135,12 @@ export default defineComponent({
                               }else{
                                     this.requestDados();
                               }
+                              this.is_deletando = false;
                         }
                   ).catch((error_retorno)=> {
-                        this.is_in_DeletModal = false
-                        this.$emit('Erro_fetch', error_retorno)
+                        this.is_in_DeletModal = false;
+                        this.is_deletando = false;
+                        this.$emit('Erro_fetch', error_retorno);
                   })
             },
             avancaPagina(){
@@ -275,6 +279,7 @@ export default defineComponent({
                         {'nome': 'Verção', 'key': 'versaoApiTek'},
                   ]"
                   @deletarDadoPai="(arg : any) => deletar(arg)"
+                  :deletando="is_deletando"
                   @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina"
@@ -301,6 +306,7 @@ export default defineComponent({
                         {'nome': 'Verção', 'key': 'versaoApiTek'},
                   ]"
                   @deletarDadoPai="(arg : any) => deletar(arg)"
+                  :deletando="is_deletando"
                   @ordenarDadoPai="(arg : any) => ordenaEmpresa(arg)"
                   @filtrarDadoPai="filtraEmpresa"
                   @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
@@ -334,6 +340,7 @@ export default defineComponent({
                         {'nome': 'Verção', 'key': 'versaoApiTek'},
                   ]"
                   @deletarDadoPai="(arg : any) => deletar(arg)"
+                  :deletando="is_deletando"
                   @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina"
@@ -361,6 +368,7 @@ export default defineComponent({
                         {'nome': 'Verção', 'key': 'versaoApiTek'},
                   ]"
                   @deletarDadoPai="(arg : any) => deletar(arg)"
+                  :deletando="is_deletando"
                   @ordenarDadoPai="(arg : any) => ordenaEmpresa(arg)"
                   @filtrarDadoPai="filtraEmpresa"
                   @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"

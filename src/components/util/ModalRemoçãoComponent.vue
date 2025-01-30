@@ -4,18 +4,21 @@ import { defineComponent } from 'vue'
 export default defineComponent({
       data() {
           return {
-            click_delete: false
+            click_delete: this.isInDelet
           }
       },
       props:{
             isAtivo:{
                   type: Boolean,
                   retuire: true
+            },
+            isInDelet:{
+                  type: Boolean,
+                  required: true
             }
       },
       methods:{
             deletarItem(){
-                  this.click_delete = true;
                   this.$emit('deletar_item')
             }
       },

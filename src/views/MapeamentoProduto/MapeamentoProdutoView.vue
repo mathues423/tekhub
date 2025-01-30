@@ -18,7 +18,6 @@ import TimeMensageComponent from '@/components/mensagem/TimeMensageComponent.vue
 export default defineComponent({
       data(){
             return {
-                  is_in_DeletModal:false,
                   auth_type: APPCONFIG.authType,
                   fetch_error_msg: {},
                   have_fetch_error: false,
@@ -79,6 +78,9 @@ export default defineComponent({
                   filtro_erp: '',
                   filtro_site: '',
                   request_pesquisa: '',
+
+                  is_in_DeletModal:false,
+                  is_deletando: false
             }
       },
       components:{
@@ -113,6 +115,7 @@ export default defineComponent({
                   router.push('/mapeamentoprodutos/0');
             },
             deletar(objeto: {codigo: string}){
+                  this.is_deletando = true;
                   this.is_in_DeletModal = true;
                   const rota_interna = this.itsOnFilter ? 'mapeamentoprodudo_pesquisa' : 'mapeamentoprodudo';
                   let aux = {'roter_externa': 'mapeamentoproduto', 'id': objeto.codigo, 'roter_interna': rota_interna}
@@ -124,9 +127,11 @@ export default defineComponent({
                               }else{
                                     this.requestDados();
                               }
+                              this.is_deletando = false;
                         }
                   ).catch((error_retorno)=> {
                         this.showError(error_retorno)
+                        this.is_deletando = false;
                         this.is_in_DeletModal = false;
                   })
             },
@@ -381,6 +386,7 @@ export default defineComponent({
       
                         <CriarBotaoComponent @criar="adicionarMapeamentoProduto"/>
                         <MapeamentoProdutoComponent
+                              :is_deletando="is_deletando"
                               :is_in_DeletModal="is_in_DeletModal"
                               :header_info="dado_paginado.header"
 

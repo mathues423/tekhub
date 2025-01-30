@@ -82,7 +82,8 @@ export default defineComponent({
                   largura: window.innerWidth,
                   
                   request_pesquisa: '',
-                  is_in_DeletModal: false
+                  is_in_DeletModal: false,
+                  is_deletando: false
             }
       },
       components:{
@@ -117,6 +118,8 @@ export default defineComponent({
                   }
             },
             deletar(objeto: {codigo: string}){
+                  this.is_deletando = false;
+                  this.is_in_DeletModal = true;
                   const rota_interna = this.itsOnFilter ? 'canais_pesquisa' : 'canais';
                   let aux = {'roter_externa': 'canal', 'id': objeto.codigo, 'roter_interna': rota_interna}
                   store.dispatch('delDadosID', aux)
@@ -127,8 +130,13 @@ export default defineComponent({
                               }else{
                                     this.requestDados();
                               }
+                              this.is_deletando = false;
                         }
-                  ).catch((error_retorno)=> this.$emit('Erro_fetch', error_retorno))
+                  ).catch((error_retorno)=> {
+                        this.is_deletando = false;
+                        this.is_in_DeletModal = false;
+                        this.$emit('Erro_fetch', error_retorno)
+                  })
             },
             avancaPagina(){
                   if (this.pagina_atual < this.NUMERO_PAGINA) {
@@ -243,6 +251,7 @@ export default defineComponent({
                         {'nome': 'TIPO', 'key': 'tipo'},
                   ]"
                   @deletarDadoPai="(arg : any) => deletar(arg)"
+                  :deletando="is_deletando"
                   @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina"
@@ -268,6 +277,7 @@ export default defineComponent({
                         {'nome': 'TIPO', 'key': 'tipo'},
                   ]"
                   @deletarDadoPai="(arg) => deletar(arg)"
+                  :deletando="is_deletando"
                   @ordenarDadoPai="(arg) => {return null}"
                   @filtrarDadoPai="filtraCanais"
                   @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
@@ -301,6 +311,7 @@ export default defineComponent({
                         {'nome': 'TIPO', 'key': 'tipo'},
                   ]"
                   @deletarDadoPai="(arg : any) => deletar(arg)"
+                  :deletando="is_deletando"
                   @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina"
@@ -327,6 +338,7 @@ export default defineComponent({
                         {'nome': 'TIPO', 'key': 'tipo'},
                   ]"
                   @deletarDadoPai="(arg) => deletar(arg)"
+                  :deletando="is_deletando"
                   @ordenarDadoPai="(arg) => {return null}"
                   @filtrarDadoPai="filtraCanais"
                   @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
