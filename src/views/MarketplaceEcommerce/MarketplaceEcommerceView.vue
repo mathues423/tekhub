@@ -33,7 +33,7 @@ export default defineComponent({
                               'isfiltrable': true, 'isordenable':true},
 
                               {'header': 'Canal', 'key_body': 'ambienteCanalAlias',
-                              'filtro':{'tipo_obj': 'Number', 'tipo_filtro': 'all'},
+                              'filtro':{'tipo_obj': 'String', 'tipo_filtro': 'all'},
                               'isfiltrable': true, 'isordenable':false},
 
                               {'header': 'Código da Empresa', 'key_body': 'empresaCodigo',
@@ -42,7 +42,7 @@ export default defineComponent({
                               'isfiltrable': true, 'isordenable':true},
 
                               {'header': 'Descrição da Empresa', 'key_body': 'empresaDescricao',
-                              'filtro':{'tipo_obj': 'Number', 'tipo_filtro': 'all'},
+                              'filtro':{'tipo_obj': 'String', 'tipo_filtro': 'all'},
                               'isfiltrable': true, 'isordenable':false},
 
                               {'header': 'Ações', 'key_body': 'button',
@@ -53,16 +53,20 @@ export default defineComponent({
                   dado_pesquisa:{
                         header:[
                               {'header': 'Código', 'key_body': 'codigo',
-                              'isfiltrable': false, 'isordenable':false},
+                              'filtro':{'tipo_obj': 'Number', 'tipo_filtro': 'all'},
+                              'isfiltrable': true, 'isordenable':false},
 
                               {'header': 'Canal', 'key_body': 'ambienteCanalAlias',
-                              'isfiltrable': false, 'isordenable':false},
+                              'filtro':{'tipo_obj': 'String', 'tipo_filtro': 'all'},
+                              'isfiltrable': true, 'isordenable':false},
 
                               {'header': 'Código da Empresa', 'key_body': 'empresaCodigo',
-                              'isfiltrable': false, 'isordenable':false},
+                              'filtro':{'tipo_obj': 'Number', 'tipo_filtro': 'all'},
+                              'isfiltrable': true, 'isordenable':false},
 
                               {'header': 'Descrição da Empresa', 'key_body': 'empresaDescricao',
-                              'isfiltrable': false, 'isordenable':false},
+                              'filtro':{'tipo_obj': 'String', 'tipo_filtro': 'all'},
+                              'isfiltrable': true, 'isordenable':false},
 
                               {'header': 'Ações', 'key_body': 'button',
                               'isfiltrable': false, 'isordenable':false}
@@ -73,7 +77,10 @@ export default defineComponent({
                         header: [] as Array<object>,
                         body: [] as Array<object>
                   },
-                  inRequestEmpresa: false
+                  inRequestEmpresa: false,
+
+                  request_pesquisa: '',
+                  is_in_DeletModal: false
             }
       },
       components:{
@@ -115,22 +122,35 @@ export default defineComponent({
                   }).catch((error_retorno)=> this.showError(error_retorno))
             },
             deletar(objeto: {codigo: string}){
-                  let aux = {'roter_externa': 'integracaomarketplaceecommerce', 'id': objeto.codigo, 'roter_interna': 'marketplaceecommerce'}
+                  const rota_interna = this.itsOnFilter ? 'marketplaceecommerce_pesquisa' : 'marketplaceecommerce';
+                  let aux = {'roter_externa': 'integracaomarketplaceecommerce', 'id': objeto.codigo, 'roter_interna': rota_interna}
                   Promise.resolve(store.dispatch('delDadosID', aux))
-                  .then(
-                        () => this.requestDados()
-                  ).catch((error_retorno)=> this.showError(error_retorno))
+                  .then(() => {
+                        if (this.itsOnFilter) {
+                              this.getPesquisa(this.request_pesquisa)
+                        }else{
+                              this.requestDados()
+                        }
+                  }).catch((error_retorno)=> this.showError(error_retorno))
             },
             avancaPagina(){
                   if (this.pagina_atual < this.NUMERO_PAGINA) {
                         this.pagina_atual++;
-                        this.requestDados();
+                        if (this.itsOnFilter) {
+                              this.getPesquisa(this.request_pesquisa)
+                        }else{
+                              this.requestDados()
+                        }
                   }
             },
             recuarPagina(){
                   if (this.pagina_atual > 1) {
                         this.pagina_atual--;
-                        this.requestDados();
+                        if (this.itsOnFilter) {
+                              this.getPesquisa(this.request_pesquisa)
+                        }else{
+                              this.requestDados()
+                        }
                   }
             },
             async requestDados(){
@@ -161,9 +181,10 @@ export default defineComponent({
                         title.ordem.tipo_ordenacao = 'Asc'
                   }
                   title.ordem.on = true;
+                  const rota_interna = this.itsOnFilter ? 'marketplaceecommerce_pesquisa' : 'marketplaceecommerce';
                   store.commit('ordenarDadosInterno', {
                         'ordem': title.ordem.tipo_ordenacao,
-                        'rota_interna': 'marketplaceecommerce',
+                        'rota_interna': rota_interna,
                         'nome_dado': title.key_body,
                         'tipo': title.ordem.tipo_obj
                   })
@@ -175,18 +196,27 @@ export default defineComponent({
             closefiltrarMarketplaceEcommerce(){
                   this.itsOnFilter = false;
                   this.lista_estado = 'Lista'
+                  this.pagina_atual = 1;
+                  this.requestDados()
             },
             getPesquisa(request: string){
                   this.lista_estado = 'Loader'
+                  this.request_pesquisa = request;
                   store.dispatch('getDadosPaginados', {
                         'roter_interna': 'marketplaceecommerce_pesquisa',
                         'roter_externa': 'integracaomarketplaceecommerce',
-                        'request': `?pagina=1&porPagina=0&ordenacao=codigo&direcao=Asc&`+request,
-                        'pagina_atual': 1,
+                        'request': `?pagina=${this.pagina_atual}&porPagina=${this.ITEM_PAGINA_MAX}&ordenacao=codigo&direcao=Asc&`+this.request_pesquisa,
+                        'pagina_atual': this.pagina_atual,
                         'item_page': this.ITEM_PAGINA_MAX
                   }).then(() => {
+                        if(this.ITEM_PAGINA_MAX > 0){
+                              this.NUMERO_PAGINA = Math.ceil(store.getters.getMarketplaceEcommerce_pesquisaLength / this.ITEM_PAGINA_MAX);
+                        }else{
+                              this.NUMERO_PAGINA = 1;
+                        }
                         this.dado_pesquisa.body = store.getters.getMarketplaceEcommerce_pesquisa;
                         this.lista_estado = 'Lista'
+                        this.dado_parametro = this.dado_pesquisa
                   }).catch((error_retorno)=> this.showError(error_retorno))
             },
             quantidadeItens(args: number){
@@ -233,20 +263,27 @@ export default defineComponent({
                         <MarketplaceEcommerceComponent 
                               :ITEM_PAGINA_MAX="ITEM_PAGINA_MAX"
                               :NUMERO_PAGINA="NUMERO_PAGINA"
-                              :dado="dado_parametro"
-                              :its-on-filter="itsOnFilter"
-                              :lista_estado="lista_estado"
                               :pagina_atual="pagina_atual"
+                              :dado="dado_parametro"
+                              :itsOnFilter="itsOnFilter"
+                              :lista_estado="lista_estado"
       
                               @deletar="(arg : any) => deletar(arg)"
       
                               @filtraMarketplaceEcommerce="filtraMarketplaceEcommerce"
                               @closefiltrarMarketplaceEcommerce="closefiltrarMarketplaceEcommerce"
-                              @getPesquisa="(arg: string)=> getPesquisa(arg)"
                               @ordenaMarketplaceEcommerce="(arg : any) => ordenaMarketplaceEcommerce(arg)"
                               @quantidadeItens="(args: number)=> quantidadeItens(args)"
                               @avancaPagina="avancaPagina" 
                               @recuarPagina="recuarPagina"
+                              @getPesquisa="(args: string) => {
+                                                pagina_atual = 1
+                                                getPesquisa(args)
+                                          }"
+
+                              :is_in_DeletModal="is_in_DeletModal"
+                              @fecharModalDelet="()=> is_in_DeletModal = false"
+                              @abrirModalDelet="()=> is_in_DeletModal = true"
                         />
                   </span>
                   <span v-else>

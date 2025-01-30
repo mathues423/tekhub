@@ -40,7 +40,6 @@ export default defineComponent({
 
 <template>
       <Teleport to="body">
-            {{ mensagem }}
             <div class="page_mask" v-if="!is_closed">
                   <div class="row">
                         <div class="col-1 col-lg-2"></div>

@@ -52,8 +52,8 @@ export default defineComponent({
                   <span v-if="!have_fetch_error || fetch_error_msg['data' as keyof typeof fetch_error_msg]">
                         <!-- ERRO no servidor mensagem -->
                         <TimeMensageComponent v-if="fetch_error_msg['data' as keyof typeof fetch_error_msg]"
-                              :mensagem="'Houve algum erro no servidor'"
-                              @fechar_erro="()=> voltarErroServer"
+                              :mensagem="fetch_error_msg['errors' as keyof typeof fetch_error_msg][0]"
+                              @fechar_erro="voltarErroServer"
                         />
                         <CriarBotao @criar="adicionarNewempresa" />
                         <EmpresaComponent 

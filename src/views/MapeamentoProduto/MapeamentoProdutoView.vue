@@ -18,6 +18,7 @@ import TimeMensageComponent from '@/components/mensagem/TimeMensageComponent.vue
 export default defineComponent({
       data(){
             return {
+                  is_in_DeletModal:false,
                   auth_type: APPCONFIG.authType,
                   fetch_error_msg: {},
                   have_fetch_error: false,
@@ -76,7 +77,8 @@ export default defineComponent({
                   escolheu_empresa: false,
                   erros_pesquisa: [''],
                   filtro_erp: '',
-                  filtro_site: ''
+                  filtro_site: '',
+                  request_pesquisa: '',
             }
       },
       components:{
@@ -111,25 +113,45 @@ export default defineComponent({
                   router.push('/mapeamentoprodutos/0');
             },
             deletar(objeto: {codigo: string}){
-                  let aux = {'roter_externa': '', 'id': objeto.codigo, 'roter_interna': ''}
+                  this.is_in_DeletModal = true;
+                  const rota_interna = this.itsOnFilter ? 'mapeamentoprodudo_pesquisa' : 'mapeamentoprodudo';
+                  let aux = {'roter_externa': 'mapeamentoproduto', 'id': objeto.codigo, 'roter_interna': rota_interna}
                   Promise.resolve(store.dispatch('delDadosID', aux))
                   .then(
-                        () => this.requestDados()
-                  ).catch((error_retorno)=> this.showError(error_retorno))
+                        () => {
+                              if (this.itsOnFilter) {
+                                    this.getPesquisa_filtrada(this.request_pesquisa);
+                              }else{
+                                    this.requestDados();
+                              }
+                        }
+                  ).catch((error_retorno)=> {
+                        this.showError(error_retorno)
+                        this.is_in_DeletModal = false;
+                  })
             },
             avancaPagina(){
                   if (this.pagina_atual < this.NUMERO_PAGINA) {
                         this.pagina_atual++;
-                        this.requestDados();
+                        if (this.itsOnFilter) {
+                              this.getPesquisa_filtrada(this.request_pesquisa);
+                        }else{
+                              this.requestDados();
+                        }
                   }
             },
             recuarPagina(){
                   if (this.pagina_atual > 1) {
                         this.pagina_atual--;
-                        this.requestDados();
+                        if (this.itsOnFilter) {
+                              this.getPesquisa_filtrada(this.request_pesquisa);
+                        }else{
+                              this.requestDados();
+                        }
                   }
             },
             async requestDados(){
+                  this.is_in_DeletModal = false;
                   this.dado_parametro.header = this.dado_paginado.header;
                   this.erros_pesquisa = [];
                   regra_map._pesquisa(this.dado_empresa_selected, this.canal_selected, this.erros_pesquisa, this.auth_type);
@@ -197,9 +219,11 @@ export default defineComponent({
             closefiltrarMapeamentoProduto(){
                   this.itsOnFilter = false;
                   this.lista_estado = 'Lista'
+                  this.pagina_atual = 1;
+                  this.requestDados();
             },
             getPesquisa_filtrada(request: string){
-                  console.log('DAS', request);
+                  this.request_pesquisa = request;
                   
                   this.dado_parametro.header = this.dado_pesquisa.header;
                   this.erros_pesquisa = [];
@@ -223,10 +247,15 @@ export default defineComponent({
                   store.dispatch('getDadosPaginados', {
                         'roter_interna': 'mapeamentoprodudo_pesquisa',
                         'roter_externa': 'mapeamentoprodudo',
-                        'request': `?pagina=1&porPagina=0&ordenacao=codigo&direcao=Asc`+codigo_empresa+`&`+request,
-                        'pagina_atual': 1,
+                        'request': `?pagina=${this.pagina_atual}&porPagina=${this.ITEM_PAGINA_MAX}&ordenacao=codigo&direcao=Asc`+codigo_empresa+`&`+this.request_pesquisa,
+                        'pagina_atual': this.pagina_atual,
                         'item_page': this.ITEM_PAGINA_MAX
                   }).then((le) => {
+                        if(this.ITEM_PAGINA_MAX > 0){
+                              this.NUMERO_PAGINA = Math.ceil(store.getters.getMapeamentoProduto_pesquisaLength / this.ITEM_PAGINA_MAX);
+                        }else{
+                              this.NUMERO_PAGINA = 1;
+                        }
                         this.dado_parametro.body = store.getters.getMapeamentoProduto_pesquisa;
                         this.lista_estado = 'Lista_filtrada'
                   }).catch((error_retorno)=> this.showError(error_retorno))
@@ -234,7 +263,11 @@ export default defineComponent({
             quantidadeItens(args: number){
                   this.pagina_atual = 1;
                   this.ITEM_PAGINA_MAX = args;
-                  this.requestDados()
+                  if (this.itsOnFilter) {
+                        this.getPesquisa_filtrada(this.request_pesquisa);
+                  }else{
+                        this.requestDados();
+                  }
             },
             showError(objeto_erro: object){
                   this.fetch_error_msg = objeto_erro;
@@ -261,7 +294,7 @@ export default defineComponent({
                         <!-- ERRO no servidor mensagem -->
                         <TimeMensageComponent v-if="fetch_error_msg['data' as keyof typeof fetch_error_msg]"
                               :mensagem="'Houve algum erro no servidor'"
-                              @fechar_erro="()=> voltarErroServer"
+                              @fechar_erro="voltarErroServer"
                         />
                         <!-- Pesquisa Card -->
                         <div :class="['row', 'my-1']">
@@ -348,6 +381,9 @@ export default defineComponent({
       
                         <CriarBotaoComponent @criar="adicionarMapeamentoProduto"/>
                         <MapeamentoProdutoComponent
+                              :is_in_DeletModal="is_in_DeletModal"
+                              :header_info="dado_paginado.header"
+
                               :lista_estado="lista_estado"
                               :itsOnFilter="itsOnFilter"
                               :itsOnRequestPesquisa="inRequestPesquisa"
@@ -356,7 +392,10 @@ export default defineComponent({
                               :pagina_atual="pagina_atual"
                               :dado="dado_parametro"
       
-                              @getPesquisa="(arg: string)=> getPesquisa_filtrada(arg)"
+                              @getPesquisa="(arg: string)=> {
+                                          pagina_atual = 1;
+                                          getPesquisa_filtrada(arg);
+                                    }"
                               @closefiltrarMapeamentoProduto="closefiltrarMapeamentoProduto"
                               @deletar="(arg: any)=> deletar(arg)"
                               @quantidadeItens="(arg: number)=> quantidadeItens(arg)"
@@ -364,6 +403,10 @@ export default defineComponent({
                               @filtraMapeamentoProduto="filtraMapeamentoProduto"
                               @avancaPagina="avancaPagina"
                               @recuarPagina="recuarPagina"
+
+                              :showDeletModal="is_in_DeletModal"
+                              @fecharModal="()=> is_in_DeletModal = false"
+                              @abrirModal="()=> is_in_DeletModal = true"
                         />
                   </span>
                   <span v-else>

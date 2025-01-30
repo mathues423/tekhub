@@ -8,7 +8,6 @@ import ModalRemoçãoComponent from '../ModalRemoçãoComponent.vue';
 export default defineComponent({
       data() {
           return {
-            showDeletModal: false,
             dado_modal: {},
             dado_expandido: [false],
             dado_json: ['']
@@ -22,12 +21,12 @@ export default defineComponent({
       },
       props:{
             have_item_p_pagina:{
-                  type: Boolean
+                  type: Boolean,
+                  required: true
             },
             have_pagination:{
                   type: Boolean,
-                  required:true,
-                  default: false
+                  required:true
             },
             pagina_max:{
                   type:Number,
@@ -62,8 +61,11 @@ export default defineComponent({
             },
             have_expancion:{
                   type: Boolean,
-                  default: Boolean(false),
                   required:true
+            },
+            showDeletModal:{
+                  type: Boolean,
+                  required: true
             }
       },
       mounted() {
@@ -80,18 +82,10 @@ export default defineComponent({
       methods:{
             expandir(linha: number){
                   this.dado_expandido[linha] = true;
-                  // this.custumise_json(JSON.stringify(this.dados?.body[linha]))
             },
             fechar(linha: number){
                   this.dado_expandido[linha] = false;
             },
-            // custumise_json(data: string){
-            //       let its_in_str = false;
-            //       return data
-            //       .replaceAll('{','<span class="parentesis">{</span> sdafads')
-            //       .replaceAll('}','<span class="parentesis">}</span> sdafads')
-            // },
-
             up_lista(){
                   this.$emit('avancar');
             },
@@ -100,7 +94,7 @@ export default defineComponent({
             },
             mountDeletModal(arg: {codigoTek: string, descricao: string, cnpj: number, versaoApiTek: string}){
                   this.dado_modal = arg;
-                  this.showDeletModal = true;
+                  this.$emit('abrirModal')
             },
             deletarDado(){
                   this.$emit('deletarDadoPai', this.dado_modal);
@@ -121,12 +115,12 @@ export default defineComponent({
                   this.$emit('trocarQuandidadeDadoPai', args)
             }
       },
-      emits: ['avancar', 'recuar', 'deletarDadoPai', 'ordenarDadoPai', 'filtrarDadoPai', 'trocarQuandidadeDadoPai']
+      emits: ['avancar', 'recuar', 'deletarDadoPai', 'ordenarDadoPai', 'filtrarDadoPai', 'trocarQuandidadeDadoPai', 'fecharModal', 'abrirModal']
 })
 </script>
 
 <template>
-      <ModalRemoçãoComponent :isAtivo="showDeletModal" @close="showDeletModal = false" @deletar_item="deletarDado">
+      <ModalRemoçãoComponent :isAtivo="showDeletModal" @close="$emit('fecharModal')" @deletar_item="deletarDado">
             <template v-slot:body> 
                   <div class="aviso">Atenção essa ação não poderá ser desfeita.</div>
                   <div style="padding-top: 5px;">Informações do item</div>

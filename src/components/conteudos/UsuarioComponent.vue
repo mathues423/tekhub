@@ -74,7 +74,10 @@ export default defineComponent({
                   body: [] as Array<object>
             },
             its_card: false,
-            largura: window.innerWidth
+            largura: window.innerWidth,
+
+            request_pesquisa: '',
+            is_in_DeletModal: false
           }
       },
       components:{
@@ -109,22 +112,35 @@ export default defineComponent({
                   }
             },
             deletar(objeto: {codigo: string}){
-                  let aux = {'roter_externa': 'usuario', 'id': objeto.codigo, 'roter_interna': 'usuarios'}
+                  const rota_interna = this.itsOnFilter ? 'usuarios_pesquisa' : 'usuarios';
+                  let aux = {'roter_externa': 'usuario', 'id': objeto.codigo, 'roter_interna': rota_interna}
                   Promise.resolve(store.dispatch('delDadosID', aux))
-                  .then(
-                        () => this.requestDados()
-                  ).catch((error_retorno)=> this.$emit('Erro_fetch', error_retorno))
+                  .then(() => {
+                        if (this.itsOnFilter) {
+                              this.getPesquisa(this.request_pesquisa)
+                        }else{
+                              this.requestDados()
+                        }
+                  }).catch((error_retorno)=> this.$emit('Erro_fetch', error_retorno))
             },
             avancaPagina(){
                   if (this.pagina_atual < this.NUMERO_PAGINA) {
                         this.pagina_atual++;
-                        this.requestDados();
+                        if (this.itsOnFilter) {
+                              this.getPesquisa(this.request_pesquisa)
+                        }else{
+                              this.requestDados()
+                        }
                   }
             },
             recuarPagina(){
                   if (this.pagina_atual > 1) {
                         this.pagina_atual--;
-                        this.requestDados();
+                        if (this.itsOnFilter) {
+                              this.getPesquisa(this.request_pesquisa)
+                        }else{
+                              this.requestDados()
+                        }
                   }
             },
             async requestDados(){
@@ -172,20 +188,36 @@ export default defineComponent({
             closefiltrarUsuario(){
                   this.itsOnFilter = false;
                   this.lista_estado = 'Lista'
+                  this.pagina_atual = 1;
+                  this.requestDados()
             },
             getPesquisa(request: string){
                   this.lista_estado = 'Loader'
+                  this.request_pesquisa = request;
                   store.dispatch('getDadosPaginados', {
                         'roter_interna': 'usuarios_pesquisa',
                         'roter_externa': 'usuario',
-                        'request': `?pagina=1&porPagina=0&ordenacao=codigo&direcao=Asc&`+request,
-                        'pagina_atual': 1,
+                        'request': `?pagina=${this.pagina_atual}&porPagina=${this.ITEM_PAGINA_MAX}&ordenacao=codigo&direcao=Asc&`+this.request_pesquisa,
+                        'pagina_atual': this.pagina_atual,
                         'item_page': this.ITEM_PAGINA_MAX
                   }).then(() => {
-                        this.NUMERO_PAGINA = 1;
+                        if(this.ITEM_PAGINA_MAX > 0){
+                              this.NUMERO_PAGINA = Math.ceil(store.getters.getUsuarios_pesquisaLength / this.ITEM_PAGINA_MAX);
+                        }else{
+                              this.NUMERO_PAGINA = 1;
+                        }
                         this.dado_pesquisa.body = store.getters.getUsuarios_pesquisa;
                         this.lista_estado = 'Lista'
                   }).catch((error_retorno)=> this.$emit('Erro_fetch', error_retorno))
+            },
+            changeItemPagina(quantidade: number){
+                  this.pagina_atual = 1;
+                  this.ITEM_PAGINA_MAX = quantidade;
+                  if (this.itsOnFilter) {
+                        this.getPesquisa(this.request_pesquisa)
+                  }else{
+                        this.requestDados()
+                  }
             }
       },
       emits:['Erro_fetch']
@@ -207,10 +239,13 @@ export default defineComponent({
             <!-- Lista Usuarios Pesquisa -->
             <ListaComponent v-if="lista_estado == 'Lista' && itsOnFilter && !its_card"
                   :lista_opc_paginas="lista_opc_pagina_not_card"
+                  :have_item_p_pagina="true"
+                  :have_pagination="true"
+                  :have_expancion="false"
                   :dados="dado_pesquisa"
-                  :item_p_pagina="0"
-                  :pagina="1"
-                  :pagina_max="1"
+                  :pagina="pagina_atual"
+                  :item_p_pagina="ITEM_PAGINA_MAX"
+                  :pagina_max="NUMERO_PAGINA"
                   :rota_edicao="'usuarios'"
                   :ModalContent_Remocao="[
                         {'nome': 'Email', 'key': 'email'},
@@ -218,15 +253,23 @@ export default defineComponent({
                         {'nome': 'Empresa', 'key': 'empresaDescricao'},
                   ]"
                   @deletarDadoPai="(arg : any) => deletar(arg)"
+                  @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
+                  @avancar="avancaPagina" 
+                  @recuar="recuarPagina"
+
+                  :showDeletModal="is_in_DeletModal"
+                  @fecharModal="()=> is_in_DeletModal = false"
+                  @abrirModal="()=> is_in_DeletModal = true"
             />
             <!-- Lista Usuarios -->
             <ListaComponent v-if="lista_estado == 'Lista' && !itsOnFilter && !its_card"
-                  :lista_opc_paginas="lista_opc_pagina_not_card"
+                  :lista_opc_paginas="lista_opc_pagina_not_card"                  
                   :have_item_p_pagina="true"
                   :have_pagination="true"
+                  :have_expancion="false"
                   :dados="dado_paginado"
-                  :item_p_pagina="10"
                   :pagina="pagina_atual"
+                  :item_p_pagina="ITEM_PAGINA_MAX"
                   :pagina_max="NUMERO_PAGINA"
                   :rota_edicao="'usuarios'"
                   :ModalContent_Remocao="[
@@ -237,8 +280,13 @@ export default defineComponent({
                   @deletarDadoPai="(arg : any) => deletar(arg)"
                   @ordenarDadoPai="(arg : any) => ordenaUsuario(arg)"
                   @filtrarDadoPai="filtraUsuario"
+                  @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
                   @avancar="avancaPagina" 
-                  @recuar="recuarPagina" 
+                  @recuar="recuarPagina"
+
+                  :showDeletModal="is_in_DeletModal"
+                  @fecharModal="()=> is_in_DeletModal = false"
+                  @abrirModal="()=> is_in_DeletModal = true"
             />
 
             <LoaderListaCardComponent v-if="lista_estado == 'Loader' && its_card"
@@ -248,10 +296,14 @@ export default defineComponent({
             <!-- Card Lista Usuario Pesquisa -->
             <ListaCardComponent v-if="lista_estado == 'Lista' && itsOnFilter && its_card"
                   :lista_opc_paginas="lista_opc_pagina_card"
+                  :header_info="dado_paginado.header"
+                  :have_item_p_pagina="true"
+                  :have_pagination="true"
+                  :have_expancion="false"
                   :dados="dado_pesquisa"
-                  :item_p_pagina="0"
-                  :pagina="1"
-                  :pagina_max="1"
+                  :pagina="pagina_atual"
+                  :item_p_pagina="ITEM_PAGINA_MAX"
+                  :pagina_max="NUMERO_PAGINA"
                   :rota_edicao="'usuarios'"
                   :ModalContent_Remocao="[
                         {'nome': 'Email', 'key': 'email'},
@@ -259,15 +311,24 @@ export default defineComponent({
                         {'nome': 'Empresa', 'key': 'empresaDescricao'},
                   ]"
                   @deletarDadoPai="(arg : any) => deletar(arg)"
+                  
+                  @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
+                  @avancar="avancaPagina" 
+                  @recuar="recuarPagina"
+                  :showDeletModal="is_in_DeletModal"
+                  @fecharModal="()=> is_in_DeletModal = false"
+                  @abrirModal="()=> is_in_DeletModal = true"
             />
             <!-- Card Lista Usuario -->
             <ListaCardComponent v-if="lista_estado == 'Lista' && !itsOnFilter && its_card"
                   :lista_opc_paginas="lista_opc_pagina_card"
+                  :header_info="dado_paginado.header"
                   :have_item_p_pagina="true"
                   :have_pagination="true"
+                  :have_expancion="false"
                   :dados="dado_paginado"
-                  :item_p_pagina="10"
                   :pagina="pagina_atual"
+                  :item_p_pagina="ITEM_PAGINA_MAX"
                   :pagina_max="NUMERO_PAGINA"
                   :rota_edicao="'usuarios'"
                   :ModalContent_Remocao="[
@@ -278,8 +339,13 @@ export default defineComponent({
                   @deletarDadoPai="(arg : any) => deletar(arg)"
                   @ordenarDadoPai="(arg : any) => ordenaUsuario(arg)"
                   @filtrarDadoPai="filtraUsuario"
+                  @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
                   @avancar="avancaPagina" 
-                  @recuar="recuarPagina" 
+                  @recuar="recuarPagina"
+                  
+                  :showDeletModal="is_in_DeletModal"
+                  @fecharModal="()=> is_in_DeletModal = false"
+                  @abrirModal="()=> is_in_DeletModal = true"
             />
       </div>
 </template>

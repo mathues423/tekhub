@@ -59,6 +59,14 @@ export default defineComponent({
                   type: Object as PropType<{header: Array<object>, body: Array<object>}>,
                   required: true
             },
+            is_in_DeletModal:{
+                  type: Boolean,
+                  required: true
+            },
+            header_info:{
+                  type: Object,
+                  required: true
+            }
       },
       components:{
             LoaderListaComponent,
@@ -108,7 +116,8 @@ export default defineComponent({
             }
       },
       emits:['getPesquisa','closefiltrarMapeamentoProduto','deletar', 'quantidadeItens',
-      'ordenaMapeamentoProduto','filtraMapeamentoProduto','avancaPagina','recuarPagina']
+      'ordenaMapeamentoProduto','filtraMapeamentoProduto','avancaPagina','recuarPagina',
+      'fecharModal', 'abrirModal']
 })
 </script>
 
@@ -116,7 +125,7 @@ export default defineComponent({
       <div class="row">
             <FiltroPaiComponent v-if="!its_card"
                   :itsOnFilter="itsOnFilter"
-                  :header="dado['header' as keyof typeof dado]"
+                  :header="header_info"
                   @pesquisa_request="(args: string) => getPesquisa(args)"
                   @close_pesquisa="closefiltrarMapeamentoProduto"
             />
@@ -131,6 +140,7 @@ export default defineComponent({
                   :lista_opc_paginas="lista_opc_pagina_not_card"
                   :have_item_p_pagina="true"
                   :have_pagination="true"
+                  :have_expancion="false"
                   :dados="dado"
                   :pagina="pagina_atual"
                   :item_p_pagina="ITEM_PAGINA_MAX_local"
@@ -147,14 +157,21 @@ export default defineComponent({
                   @trocarQuandidadeDadoPai="(args: number)=> quantidadeItens(args)"
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina" 
+
+                  :showDeletModal="is_in_DeletModal"
+                  @fecharModal="()=> $emit('fecharModal')"
+                  @abrirModal="()=> $emit('abrirModal')"
             />
             <!-- Lista fildrada -->
             <ListaComponent  v-if="lista_estado == 'Lista_filtrada' && itsOnFilter && !its_card"
                   :lista_opc_paginas="lista_opc_pagina_not_card"
+                  :have_item_p_pagina="true"
+                  :have_pagination="true"
+                  :have_expancion="false"
                   :dados="dado"
-                  :pagina="1"
-                  :pagina_max="1"
-                  :item_p_pagina="0"
+                  :pagina="pagina_atual"
+                  :item_p_pagina="ITEM_PAGINA_MAX_local"
+                  :pagina_max="NUMERO_PAGINA"
                   :rota_edicao="'mapeamentoprodutos'"
                   :ModalContent_Remocao="[
                         {'nome': 'Produto ERP', 'key': 'produtoErp'},
@@ -162,6 +179,13 @@ export default defineComponent({
                         {'nome': 'Produto Pai Site', 'key': 'produtoPaiSite'},
                   ]"
                   @deletarDadoPai="(arg: object) => deletar(arg)"
+                  @trocarQuandidadeDadoPai="(args: number)=> quantidadeItens(args)"
+                  @avancar="avancaPagina" 
+                  @recuar="recuarPagina" 
+
+                  :showDeletModal="is_in_DeletModal"
+                  @fecharModal="()=> $emit('fecharModal')"
+                  @abrirModal="()=> $emit('abrirModal')"
             />
 
 
@@ -172,10 +196,14 @@ export default defineComponent({
             <!-- Card Lista Mapeamento Pesquisa -->
             <ListaCardComponent v-if="lista_estado == 'Lista_filtrada' && itsOnFilter && its_card"
                   :lista_opc_paginas="lista_opc_pagina_card"
+                  :header_info="header_info"
+                  :have_item_p_pagina="true"
+                  :have_pagination="true"
+                  :have_expancion="false"
                   :dados="dado"
-                  :pagina="1"
-                  :pagina_max="1"
-                  :item_p_pagina="0"
+                  :pagina="pagina_atual"
+                  :item_p_pagina="ITEM_PAGINA_MAX_local"
+                  :pagina_max="NUMERO_PAGINA"
                   :rota_edicao="'mapeamentoprodutos'"
                   :ModalContent_Remocao="[
                         {'nome': 'Produto ERP', 'key': 'produtoErp'},
@@ -183,12 +211,21 @@ export default defineComponent({
                         {'nome': 'Produto Pai Site', 'key': 'produtoPaiSite'},
                   ]"
                   @deletarDadoPai="(arg: object) => deletar(arg)"
+                  @trocarQuandidadeDadoPai="(args: number)=> quantidadeItens(args)"
+                  @avancar="avancaPagina" 
+                  @recuar="recuarPagina" 
+                  
+                  :showDeletModal="is_in_DeletModal"
+                  @fecharModal="()=> $emit('fecharModal')"
+                  @abrirModal="()=> $emit('abrirModal')"
             />
             <!-- Card Lista Mapeamento -->
             <ListaCardComponent v-if="lista_estado == 'Lista' && !itsOnFilter && its_card"
                   :lista_opc_paginas="lista_opc_pagina_card"
+                  :header_info="header_info"
                   :have_item_p_pagina="true"
                   :have_pagination="true"
+                  :have_expancion="false"
                   :dados="dado"
                   :pagina="pagina_atual"
                   :item_p_pagina="ITEM_PAGINA_MAX_local"
@@ -205,6 +242,10 @@ export default defineComponent({
                   @trocarQuandidadeDadoPai="(args: number)=> quantidadeItens(args)"
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina" 
+
+                  :showDeletModal="is_in_DeletModal"
+                  @fecharModal="()=> $emit('fecharModal')"
+                  @abrirModal="()=> $emit('abrirModal')"
             />
       </div>
       

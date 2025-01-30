@@ -99,6 +99,10 @@ export default defineComponent({
                   type: Boolean,
                   required:true,
                   default: false
+            },
+            header_info:{
+                  type: Object,
+                  required: true
             }
       },
       methods:{
@@ -183,7 +187,7 @@ export default defineComponent({
                               <div :class="['row', 'conteudo_pesquisa', (its_OnFilter || its_OnOrder) ? 'open' : '']">
                                     <FiltroPaiComponent class="my-3"
                                           :itsOnFilter="its_OnFilter"
-                                          :header="dados.header"
+                                          :header="header_info"
                                           @pesquisa_request="(args: string) => filtrarDado(args)"
                                           @close_pesquisa="Filtro"
                                     />
