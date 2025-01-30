@@ -310,6 +310,7 @@ export default defineComponent({
                                     </div>
                                     <div class="col-6" v-if="auth_type != 'ROLE_USER'">
                                           <EmpresaSelectComponent
+                                                :valor_inicial="{}"
                                                 :have_erro="erros_pesquisa.findIndex((x) => x =='empresa') != -1"
                                                 @empresa_escolhida="(arg: object)=> dado_empresa_selected = arg"
                                                 @erro_fetch="(ret)=> showError(ret)"

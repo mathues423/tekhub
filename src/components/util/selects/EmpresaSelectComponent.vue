@@ -40,9 +40,9 @@ export default defineComponent({
           .then((arg)=>{
             this.empresa_request = arg.data;
             this.requested = true;
-            }).catch((error_retorno)=> this.$emit('Erro_fetch', error_retorno))
+            }).catch((error_retorno)=> this.$emit('erro_fetch', error_retorno))
       },
-      emits:['empresa_escolhida', 'Erro_fetch']
+      emits:['empresa_escolhida', 'erro_fetch']
 })
 </script>
 

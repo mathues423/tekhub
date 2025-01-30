@@ -197,6 +197,7 @@ export default defineComponent({
                                           </div>
                                           <div class="col-8">
                                                 <EmpresaSelectComponent 
+                                                      :valor_inicial="{}"
                                                       :have_erro="errors.findIndex((x) => x =='empresa') != -1"
                                                       @empresa_escolhida="(arg)=> empresa_escolhida = arg"
                                                       @Erro_fetch="(arg)=> showError(arg)"

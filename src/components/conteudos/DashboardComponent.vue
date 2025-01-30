@@ -18,7 +18,7 @@ export default defineComponent({
                   Promise.resolve(fetch_.getDado('/atualizacaoecommerce/pendentes'))
                   .then((ret)=> {
                         this.teste = ret
-                  }).catch((error_retorno)=> this.$emit('Erro_fetch', error_retorno))
+                  }).catch((error_retorno)=> this.$emit('erro_fetch', error_retorno))
             }else{
                   this.is_user = true
             }
@@ -34,7 +34,7 @@ export default defineComponent({
                   this.estados_tabela[id] == 'close' ? this.estados_tabela[id] = 'open' : this.estados_tabela[id] = 'close';
             }
       },
-      emits:['Erro_fetch']
+      emits:['erro_fetch']
 })
 </script>
 

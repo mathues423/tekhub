@@ -87,7 +87,7 @@ export default defineComponent({
                   this.empresa_select = empresa
             }
       },
-      emits:['request_filtro', 'Erro_fetch']
+      emits:['request_filtro', 'erro_fetch']
 })
 </script>
 
@@ -97,7 +97,7 @@ export default defineComponent({
                   <EmpresaSelectComponent 
                         :have_erro="empresa_erro"
                         @empresa_escolhida="(args: object)=> escolha_empresa(args)"
-                        @erro_fetch="(arg)=> $emit('Erro_fetch', arg)"
+                        @erro_fetch="(arg)=> $emit('erro_fetch', arg)"
                   />
             </div>
             <div class="col-md-6 col row my-1">

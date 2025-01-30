@@ -140,7 +140,7 @@ export default defineComponent({
                   ).catch((error_retorno)=> {
                         this.is_in_DeletModal = false;
                         this.is_deletando = false;
-                        this.$emit('Erro_fetch', error_retorno);
+                        this.$emit('erro_fetch', error_retorno);
                   })
             },
             avancaPagina(){
@@ -180,7 +180,7 @@ export default defineComponent({
                               this.NUMERO_PAGINA = 1;
                         }
                         this.lista_estado = 'Lista'
-                  }).catch((error_retorno)=> this.$emit('Erro_fetch', error_retorno))
+                  }).catch((error_retorno)=> this.$emit('erro_fetch', error_retorno))
             },
             ordenaEmpresa(title: {ordem: {tipo_ordenacao : string, on: boolean, tipo_obj: string}, key_body: string}){
                   this.dado_paginado.header.forEach(
@@ -230,7 +230,7 @@ export default defineComponent({
                         }
                         this.dado_pesquisa.body = store.getters.getEmpresas_pesquisa;
                         this.lista_estado = 'Lista';
-                  }).catch((error_retorno)=> this.$emit('Erro_fetch', error_retorno))
+                  }).catch((error_retorno)=> this.$emit('erro_fetch', error_retorno))
             },
             changeItemPagina(quantidade: number){
                   this.pagina_atual = 1;
@@ -242,7 +242,7 @@ export default defineComponent({
                   }
             }
       },
-      emits:['Erro_fetch']
+      emits:['erro_fetch']
 })
 </script>
 
