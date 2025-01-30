@@ -44,10 +44,10 @@ export default defineComponent({
                   :user_type="auth_type"
             />
             <div class="col-12 col-lg-10" id="content" style="padding-left: calc(var(--bs-gutter-x));">
-                  <span v-if="!have_erro || mensage_erro['data' as keyof typeof mensage_erro]">
+                  <span v-if="!have_erro || mensage_erro['errors' as keyof typeof mensage_erro]">
                         <!-- ERRO no servidor mensagem -->
-                        <TimeMensageComponent v-if="mensage_erro['data' as keyof typeof mensage_erro]"
-                              :mensagem="'Houve algum erro no servidor'"
+                        <TimeMensageComponent v-if="mensage_erro['errors' as keyof typeof mensage_erro]"
+                              :mensagem="mensage_erro['errors' as keyof typeof mensage_erro][0]"
                               @fechar_erro="voltarErroServer"
                         />
                         <DashboardComponent 

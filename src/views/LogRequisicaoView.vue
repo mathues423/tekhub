@@ -145,10 +145,10 @@ export default defineComponent({
                   :user_type="auth_type"
             />
             <div class="col-12 col-lg-10" id="content">
-                  <span v-if="!have_fetch_error || fetch_error_msg['data' as keyof typeof fetch_error_msg]">
+                  <span v-if="!have_fetch_error || fetch_error_msg['errors' as keyof typeof fetch_error_msg]">
                         <!-- ERRO no servidor mensagem -->
-                        <TimeMensageComponent v-if="fetch_error_msg['data' as keyof typeof fetch_error_msg]"
-                              :mensagem="'Houve algum erro no servidor'"
+                        <TimeMensageComponent v-if="fetch_error_msg['errors' as keyof typeof fetch_error_msg]"
+                              :mensagem="fetch_error_msg['errors' as keyof typeof fetch_error_msg][0]"
                               @fechar_erro="voltarErroServer"
                         />
                         <BuscaEmpresaDateComponent
@@ -171,6 +171,7 @@ export default defineComponent({
                               :pagina_max="NUMERO_PAGINA"
                               :rota_edicao="''"
                               :ModalContent_Remocao="[]"
+                              :showDeletModal="false"
                               
                               @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
                               @avancar="avancaPagina" 
@@ -184,6 +185,7 @@ export default defineComponent({
                         <!-- Card Lista Canais -->
                         <ListaCardComponent v-if="lista_estado == 'Lista' && its_card"
                               :lista_opc_paginas="lista_opc_pagina_card"
+                              :header_info="dado_paginado.header"
                               :have_item_p_pagina="true"
                               :have_pagination="true"
                               :have_expancion="true"
@@ -193,6 +195,7 @@ export default defineComponent({
                               :pagina_max="NUMERO_PAGINA"
                               :rota_edicao="''"
                               :ModalContent_Remocao="[]"
+                              :showDeletModal="false"
                               
                               @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
                               @avancar="avancaPagina" 

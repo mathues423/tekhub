@@ -42,12 +42,12 @@ export default defineComponent({
       <Teleport to="body">
             <div class="page_mask" v-if="!is_closed">
                   <div class="row">
-                        <div class="col-1 col-lg-2"></div>
-                        <div class="alert col-10 col-lg-8 alert-warning my-3 row">
+                        <div class="col-lg-2"></div>
+                        <div class="alert col-12 col-lg-8 alert-warning my-3 row">
                               <div class="col" style="align-content: center;">
                                     {{ mensagem }}
                               </div>
-                              <div class="col-2" style="align-content: center;">
+                              <div class="col-12" style="align-content: center;">
                                     <button class="btn btn-info w-100" @click="()=>{
                                           time_mensage = 0;
                                           is_closed= true;
@@ -57,7 +57,7 @@ export default defineComponent({
                                     </button>
                               </div>
                         </div>
-                        <div class="col-1 col-lg-2"></div>
+                        <div class="col-lg-2"></div>
                   </div>
             </div>
       </Teleport>

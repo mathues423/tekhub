@@ -9,7 +9,6 @@ import FiltroPaiComponent from '../busca/FiltroPaiComponent.vue';
 export default defineComponent({
       data() {
           return {
-            showDeletModal: false,
             dado_modal: {
             },
             dado_expandido: [false],
@@ -103,6 +102,10 @@ export default defineComponent({
             header_info:{
                   type: Object,
                   required: true
+            },
+            showDeletModal:{
+                  type: Boolean,
+                  required: true
             }
       },
       methods:{
@@ -120,7 +123,7 @@ export default defineComponent({
             },
             mountDeletModal(arg: {codigoTek: string, descricao: string, cnpj: number, versaoApiTek: string}){
                   this.dado_modal = arg;
-                  this.showDeletModal = true;
+                  this.$emit('abrirModal')
             },
             deletarDado(){
                   this.$emit('deletarDadoPai', this.dado_modal);
@@ -154,12 +157,13 @@ export default defineComponent({
                   this.its_OnFilter = false;
             }
       },
-      emits: ['avancar', 'recuar', 'deletarDadoPai', 'ordenarDadoPai', 'filtrarDadoPai', 'trocarQuandidadeDadoPai']
+      emits: ['avancar', 'recuar', 'deletarDadoPai', 'ordenarDadoPai', 'filtrarDadoPai', 'trocarQuandidadeDadoPai', 
+      'fecharModal', 'abrirModal']
 })
 </script>
 
 <template>
-      <ModalRemoçãoComponent :isAtivo="showDeletModal" @close="showDeletModal = false" @deletar_item="deletarDado">
+      <ModalRemoçãoComponent :isAtivo="showDeletModal" @close="$emit('fecharModal')" @deletar_item="deletarDado">
             <template v-slot:body> 
                   <div class="aviso">Atenção essa ação não poderá ser desfeita.</div>
                   <div style="padding-top: 5px;">Informações do item</div>

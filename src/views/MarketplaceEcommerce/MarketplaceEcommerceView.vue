@@ -248,10 +248,10 @@ export default defineComponent({
                   :user_type="auth_type"
             />
             <div class="col-12 col-lg-10" id="content" style="padding-left: calc(var(--bs-gutter-x));">
-                  <span v-if="!have_fetch_error || fetch_error_msg['data' as keyof typeof fetch_error_msg]">
+                  <span v-if="!have_fetch_error || fetch_error_msg['errors' as keyof typeof fetch_error_msg]">
                         <!-- ERRO no servidor mensagem -->
-                        <TimeMensageComponent v-if="fetch_error_msg['data' as keyof typeof fetch_error_msg]"
-                              :mensagem="'Houve algum erro no servidor'"
+                        <TimeMensageComponent v-if="fetch_error_msg['errors' as keyof typeof fetch_error_msg]"
+                              :mensagem="fetch_error_msg['errors' as keyof typeof fetch_error_msg][0]"
                               @fechar_erro="voltarErroServer"
                         />
                         <BuscaEmpresaComponent 
@@ -261,6 +261,7 @@ export default defineComponent({
                         />
                         <CriarBotaoComponent @criar="adicionarNewmarketplaceecommerce"/>
                         <MarketplaceEcommerceComponent 
+                              :header_info="dado_paginado.header"
                               :ITEM_PAGINA_MAX="ITEM_PAGINA_MAX"
                               :NUMERO_PAGINA="NUMERO_PAGINA"
                               :pagina_atual="pagina_atual"
