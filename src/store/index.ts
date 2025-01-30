@@ -96,6 +96,9 @@ const store = createStore({
     getEmpresasLength(state): object{
       return state.empresas['totalRegistros' as keyof typeof state.empresas]
     },
+    getEmpresas_pesquisaLength(state): object{
+      return state.empresas_pesquisa['totalRegistros' as keyof typeof state.empresas_pesquisa]
+    },
 
     //Ambiente
     getAmbientes(state): object{
@@ -106,6 +109,9 @@ const store = createStore({
     },
     getAmbientesLength(state): object{
       return state.ambientes['totalRegistros' as keyof typeof state.ambientes]
+    },
+    getAmbientes_pesquisaLength(state): object{
+      return state.ambientes_pesquisa['totalRegistros' as keyof typeof state.ambientes_pesquisa]
     },
 
     //Usuario
@@ -118,6 +124,9 @@ const store = createStore({
     getUsuariosLength(state): object{
       return state.usuarios['totalRegistros' as keyof typeof state.usuarios]
     },
+    getUsuarios_pesquisaLength(state): object{
+      return state.usuarios['totalRegistros' as keyof typeof state.usuarios_pesquisa]
+    },
 
     //Canais
     getCanais(state): object{
@@ -128,6 +137,9 @@ const store = createStore({
     },
     getCanaisLength(state): object{
       return state.canais['totalRegistros' as keyof typeof state.canais]
+    },
+    getCanais_pesquisaLength(state): object{
+      return state.canais['totalRegistros' as keyof typeof state.canais_pesquisa]
     },
 
     //LOG Atualização
@@ -156,6 +168,9 @@ const store = createStore({
     getMapeamentoProdutoLength(state): object{
       return state.mapeamentoprodudo['totalRegistros' as keyof typeof state.mapeamentoprodudo]
     },
+    getMapeamentoProduto_pesquisaLength(state): object{
+      return state.mapeamentoprodudo['totalRegistros' as keyof typeof state.mapeamentoprodudo_pesquisa]
+    },
 
     //Market
     getMarketplaceEcommerce(state): object{
@@ -166,6 +181,9 @@ const store = createStore({
     },
     getMarketplaceEcommerceLength(state): object{
       return state.marketplaceecommerce['totalRegistros' as keyof typeof state.marketplaceecommerce]
+    },
+    getMarketplaceEcommerce_pesquisaLength(state): object{
+      return state.marketplaceecommerce['totalRegistros' as keyof typeof state.marketplaceecommerce_pesquisa]
     },
   },
   actions: { //Asincrono Dispacht
