@@ -10,6 +10,7 @@ import store from '@/store';
 import fetch_ from '@/services/fetch/requisicao';
 import LoaderSkeleton from '@/components/util/Loaders/LoaderSkeleton.vue';
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
+import TimeMensageComponent from '@/components/mensagem/TimeMensageComponent.vue';
 
 export default defineComponent({
       data(){
@@ -28,7 +29,7 @@ export default defineComponent({
                   tipo_canal: ['MARKETPLACE', 'ECOMMERCE', 'LOGISTICA', 'PAGAMENTO'],
                   canal_assossiado_req: [] as Array<object>,
                   requested: false,
-                  request_new_canal: false
+                  new_canal_request: false
             }
       },
       components:{
@@ -36,7 +37,8 @@ export default defineComponent({
             VersaoMaximisada,
             LoaderSkeleton,
             ErroFormComponent,
-            ErroResponseComponent
+            ErroResponseComponent,
+            TimeMensageComponent
       },
       mounted(){
             Promise.resolve(fetch_.getDado('/canal')).then(
@@ -49,7 +51,7 @@ export default defineComponent({
       methods:{
             async criacaoRequest(){
                   this.errors = [];
-                  this.request_new_canal = true;
+                  this.new_canal_request = true;
                   canal._add(this.canal_new, this.errors)
                   if(this.errors.length == 0){
                         // if(this.canal_new.codigo == -1){
@@ -68,6 +70,14 @@ export default defineComponent({
             showError(objeto_erro: object){
                   this.fetch_error_msg = objeto_erro;
                   this.have_fetch_error = true;
+            },
+            voltarErro(){
+                  this.have_fetch_error = false;
+                  this.new_canal_request = false;
+            },
+            voltarErroServer(){
+                  this.fetch_error_msg = {};
+                  this.voltarErro();
             }
       }
 })
@@ -81,7 +91,12 @@ export default defineComponent({
                   :user_type="auth_type"
             />
             <div class="col-12 col-lg-10" id="content">
-                  <span v-if="!have_fetch_error">
+                  <span v-if="!have_fetch_error || fetch_error_msg['data' as keyof typeof fetch_error_msg]">
+                        <!-- ERRO no servidor mensagem -->
+                        <TimeMensageComponent v-if="fetch_error_msg['data' as keyof typeof fetch_error_msg]"
+                              :mensagem="'Houve algum erro no servidor'"
+                              @fechar_erro="()=> voltarErroServer"
+                        />
                         <div class="row">
                               <div class="col-1"></div>
                               <div class="Card-Body col-8">
@@ -163,7 +178,7 @@ export default defineComponent({
       
                                           <!-- Botao -->
                                           <div style="margin-top: 16px;" class="col-12">
-                                                <button :class="['btn', 'btn-primary', 'col-2', {'disabled' : !requested}, {'disabled' : request_new_canal}]">
+                                                <button class="btn btn-primary col-2" :disabled="!requested || new_canal_request" >
                                                       <span>Criar</span>
                                                 </button>
                                                 <button class="btn btn-light col-2" style="margin-left: 24px;" @click="voltarCanal()">
@@ -178,6 +193,7 @@ export default defineComponent({
                   <span v-else>
                         <ErroResponseComponent
                               :error_msg="fetch_error_msg"
+                              @voltar="()=> voltarErro"
                         />
                   </span>
             </div>

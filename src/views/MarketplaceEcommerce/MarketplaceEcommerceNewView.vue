@@ -11,6 +11,7 @@ import fetch_ from '@/services/fetch/requisicao';
 import LoaderSkeleton from '@/components/util/Loaders/LoaderSkeleton.vue';
 import EmpresaSelectComponent from '@/components/util/selects/EmpresaSelectComponent.vue';
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
+import TimeMensageComponent from '@/components/mensagem/TimeMensageComponent.vue';
 
 export default defineComponent({
       data(){
@@ -56,7 +57,7 @@ export default defineComponent({
                   ambiente_aux:{},
                   ambiente_select:{},
                   inRequestAmbiente:false,
-                  criando:false,
+                  new_markEcom_request:false,
                   usuario_select:{},
                   usuarioApi_aux:{},
                   errors: [] as Array<string>
@@ -83,7 +84,8 @@ export default defineComponent({
             LoaderSkeleton,
             EmpresaSelectComponent,
             ErroFormComponent,
-            ErroResponseComponent
+            ErroResponseComponent,
+            TimeMensageComponent
       },
       mounted(){
             this.inRequestAmbiente = true;
@@ -95,7 +97,7 @@ export default defineComponent({
       },
       methods:{
             async criacaoRequest(){
-                  this.criando = true;
+                  this.new_markEcom_request = true;
                   this.errors = [];
                   regra_marketplace._add(this.marketplaceecommerce_new, this.errors)
                   
@@ -105,7 +107,7 @@ export default defineComponent({
                               .then(()=> this.voltarMarktplaceEcommerce())
                         ).catch((error_retorno)=> this.showError(error_retorno))
                   }else{
-                        this.criando = false;
+                        this.new_markEcom_request = false;
                   }
                   
             },
@@ -126,6 +128,14 @@ export default defineComponent({
             showError(objeto_erro: object){
                   this.fetch_error_msg = objeto_erro;
                   this.have_fetch_error = true;
+            },
+            voltarErro(){
+                  this.have_fetch_error = false;
+                  this.new_markEcom_request = false;
+            },
+            voltarErroServer(){
+                  this.fetch_error_msg = {};
+                  this.voltarErro();
             }
       }
 })
@@ -139,7 +149,12 @@ export default defineComponent({
                   :user_type="auth_type"
             />
             <div class="col-12 col-lg-10" id="content">
-                  <span v-if="!have_fetch_error">
+                  <span v-if="!have_fetch_error || fetch_error_msg['data' as keyof typeof fetch_error_msg]">
+                        <!-- ERRO no servidor mensagem -->
+                        <TimeMensageComponent v-if="fetch_error_msg['data' as keyof typeof fetch_error_msg]"
+                              :mensagem="'Houve algum erro no servidor'"
+                              @fechar_erro="()=> voltarErroServer"
+                        />
                         <div class="row">
                               <div class="col-1"></div>
                               <div class="Card-Body col-8">
@@ -304,7 +319,7 @@ export default defineComponent({
       
                                           <!-- Botões -->
                                           <div style="margin-top: 16px;" class="col-12">
-                                                <button class="btn btn-primary col-2" :disabled="inRequestEmpresa || inRequestAmbiente || criando" >
+                                                <button class="btn btn-primary col-2" :disabled="inRequestAmbiente || new_markEcom_request" >
                                                       <span>Criar</span>
                                                 </button>
                                                 <button class="btn btn-light col-2" style="margin-left: 24px;" @click="voltarMarktplaceEcommerce()">
@@ -319,6 +334,7 @@ export default defineComponent({
                   <span v-else>
                         <ErroResponseComponent 
                               :error_msg="fetch_error_msg"
+                              @voltar="()=> voltarErro"
                         />
                   </span>
             </div>

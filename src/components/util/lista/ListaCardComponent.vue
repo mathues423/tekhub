@@ -98,7 +98,7 @@ export default defineComponent({
             have_expancion:{
                   type: Boolean,
                   required:true,
-                  default: Boolean(false)
+                  default: false
             }
       },
       methods:{

@@ -1,6 +1,7 @@
 <script lang="ts">
 import { APPCONFIG } from '@/components/constants/Config';
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
+import TimeMensageComponent from '@/components/mensagem/TimeMensageComponent.vue';
 import NavbarComplet from '@/components/util/navbars/NavbarComplet.vue';
 import VersaoMaximisada from '@/components/versionamento/VersaoMaximisada.vue';
 import fetch_ from '@/services/fetch/requisicao';
@@ -25,11 +26,16 @@ export default defineComponent({
             NavbarComplet,
             VersaoMaximisada,
             ErroResponseComponent,
+            TimeMensageComponent
       },
       methods:{
             showError(objeto_erro: object){
                   this.fetch_error_msg = objeto_erro;
                   this.have_fetch_error = true;
+            },
+            voltarErroServer(){
+                  this.fetch_error_msg = {};
+                  this.have_fetch_error = false;
             }
       }
 })
@@ -43,13 +49,19 @@ export default defineComponent({
                   :user_type="auth_type"
             />
             <div class="col-12 col-lg-10" id="content" style="padding-left: calc(var(--bs-gutter-x));">
-                  <span v-if="!have_fetch_error">
+                  <span v-if="!have_fetch_error || fetch_error_msg['data' as keyof typeof fetch_error_msg]">
+                        <!-- ERRO no servidor mensagem -->
+                        <TimeMensageComponent v-if="fetch_error_msg['data' as keyof typeof fetch_error_msg]"
+                              :mensagem="'Houve algum erro no servidor'"
+                              @fechar_erro="()=> voltarErroServer"
+                        />
                         Placeholder <br>
                         {{ teste }}
                   </span>
                   <span v-else>
                         <ErroResponseComponent
                               :error_msg="fetch_error_msg" 
+                              @voltar="have_fetch_error = false"
                         />
                   </span>
             </div>

@@ -2,6 +2,7 @@
 import { APPCONFIG } from '@/components/constants/Config';
 import CanaisComponent from '@/components/conteudos/CanaisComponent.vue';
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
+import TimeMensageComponent from '@/components/mensagem/TimeMensageComponent.vue';
 import NavbarComplet from '@/components/util/navbars/NavbarComplet.vue';
 // import CriarBotao from '@/components/util/CriarBotaoComponent.vue';
 import VersaoMaximisada from '@/components/versionamento/VersaoMaximisada.vue';
@@ -22,7 +23,8 @@ export default defineComponent({
             // CriarBotao,
             CanaisComponent,
             VersaoMaximisada,
-            ErroResponseComponent
+            ErroResponseComponent,
+            TimeMensageComponent
       },
       methods:{
             adicionarNewcanal(){
@@ -31,6 +33,10 @@ export default defineComponent({
             showError(objeto_erro: object){
                   this.fetch_error_msg = objeto_erro;
                   this.have_fetch_error = true;
+            },
+            voltarErroServer(){
+                  this.fetch_error_msg = {};
+                  this.have_fetch_error = false;
             }
       }
 })
@@ -44,7 +50,12 @@ export default defineComponent({
                   :user_type="auth_type"
             />
             <div class="col-12 col-lg-10" id="content" style="padding-left: calc(var(--bs-gutter-x));">
-                  <span v-if="!have_fetch_error">
+                  <span v-if="!have_fetch_error || fetch_error_msg['data' as keyof typeof fetch_error_msg]">
+                        <!-- ERRO no servidor mensagem -->
+                        <TimeMensageComponent v-if="fetch_error_msg['data' as keyof typeof fetch_error_msg]"
+                              :mensagem="'Houve algum erro no servidor'"
+                              @fechar_erro="()=> voltarErroServer"
+                        />
                         <!-- <CriarBotao @criar="adicionarNewcanal"/> -->
                         <CanaisComponent class="my-2"
                               @Erro_fetch="(ret)=> showError(ret)"
@@ -53,6 +64,7 @@ export default defineComponent({
                   <span v-else>
                         <ErroResponseComponent 
                               :error_msg="fetch_error_msg"
+                              @voltar="have_fetch_error = false"
                         />
                   </span>
             </div>

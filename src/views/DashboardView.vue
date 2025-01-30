@@ -2,6 +2,7 @@
 import { APPCONFIG } from '@/components/constants/Config';
 import DashboardComponent from '@/components/conteudos/DashboardComponent.vue';
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
+import TimeMensageComponent from '@/components/mensagem/TimeMensageComponent.vue';
 import NavbarComplet from '@/components/util/navbars/NavbarComplet.vue';
 import VersaoMaximisada from '@/components/versionamento/VersaoMaximisada.vue';
 import { defineComponent } from 'vue';
@@ -18,12 +19,17 @@ export default defineComponent({
             NavbarComplet,
             DashboardComponent,
             VersaoMaximisada,
-            ErroResponseComponent
+            ErroResponseComponent,
+            TimeMensageComponent
       },
       methods:{
             checkErro(retorno: object){
-                  this.mensage_erro = retorno
+                  this.mensage_erro = retorno;
                   this.have_erro = true;
+            },
+            voltarErroServer(){            
+                  this.mensage_erro = {};
+                  this.have_erro = false;
             }
       }
 })
@@ -38,16 +44,21 @@ export default defineComponent({
                   :user_type="auth_type"
             />
             <div class="col-12 col-lg-10" id="content" style="padding-left: calc(var(--bs-gutter-x));">
-                  {{ auth_type }}
-                  <span v-if="!have_erro">
+                  <span v-if="!have_erro || mensage_erro['data' as keyof typeof mensage_erro]">
+                        <!-- ERRO no servidor mensagem -->
+                        <TimeMensageComponent v-if="mensage_erro['data' as keyof typeof mensage_erro]"
+                              :mensagem="'Houve algum erro no servidor'"
+                              @fechar_erro="()=> voltarErroServer"
+                        />
                         <DashboardComponent 
                               :user_type="auth_type"
                               @Erro_fetch="(ret)=> checkErro(ret)"
                         />
                   </span>
-                  <span v-else>
+                  <span v-if="have_erro">
                         <ErroResponseComponent
                               :error_msg="mensage_erro"
+                              @voltar="have_erro = false"
                         />
                   </span>
             </div>

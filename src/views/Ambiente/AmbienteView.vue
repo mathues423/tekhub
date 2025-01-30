@@ -7,6 +7,7 @@ import VersaoMaximisada from '@/components/versionamento/VersaoMaximisada.vue';
 import router from '@/router';
 import { defineComponent } from 'vue';
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
+import TimeMensageComponent from '@/components/mensagem/TimeMensageComponent.vue';
 
 
 export default defineComponent({
@@ -22,7 +23,8 @@ export default defineComponent({
             AmbienteComponent,
             VersaoMaximisada,
             CriarBotaoComponent,
-            ErroResponseComponent
+            ErroResponseComponent,
+            TimeMensageComponent
       },
       methods:{
             adicionarNewambiente(){
@@ -31,6 +33,10 @@ export default defineComponent({
             showError(objeto_erro: object){
                   this.fetch_error_msg = objeto_erro;
                   this.have_fetch_error = true;
+            },
+            voltarErroServer(){
+                  this.fetch_error_msg = {};
+                  this.have_fetch_error = false;
             }
       }
 })
@@ -44,7 +50,12 @@ export default defineComponent({
                   :user_type="auth_type"
             />
             <div class="col-12 col-lg-10" id="content" style="padding-left: calc(var(--bs-gutter-x));">
-                  <span v-if="!have_fetch_error">
+                  <span v-if="!have_fetch_error || fetch_error_msg['data' as keyof typeof fetch_error_msg]">
+                        <!-- ERRO no servidor mensagem -->
+                        <TimeMensageComponent v-if="fetch_error_msg['data' as keyof typeof fetch_error_msg]"
+                              :mensagem="'Houve algum erro no servidor'"
+                              @fechar_erro="()=> voltarErroServer"
+                        />
                         <CriarBotaoComponent @criar="adicionarNewambiente"/>
                         <AmbienteComponent 
                         @erro_fetch="(args: object)=> showError(args)"/>
@@ -52,6 +63,7 @@ export default defineComponent({
                   <span v-else>
                         <ErroResponseComponent 
                               :error_msg="fetch_error_msg"
+                              @voltar="have_fetch_error = false"
                         />
                   </span>
             </div>

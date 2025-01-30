@@ -13,6 +13,7 @@ import ErroFormComponent from '@/components/mensagem/ErroFormComponent.vue';
 import regra_map from '@/services/regras_negocio/regras_mapeamentoprodutos'
 import EmpresaSelectComponent from '@/components/util/selects/EmpresaSelectComponent.vue';
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
+import TimeMensageComponent from '@/components/mensagem/TimeMensageComponent.vue';
 
 export default defineComponent({
       data(){
@@ -52,13 +53,16 @@ export default defineComponent({
                   dado_pesquisa:{
                         header:[
                               {'header': 'Produto ERP', 'key_body': 'produtoErp',
-                              'isfiltrable': false, 'isordenable': false},
+                              'filtro':{'tipo_obj': 'String', 'tipo_filtro': 'all'},
+                              'isfiltrable': true, 'isordenable': false},
 
                               {'header': 'Produto Site', 'key_body': 'produtoSite',
-                              'isfiltrable': false, 'isordenable': false},
+                              'filtro':{'tipo_obj': 'String', 'tipo_filtro': 'all'},
+                              'isfiltrable': true, 'isordenable': false},
 
                               {'header': 'Produto Pai Site', 'key_body': 'produtoPaiSite',
-                              'isfiltrable': false, 'isordenable': false},
+                              'filtro':{'tipo_obj': 'String', 'tipo_filtro': 'all'},
+                              'isfiltrable': true, 'isordenable': false},
 
                               {'header': 'Ações', 'key_body': 'button',
                               'isfiltrable': false, 'isordenable': false}
@@ -83,7 +87,8 @@ export default defineComponent({
             LoaderSkeleton,
             EmpresaSelectComponent,
             VersaoMaximisada,
-            ErroResponseComponent
+            ErroResponseComponent,
+            TimeMensageComponent
       },
       watch:{
             dado_empresa_selected(){
@@ -135,7 +140,12 @@ export default defineComponent({
                   const pagina = `?pagina=${this.pagina_atual}`;
                   const porPagina = `&porPagina=${this.ITEM_PAGINA_MAX}`;
                   const ordem = `&ordenacao=codigo&direcao=Asc`;
-                  const codigo_empresa = `&filtro=empresa.codigo==${this.dado_empresa_selected['codigo' as keyof typeof this.dado_empresa_selected]}`;
+                  let codigo_empresa;
+                  if(this.auth_type == 'ROLE_USER'){
+                        codigo_empresa = ''
+                  }else{
+                        codigo_empresa = `&filtro=empresa.codigo==${this.dado_empresa_selected['codigo' as keyof typeof this.dado_empresa_selected]}`;
+                  }
                   const codigo_canal = `&filtro=canal.codigo==${this.canal_selected['ambienteCanalCodigo' as keyof typeof this.canal_selected]}`;
                   let erp = '', site = '';
                   if (this.filtro_erp != '') {
@@ -189,20 +199,31 @@ export default defineComponent({
                   this.lista_estado = 'Lista'
             },
             getPesquisa_filtrada(request: string){
+                  console.log('DAS', request);
+                  
                   this.dado_parametro.header = this.dado_pesquisa.header;
                   this.erros_pesquisa = [];
                   if(!this.dado_empresa_selected['codigo' as keyof typeof this.dado_empresa_selected] || !this.canal_selected['codigo' as keyof typeof this.canal_selected]){
-                        if(!this.dado_empresa_selected['codigo' as keyof typeof this.dado_empresa_selected])
+                        if(!this.dado_empresa_selected['codigo' as keyof typeof this.dado_empresa_selected] && this.auth_type != 'ROLE_USER'){
                               this.erros_pesquisa.push('empresa')
-                        if(!this.canal_selected['codigo' as keyof typeof this.canal_selected])
+                              return
+                        }
+                        if(!this.canal_selected['codigo' as keyof typeof this.canal_selected]){
                               this.erros_pesquisa.push('canal')
-                        return
+                              return
+                        }
                   }
                   this.lista_estado = 'Loader'
+                  let codigo_empresa;
+                  if(this.auth_type == 'ROLE_USER'){
+                        codigo_empresa = ''
+                  }else{
+                        codigo_empresa = `&filtro=empresa.codigo==${this.dado_empresa_selected['codigo' as keyof typeof this.dado_empresa_selected]}`;
+                  }
                   store.dispatch('getDadosPaginados', {
                         'roter_interna': 'mapeamentoprodudo_pesquisa',
                         'roter_externa': 'mapeamentoprodudo',
-                        'request': `?pagina=1&porPagina=0&ordenacao=codigo&direcao=Asc&filtro=empresa.codigo==${this.dado_empresa_selected['codigo' as keyof typeof this.dado_empresa_selected]}&filtro=canal.codigo==${this.canal_selected['ambienteCanalCodigo' as keyof typeof this.canal_selected]}&`+request,
+                        'request': `?pagina=1&porPagina=0&ordenacao=codigo&direcao=Asc`+codigo_empresa+`&`+request,
                         'pagina_atual': 1,
                         'item_page': this.ITEM_PAGINA_MAX
                   }).then((le) => {
@@ -218,6 +239,11 @@ export default defineComponent({
             showError(objeto_erro: object){
                   this.fetch_error_msg = objeto_erro;
                   this.have_fetch_error = true;
+            },
+            voltarErroServer(){
+                  this.inRequestPesquisa = false;
+                  this.fetch_error_msg = {};
+                  this.have_fetch_error = false;
             }
       }
 })
@@ -231,7 +257,12 @@ export default defineComponent({
                   :user_type="auth_type"
             />
             <div class="col-12 col-lg-10" id="content">
-                  <span v-if="!have_fetch_error">
+                  <span v-if="!have_fetch_error || fetch_error_msg['data' as keyof typeof fetch_error_msg]">
+                        <!-- ERRO no servidor mensagem -->
+                        <TimeMensageComponent v-if="fetch_error_msg['data' as keyof typeof fetch_error_msg]"
+                              :mensagem="'Houve algum erro no servidor'"
+                              @fechar_erro="()=> voltarErroServer"
+                        />
                         <!-- Pesquisa Card -->
                         <div :class="['row', 'my-1']">
                               <div class="col-1"></div>
@@ -336,7 +367,7 @@ export default defineComponent({
                         />
                   </span>
                   <span v-else>
-                        <ErroResponseComponent 
+                        <ErroResponseComponent
                               :error_msg="fetch_error_msg"
                               @voltar="have_fetch_error = false"
                         />

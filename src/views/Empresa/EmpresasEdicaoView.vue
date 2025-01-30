@@ -7,6 +7,7 @@ import ErroFormComponent from '@/components/mensagem/ErroFormComponent.vue';
 import { defineComponent } from 'vue';
 import empresa from '@/services/regras_negocio/regras_empresa';
 import store from '@/store';
+import TimeMensageComponent from '@/components/mensagem/TimeMensageComponent.vue';
 
 export default defineComponent({
       data(){
@@ -14,7 +15,7 @@ export default defineComponent({
                   auth_type: APPCONFIG.authType,
                   fetch_error_msg: {},
                   have_fetch_error: false,
-                  isEditing: false,
+                  edit_empresa_request: false,
                   empresa:{
                         descricao: '',
                         cnpj: '',
@@ -35,11 +36,12 @@ export default defineComponent({
       components:{
             NavbarComplet,
             VersaoMaximisada,
-            ErroFormComponent
+            ErroFormComponent,
+            TimeMensageComponent
       },
       methods:{
             async editRequest(){
-                  this.isEditing = true;
+                  this.edit_empresa_request = true;
                   this.errors = [];
                   const id = (this.$route.params['id'] || '-1') as string;
                   empresa._edit(this.old_empresa, this.empresa, this.errors)
@@ -50,7 +52,7 @@ export default defineComponent({
                               this.voltarEmpresa()
                         ).catch((error_retorno)=> this.showError(error_retorno))
                   }else{
-                        this.isEditing = false;
+                        this.edit_empresa_request = false;
                   }
             },
             voltarEmpresa(){
@@ -59,6 +61,14 @@ export default defineComponent({
             showError(objeto_erro: object){
                   this.fetch_error_msg = objeto_erro;
                   this.have_fetch_error = true;
+            },
+            voltarErro(){
+                  this.have_fetch_error = false;
+                  this.edit_empresa_request = false;
+            },
+            voltarErroServer(){
+                  this.fetch_error_msg = {};
+                  this.voltarErro();
             }
       },
       async mounted(){
@@ -83,7 +93,12 @@ export default defineComponent({
                   :user_type="auth_type"
             />
             <div class="col-12 col-lg-10" id="content">
-                  <span v-if="!have_fetch_error">
+                  <span v-if="!have_fetch_error || fetch_error_msg['data' as keyof typeof fetch_error_msg]">
+                        <!-- ERRO no servidor mensagem -->
+                        <TimeMensageComponent v-if="fetch_error_msg['data' as keyof typeof fetch_error_msg]"
+                              :mensagem="'Houve algum erro no servidor'"
+                              @fechar_erro="()=> voltarErroServer"
+                        />
                         <div class="row">
                               <div class="col-1"></div>
                               <div class="Card-Body col-8">
@@ -146,7 +161,7 @@ export default defineComponent({
                                                 :mensagem="'Edite antes de salvar'"
                                                 :class="['alert-warning desativada',{'ativada' : errors.findIndex((x) => x =='igual') != -1}]"
                                                 />
-                                                <button class="btn btn-primary col-2" :disabled="isEditing">
+                                                <button class="btn btn-primary col-2" :disabled="edit_empresa_request">
                                                       <span>Iditar</span>
                                                 </button>
                                                 <button class="btn btn-light col-2" style="margin-left: 24px;" @click="voltarEmpresa()">
@@ -161,6 +176,7 @@ export default defineComponent({
                   <span v-else>
                         <ErroResponseComponent 
                               :error_msg="fetch_error_msg"
+                              @voltar="have_fetch_error = false"
                         />
                   </span>
             </div>

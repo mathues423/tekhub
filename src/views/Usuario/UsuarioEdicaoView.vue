@@ -10,6 +10,7 @@ import usuarios from '@/services/regras_negocio/regras_usuarios';
 import ErroFormComponent from '@/components/mensagem/ErroFormComponent.vue'
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
 import fetch_ from '@/services/fetch/requisicao';
+import TimeMensageComponent from '@/components/mensagem/TimeMensageComponent.vue';
 
 export default defineComponent({
       data(){
@@ -19,7 +20,7 @@ export default defineComponent({
                   have_fetch_error: false,
                   empresa_escolhida:{},
                   empresa_aux:{},
-                  new_user_reqest:false,
+                  edit_user_reqest:false,
                   in_request:false,
                   perfil: [{name: 'Usuario', value: 'ROLE_USER'}, {name: 'Suporte', value: 'ROLE_SUP'}, {name: 'Administrador', value: 'ROLE_ADMIN'}],
                   usuario:{
@@ -44,7 +45,8 @@ export default defineComponent({
             EmpresaSelectComponent,
             VersaoMaximisada,
             ErroFormComponent,
-            ErroResponseComponent
+            ErroResponseComponent,
+            TimeMensageComponent
       },
       watch:{
             empresa_escolhida(){
@@ -74,7 +76,7 @@ export default defineComponent({
                   router.push('/usuarios');
             },
             async edicaoRequest(){
-                  this.new_user_reqest = true;
+                  this.edit_user_reqest = true;
                   const id = (this.$route.params['id'] || '-1') as string;
                   while (this.errors.length) {
                         this.errors.pop();
@@ -84,11 +86,11 @@ export default defineComponent({
                         Promise.resolve(
                               store.dispatch('setDadosID', {'roter_externa': 'usuario', 'id': id, 'roter_interna': 'usuarios', 'new_dado': this.usuario})
                               .then((ret)=> {
-                                  this.new_user_reqest = false;
+                                  this.edit_user_reqest = false;
                               })
                         ).catch((error_retorno)=> this.showError(error_retorno));
                   }else{
-                        this.new_user_reqest = false;
+                        this.edit_user_reqest = false;
                   }
                   
             },
@@ -109,7 +111,11 @@ export default defineComponent({
             },
             voltarErro(){
                   this.have_fetch_error = false;
-                  this.new_user_reqest = false;
+                  this.edit_user_reqest = false;
+            },
+            voltarErroServer(){
+                  this.fetch_error_msg = {};
+                  this.voltarErro();
             },
             compObject(old_obj: object, new_ob: object): boolean {
                   const chave_old = Object.keys(old_obj),
@@ -137,7 +143,12 @@ export default defineComponent({
                   :user_type="auth_type"
             />
             <div class="col-12 col-lg-10" id="content">
-                  <span v-if="!have_fetch_error">
+                  <span v-if="!have_fetch_error || fetch_error_msg['data' as keyof typeof fetch_error_msg]">
+                        <!-- ERRO no servidor mensagem -->
+                        <TimeMensageComponent v-if="fetch_error_msg['data' as keyof typeof fetch_error_msg]"
+                              :mensagem="'Houve algum erro no servidor'"
+                              @fechar_erro="()=> voltarErroServer"
+                        />
                         <div class="row">
                               <!-- Email -->
                               <div class="col-1"></div>
@@ -227,7 +238,7 @@ export default defineComponent({
                                                 :mensagem="'Edite antes de salvar'"
                                                 :class="['alert-warning desativada',{'ativada' : errors.findIndex((x) => x =='igual') != -1}]"
                                                 />
-                                                <button class="btn btn-primary col-2" :disabled="(new_user_reqest || in_request)" @click="edicaoRequest">
+                                                <button class="btn btn-primary col-2" :disabled="(edit_user_reqest || in_request)" @click="edicaoRequest">
                                                       <span>Editar</span>
                                                 </button>
                                                 <button class="btn btn-light col-2" style="margin-left: 24px;" @click="voltarUsuario">

@@ -9,6 +9,7 @@ import store from '@/store';
 import usuarios from '@/services/regras_negocio/regras_usuarios';
 import ErroFormComponent from '@/components/mensagem/ErroFormComponent.vue'
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
+import TimeMensageComponent from '@/components/mensagem/TimeMensageComponent.vue';
 
 export default defineComponent({
       data(){
@@ -35,7 +36,8 @@ export default defineComponent({
             EmpresaSelectComponent,
             VersaoMaximisada,
             ErroFormComponent,
-            ErroResponseComponent
+            ErroResponseComponent,
+            TimeMensageComponent
       },
       watch:{
             empresa_escolhida(){
@@ -83,6 +85,10 @@ export default defineComponent({
                   this.have_fetch_error = false;
                   this.new_user_reqest = false;
             },
+            voltarErroServer(){
+                  this.fetch_error_msg = {};
+                  this.voltarErro();
+            },
             compObject(old_obj: object, new_ob: object): boolean {
                   const chave_old = Object.keys(old_obj),
                         chave_new = Object.keys(new_ob);
@@ -109,7 +115,12 @@ export default defineComponent({
                   :user_type="auth_type"
             />
             <div class="col-12 col-lg-10" id="content">
-                  <span v-if="!have_fetch_error">
+                  <span v-if="!have_fetch_error || fetch_error_msg['data' as keyof typeof fetch_error_msg]">
+                        <!-- ERRO no servidor mensagem -->
+                        <TimeMensageComponent v-if="fetch_error_msg['data' as keyof typeof fetch_error_msg]"
+                              :mensagem="'Houve algum erro no servidor'"
+                              @fechar_erro="()=> voltarErroServer"
+                        />
                         <div class="row">
                               <!-- Email -->
                               <div class="col-1"></div>

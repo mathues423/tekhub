@@ -25,17 +25,12 @@
 
 <template>
       <div class="row">
-            <div class="content" style="text-align: center; margin-top: auto; margin-bottom: auto;" v-if="error_msg.errors">
-                  <div>
-                        {{ error_msg.errors }}
-                  </div>
+            <div class="content" style="text-align: center; margin-top: auto; margin-bottom: auto;">
+                  Sua Requisição feita as: ({{ error_msg.timestamp }}) para a rotado servidor "...{{ error_msg.path }}" <br>
+                  teve o erro [mensagem: "{{ error_msg.message }}", status: "{{ error_msg.status }} {{ error_msg.error }}"].
                   <div>
                         <button class="btn btn-info" @click="$emit('voltar')">Voltar</button>
                   </div>
-            </div>
-            <div class="content" style="text-align: center; margin-top: auto; margin-bottom: auto;" v-else>
-                  Sua Requisição feita as: ({{ error_msg.timestamp }}) para a rotado servidor "...{{ error_msg.path }}" <br>
-                  teve o erro [mensagem: "{{ error_msg.message }}", status: "{{ error_msg.status }} {{ error_msg.error }}"].
             </div>
             
       </div>

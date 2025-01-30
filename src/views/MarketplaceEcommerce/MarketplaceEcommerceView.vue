@@ -10,6 +10,7 @@ import fetch_ from '@/services/fetch/requisicao';
 import { defineComponent } from 'vue';
 import store from '@/store';
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
+import TimeMensageComponent from '@/components/mensagem/TimeMensageComponent.vue';
 
 export default defineComponent({
       data(){
@@ -81,7 +82,8 @@ export default defineComponent({
             CriarBotaoComponent,
             VersaoMaximisada,
             BuscaEmpresaComponent,
-            ErroResponseComponent
+            ErroResponseComponent,
+            TimeMensageComponent
       },
       async mounted() {
             this.dado_parametro.header = this.dado_paginado.header;
@@ -199,6 +201,10 @@ export default defineComponent({
             showError(objeto_erro: object){
                   this.fetch_error_msg = objeto_erro;
                   this.have_fetch_error = true;
+            },
+            voltarErroServer(){
+                  this.fetch_error_msg = {};
+                  this.have_fetch_error = false;
             }
       }
 })
@@ -212,7 +218,12 @@ export default defineComponent({
                   :user_type="auth_type"
             />
             <div class="col-12 col-lg-10" id="content" style="padding-left: calc(var(--bs-gutter-x));">
-                  <span v-if="!have_fetch_error">
+                  <span v-if="!have_fetch_error || fetch_error_msg['data' as keyof typeof fetch_error_msg]">
+                        <!-- ERRO no servidor mensagem -->
+                        <TimeMensageComponent v-if="fetch_error_msg['data' as keyof typeof fetch_error_msg]"
+                              :mensagem="'Houve algum erro no servidor'"
+                              @fechar_erro="()=> voltarErroServer"
+                        />
                         <BuscaEmpresaComponent 
                               :inRequest="inRequestEmpresa"
                               @id_empresa="(arg)=> request_empresa(arg)"
@@ -241,6 +252,7 @@ export default defineComponent({
                   <span v-else>
                         <ErroResponseComponent 
                               :error_msg="fetch_error_msg"
+                              @voltar="have_fetch_error = false"
                         />
                   </span>
             </div>

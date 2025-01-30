@@ -10,6 +10,7 @@ import store from '@/store';
 import { defineComponent } from 'vue';
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
 import { APPCONFIG } from '@/components/constants/Config';
+import TimeMensageComponent from '@/components/mensagem/TimeMensageComponent.vue';
 
 
 export default defineComponent({
@@ -70,7 +71,8 @@ export default defineComponent({
             ListaComponent,
             ListaCardComponent,
             LoaderListaCardComponent,
-            ErroResponseComponent
+            ErroResponseComponent,
+            TimeMensageComponent
       },
       mounted() {
             this.onResize()
@@ -126,6 +128,10 @@ export default defineComponent({
             showError(objeto_erro: object){
                   this.fetch_error_msg = objeto_erro;
                   this.have_fetch_error = true;
+            },
+            voltarErroServer(){
+                  this.have_fetch_error = false;
+                  this.fetch_error_msg = {};
             }
       }
 })
@@ -139,7 +145,12 @@ export default defineComponent({
                   :user_type="auth_type"
             />
             <div class="col-12 col-lg-10" id="content">
-                  <span v-if="!have_fetch_error">
+                  <span v-if="!have_fetch_error || fetch_error_msg['data' as keyof typeof fetch_error_msg]">
+                        <!-- ERRO no servidor mensagem -->
+                        <TimeMensageComponent v-if="fetch_error_msg['data' as keyof typeof fetch_error_msg]"
+                              :mensagem="'Houve algum erro no servidor'"
+                              @fechar_erro="()=> voltarErroServer"
+                        />
                         <BuscaEmpresaDateComponent
                               :rota_externa="'logrequisicao'"
                               @request_filtro="(args: string)=> requisicao(args)"
@@ -191,6 +202,7 @@ export default defineComponent({
                   <span v-else>
                         <ErroResponseComponent 
                               :error_msg="fetch_error_msg"
+                              @voltar="have_fetch_error = false"
                         />
                   </span>
             </div>
