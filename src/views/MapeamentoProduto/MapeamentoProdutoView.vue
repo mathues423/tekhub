@@ -303,12 +303,12 @@ export default defineComponent({
                         />
                         <!-- Pesquisa Card -->
                         <div :class="['row', 'my-1']">
-                              <div class="col-1"></div>
+                              <div class="col-lg-1"></div>
                               <div class="Card-Body col-10 row">
-                                    <div class="col-2 form_text" v-if="auth_type != 'ROLE_USER'">
+                                    <div class="col-4 col-lg-2 form_text" v-if="auth_type != 'ROLE_USER'">
                                           *Empresa: 
                                     </div>
-                                    <div class="col-6" v-if="auth_type != 'ROLE_USER'">
+                                    <div class="col-8" v-if="auth_type != 'ROLE_USER'">
                                           <EmpresaSelectComponent
                                                 :valor_inicial="{}"
                                                 :have_erro="erros_pesquisa.findIndex((x) => x =='empresa') != -1"
@@ -316,18 +316,17 @@ export default defineComponent({
                                                 @erro_fetch="(ret)=> showError(ret)"
                                           />
                                     </div>
-                                    <div class="col-4" v-if="auth_type != 'ROLE_USER'">
+                                    <div class="col-12 col-lg-2" v-if="auth_type != 'ROLE_USER'">
                                           <ErroFormComponent
                                                 :mensagem="'Informe a Empresa'"
                                                 :class="['alert-danger desativada',{'ativada' : erros_pesquisa.indexOf('empresa') != -1 }]"
                                           />
                                     </div>
       
-                                    <div class="col-2 form_text">
+                                    <div class="col-4 col-lg-2 form_text">
                                           *Canal de venda:
                                     </div>
-      
-                                    <div class="col-6">
+                                    <div class="col-8">
                                           <div v-show="inRequestCanal">
                                                 <LoaderSkeleton 
                                                       :tipo_loader="'select'"
@@ -338,7 +337,7 @@ export default defineComponent({
                                                 <option v-for="canal in dado_canais" :key="canal" :value="canal"> {{ canal['ambienteCanalAlias' as keyof typeof canal] }}</option>
                                           </select>
                                     </div>
-                                    <div class="col-4">
+                                    <div class="col-12 col-lg-2">
                                           <ErroFormComponent
                                                 :mensagem="'Informe a Canal'"
                                                 :class="['alert-danger desativada',{'ativada' : erros_pesquisa.indexOf('canal') != -1 }]"
@@ -349,7 +348,7 @@ export default defineComponent({
                                           <span>Filtros</span>
                                     </div>
                                     <!-- Produto Erp -->
-                                    <div class="col-2 form_text">
+                                    <div class="col-4 col-lg-2 form_text">
                                           Produto Erp:
                                     </div>
                                     <div class="col-8">
@@ -359,9 +358,9 @@ export default defineComponent({
                                           :class="['alert-danger desativada',{'ativada' : erros_pesquisa.indexOf('filtro_erp') != -1}]"
                                           /> -->
                                     </div>
-                                    <div class="col-2"></div>
+                                    <div class="col-12"></div>
                                     <!-- Produto Site -->
-                                    <div class="col-2 form_text">
+                                    <div class="col-4 col-lg-2 form_text">
                                           Produto Site:
                                     </div>
                                     <div class="col-8">
@@ -371,9 +370,10 @@ export default defineComponent({
                                           :class="['alert-danger desativada',{'ativada' : erros_pesquisa.indexOf('filtro_site') != -1}]"
                                           /> -->
                                     </div>
-                                    <div class="col-2"></div>
-      
-                                    <div>
+                                    <div class="col-12"></div>
+
+                                    <div class="col-2 col-lg-1"></div>
+                                    <div class="col">
                                           <button class="btn btn-light" @click="requestDados" :disabled="inRequestPesquisa">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                                                       <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>

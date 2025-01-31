@@ -85,11 +85,11 @@ export default defineComponent({
                               @fechar_erro="voltarErroServer"
                         />
                         <div class="row">
-                              <div class="col-1"></div>
-                              <div class="Card-Body col-8">
+                              <div class="col-lg-1"></div>
+                              <div class="Card-Body col-12 col-lg-8">
                                     <form @submit.prevent="criacaoRequest()" class="row form_content" novalidate>
                                           <!-- Razao -->
-                                          <div class="col-2 form_text">
+                                          <div class="col-4 col-lg-2 form_text">
                                                 *Razão social:
                                           </div>
                                           <div class="col-8">
@@ -99,9 +99,9 @@ export default defineComponent({
                                                 :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='razao') != -1}]"
                                                 />
                                           </div>
-                                          <div class="col-2"></div>
+                                          <div class="col-lg-2"></div>
                                           <!-- CNPJ -->
-                                          <div class="col-2 form_text">
+                                          <div class="col-4 col-lg-2 form_text">
                                                 *CNPJ:
                                           </div>
                                           <div class="col-8">
@@ -115,9 +115,9 @@ export default defineComponent({
                                                 :class="['alert-warning desativada',{'ativada' : errors.findIndex((x) => x =='400') != -1}]"
                                                 />
                                           </div>
-                                          <div class="col-2"></div>
+                                          <div class="col-lg-2"></div>
                                           <!-- Codigo -->
-                                          <div class="col-2 form_text">
+                                          <div class="col-4 col-lg-2 form_text">
                                                 *Codigo na Tek-System:
                                           </div>
                                           <div class="col-8">
@@ -127,9 +127,9 @@ export default defineComponent({
                                                 :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='codigo') != -1}]"
                                                 />
                                           </div>
-                                          <div class="col-2"></div>
+                                          <div class="col-lg-2"></div>
                                           <!-- Versao -->
-                                          <div class="col-2 form_text">
+                                          <div class="col-4 col-lg-2 form_text">
                                                 *Verção API:
                                           </div>
                                           <div class="col-8">
@@ -139,19 +139,19 @@ export default defineComponent({
                                                 :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='api') != -1}]"
                                                 />
                                           </div>
-                                          <div class="col-2"></div>
+                                          <div class="col-lg-2"></div>
       
                                           <div style="margin-top: 16px;" class="col-12">
-                                                <button class="btn btn-primary col-2" :disabled="new_empresa_request">
+                                                <button class="btn btn-primary col-4 col-lg-2" style="margin-left: 24px;" :disabled="new_empresa_request">
                                                       <span>Criar</span>
                                                 </button>
-                                                <button class="btn btn-light col-2" style="margin-left: 24px;" @click="voltarEmpresa()">
+                                                <button class="btn btn-light col-4 col-lg-2" style="margin-left: 24px;" @click="voltarEmpresa()">
                                                       <span>Voltar</span>
                                                 </button>
                                           </div>
                                     </form>
                               </div>
-                              <div class="col-3"></div>
+                              <div class="col-lg-3"></div>
                         </div>
                   </span>
                   <span v-else>

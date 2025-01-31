@@ -102,7 +102,7 @@ export default defineComponent({
                               <div class="Card-Body col-8">
                                     <form @submit.prevent="criacaoRequest()" class="row form_content" novalidate>
                                           <!-- Descrição -->
-                                          <div class="col-2 form_text">
+                                          <div class="col-4 col-lg-2 form_text">
                                                 *Descrição:
                                           </div>
                                           <div class="col-8">
@@ -112,9 +112,9 @@ export default defineComponent({
                                                 :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='descricao') != -1}]"
                                                 />
                                           </div>
-                                          <div class="col-2"></div>
+                                          <div class="col-lg-2"></div>
                                           <!-- Alias -->
-                                          <div class="col-2 form_text">
+                                          <div class="col-4 col-lg-2 form_text">
                                                 *Alias:
                                           </div>
                                           <div class="col-8">
@@ -124,9 +124,9 @@ export default defineComponent({
                                                 :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='alias') != -1}]"
                                                 />
                                           </div>
-                                          <div class="col-2"></div>
+                                          <div class="col-lg-2"></div>
                                           <!-- Alias TekPropt -->
-                                          <div class="col-2 form_text">
+                                          <div class="col-4 col-lg-2 form_text">
                                                 Alias TekPropt:
                                           </div>
                                           <div class="col-8">
@@ -136,9 +136,9 @@ export default defineComponent({
                                                 :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='alias_tekprot') != -1}]"
                                                 /> -->
                                           </div>
-                                          <div class="col-2"></div>
+                                          <div class="col-lg-2"></div>
                                           <!-- Tipo -->
-                                          <div class="col-2 form_text">
+                                          <div class="col-4 col-lg-2 form_text">
                                                 *Tipo:
                                           </div>
                                           <div class="col-8">
@@ -151,9 +151,9 @@ export default defineComponent({
                                                 :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='tipo') != -1}]"
                                                 />
                                           </div>
-                                          <div class="col-2"></div>
+                                          <div class="col-lg-2"></div>
                                           <!-- Canal Associado -->
-                                          <div class="col-2 form_text">
+                                          <div class="col-4 col-lg-2 form_text">
                                                 Canal Associado:
                                           </div>
                                           <!-- Como linkar o canal associado ?? -->
@@ -174,14 +174,14 @@ export default defineComponent({
                                                 :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='canal_ass') != -1}]"
                                                 /> -->
                                           </div>
-                                          <div class="col-2"></div>
+                                          <div class="col-lg-2"></div>
       
                                           <!-- Botao -->
                                           <div style="margin-top: 16px;" class="col-12">
-                                                <button class="btn btn-primary col-2" :disabled="!requested || new_canal_request" >
+                                                <button class="btn btn-primary col-4 col-lg-2" :disabled="!requested || new_canal_request" >
                                                       <span>Criar</span>
                                                 </button>
-                                                <button class="btn btn-light col-2" style="margin-left: 24px;" @click="voltarCanal()">
+                                                <button class="btn btn-light col-4 col-lg-2" style="margin-left: 24px;" @click="voltarCanal()">
                                                       <span>Voltar</span>
                                                 </button>
                                           </div>

@@ -223,7 +223,7 @@ export default defineComponent({
                                     {{ marketplaceecommerce_new }}
                                     <form @submit.prevent="criacaoRequest()" class="row form_content" novalidate>
                                           <!-- Empresa -->
-                                          <div class="col-2 form_text">
+                                          <div class="col-4 col-lg-2 form_text">
                                                 *Empresa:
                                           </div>
                                           <div class="col-8">
@@ -239,9 +239,9 @@ export default defineComponent({
                                                       :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='empresa') != -1}]"
                                                 />
                                           </div>
-                                          <div class="col-2"></div>
+                                          <div class="col-lg-2"></div>
                                           <!-- Ambiente -->
-                                          <div class="col-2 form_text">
+                                          <div class="col-4 col-lg-2 form_text">
                                                 *Ambiente:
                                           </div>
                                           <div class="col-8">
@@ -257,17 +257,17 @@ export default defineComponent({
                                                       :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='ambiente') != -1}]"
                                                 />
                                           </div>
-                                          <div class="col-2"></div>
+                                          <div class="col-lg-2"></div>
                                           <!-- Usuario -->
-                                          <div class="col-2 form_text">
+                                          <div class="col-4 col-lg-2 form_text">
                                                 Usuario:
                                           </div>
                                           <div class="col-8">
                                                 <input type="text" class="form-control" v-model="marketplaceecommerce_new.usuario">
                                           </div>
-                                          <div class="col-2"></div>
+                                          <div class="col-lg-2"></div>
                                           <!-- Senha -->
-                                          <div class="col-2 form_text">
+                                          <div class="col-4 col-lg-2 form_text">
                                                 Senha:
                                           </div>
                                           <div class="col-8">
@@ -287,57 +287,57 @@ export default defineComponent({
                                                       </span>
                                                 </div>
                                           </div>
-                                          <div class="col-2"></div>
+                                          <div class="col-lg-2"></div>
                                           <!-- Token -->
-                                          <div class="col-2 form_text">
+                                          <div class="col-4 col-lg-2 form_text">
                                                 Token:
                                           </div>
                                           <div class="col-8">
                                                 <input type="text" class="form-control" v-model="marketplaceecommerce_new.token">
                                           </div>
-                                          <div class="col-2"></div>
+                                          <div class="col-lg-2"></div>
                                           <!-- ClienteId -->
-                                          <div class="col-2 form_text">
+                                          <div class="col-4 col-lg-2 form_text">
                                                 ClienteId:
                                           </div>
                                           <div class="col-8">
                                                 <input type="text" class="form-control" v-model="marketplaceecommerce_new.appClienteId">
                                           </div>
-                                          <div class="col-2"></div>
+                                          <div class="col-lg-2"></div>
                                           <!-- ClienteSecret -->
-                                          <div class="col-2 form_text">
+                                          <div class="col-4 col-lg-2 form_text">
                                                 ClienteSecret:
                                           </div>
                                           <div class="col-8">
                                                 <input type="text" class="form-control" v-model="marketplaceecommerce_new.appClienteSecret">
                                           </div>
-                                          <div class="col-2"></div>
+                                          <div class="col-lg-2"></div>
                                           <!-- URL redirecionamento -->
-                                          <div class="col-2 form_text">
+                                          <div class="col-4 col-lg-2 form_text">
                                                 URL redirecionamento:
                                           </div>
                                           <div class="col-8">
                                                 <input type="text" class="form-control" v-model="marketplaceecommerce_new.urlRedirecionamento">
                                           </div>
-                                          <div class="col-2"></div>
+                                          <div class="col-lg-2"></div>
                                           <!-- Webservice Api -->
-                                          <div class="col-2 form_text">
+                                          <div class="col-4 col-lg-2 form_text">
                                                 Webservice Api:
                                           </div>
                                           <div class="col-8">
                                                 <input type="text" class="form-control" v-model="marketplaceecommerce_new.webserviceApi">
                                           </div>
-                                          <div class="col-2"></div>
+                                          <div class="col-lg-2"></div>
                                           <!-- Variação Principal -->
-                                          <div class="col-2 form_text">
+                                          <div class="col-4 col-lg-2 form_text">
                                                 Variação Principal:
                                           </div>
                                           <div class="col-8">
                                                 <input type="text" class="form-control" v-model="marketplaceecommerce_new.variacaoPrincipal">
                                           </div>
-                                          <div class="col-2"></div>
+                                          <div class="col-lg-2"></div>
                                           <!-- Det. em Produto Simpres -->
-                                          <div class="col-2 form_text">
+                                          <div class="col-4 col-lg-2 form_text">
                                                 Det. em Produto Simpres:
                                           </div>
                                           <div class="col-8">
@@ -345,9 +345,9 @@ export default defineComponent({
                                                       <input style="height: 1.75em; width: 3.5em;" class="form-check-input" type="checkbox" role="switch" v-model="marketplaceecommerce_new.transformaVariacaoEmProdutoSimples" aria-checked="mixed">
                                                 </div>
                                           </div>
-                                          <div class="col-2"></div>
+                                          <div class="col-lg-2"></div>
                                           <!-- Modo Dbug -->
-                                          <div class="col-2 form_text">
+                                          <div class="col-4 col-lg-2 form_text">
                                                 Modo Dbug:
                                           </div>
                                           <div class="col-8">
@@ -355,17 +355,17 @@ export default defineComponent({
                                                       <input style="height: 1.75em; width: 3.5em;" class="form-check-input" type="checkbox" role="switch" v-model="marketplaceecommerce_new.modoDebug" aria-checked="mixed">
                                                 </div>
                                           </div>
-                                          <div class="col-2"></div>
+                                          <div class="col-lg-2"></div>
                                           <!-- Versão -->
-                                          <div class="col-2 form_text">
+                                          <div class="col-4 col-lg-2 form_text">
                                                 Versão:
                                           </div>
                                           <div class="col-8">
                                                 <input type="text" class="form-control" v-model="marketplaceecommerce_new.versaoEcommerce">
                                           </div>
-                                          <div class="col-2"></div>
+                                          <div class="col-lg-2"></div>
                                           <!-- Usuário Api -->
-                                          <div class="col-2 form_text">
+                                          <div class="col-4 col-lg-2 form_text">
                                                 Usuário Api:
                                           </div>
                                           <div class="col-8">
@@ -374,9 +374,9 @@ export default defineComponent({
                                                       <option v-for="usuario in usuario_select" :key="usuario" :value="usuario"> {{ usuario['email' as keyof typeof usuario] }}</option>
                                                 </select>
                                           </div>
-                                          <div class="col-2"></div>
+                                          <div class="col-lg-2"></div>
                                           <!-- Atributos defaut(json) -->
-                                          <div class="col-2 form_text">
+                                          <div class="col-4 col-lg-2 form_text">
                                                 Atributos defaut(json):
                                           </div>
                                           <div class="col-8">
@@ -389,10 +389,10 @@ export default defineComponent({
                                                       :mensagem="'Edite antes de salvar.'"
                                                       :class="['alert-warning desativada',{'ativada' : errors.findIndex((x) => x =='igual') != -1}]"
                                                 />
-                                                <button class="btn btn-primary col-2" :disabled="inRequestEmpresa || inRequestAmbiente || edit_markEcom_request" >
+                                                <button class="btn btn-primary col-4 col-lg-2" :disabled="inRequestEmpresa || inRequestAmbiente || edit_markEcom_request" >
                                                       <span>Editar</span>
                                                 </button>
-                                                <button class="btn btn-light col-2" style="margin-left: 24px;" @click="voltarMarktplaceEcommerce()">
+                                                <button class="btn btn-light col-4 col-lg-2" style="margin-left: 24px;" @click="voltarMarktplaceEcommerce()">
                                                       <span>Voltar</span>
                                                 </button>
                                           </div>

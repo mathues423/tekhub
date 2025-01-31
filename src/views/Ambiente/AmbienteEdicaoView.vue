@@ -129,7 +129,7 @@ export default defineComponent({
                               <div class="Card-Body col-8">
                                     <form @submit.prevent="editRequest" class="row form_content" novalidate>
                                          <!-- Canal -->
-                                         <div class="col-2 form_text">
+                                         <div class="col-4 col-lg-2 form_text">
                                                 *Canal:
                                           </div>
                                           <div class="col-8">
@@ -149,9 +149,9 @@ export default defineComponent({
                                                 :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='canalAlias') != -1}]"
                                                 />
                                           </div>
-                                          <div class="col-2"></div>
+                                          <div class="col-lg-2"></div>
                                           <!-- Url -->
-                                          <div class="col-2 form_text">
+                                          <div class="col-4 col-lg-2 form_text">
                                                 *Url:
                                           </div>
                                           <div class="col-8">
@@ -161,9 +161,9 @@ export default defineComponent({
                                                 :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='url') != -1}]"
                                                 />
                                           </div>
-                                          <div class="col-2"></div>
+                                          <div class="col-lg-2"></div>
                                           <!-- Versão -->
-                                          <div class="col-2 form_text">
+                                          <div class="col-4 col-lg-2 form_text">
                                                 *Versão:
                                           </div>
                                           <div class="col-8">
@@ -173,9 +173,9 @@ export default defineComponent({
                                                 :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='versao') != -1}]"
                                                 />
                                           </div>
-                                          <div class="col-2"></div>
+                                          <div class="col-lg-2"></div>
                                           <!-- Ambiente -->
-                                          <div class="col-2 form_text">
+                                          <div class="col-4 col-lg-2 form_text">
                                                 *Ambiente:
                                           </div>
                                           <div class="col-8">
@@ -188,9 +188,9 @@ export default defineComponent({
                                                 :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='ambiente') != -1}]"
                                                 />
                                           </div>
-                                          <div class="col-2"></div>
+                                          <div class="col-lg-2"></div>
                                           <!-- Status -->
-                                          <div class="col-2 form_text">
+                                          <div class="col-4 col-lg-2 form_text">
                                                 *Status:
                                           </div>
                                           <div class="col-8">
@@ -198,17 +198,17 @@ export default defineComponent({
                                                       <input style="height: 1.75em; width: 3.5em;" class="form-check-input" type="checkbox" role="switch" v-model="status_aux" aria-checked="mixed">
                                                 </div>
                                           </div>
-                                          <div class="col-2"></div>
+                                          <div class="col-lg-2"></div>
       
                                           <div style="margin-top: 16px;" class="col-12">
                                                 <ErroFormComponent
                                                 :mensagem="'Edite antes de salvar'"
                                                 :class="['alert-warning desativada',{'ativada' : errors.findIndex((x) => x =='igual') != -1}]"
                                                 />
-                                                <button class="btn btn-primary col-2" :disabled="edit_ambiente_request || !requested">
+                                                <button class="btn btn-primary col-4 col-lg-2" :disabled="edit_ambiente_request || !requested">
                                                       <span>Iditar</span>
                                                 </button>
-                                                <button class="btn btn-light col-2" style="margin-left: 24px;" @click="voltarAmbiente()">
+                                                <button class="btn btn-light col-4 col-lg-2" style="margin-left: 24px;" @click="voltarAmbiente()">
                                                       <span>Cancelar</span>
                                                 </button>
                                           </div>

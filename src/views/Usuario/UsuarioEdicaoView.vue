@@ -155,7 +155,7 @@ export default defineComponent({
                               <div class="Card-Body col-8">
                                     <form @submit.prevent="edicaoRequest" class="row form_content" novalidate>
                                           <!-- Email -->
-                                          <div class="col-2 form_text">
+                                          <div class="col-4 col-lg-2 form_text">
                                                 *Email:
                                           </div>
                                           <div class="col-8">
@@ -165,9 +165,9 @@ export default defineComponent({
                                                       :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='email') != -1}]"
                                                 />
                                           </div>
-                                          <div class="col-2"></div>
+                                          <div class="col-lg-2"></div>
                                           <!-- Senha -->
-                                          <div class="col-2 form_text">
+                                          <div class="col-4 col-lg-2 form_text">
                                                 *Senha:
                                           </div>
                                           <div class="col-8">
@@ -191,19 +191,19 @@ export default defineComponent({
                                                       :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='senha') != -1}]"
                                                 />
                                           </div>
-                                          <div class="col-2"></div>
+                                          <div class="col-lg-2"></div>
                                           
                                           <!-- Token -->
-                                          <div class="col-2 form_text">
+                                          <div class="col-4 col-lg-2 form_text">
                                                 Token:
                                           </div>
                                           <div class="col-8">
                                                 <input :placeholder="usuario.token" type="text" class="form-control" disabled>
                                           </div>
-                                          <div class="col-2"></div>
+                                          <div class="col-lg-2"></div>
       
                                           <!-- Perfil -->
-                                          <div class="col-2 form_text">
+                                          <div class="col-4 col-lg-2 form_text">
                                                 *Perfil:
                                           </div>
                                           <div class="col-8">
@@ -216,11 +216,11 @@ export default defineComponent({
                                                       :class="['alert-danger desativada', {'ativada' : errors.findIndex((x) => x =='perfil') != -1}]"
                                                 />
                                           </div>
-                                          <div class="col-2"></div>
+                                          <div class="col-lg-2"></div>
       
       
                                           <!-- Empresa -->
-                                          <div class="col-2 form_text">
+                                          <div class="col-4 col-lg-2 form_text">
                                                 *Empresa:
                                           </div>
                                           <div class="col-8">
@@ -231,17 +231,17 @@ export default defineComponent({
                                                       @Erro_fetch="(arg)=> showError(arg)"
                                                 />
                                           </div>
-                                          <div class="col-2"></div>
+                                          <div class="col-lg-2"></div>
       
                                           <div style="margin-top: 16px;" class="col-12">
                                                 <ErroFormComponent
                                                 :mensagem="'Edite antes de salvar'"
                                                 :class="['alert-warning desativada',{'ativada' : errors.findIndex((x) => x =='igual') != -1}]"
                                                 />
-                                                <button class="btn btn-primary col-2" :disabled="(edit_user_reqest || in_request)" @click="edicaoRequest">
+                                                <button class="btn btn-primary col-4 col-lg-2" :disabled="(edit_user_reqest || in_request)" @click="edicaoRequest">
                                                       <span>Editar</span>
                                                 </button>
-                                                <button class="btn btn-light col-2" style="margin-left: 24px;" @click="voltarUsuario">
+                                                <button class="btn btn-light col-4 col-lg-2" style="margin-left: 24px;" @click="voltarUsuario">
                                                       <span>Voltar</span>
                                                 </button>
                                           </div>
