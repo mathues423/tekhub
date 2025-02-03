@@ -32,7 +32,6 @@ class UserDados {
             this.usuario.senha = senha;   
             try {
                   const { data } = await http.post('/auth', this.usuario);
-                  console.log('data', data);
                   
                   this.usuario.token = data.data.token;
                   this.usuario.perfilUsuario = data.data.perfilUsuario;

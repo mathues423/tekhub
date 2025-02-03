@@ -226,7 +226,7 @@ router.beforeEach(async (to, from, next) => {
     if (required_type.includes(APPCONFIG.authType)) {
       next();
     }else{
-      console.log('ERRO REQUEST');
+      console.error('ERRO REQUEST');
     }
   }else{
     next();

@@ -10,11 +10,19 @@ export default{
 </script>
 
 <template>
-  <router-view/>
+  <router-view id="template"/>
 </template>
 
 <style>
-
+#template.row{
+  height: 100vh;
+}
+/* #template.row>div.nav_lateral{
+  height: calc(100vh -78px - 50px);
+} */
+#template.row>div#content{
+  height: calc(100vh - calc( 78px + 50px));
+}
 body { 
   /* White teme */
   background-color: var(--dark-blue);

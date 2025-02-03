@@ -47,7 +47,7 @@ export default defineComponent({
                               <div class="col" style="align-content: center;">
                                     {{ mensagem }}
                               </div>
-                              <div class="col-12" style="align-content: center;">
+                              <div class="col-12 col-lg-4" style="align-content: center;">
                                     <button class="btn btn-info w-100" @click="()=>{
                                           time_mensage = 0;
                                           is_closed= true;
