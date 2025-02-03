@@ -9,7 +9,8 @@ import store from '@/store';
 import usuarios from '@/services/regras_negocio/regras_usuarios';
 import ErroFormComponent from '@/components/mensagem/ErroFormComponent.vue'
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
-import TimeMensageComponent from '@/components/mensagem/TimeMensageComponent.vue';
+import TimeMensageErroComponent from '@/components/mensagem/TimeMensageErroComponent.vue';
+import TimeMensageFormReturnComponent from '@/components/mensagem/TimeMensageFormReturnComponent.vue';
 
 export default defineComponent({
       data(){
@@ -28,7 +29,8 @@ export default defineComponent({
                         perfil: ''
                   },
                   token:'',
-                  errors:[]
+                  errors:[],
+                  criando: false
             }
       },
       components:{
@@ -37,7 +39,8 @@ export default defineComponent({
             VersaoMaximisada,
             ErroFormComponent,
             ErroResponseComponent,
-            TimeMensageComponent
+            TimeMensageErroComponent,
+            TimeMensageFormReturnComponent
       },
       watch:{
             empresa_escolhida(){
@@ -57,8 +60,10 @@ export default defineComponent({
                   if(this.errors.length == 0){
                         Promise.resolve(
                               store.dispatch('putDados', {'roter_externa': 'usuario', 'dado': this.usuario, 'roter_interna': 'usuarios'})
-                              .then(()=> {
-                                  this.new_user_reqest = false;  
+                              .then((ret)=> {
+                                    this.token = ret.data.token;
+                                    this.new_user_reqest = false;
+                                    this.criando = true;
                               })
                         ).catch((error_retorno)=> this.showError(error_retorno));
                   }else{
@@ -88,20 +93,6 @@ export default defineComponent({
             voltarErroServer(){
                   this.fetch_error_msg = {};
                   this.voltarErro();
-            },
-            compObject(old_obj: object, new_ob: object): boolean {
-                  const chave_old = Object.keys(old_obj),
-                        chave_new = Object.keys(new_ob);
-                        
-                  if (chave_old.length != chave_new.length) {
-                        return true;
-                  }
-                  
-                  const saoDiferentes = chave_old.some((chave) => {
-                        return old_obj[chave as keyof typeof old_obj] !== new_ob[chave as keyof typeof new_ob];
-                  });
-                  
-                  return !saoDiferentes
             }
       }
 })
@@ -117,7 +108,8 @@ export default defineComponent({
             <div class="col-12 col-lg-10" id="content">
                   <span v-if="!have_fetch_error || fetch_error_msg['errors' as keyof typeof fetch_error_msg]">
                         <!-- ERRO no servidor mensagem -->
-                        <TimeMensageComponent v-if="fetch_error_msg['errors' as keyof typeof fetch_error_msg]"
+                        <TimeMensageErroComponent v-if="fetch_error_msg['errors' as keyof typeof fetch_error_msg]"
+                              :time_duration="5"      
                               :mensagem="fetch_error_msg['errors' as keyof typeof fetch_error_msg][0]"
                               @fechar_erro="voltarErroServer"
                         />
@@ -197,7 +189,7 @@ export default defineComponent({
                                           </div>
                                           <div class="col-8">
                                                 <EmpresaSelectComponent 
-                                                      :valor_inicial="{}"
+                                                      :valor_inicial="empresa_escolhida"
                                                       :have_erro="errors.findIndex((x) => x =='empresa') != -1"
                                                       @empresa_escolhida="(arg)=> empresa_escolhida = arg"
                                                       @Erro_fetch="(arg)=> showError(arg)"
@@ -206,7 +198,12 @@ export default defineComponent({
                                           <div class="col-lg-2"></div>
       
                                           <div style="margin-top: 16px;" class="col-12">
-                                                <button class="btn btn-primary col-4 col-lg-2" :disabled="new_user_reqest" @click="criacaoRequest">
+                                                <TimeMensageFormReturnComponent v-if="criando"
+                                                      :mensagem="'Alterado com sucesso'"
+                                                      :time_duration="5"
+                                                      @fechar_mensagem="criando = false"
+                                                />
+                                                <button class="btn btn-primary col-4 col-lg-2" :disabled="new_user_reqest || criando" @click="criacaoRequest">
                                                       <span>Criar</span>
                                                 </button>
                                                 <button class="btn btn-light col-4 col-lg-2" style="margin-left: 24px;" @click="voltarUsuario">

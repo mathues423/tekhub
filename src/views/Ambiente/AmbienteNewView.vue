@@ -100,6 +100,7 @@ export default defineComponent({
                   <span v-if="!have_fetch_error || fetch_error_msg['errors' as keyof typeof fetch_error_msg]">
                         <!-- ERRO no servidor mensagem -->
                         <TimeMensageErroComponent v-if="fetch_error_msg['errors' as keyof typeof fetch_error_msg]"
+                              :time_duration="5"      
                               :mensagem="fetch_error_msg['errors' as keyof typeof fetch_error_msg][0]"
                               @fechar_erro="voltarErroServer"
                         />

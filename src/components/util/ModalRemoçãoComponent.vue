@@ -2,17 +2,21 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-      data() {
-          return {
-            click_delete: this.isInDelet
-          }
-      },
+      // data() {
+      //     return {
+      //       click_delete: this.isInDelet
+      //     }
+      // },
       props:{
             isAtivo:{
                   type: Boolean,
                   retuire: true
             },
             isInDelet:{
+                  type: Boolean,
+                  required: true
+            },
+            estado_btn:{
                   type: Boolean,
                   required: true
             }
@@ -49,8 +53,8 @@ export default defineComponent({
                                     Cancelar
                               </button>
                               <div class="col-2 col-lg-1"></div>
-                              <button class="btn btn-primary col-5 col-lg-2" @click="deletarItem" :disabled="click_delete">
-                                    <span v-if="click_delete">
+                              <button class="btn btn-primary col-5 col-lg-2" @click="deletarItem" :disabled="estado_btn">
+                                    <span v-if="estado_btn">
                                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
                                                 <radialGradient id="a12" cx=".66" fx=".66" cy=".3125" fy=".3125" gradientTransform="scale(1.5)">
                                                       <stop offset="0" stop-color="#FFFFFF"></stop>

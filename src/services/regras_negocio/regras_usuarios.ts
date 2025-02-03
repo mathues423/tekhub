@@ -35,7 +35,7 @@ class Usuario {
                   erros_msg.push('empresa');
             }
             
-            if(this.compObject(old_dado, new_dado)){
+            if(!this.compObject(old_dado, new_dado)){
                   erros_msg.push('igual');
             }
       }
@@ -51,7 +51,7 @@ class Usuario {
                   return old_obj[chave as keyof typeof old_obj] !== new_ob[chave as keyof typeof new_ob];
             });
             
-            return !saoDiferentes
+            return saoDiferentes
       }
 }
 

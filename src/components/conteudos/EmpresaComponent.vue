@@ -87,7 +87,8 @@ export default defineComponent({
 
             request_pesquisa: '',
             is_in_DeletModal: false,
-            is_deletando: false
+            is_deletando: false,
+            disable_botao_delet: false
           }
       },
       components:{
@@ -123,8 +124,7 @@ export default defineComponent({
             },
 
             deletar(objeto: {codigo: string}){
-                  this.is_deletando = true;
-                  this.is_in_DeletModal = true;
+                  this.is_deletando = this.is_in_DeletModal = this.disable_botao_delet = true;
                   const rota_interna = this.itsOnFilter ? 'empresas_pesquisa' : 'empresas';
                   let aux = {'roter_externa': 'empresa', 'id': objeto.codigo, 'roter_interna': rota_interna}
                   store.dispatch('delDadosID', aux)
@@ -136,10 +136,13 @@ export default defineComponent({
                                     this.requestDados();
                               }
                               this.is_deletando = false;
+                              this.is_in_DeletModal = true;
+                              this.disable_botao_delet = false;
                         }
                   ).catch((error_retorno)=> {
                         this.is_in_DeletModal = false;
                         this.is_deletando = false;
+                        this.disable_botao_delet = false;
                         this.$emit('erro_fetch', error_retorno);
                   })
             },
@@ -279,11 +282,12 @@ export default defineComponent({
                         {'nome': 'Verção', 'key': 'versaoApiTek'},
                   ]"
                   @deletarDadoPai="(arg : any) => deletar(arg)"
-                  :deletando="is_deletando"
                   @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina"
-
+                  
+                  :deletando="is_deletando"
+                  :disabled_btn="disable_botao_delet"
                   :showDeletModal="is_in_DeletModal"
                   @fecharModal="()=> is_in_DeletModal = false"
                   @abrirModal="()=> is_in_DeletModal = true"
@@ -306,13 +310,14 @@ export default defineComponent({
                         {'nome': 'Verção', 'key': 'versaoApiTek'},
                   ]"
                   @deletarDadoPai="(arg : any) => deletar(arg)"
-                  :deletando="is_deletando"
                   @ordenarDadoPai="(arg : any) => ordenaEmpresa(arg)"
                   @filtrarDadoPai="filtraEmpresa"
                   @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina"
-
+                  
+                  :deletando="is_deletando"
+                  :disabled_btn="disable_botao_delet"
                   :showDeletModal="is_in_DeletModal"
                   @fecharModal="()=> is_in_DeletModal = false"
                   @abrirModal="()=> is_in_DeletModal = true"
@@ -340,11 +345,12 @@ export default defineComponent({
                         {'nome': 'Verção', 'key': 'versaoApiTek'},
                   ]"
                   @deletarDadoPai="(arg : any) => deletar(arg)"
-                  :deletando="is_deletando"
                   @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina"
-
+                  
+                  :deletando="is_deletando"
+                  :disabled_btn="disable_botao_delet"
                   :showDeletModal="is_in_DeletModal"
                   @fecharModal="()=> is_in_DeletModal = false"
                   @abrirModal="()=> is_in_DeletModal = true"
@@ -368,13 +374,14 @@ export default defineComponent({
                         {'nome': 'Verção', 'key': 'versaoApiTek'},
                   ]"
                   @deletarDadoPai="(arg : any) => deletar(arg)"
-                  :deletando="is_deletando"
                   @ordenarDadoPai="(arg : any) => ordenaEmpresa(arg)"
                   @filtrarDadoPai="filtraEmpresa"
                   @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina"
-
+                  
+                  :deletando="is_deletando"
+                  :disabled_btn="disable_botao_delet"
                   :showDeletModal="is_in_DeletModal"
                   @fecharModal="()=> is_in_DeletModal = false"
                   @abrirModal="()=> is_in_DeletModal = true"

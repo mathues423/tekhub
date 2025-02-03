@@ -10,7 +10,8 @@ import usuarios from '@/services/regras_negocio/regras_usuarios';
 import ErroFormComponent from '@/components/mensagem/ErroFormComponent.vue'
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
 import fetch_ from '@/services/fetch/requisicao';
-import TimeMensageComponent from '@/components/mensagem/TimeMensageComponent.vue';
+import TimeMensageErroComponent from '@/components/mensagem/TimeMensageErroComponent.vue';
+import TimeMensageFormReturnComponent from '@/components/mensagem/TimeMensageFormReturnComponent.vue';
 
 export default defineComponent({
       data(){
@@ -37,7 +38,8 @@ export default defineComponent({
                         token:'',
                         perfil: ''
                   },
-                  errors:[]
+                  errors:[],
+                  editado:false
             }
       },
       components:{
@@ -46,7 +48,8 @@ export default defineComponent({
             VersaoMaximisada,
             ErroFormComponent,
             ErroResponseComponent,
-            TimeMensageComponent
+            TimeMensageErroComponent,
+            TimeMensageFormReturnComponent
       },
       watch:{
             empresa_escolhida(){
@@ -87,6 +90,13 @@ export default defineComponent({
                               store.dispatch('setDadosID', {'roter_externa': 'usuario', 'id': id, 'roter_interna': 'usuarios', 'new_dado': this.usuario})
                               .then((ret)=> {
                                   this.edit_user_reqest = false;
+                                  this.editado = true;
+                                  this.usuario_old.email = this.usuario.email;
+                                  this.usuario_old.empresaCodigo = this.usuario.empresaCodigo;
+                                  this.usuario_old.perfil = this.usuario.perfil;
+                                  this.usuario_old.senha = this.usuario.senha;
+                                  this.usuario_old.token = this.usuario.token;
+                                  delete this.usuario['codigo' as keyof typeof this.usuario];
                               })
                         ).catch((error_retorno)=> this.showError(error_retorno));
                   }else{
@@ -116,20 +126,6 @@ export default defineComponent({
             voltarErroServer(){
                   this.fetch_error_msg = {};
                   this.voltarErro();
-            },
-            compObject(old_obj: object, new_ob: object): boolean {
-                  const chave_old = Object.keys(old_obj),
-                        chave_new = Object.keys(new_ob);
-                        
-                  if (chave_old.length != chave_new.length) {
-                        return true;
-                  }
-                  
-                  const saoDiferentes = chave_old.some((chave) => {
-                        return old_obj[chave as keyof typeof old_obj] !== new_ob[chave as keyof typeof new_ob];
-                  });
-                  
-                  return !saoDiferentes
             }
       }
 })
@@ -145,7 +141,8 @@ export default defineComponent({
             <div class="col-12 col-lg-10" id="content">
                   <span v-if="!have_fetch_error || fetch_error_msg['errors' as keyof typeof fetch_error_msg]">
                         <!-- ERRO no servidor mensagem -->
-                        <TimeMensageComponent v-if="fetch_error_msg['errors' as keyof typeof fetch_error_msg]"
+                        <TimeMensageErroComponent v-if="fetch_error_msg['errors' as keyof typeof fetch_error_msg]"
+                              :time_duration="5"
                               :mensagem="fetch_error_msg['errors' as keyof typeof fetch_error_msg][0]"
                               @fechar_erro="voltarErroServer"
                         />
@@ -235,10 +232,15 @@ export default defineComponent({
       
                                           <div style="margin-top: 16px;" class="col-12">
                                                 <ErroFormComponent
-                                                :mensagem="'Edite antes de salvar'"
-                                                :class="['alert-warning desativada',{'ativada' : errors.findIndex((x) => x =='igual') != -1}]"
+                                                      :mensagem="'Edite antes de salvar'"
+                                                      :class="['alert-warning desativada',{'ativada' : errors.findIndex((x) => x =='igual') != -1}]"
                                                 />
-                                                <button class="btn btn-primary col-4 col-lg-2" :disabled="(edit_user_reqest || in_request)" @click="edicaoRequest">
+                                                <TimeMensageFormReturnComponent v-if="editado"
+                                                      :mensagem="'Alterado com sucesso'"
+                                                      :time_duration="5"
+                                                      @fechar_mensagem="editado = false"
+                                                />
+                                                <button class="btn btn-primary col-4 col-lg-2" :disabled="(edit_user_reqest || in_request || editado)" @click="edicaoRequest">
                                                       <span>Editar</span>
                                                 </button>
                                                 <button class="btn btn-light col-4 col-lg-2" style="margin-left: 24px;" @click="voltarUsuario">
