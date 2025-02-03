@@ -13,7 +13,7 @@ import ErroFormComponent from '@/components/mensagem/ErroFormComponent.vue';
 import regra_map from '@/services/regras_negocio/regras_mapeamentoprodutos'
 import EmpresaSelectComponent from '@/components/util/selects/EmpresaSelectComponent.vue';
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
-import TimeMensageComponent from '@/components/mensagem/TimeMensageComponent.vue';
+import TimeMensageErroComponent from '@/components/mensagem/TimeMensageErroComponent.vue';
 
 export default defineComponent({
       data(){
@@ -92,7 +92,7 @@ export default defineComponent({
             EmpresaSelectComponent,
             VersaoMaximisada,
             ErroResponseComponent,
-            TimeMensageComponent
+            TimeMensageErroComponent
       },
       watch:{
             dado_empresa_selected(){
@@ -297,7 +297,7 @@ export default defineComponent({
             <div class="col-12 col-lg-10" id="content">
                   <span v-if="!have_fetch_error || fetch_error_msg['errors' as keyof typeof fetch_error_msg]">
                         <!-- ERRO no servidor mensagem -->
-                        <TimeMensageComponent v-if="fetch_error_msg['errors' as keyof typeof fetch_error_msg]"
+                        <TimeMensageErroComponent v-if="fetch_error_msg['errors' as keyof typeof fetch_error_msg]"
                               :mensagem="fetch_error_msg['errors' as keyof typeof fetch_error_msg][0]"
                               @fechar_erro="voltarErroServer"
                         />

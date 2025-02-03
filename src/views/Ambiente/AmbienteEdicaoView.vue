@@ -10,7 +10,7 @@ import store from '@/store';
 import fetch_ from '@/services/fetch/requisicao';
 import LoaderSkeleton from '@/components/util/Loaders/LoaderSkeleton.vue';
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
-import TimeMensageComponent from '@/components/mensagem/TimeMensageComponent.vue';
+import TimeMensageErroComponent from '@/components/mensagem/TimeMensageErroComponent.vue';
 
 export default defineComponent({
       data(){
@@ -46,7 +46,7 @@ export default defineComponent({
             LoaderSkeleton,
             ErroFormComponent,
             ErroResponseComponent,
-            TimeMensageComponent
+            TimeMensageErroComponent
       },
       methods:{
             async editRequest(){
@@ -120,7 +120,7 @@ export default defineComponent({
             <div class="col-12 col-lg-10" id="content">
                   <span v-if="!have_fetch_error || fetch_error_msg['errors' as keyof typeof fetch_error_msg]">
                         <!-- ERRO no servidor mensagem -->
-                        <TimeMensageComponent v-if="fetch_error_msg['errors' as keyof typeof fetch_error_msg]"
+                        <TimeMensageErroComponent v-if="fetch_error_msg['errors' as keyof typeof fetch_error_msg]"
                               :mensagem="fetch_error_msg['errors' as keyof typeof fetch_error_msg][0]"
                               @fechar_erro="voltarErroServer"
                         />

@@ -104,6 +104,7 @@ export default defineComponent({
 <style scoped>
 .nav_upper{
       background-color: var(--bs-primary-text-emphasis);
+      max-height: 78px;
 }
 
 .nav_lateral{

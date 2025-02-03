@@ -7,7 +7,7 @@ import VersaoMaximisada from '@/components/versionamento/VersaoMaximisada.vue';
 import router from '@/router';
 import { defineComponent } from 'vue';
 import ErroResponseComponent from "@/components/mensagem/ErroResponseComponent.vue";
-import TimeMensageComponent from '@/components/mensagem/TimeMensageComponent.vue';
+import TimeMensageErroComponent from '@/components/mensagem/TimeMensageErroComponent.vue';
 
 export default defineComponent({
       data() {
@@ -23,7 +23,7 @@ export default defineComponent({
             EmpresaComponent,
             VersaoMaximisada,
             ErroResponseComponent,
-            TimeMensageComponent
+            TimeMensageErroComponent
       },
       methods:{
             adicionarNewempresa(){
@@ -51,7 +51,7 @@ export default defineComponent({
             <div class="col-12 col-lg-10" id="content" style="padding-left: calc(var(--bs-gutter-x));">
                   <span v-if="!have_fetch_error || fetch_error_msg['errors' as keyof typeof fetch_error_msg]">
                         <!-- ERRO no servidor mensagem -->
-                        <TimeMensageComponent v-if="fetch_error_msg['errors' as keyof typeof fetch_error_msg]"
+                        <TimeMensageErroComponent v-if="fetch_error_msg['errors' as keyof typeof fetch_error_msg]"
                               :mensagem="fetch_error_msg['errors' as keyof typeof fetch_error_msg][0]"
                               @fechar_erro="voltarErroServer"
                         />

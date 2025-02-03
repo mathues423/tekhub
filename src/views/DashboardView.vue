@@ -2,7 +2,7 @@
 import { APPCONFIG } from '@/components/constants/Config';
 import DashboardComponent from '@/components/conteudos/DashboardComponent.vue';
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
-import TimeMensageComponent from '@/components/mensagem/TimeMensageComponent.vue';
+import TimeMensageErroComponent from '@/components/mensagem/TimeMensageErroComponent.vue';
 import NavbarComplet from '@/components/util/navbars/NavbarComplet.vue';
 import VersaoMaximisada from '@/components/versionamento/VersaoMaximisada.vue';
 import { defineComponent } from 'vue';
@@ -20,7 +20,7 @@ export default defineComponent({
             DashboardComponent,
             VersaoMaximisada,
             ErroResponseComponent,
-            TimeMensageComponent
+            TimeMensageErroComponent
       },
       methods:{
             checkErro(retorno: object){
@@ -46,7 +46,7 @@ export default defineComponent({
             <div class="col-12 col-lg-10" id="content" style="padding-left: calc(var(--bs-gutter-x));">
                   <span v-if="!have_erro || mensage_erro['errors' as keyof typeof mensage_erro]">
                         <!-- ERRO no servidor mensagem -->
-                        <TimeMensageComponent v-if="mensage_erro['errors' as keyof typeof mensage_erro]"
+                        <TimeMensageErroComponent v-if="mensage_erro['errors' as keyof typeof mensage_erro]"
                               :mensagem="mensage_erro['errors' as keyof typeof mensage_erro][0]"
                               @fechar_erro="voltarErroServer"
                         />

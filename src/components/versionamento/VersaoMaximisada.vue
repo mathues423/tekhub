@@ -16,5 +16,6 @@
       background-color: var(--bs-white);
       font-size: 25px;
       padding: 10px;
+      max-height: 50px;
 }
 </style>

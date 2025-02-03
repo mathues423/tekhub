@@ -10,7 +10,7 @@ import store from '@/store';
 import { defineComponent } from 'vue';
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
 import { APPCONFIG } from '@/components/constants/Config';
-import TimeMensageComponent from '@/components/mensagem/TimeMensageComponent.vue';
+import TimeMensageErroComponent from '@/components/mensagem/TimeMensageErroComponent.vue';
 
 
 export default defineComponent({
@@ -72,7 +72,7 @@ export default defineComponent({
             ListaCardComponent,
             LoaderListaCardComponent,
             ErroResponseComponent,
-            TimeMensageComponent
+            TimeMensageErroComponent
       },
       mounted() {
             this.onResize()
@@ -147,7 +147,7 @@ export default defineComponent({
             <div class="col-12 col-lg-10" id="content">
                   <span v-if="!have_fetch_error || fetch_error_msg['errors' as keyof typeof fetch_error_msg]">
                         <!-- ERRO no servidor mensagem -->
-                        <TimeMensageComponent v-if="fetch_error_msg['errors' as keyof typeof fetch_error_msg]"
+                        <TimeMensageErroComponent v-if="fetch_error_msg['errors' as keyof typeof fetch_error_msg]"
                               :mensagem="fetch_error_msg['errors' as keyof typeof fetch_error_msg][0]"
                               @fechar_erro="voltarErroServer"
                         />
