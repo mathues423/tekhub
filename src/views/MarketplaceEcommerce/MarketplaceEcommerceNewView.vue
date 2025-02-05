@@ -324,7 +324,7 @@ export default defineComponent({
                                           <!-- Botões -->
                                           <div style="margin-top: 16px;" class="col-12">
                                                 <TimeMensageFormReturnComponent v-if="criando"
-                                                      :mensagem="'Alterado com sucesso'"
+                                                      :mensagem="'Integração criado com sucesso'"
                                                       :time_duration="5"
                                                       @fechar_mensagem="criando = false"
                                                 />

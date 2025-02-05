@@ -410,7 +410,7 @@ export default defineComponent({
                                                       :class="['alert-warning desativada',{'ativada' : errors.findIndex((x) => x =='igual') != -1}]"
                                                 />
                                                 <TimeMensageFormReturnComponent v-if="editado"
-                                                      :mensagem="'Alterado com sucesso'"
+                                                      :mensagem="'Integração alterado com sucesso'"
                                                       :time_duration="5"
                                                       @fechar_mensagem="editado = false"
                                                 />

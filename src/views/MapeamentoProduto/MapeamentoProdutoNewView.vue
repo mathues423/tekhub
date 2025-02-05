@@ -12,6 +12,7 @@ import LoaderSkeleton from '@/components/util/Loaders/LoaderSkeleton.vue';
 import EmpresaSelectComponent from '@/components/util/selects/EmpresaSelectComponent.vue';
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
 import TimeMensageErroComponent from '@/components/mensagem/TimeMensageErroComponent.vue';
+import TimeMensageFormReturnComponent from '@/components/mensagem/TimeMensageFormReturnComponent.vue';
 
 export default defineComponent({
       data(){
@@ -31,7 +32,8 @@ export default defineComponent({
                   inRequestCanal: false,
                   escolheu_empresa:false,
                   alert_mensag: '<código do produto>.<código da variação>.<código da cor>.<código do acabamento>',
-                  errors: [] as Array<string>
+                  errors: [] as Array<string>,
+                  criando: false
             }
       },
       watch:{
@@ -52,7 +54,8 @@ export default defineComponent({
             EmpresaSelectComponent,
             ErroFormComponent,
             ErroResponseComponent,
-            TimeMensageErroComponent
+            TimeMensageErroComponent,
+            TimeMensageFormReturnComponent
       },
       methods:{
             async criacaoRequest(){
@@ -68,7 +71,11 @@ export default defineComponent({
                         }
                         Promise.resolve(
                               store.dispatch('putDados', {'roter_externa': 'mapeamentoprodudo/', 'dado': aux, 'roter_interna': 'mapeamentoprodudo'})
-                              .then(()=> this.voltarMapeamentoProduto())
+                              .then((ret)=> {
+                                    console.log(ret);
+                                    this.new_mapeamento_request = false;
+                                    this.criando = true;
+                              })
                         ).catch((error_retorno)=> this.showError(error_retorno))
                   }else{
                         this.new_mapeamento_request = false;
@@ -77,18 +84,6 @@ export default defineComponent({
             },
             voltarMapeamentoProduto(){
                   router.push('/mapeamentoprodutos');
-            },
-            compObject(old_obj: object, new_ob: object): boolean {
-                  const chave_old = Object.keys(old_obj),
-                        chave_new = Object.keys(new_ob);
-                  if (chave_old.length != chave_new.length) {
-                        return true;
-                  }
-                  const saoDiferentes = chave_old.some((chave) => {
-                              return old_obj[chave as keyof typeof old_obj] !== new_ob[chave as keyof typeof new_ob];
-                        });
-            
-                  return !saoDiferentes
             },
             showError(objeto_erro: object){
                   this.fetch_error_msg = objeto_erro;
@@ -204,7 +199,12 @@ export default defineComponent({
                                           </div>
       
                                           <div style="margin-top: 16px;" class="col-12">
-                                                <button class="btn btn-primary col-4 col-lg-2" :disabled="new_mapeamento_request">
+                                                <TimeMensageFormReturnComponent v-if="criando"
+                                                      :mensagem="'Produto criado com sucesso'"
+                                                      :time_duration="5"
+                                                      @fechar_mensagem="criando = false"
+                                                />
+                                                <button class="btn btn-primary col-4 col-lg-2" :disabled="new_mapeamento_request || criando">
                                                       <span>Criar</span>
                                                 </button>
                                                 <button class="btn btn-light col-4 col-lg-2" style="margin-left: 24px;" @click="voltarMapeamentoProduto()">

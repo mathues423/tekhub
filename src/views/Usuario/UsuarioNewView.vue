@@ -199,7 +199,7 @@ export default defineComponent({
       
                                           <div style="margin-top: 16px;" class="col-12">
                                                 <TimeMensageFormReturnComponent v-if="criando"
-                                                      :mensagem="'Alterado com sucesso'"
+                                                      :mensagem="'Usuario criado com sucesso'"
                                                       :time_duration="5"
                                                       @fechar_mensagem="criando = false"
                                                 />
