@@ -9,6 +9,7 @@ import empresa from '@/services/regras_negocio/regras_empresa';
 import store from '@/store';
 import TimeMensageErroComponent from '@/components/mensagem/TimeMensageErroComponent.vue';
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
+import TimeMensageFormReturnComponent from '@/components/mensagem/TimeMensageFormReturnComponent.vue';
 
 export default defineComponent({
       data(){
@@ -31,7 +32,8 @@ export default defineComponent({
                         versaoApiTek: '',
                         integracoes: []
                   },
-                  errors: []
+                  errors: [],
+                  editado:false
             }
       },
       components:{
@@ -39,7 +41,8 @@ export default defineComponent({
             VersaoMaximisada,
             ErroFormComponent,
             ErroResponseComponent,
-            TimeMensageErroComponent
+            TimeMensageErroComponent,
+            TimeMensageFormReturnComponent
       },
       methods:{
             async editRequest(){
@@ -50,9 +53,16 @@ export default defineComponent({
                   if (this.errors.length == 0) {
                         Promise.resolve(
                               store.dispatch('setDadosID', {'roter_externa': 'empresa', 'id': id, 'roter_interna': 'empresas', 'new_dado': this.empresa}))
-                        .then(()=> 
-                              this.voltarEmpresa()
-                        ).catch((error_retorno)=> this.showError(error_retorno))
+                        .then(()=> {
+                                    this.edit_empresa_request = false;
+                                    this.editado = true;
+                                    this.old_empresa.cnpj = this.empresa.cnpj
+                                    this.old_empresa.codigoTek = this.empresa.codigoTek
+                                    this.old_empresa.descricao = this.empresa.descricao
+                                    this.old_empresa.integracoes = this.empresa.integracoes
+                                    this.old_empresa.versaoApiTek = this.empresa.versaoApiTek
+                                    delete this.empresa['codigo' as keyof typeof this.empresa]
+                              }).catch((error_retorno)=> this.showError(error_retorno))
                   }else{
                         this.edit_empresa_request = false;
                   }
@@ -98,7 +108,7 @@ export default defineComponent({
                   <span v-if="!have_fetch_error || fetch_error_msg['errors' as keyof typeof fetch_error_msg]">
                         <!-- ERRO no servidor mensagem -->
                         <TimeMensageErroComponent v-if="fetch_error_msg['errors' as keyof typeof fetch_error_msg]"
-                              :time_duration="5"
+                              :time_duration="10"
                               :mensagem="fetch_error_msg['errors' as keyof typeof fetch_error_msg][0]"
                               @fechar_erro="voltarErroServer"
                         />
@@ -164,7 +174,12 @@ export default defineComponent({
                                                       :mensagem="'Edite antes de salvar'"
                                                       :class="['alert-warning desativada',{'ativada' : errors.findIndex((x) => x =='igual') != -1}]"
                                                 />
-                                                <button class="btn btn-primary col-4 col-lg-2" style="margin-left: 24px;" :disabled="edit_empresa_request">
+                                                <TimeMensageFormReturnComponent v-if="editado"
+                                                      :mensagem="'Alterado com sucesso'"
+                                                      :time_duration="5"
+                                                      @fechar_mensagem="editado = false"
+                                                />
+                                                <button class="btn btn-primary col-4 col-lg-2" style="margin-left: 24px;" :disabled="edit_empresa_request || editado">
                                                       <span>Iditar</span>
                                                 </button>
                                                 <button class="btn btn-light col-4 col-lg-2" style="margin-left: 24px;" @click="voltarEmpresa()">

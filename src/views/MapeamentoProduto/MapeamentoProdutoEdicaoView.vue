@@ -11,6 +11,7 @@ import fetch_ from '@/services/fetch/requisicao';
 import LoaderSkeleton from '@/components/util/Loaders/LoaderSkeleton.vue';
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
 import TimeMensageErroComponent from '@/components/mensagem/TimeMensageErroComponent.vue';
+import TimeMensageFormReturnComponent from '@/components/mensagem/TimeMensageFormReturnComponent.vue';
 
 export default defineComponent({
       data(){
@@ -38,7 +39,8 @@ export default defineComponent({
                   inRequestCanal: false,
                   edit_mapProd_request: false,
                   alert_mensag: '<código do produto>.<código da variação>.<código da cor>.<código do acabamento>',
-                  errors: [] as Array<string>
+                  errors: [] as Array<string>,
+                  editado: false
             }
       },
       components:{
@@ -47,16 +49,17 @@ export default defineComponent({
             LoaderSkeleton,
             ErroFormComponent,
             ErroResponseComponent,
-            TimeMensageErroComponent
+            TimeMensageErroComponent,
+            TimeMensageFormReturnComponent
       },
       mounted() {
             const rota_id = (this.$route.params['id'] || '-1') as string;
-            Promise.resolve(store.dispatch('getMapeamentoProdutosID', rota_id))
+            store.dispatch('getMapeamentoProdutosID', rota_id)
             .then((value) => {
-                  Promise.resolve(fetch_.getDado_ID('/empresa', value.empresaCodigo))
+                  fetch_.getDado_ID('/empresa', value.empresaCodigo)
                   .then((empresa)=>{
                         this.mapeamentoproduto.empresa = this.mapeamentoproduto_old.empresa = empresa.data;
-                        Promise.resolve(fetch_.getDado(`/integracaomarketplaceecommerce/?filtro=empresa.codigo==${value.empresaCodigo}`))
+                        fetch_.getDado(`/integracaomarketplaceecommerce/?filtro=empresa.codigo==${value.empresaCodigo}`)
                         .then((canal)=>{
                               canal.data.forEach((dado: object)=>{
                                     if (dado['ambienteCanalCodigo' as keyof typeof dado] == value.canalCodigo) {
@@ -66,8 +69,6 @@ export default defineComponent({
                               this.inRequestCanal = false;
                         }).catch((error_retorno)=> this.showError(error_retorno))
                   }).catch((error_retorno)=> this.showError(error_retorno))
-
-
                   this.mapeamentoproduto.produtoErp = this.mapeamentoproduto_old.produtoErp = value.produtoErp;
                   this.mapeamentoproduto.produtoSite = this.mapeamentoproduto_old.produtoSite = value.produtoSite;
                   this.mapeamentoproduto.produtoPai = this.mapeamentoproduto_old.produtoPai = value.produtoPaiSite;
@@ -97,12 +98,19 @@ export default defineComponent({
                               empresaCodigo: this.mapeamentoproduto.empresa['codigo' as keyof typeof this.mapeamentoproduto.empresa],
                               produtoErp: this.mapeamentoproduto.produtoErp,
                               produtoPaiSite: this.mapeamentoproduto.produtoPai,
-                              produtoSite: this.mapeamentoproduto.produtoSite,
+                              produtoSite: this.mapeamentoproduto.produtoSite
                         }
-                        Promise.resolve(
-                              store.dispatch('setDadosID_notCodigo', {'roter_externa': 'mapeamentoprodudo','id': id, 'new_dado': aux, 'roter_interna': 'mapeamentoprodudo'})
-                              .then(()=> this.voltarMapeamentoProduto())
-                        ).catch((error_retorno)=> this.showError(error_retorno))
+                        store.dispatch('setDadosID_notCodigo', {'roter_externa': 'mapeamentoprodudo','id': id, 'new_dado': aux, 'roter_interna': 'mapeamentoprodudo'})
+                        .then(()=> {
+                              this.edit_mapProd_request = false;
+                              this.editado = true;
+                              this.mapeamentoproduto_old.canal = this.mapeamentoproduto.canal
+                              this.mapeamentoproduto_old.empresa = this.mapeamentoproduto.empresa
+                              this.mapeamentoproduto_old.produtoErp = this.mapeamentoproduto.produtoErp
+                              this.mapeamentoproduto_old.produtoPai = this.mapeamentoproduto.produtoPai
+                              this.mapeamentoproduto_old.produtoSite = this.mapeamentoproduto.produtoSite
+                              delete this.mapeamentoproduto['codigo' as keyof typeof this.mapeamentoproduto]
+                        }).catch((error_retorno)=> this.showError(error_retorno))
                   }else{
                         this.edit_mapProd_request = false;
                   }
@@ -135,10 +143,12 @@ export default defineComponent({
                   :user_type="auth_type"
             />
             <div class="col-12 col-lg-10" id="content" style="padding-left: calc(var(--bs-gutter-x));">
+                  {{ mapeamentoproduto }} <br><br> 
+                  {{ mapeamentoproduto_old }}
                   <span v-if="!have_fetch_error || fetch_error_msg['errors' as keyof typeof fetch_error_msg]">
                         <!-- ERRO no servidor mensagem -->
                         <TimeMensageErroComponent v-if="fetch_error_msg['errors' as keyof typeof fetch_error_msg]"
-                              :time_duration="5"
+                              :time_duration="10"
                               :mensagem="fetch_error_msg['errors' as keyof typeof fetch_error_msg][0]"
                               @fechar_erro="voltarErroServer"
                         />
@@ -233,7 +243,12 @@ export default defineComponent({
                                                 :mensagem="'Edite antes de salvar.'"
                                                 :class="['alert-warning desativada',{'ativada' : errors.findIndex((x) => x =='igual') != -1}]"
                                                 />
-                                                <button class="btn btn-primary col-4 col-lg-2" :disabled="inRequestCanal || inRequestEmpresa || edit_mapProd_request">
+                                                <TimeMensageFormReturnComponent v-if="editado"
+                                                      :mensagem="'Alterado com sucesso'"
+                                                      :time_duration="5"
+                                                      @fechar_mensagem="editado = false"
+                                                />
+                                                <button class="btn btn-primary col-4 col-lg-2" :disabled="inRequestCanal || inRequestEmpresa || edit_mapProd_request || editado">
                                                       <span>Editar</span>
                                                 </button>
                                                 <button class="btn btn-light col-4 col-lg-2" style="margin-left: 24px;" @click="voltarMapeamentoProduto()">
@@ -248,12 +263,9 @@ export default defineComponent({
                   <span v-else>
                         <ErroResponseComponent 
                               :error_msg="fetch_error_msg"
-                              @voltar="()=> voltarErro"
+                              @voltar="voltarErro"
                         />
                   </span>
-                  {{ mapeamentoproduto.canal }} <br><br>
-                  {{ mapeamentoproduto.empresa }}<br><br>
-                  <br><br>
             </div>
             <VersaoMaximisada />
       </div>

@@ -12,6 +12,7 @@ import LoaderSkeleton from '@/components/util/Loaders/LoaderSkeleton.vue';
 import EmpresaSelectComponent from '@/components/util/selects/EmpresaSelectComponent.vue';
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
 import TimeMensageErroComponent from '@/components/mensagem/TimeMensageErroComponent.vue';
+import TimeMensageFormReturnComponent from '@/components/mensagem/TimeMensageFormReturnComponent.vue';
 
 export default defineComponent({
       data(){
@@ -60,7 +61,8 @@ export default defineComponent({
                   new_markEcom_request:false,
                   usuario_select:{},
                   usuarioApi_aux:{},
-                  errors: [] as Array<string>
+                  errors: [] as Array<string>,
+                  criando: false
             }
       },
       watch:{
@@ -85,7 +87,8 @@ export default defineComponent({
             EmpresaSelectComponent,
             ErroFormComponent,
             ErroResponseComponent,
-            TimeMensageErroComponent
+            TimeMensageErroComponent,
+            TimeMensageFormReturnComponent
       },
       mounted(){
             this.inRequestAmbiente = true;
@@ -100,16 +103,15 @@ export default defineComponent({
                   this.new_markEcom_request = true;
                   this.errors = [];
                   regra_marketplace._add(this.marketplaceecommerce_new, this.errors)
-                  
                   if(this.errors.length == 0){
-                        Promise.resolve(
-                              store.dispatch('putDados', {'roter_externa': 'integracaomarketplaceecommerce/', 'dado': this.marketplaceecommerce_new, 'roter_interna': 'marketplaceecommerce'})
-                              .then(()=> this.voltarMarktplaceEcommerce())
-                        ).catch((error_retorno)=> this.showError(error_retorno))
+                        store.dispatch('putDados', {'roter_externa': 'integracaomarketplaceecommerce/', 'dado': this.marketplaceecommerce_new, 'roter_interna': 'marketplaceecommerce'})
+                        .then(()=> {
+                              this.new_markEcom_request = false;
+                              this.criando = true;
+                        }).catch((error_retorno)=> this.showError(error_retorno))
                   }else{
                         this.new_markEcom_request = false;
                   }
-                  
             },
             voltarMarktplaceEcommerce(){
                   router.push('/integracoesmarketplacesecommerces');
@@ -152,7 +154,7 @@ export default defineComponent({
                   <span v-if="!have_fetch_error || fetch_error_msg['errors' as keyof typeof fetch_error_msg]">
                         <!-- ERRO no servidor mensagem -->
                         <TimeMensageErroComponent v-if="fetch_error_msg['errors' as keyof typeof fetch_error_msg]"
-                              :time_duration="5"
+                              :time_duration="10"
                               :mensagem="fetch_error_msg['errors' as keyof typeof fetch_error_msg][0]"
                               @fechar_erro="voltarErroServer"
                         />
@@ -321,7 +323,12 @@ export default defineComponent({
       
                                           <!-- Botões -->
                                           <div style="margin-top: 16px;" class="col-12">
-                                                <button class="btn btn-primary col-4 col-lg-2" :disabled="inRequestAmbiente || new_markEcom_request" >
+                                                <TimeMensageFormReturnComponent v-if="criando"
+                                                      :mensagem="'Alterado com sucesso'"
+                                                      :time_duration="5"
+                                                      @fechar_mensagem="criando = false"
+                                                />
+                                                <button class="btn btn-primary col-4 col-lg-2" :disabled="inRequestAmbiente || new_markEcom_request || criando" >
                                                       <span>Criar</span>
                                                 </button>
                                                 <button class="btn btn-light col-4 col-lg-2" style="margin-left: 24px;" @click="voltarMarktplaceEcommerce()">

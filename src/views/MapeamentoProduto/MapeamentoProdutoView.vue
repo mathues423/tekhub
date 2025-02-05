@@ -80,7 +80,8 @@ export default defineComponent({
                   request_pesquisa: '',
 
                   is_in_DeletModal:false,
-                  is_deletando: false
+                  is_deletando: false,
+                  disable_botao_delet: false
             }
       },
       components:{
@@ -115,8 +116,7 @@ export default defineComponent({
                   router.push('/mapeamentoprodutos/0');
             },
             deletar(objeto: {codigo: string}){
-                  this.is_deletando = true;
-                  this.is_in_DeletModal = true;
+                  this.is_deletando =this.is_in_DeletModal = this.disable_botao_delet = true;
                   const rota_interna = this.itsOnFilter ? 'mapeamentoprodudo_pesquisa' : 'mapeamentoprodudo';
                   let aux = {'roter_externa': 'mapeamentoproduto', 'id': objeto.codigo, 'roter_interna': rota_interna}
                   Promise.resolve(store.dispatch('delDadosID', aux))
@@ -127,12 +127,15 @@ export default defineComponent({
                               }else{
                                     this.requestDados();
                               }
-                              this.is_deletando = false;
+                              this.is_deletando = true;
+                              this.is_in_DeletModal = false;
+                              this.disable_botao_delet = false;
                         }
                   ).catch((error_retorno)=> {
                         this.showError(error_retorno)
                         this.is_deletando = false;
                         this.is_in_DeletModal = false;
+                        this.disable_botao_delet = false;
                   })
             },
             avancaPagina(){
@@ -298,7 +301,7 @@ export default defineComponent({
                   <span v-if="!have_fetch_error || fetch_error_msg['errors' as keyof typeof fetch_error_msg]">
                         <!-- ERRO no servidor mensagem -->
                         <TimeMensageErroComponent v-if="fetch_error_msg['errors' as keyof typeof fetch_error_msg]"
-                              :time_duration="5"
+                              :time_duration="10"
                               :mensagem="fetch_error_msg['errors' as keyof typeof fetch_error_msg][0]"
                               @fechar_erro="voltarErroServer"
                         />
@@ -412,6 +415,8 @@ export default defineComponent({
                               @avancaPagina="avancaPagina"
                               @recuarPagina="recuarPagina"
 
+                              
+                              :disable_botao_delet="disable_botao_delet"
                               :showDeletModal="is_in_DeletModal"
                               @fecharModal="()=> is_in_DeletModal = false"
                               @abrirModal="()=> is_in_DeletModal = true"

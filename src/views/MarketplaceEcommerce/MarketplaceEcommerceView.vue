@@ -81,7 +81,8 @@ export default defineComponent({
 
                   request_pesquisa: '',
                   is_in_DeletModal: false,
-                  is_deletando: false
+                  is_deletando: false,
+                  disable_botao_delet: false
             }
       },
       components:{
@@ -123,8 +124,7 @@ export default defineComponent({
                   }).catch((error_retorno)=> this.showError(error_retorno))
             },
             deletar(objeto: {codigo: string}){
-                  this.is_deletando = false;
-                  this.is_in_DeletModal = true;
+                  this.is_deletando = this.is_in_DeletModal = this.disable_botao_delet = true;
                   const rota_interna = this.itsOnFilter ? 'marketplaceecommerce_pesquisa' : 'marketplaceecommerce';
                   let aux = {'roter_externa': 'integracaomarketplaceecommerce', 'id': objeto.codigo, 'roter_interna': rota_interna}
                   Promise.resolve(store.dispatch('delDadosID', aux))
@@ -135,9 +135,12 @@ export default defineComponent({
                               this.requestDados()
                         }
                         this.is_deletando = false;
+                        this.is_in_DeletModal = true;
+                        this.disable_botao_delet = false;
                   }).catch((error_retorno)=> {
                         this.is_deletando = false;
                         this.is_in_DeletModal = false;
+                        this.disable_botao_delet = false;
                         this.showError(error_retorno)
                   })
             },
@@ -259,7 +262,7 @@ export default defineComponent({
                   <span v-if="!have_fetch_error || fetch_error_msg['errors' as keyof typeof fetch_error_msg]">
                         <!-- ERRO no servidor mensagem -->
                         <TimeMensageErroComponent v-if="fetch_error_msg['errors' as keyof typeof fetch_error_msg]"
-                              :time_duration="5"      
+                              :time_duration="10"      
                               :mensagem="fetch_error_msg['errors' as keyof typeof fetch_error_msg][0]"
                               @fechar_erro="voltarErroServer"
                         />
@@ -293,6 +296,7 @@ export default defineComponent({
                                                 getPesquisa(args)
                                           }"
 
+                              :disable_botao_delet="disable_botao_delet"
                               :is_in_DeletModal="is_in_DeletModal"
                               @fecharModalDelet="()=> is_in_DeletModal = false"
                               @abrirModalDelet="()=> is_in_DeletModal = true"

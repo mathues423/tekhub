@@ -11,6 +11,7 @@ import fetch_ from '@/services/fetch/requisicao';
 import LoaderSkeleton from '@/components/util/Loaders/LoaderSkeleton.vue';
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue'
 import TimeMensageErroComponent from '@/components/mensagem/TimeMensageErroComponent.vue';
+import TimeMensageFormReturnComponent from '@/components/mensagem/TimeMensageFormReturnComponent.vue';
 
 export default defineComponent({
       data(){
@@ -90,7 +91,8 @@ export default defineComponent({
                   edit_markEcom_request:false,
                   usuario_select:{},
                   usuarioApi_aux:{},
-                  errors: [] as Array<string>
+                  errors: [] as Array<string>,
+                  editado: false
             }
       },
       watch:{
@@ -114,7 +116,8 @@ export default defineComponent({
             LoaderSkeleton,
             ErroFormComponent,
             ErroResponseComponent,
-            TimeMensageErroComponent
+            TimeMensageErroComponent,
+            TimeMensageFormReturnComponent
       },
       mounted(){
             // get Empresa e ambiente dps get usuario filtro empresa.codigo == empresa
@@ -157,17 +160,34 @@ export default defineComponent({
                   }).catch((error_retorno)=> this.showError(error_retorno))
       },
       methods:{
-            async criacaoRequest(){
+            async edicaoRequest(){
                   this.edit_markEcom_request = true;
                   this.errors = [];
                   const id = (this.$route.params['id'] || '-1') as string;
                   regra_marketplace._edit(this.marketplaceecommerce_old, this.marketplaceecommerce_new, this.errors)
                   
                   if(this.errors.length == 0){
-                        Promise.resolve(
-                              store.dispatch('setDadosID', {'roter_externa': 'integracaomarketplaceecommerce','id':id, 'new_dado': this.marketplaceecommerce_new, 'roter_interna': 'marketplaceecommerce'})
-                              .then(()=> this.voltarMarktplaceEcommerce())
-                        ).catch((error_retorno)=> this.showError(error_retorno))
+                        store.dispatch('setDadosID', {'roter_externa': 'integracaomarketplaceecommerce','id':id, 'new_dado': this.marketplaceecommerce_new, 'roter_interna': 'marketplaceecommerce'})
+                        .then(()=> {
+                              this.edit_markEcom_request = false;
+                              this.editado = true;
+                              this.marketplaceecommerce_old.empresaCodigo = this.marketplaceecommerce_new.empresaCodigo 
+                              this.marketplaceecommerce_old.ambienteCodigo = this.marketplaceecommerce_new.ambienteCodigo
+                              this.marketplaceecommerce_old.usuario = this.marketplaceecommerce_new.usuario
+                              this.marketplaceecommerce_old.senha = this.marketplaceecommerce_new.senha
+                              this.marketplaceecommerce_old.token = this.marketplaceecommerce_new.token
+                              this.marketplaceecommerce_old.appClienteId = this.marketplaceecommerce_new.appClienteId
+                              this.marketplaceecommerce_old.appClienteSecret = this.marketplaceecommerce_new.appClienteSecret
+                              this.marketplaceecommerce_old.urlRedirecionamento = this.marketplaceecommerce_new.urlRedirecionamento
+                              this.marketplaceecommerce_old.webserviceApi = this.marketplaceecommerce_new.webserviceApi
+                              this.marketplaceecommerce_old.variacaoPrincipal = this.marketplaceecommerce_new.variacaoPrincipal
+                              this.marketplaceecommerce_old.transformaVariacaoEmProdutoSimples = this.marketplaceecommerce_new.transformaVariacaoEmProdutoSimples
+                              this.marketplaceecommerce_old.modoDebug = this.marketplaceecommerce_new.modoDebug
+                              this.marketplaceecommerce_old.versaoEcommerce = this.marketplaceecommerce_new.versaoEcommerce
+                              this.marketplaceecommerce_old.usuarioApiCodigo = this.marketplaceecommerce_new.usuarioApiCodigo
+                              this.marketplaceecommerce_old.atributosDefault = this.marketplaceecommerce_new.atributosDefault
+                              delete this.marketplaceecommerce_new['codigo' as keyof typeof this.marketplaceecommerce_new]
+                        }).catch((error_retorno)=> this.showError(error_retorno))
                   }else{
                         this.edit_markEcom_request = false;
                   }
@@ -214,15 +234,14 @@ export default defineComponent({
                   <span v-if="!have_fetch_error || fetch_error_msg['errors' as keyof typeof fetch_error_msg]">
                         <!-- ERRO no servidor mensagem -->
                         <TimeMensageErroComponent v-if="fetch_error_msg['errors' as keyof typeof fetch_error_msg]"
-                              :time_duration="5"
+                              :time_duration="10"
                               :mensagem="fetch_error_msg['errors' as keyof typeof fetch_error_msg][0]"
                               @fechar_erro="voltarErroServer"
                         />
                         <div class="row">
                               <div class="col-1"></div>
                               <div class="Card-Body col-8">
-                                    {{ marketplaceecommerce_new }}
-                                    <form @submit.prevent="criacaoRequest()" class="row form_content" novalidate>
+                                    <form @submit.prevent="edicaoRequest()" class="row form_content" novalidate>
                                           <!-- Empresa -->
                                           <div class="col-4 col-lg-2 form_text">
                                                 *Empresa:
@@ -390,7 +409,12 @@ export default defineComponent({
                                                       :mensagem="'Edite antes de salvar.'"
                                                       :class="['alert-warning desativada',{'ativada' : errors.findIndex((x) => x =='igual') != -1}]"
                                                 />
-                                                <button class="btn btn-primary col-4 col-lg-2" :disabled="inRequestEmpresa || inRequestAmbiente || edit_markEcom_request" >
+                                                <TimeMensageFormReturnComponent v-if="editado"
+                                                      :mensagem="'Alterado com sucesso'"
+                                                      :time_duration="5"
+                                                      @fechar_mensagem="editado = false"
+                                                />
+                                                <button class="btn btn-primary col-4 col-lg-2" :disabled="inRequestEmpresa || inRequestAmbiente || edit_markEcom_request || editado" >
                                                       <span>Editar</span>
                                                 </button>
                                                 <button class="btn btn-light col-4 col-lg-2" style="margin-left: 24px;" @click="voltarMarktplaceEcommerce()">

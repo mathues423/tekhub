@@ -11,7 +11,6 @@ export default defineComponent({
       template: '#Empre_comp',
       data() {
           return{
-            
             lista_opc_pagina_card: [
                   {'text': '12', 'value': 12},
                   {'text': '30', 'value': 30},
@@ -65,6 +64,10 @@ export default defineComponent({
                   required: true
             },
             is_deletando:{
+                  type: Boolean,
+                  required: true
+            },
+            disable_botao_delet:{
                   type: Boolean,
                   required: true
             }
@@ -158,11 +161,12 @@ export default defineComponent({
                         {'nome': 'Empresa', 'key': 'empresaDescricao'},
                   ]"
                   @deletarDadoPai="(arg : any) => deletar(arg)"
-                  :deletando="is_deletando"
                   @trocarQuandidadeDadoPai="(args: number)=> quantidadeItens(args)"
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina"
-
+                  
+                  :deletando="is_deletando"
+                  :disabled_btn="disable_botao_delet"
                   :showDeletModal="is_in_DeletModal"
                   @fecharModal="fecharModalDelet"
                   @abrirModal="abrirModalDelet"
@@ -185,13 +189,14 @@ export default defineComponent({
                         {'nome': 'Empresa', 'key': 'empresaDescricao'},
                   ]"
                   @deletarDadoPai="(arg : any) => deletar(arg)"
-                  :deletando="is_deletando"
                   @ordenarDadoPai="(arg : any) => ordenaMarketplaceEcommerce(arg)"
                   @filtrarDadoPai="filtraMarketplaceEcommerce"
                   @trocarQuandidadeDadoPai="(args: number)=> quantidadeItens(args)"
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina"
-
+                  
+                  :deletando="is_deletando"
+                  :disabled_btn="disable_botao_delet"
                   :showDeletModal="is_in_DeletModal"
                   @fecharModal="fecharModalDelet"
                   @abrirModal="abrirModalDelet"
@@ -220,11 +225,12 @@ export default defineComponent({
                         {'nome': 'Empresa', 'key': 'empresaDescricao'},
                   ]"
                   @deletarDadoPai="(arg : any) => deletar(arg)"
-                  :deletando="is_deletando"
                   @trocarQuandidadeDadoPai="(args: number)=> quantidadeItens(args)"
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina"
-
+                  
+                  :deletando="is_deletando"
+                  :disabled_btn="disable_botao_delet"
                   :showDeletModal="is_in_DeletModal"
                   @fecharModal="fecharModalDelet"
                   @abrirModal="abrirModalDelet"
@@ -248,13 +254,14 @@ export default defineComponent({
                         {'nome': 'Empresa', 'key': 'empresaDescricao'},
                   ]"
                   @deletarDadoPai="(arg : any) => deletar(arg)"
-                  :deletando="is_deletando"
                   @ordenarDadoPai="(arg : any) => ordenaMarketplaceEcommerce(arg)"
                   @filtrarDadoPai="filtraMarketplaceEcommerce"
                   @trocarQuandidadeDadoPai="(args: number)=> quantidadeItens(args)"
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina"
-
+                  
+                  :deletando="is_deletando"
+                  :disabled_btn="disable_botao_delet"
                   :showDeletModal="is_in_DeletModal"
                   @fecharModal="fecharModalDelet"
                   @abrirModal="abrirModalDelet"

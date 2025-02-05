@@ -11,6 +11,7 @@ import fetch_ from '@/services/fetch/requisicao';
 import LoaderSkeleton from '@/components/util/Loaders/LoaderSkeleton.vue';
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
 import TimeMensageErroComponent from '@/components/mensagem/TimeMensageErroComponent.vue';
+import TimeMensageFormReturnComponent from '@/components/mensagem/TimeMensageFormReturnComponent.vue';
 
 export default defineComponent({
       data(){
@@ -36,7 +37,8 @@ export default defineComponent({
                   requested: false,
                   tipo_canal: ['MARKETPLACE', 'ECOMMERCE', 'LOGISTICA', 'PAGAMENTO'],
                   canal_assossiado_req: [] as Array<object>,
-                  errors: []
+                  errors: [],
+                  editado: false
             }
       },
       components:{
@@ -45,7 +47,8 @@ export default defineComponent({
             LoaderSkeleton,
             ErroFormComponent,
             ErroResponseComponent,
-            TimeMensageErroComponent
+            TimeMensageErroComponent,
+            TimeMensageFormReturnComponent
       },
       methods:{
             async editRequest(){
@@ -56,9 +59,16 @@ export default defineComponent({
                   if (this.errors.length == 0) {
                         Promise.resolve(
                               store.dispatch('setDadosID', {'roter_externa': 'canal', 'id': id, 'roter_interna': 'canais', 'new_dado': this.canal}))
-                        .then(()=> 
-                              this.voltarCanal()
-                        ).catch((error_retorno)=> this.showError(error_retorno))
+                        .then((ret)=> {
+                              this.edit_canal_request = false;
+                              this.editado = true;
+                              this.old_canal.alias = this.canal.alias
+                              this.old_canal.aliastekprot = this.canal.aliastekprot
+                              this.old_canal.canalAssociado = this.canal.canalAssociado
+                              this.old_canal.descricao = this.canal.descricao
+                              this.old_canal.tipo = this.canal.tipo
+                              delete this.canal['codigo' as keyof typeof this.canal]
+                        }).catch((error_retorno)=> this.showError(error_retorno))
                   }else{
                         this.edit_canal_request = false;
                   }
@@ -89,7 +99,6 @@ export default defineComponent({
                   this.old_canal.descricao = this.canal.descricao = value.descricao;
                   this.old_canal.tipo = this.canal.tipo = value.tipo;
                   this.old_canal.canalAssociado = this.canal.canalAssociado = value.canalAssociado;
-
                   Promise.resolve(fetch_.getDado('/canal')).then(
                   (args) => {
                         this.canal_assossiado_req = args.data;
@@ -111,7 +120,7 @@ export default defineComponent({
                   <span v-if="!have_fetch_error || fetch_error_msg['errors' as keyof typeof fetch_error_msg]">
                         <!-- ERRO no servidor mensagem -->
                         <TimeMensageErroComponent v-if="fetch_error_msg['errors' as keyof typeof fetch_error_msg]"
-                              :time_duration="5"      
+                              :time_duration="10"      
                               :mensagem="fetch_error_msg['errors' as keyof typeof fetch_error_msg][0]"
                               @fechar_erro="voltarErroServer"
                         />
@@ -178,8 +187,8 @@ export default defineComponent({
                                           <div class="col-8">
                                                 <span v-if="requested">
                                                       <select class="custom-select" v-model="canal.canalAssociado">
-                                                            <option selected disabled :value="{}"> Selecione o campo</option>
-                                                            <option v-for="header in canal_assossiado_req" :key="header" :value="header['codigo' as keyof typeof header]"> {{ header['descricao' as keyof typeof header] }}</option>
+                                                            <option selected disabled :value="-1"> Selecione o campo</option>
+                                                            <option v-for="header in canal_assossiado_req" :key="header['codigo' as keyof typeof header]" :value="header['codigo' as keyof typeof header]"> {{ header['descricao' as keyof typeof header] }}</option>
                                                       </select>
                                                 </span>
                                                 <span v-else>
@@ -200,7 +209,12 @@ export default defineComponent({
                                                 :mensagem="'Edite antes de salvar'"
                                                 :class="['alert-warning desativada',{'ativada' : errors.findIndex((x) => x =='igual') != -1}]"
                                                 />
-                                                <button class="btn btn-primary col-4 col-lg-2" :disabled="edit_canal_request || !requested">
+                                                <TimeMensageFormReturnComponent v-if="editado"
+                                                      :mensagem="'Alterado com sucesso'"
+                                                      :time_duration="5"
+                                                      @fechar_mensagem="editado = false"
+                                                />
+                                                <button class="btn btn-primary col-4 col-lg-2" :disabled="edit_canal_request || !requested || editado">
                                                       <span>Iditar</span>
                                                 </button>
                                                 <button class="btn btn-light col-4 col-lg-2" style="margin-left: 24px;" @click="voltarCanal()">

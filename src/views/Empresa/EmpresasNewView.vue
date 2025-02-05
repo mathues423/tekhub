@@ -24,7 +24,8 @@ export default defineComponent({
                         versaoApiTek: '',
                         integracoes: []
                   },
-                  errors: [] as Array<string>
+                  errors: [] as Array<string>,
+                  criando: false
             }
       },
       components:{
@@ -43,7 +44,10 @@ export default defineComponent({
                   empresa._add(this.empresa, this.errors)
                   if(this.errors.length == 0){
                         store.dispatch('putDados', {'roter_externa': 'empresa', 'dado': this.empresa, 'roter_interna': 'empresas'})
-                        .then(()=> this.voltarEmpresa())
+                        .then(()=>{
+                              this.new_empresa_request = false;
+                              this.criando = true;
+                        })
                         .catch((error_retorno)=> this.showError(error_retorno))
                   }else{
                         this.new_empresa_request = false;
@@ -81,7 +85,7 @@ export default defineComponent({
                   <span v-if="!have_fetch_error || fetch_error_msg['errors' as keyof typeof fetch_error_msg]">
                         <!-- ERRO no servidor mensagem -->
                         <TimeMensageErroComponent v-if="fetch_error_msg['errors' as keyof typeof fetch_error_msg]"
-                              :time_duration="5"      
+                              :time_duration="10"      
                               :mensagem="fetch_error_msg['errors' as keyof typeof fetch_error_msg][0]"
                               @fechar_erro="voltarErroServer"
                         />
@@ -143,7 +147,12 @@ export default defineComponent({
                                           <div class="col-lg-2"></div>
       
                                           <div style="margin-top: 16px;" class="col-12">
-                                                <button class="btn btn-primary col-4 col-lg-2" style="margin-left: 24px;" :disabled="new_empresa_request">
+                                                <TimeMensageFormReturnComponent v-if="criando"
+                                                      :mensagem="'Alterado com sucesso'"
+                                                      :time_duration="5"
+                                                      @fechar_mensagem="criando = false"
+                                                />
+                                                <button class="btn btn-primary col-4 col-lg-2" style="margin-left: 24px;" :disabled="new_empresa_request || criando">
                                                       <span>Criar</span>
                                                 </button>
                                                 <button class="btn btn-light col-4 col-lg-2" style="margin-left: 24px;" @click="voltarEmpresa()">

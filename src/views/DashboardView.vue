@@ -47,7 +47,7 @@ export default defineComponent({
                   <span v-if="!have_erro || mensage_erro['errors' as keyof typeof mensage_erro]">
                         <!-- ERRO no servidor mensagem -->
                         <TimeMensageErroComponent v-if="mensage_erro['errors' as keyof typeof mensage_erro]"
-                              :time_duration="5"      
+                              :time_duration="10"      
                               :mensagem="mensage_erro['errors' as keyof typeof mensage_erro][0]"
                               @fechar_erro="voltarErroServer"
                         />

@@ -70,6 +70,10 @@ export default defineComponent({
             is_deletando:{
                   type: Boolean,
                   required: true
+            },
+            disable_botao_delet:{
+                  type: Boolean,
+                  required: true
             }
       },
       components:{
@@ -156,13 +160,14 @@ export default defineComponent({
                         {'nome': 'Produto Pai Site', 'key': 'produtoPaiSite'},
                   ]"
                   @deletarDadoPai="(arg) => deletar(arg)"
-                  :deletando="is_deletando"
                   @ordenarDadoPai="(arg) => ordenaMapeamentoProduto(arg)"
                   @filtrarDadoPai="filtraMapeamentoProduto"
                   @trocarQuandidadeDadoPai="(args: number)=> quantidadeItens(args)"
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina" 
-
+                  
+                  :deletando="is_deletando"
+                  :disabled_btn="disable_botao_delet"
                   :showDeletModal="is_in_DeletModal"
                   @fecharModal="()=> $emit('fecharModal')"
                   @abrirModal="()=> $emit('abrirModal')"
@@ -184,11 +189,12 @@ export default defineComponent({
                         {'nome': 'Produto Pai Site', 'key': 'produtoPaiSite'},
                   ]"
                   @deletarDadoPai="(arg: object) => deletar(arg)"
-                  :deletando="is_deletando"
                   @trocarQuandidadeDadoPai="(args: number)=> quantidadeItens(args)"
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina" 
-
+                  
+                  :deletando="is_deletando"
+                  :disabled_btn="disable_botao_delet"
                   :showDeletModal="is_in_DeletModal"
                   @fecharModal="()=> $emit('fecharModal')"
                   @abrirModal="()=> $emit('abrirModal')"
@@ -217,11 +223,12 @@ export default defineComponent({
                         {'nome': 'Produto Pai Site', 'key': 'produtoPaiSite'},
                   ]"
                   @deletarDadoPai="(arg: object) => deletar(arg)"
-                  :deletando="is_deletando"
                   @trocarQuandidadeDadoPai="(args: number)=> quantidadeItens(args)"
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina" 
                   
+                  :deletando="is_deletando"
+                  :disabled_btn="disable_botao_delet"
                   :showDeletModal="is_in_DeletModal"
                   @fecharModal="()=> $emit('fecharModal')"
                   @abrirModal="()=> $emit('abrirModal')"
@@ -244,13 +251,14 @@ export default defineComponent({
                         {'nome': 'Produto Pai Site', 'key': 'produtoPaiSite'},
                   ]"
                   @deletarDadoPai="(arg: object) => deletar(arg)"
-                  :deletando="is_deletando"
                   @ordenarDadoPai="(arg: object) => ordenaMapeamentoProduto(arg)"
                   @filtrarDadoPai="filtraMapeamentoProduto"
                   @trocarQuandidadeDadoPai="(args: number)=> quantidadeItens(args)"
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina" 
-
+                  
+                  :deletando="is_deletando"
+                  :disabled_btn="disable_botao_delet"
                   :showDeletModal="is_in_DeletModal"
                   @fecharModal="()=> $emit('fecharModal')"
                   @abrirModal="()=> $emit('abrirModal')"

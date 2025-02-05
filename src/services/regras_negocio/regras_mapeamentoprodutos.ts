@@ -41,7 +41,7 @@ class Mapeamento {
             if(new_dado.produtoSite == ''){
                   erros_msg.push('produtoSite');
             }
-            if(this.compObject(new_dado, old_dado)){
+            if(!this.compObject(new_dado, old_dado)){
                   erros_msg.push('igual');
             }
       }
@@ -65,7 +65,7 @@ class Mapeamento {
                   return old_obj[chave as keyof typeof old_obj] !== new_ob[chave as keyof typeof new_ob];
             });
             
-            return !saoDiferentes
+            return saoDiferentes
       }
 }
 

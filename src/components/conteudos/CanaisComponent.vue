@@ -83,7 +83,8 @@ export default defineComponent({
                   
                   request_pesquisa: '',
                   is_in_DeletModal: false,
-                  is_deletando: false
+                  is_deletando: false,
+                  disable_botao_delet: false
             }
       },
       components:{
@@ -118,8 +119,7 @@ export default defineComponent({
                   }
             },
             deletar(objeto: {codigo: string}){
-                  this.is_deletando = false;
-                  this.is_in_DeletModal = true;
+                  this.is_deletando = this.is_in_DeletModal = this.disable_botao_delet = true;
                   const rota_interna = this.itsOnFilter ? 'canais_pesquisa' : 'canais';
                   let aux = {'roter_externa': 'canal', 'id': objeto.codigo, 'roter_interna': rota_interna}
                   store.dispatch('delDadosID', aux)
@@ -130,11 +130,14 @@ export default defineComponent({
                               }else{
                                     this.requestDados();
                               }
-                              this.is_deletando = false;
+                              this.disable_botao_delet = false;
+                              this.is_deletando = true;
+                              this.is_in_DeletModal = false;
                         }
                   ).catch((error_retorno)=> {
                         this.is_deletando = false;
                         this.is_in_DeletModal = false;
+                        this.disable_botao_delet = false;
                         this.$emit('erro_fetch', error_retorno)
                   })
             },
@@ -251,11 +254,12 @@ export default defineComponent({
                         {'nome': 'TIPO', 'key': 'tipo'},
                   ]"
                   @deletarDadoPai="(arg : any) => deletar(arg)"
-                  :deletando="is_deletando"
                   @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina"
-
+                  
+                  :deletando="is_deletando"
+                  :disabled_btn="disable_botao_delet"
                   :showDeletModal="is_in_DeletModal"
                   @fecharModal="()=> is_in_DeletModal = false"
                   @abrirModal="()=> is_in_DeletModal = true"
@@ -277,13 +281,14 @@ export default defineComponent({
                         {'nome': 'TIPO', 'key': 'tipo'},
                   ]"
                   @deletarDadoPai="(arg) => deletar(arg)"
-                  :deletando="is_deletando"
                   @ordenarDadoPai="(arg) => {return null}"
                   @filtrarDadoPai="filtraCanais"
                   @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina"
-
+                  
+                  :deletando="is_deletando"
+                  :disabled_btn="disable_botao_delet"
                   :showDeletModal="is_in_DeletModal"
                   @fecharModal="()=> is_in_DeletModal = false"
                   @abrirModal="()=> is_in_DeletModal = true"
@@ -311,11 +316,12 @@ export default defineComponent({
                         {'nome': 'TIPO', 'key': 'tipo'},
                   ]"
                   @deletarDadoPai="(arg : any) => deletar(arg)"
-                  :deletando="is_deletando"
                   @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina"
-
+                  
+                  :deletando="is_deletando"
+                  :disabled_btn="disable_botao_delet"
                   :showDeletModal="is_in_DeletModal"
                   @fecharModal="()=> is_in_DeletModal = false"
                   @abrirModal="()=> is_in_DeletModal = true"
@@ -338,13 +344,14 @@ export default defineComponent({
                         {'nome': 'TIPO', 'key': 'tipo'},
                   ]"
                   @deletarDadoPai="(arg) => deletar(arg)"
-                  :deletando="is_deletando"
                   @ordenarDadoPai="(arg) => {return null}"
                   @filtrarDadoPai="filtraCanais"
                   @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina"
-
+                  
+                  :deletando="is_deletando"
+                  :disabled_btn="disable_botao_delet"
                   :showDeletModal="is_in_DeletModal"
                   @fecharModal="()=> is_in_DeletModal = false"
                   @abrirModal="()=> is_in_DeletModal = true"

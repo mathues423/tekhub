@@ -21,7 +21,7 @@ export default{
   height: calc(100vh -78px - 50px);
 } */
 #template.row>div#content{
-  height: calc(100vh - calc( 78px + 50px));
+  min-height: calc(100vh - calc( 78px + 50px));
 }
 body { 
   /* White teme */

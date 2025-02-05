@@ -233,7 +233,15 @@ router.beforeEach(async (to, from, next) => {
   }
 
   // if(routes.map((x) => x.name).indexOf(to.name) == -1){
-  //   next({name:'PageNotFaund'}); //Fazer a pagina erro 404
+  //   let rota = (router.options.history.state['current' as keyof typeof router.options.history.state] || '/dashboard') as string;
+  //   if (routes.map((x)=> x.name).indexOf(rota) == -1) {
+  //     rota = '/'
+  //   }
+  //   console.log('to', to);
+  //   console.log('rota', rota);
+  //   console.log('router', router);
+  //   router.push('/')
+  //   next({path: rota});
   // }
   
 });

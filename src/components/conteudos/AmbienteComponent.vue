@@ -73,7 +73,8 @@ export default defineComponent({
 
             request_pesquisa: '',
             is_in_DeletModal: false,
-            is_deletando: false
+            is_deletando: false,
+            disable_botao_delet: false
           }
       },
       components:{
@@ -115,23 +116,23 @@ export default defineComponent({
                   }
             },
             deletar(objeto: {codigo: string}){
-                  this.is_in_DeletModal = true;
-                  this.is_deletando = true;
+                  this.is_in_DeletModal = this.is_deletando = this.disable_botao_delet = true;
                   const rota_interna = this.itsOnFilter ? 'ambientes_pesquisa' : 'ambientes';
                   let aux = {'roter_externa': 'ambiente', 'id': objeto.codigo, 'roter_interna': rota_interna}
                   store.dispatch('delDadosID', aux)
-                  .then(
-                        () => {
+                  .then(() => {
                               if (this.itsOnFilter) {
                                     this.getPesquisa(this.request_pesquisa);
                               }else{
                                     this.requestDados();
                               }
                               this.is_deletando = false;
-                        }
-                  ).catch((error_retorno)=> {
+                              this.is_in_DeletModal = true;
+                              this.disable_botao_delet = false;
+                        }).catch((error_retorno)=> {
                         this.is_in_DeletModal = false;
                         this.is_deletando = false;
+                        this.disable_botao_delet = false;
                         this.$emit('erro_fetch', error_retorno)
                   })
             },
@@ -251,11 +252,12 @@ export default defineComponent({
                         {'nome': 'Verção', 'key': 'versao'},
                   ]"
                   @deletarDadoPai="(arg : any) => deletar(arg)"
-                  :deletando="is_deletando"
                   @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina"
-
+                  
+                  :deletando="is_deletando"
+                  :disabled_btn="disable_botao_delet"
                   :showDeletModal="is_in_DeletModal"
                   @fecharModal="()=> is_in_DeletModal = false"
                   @abrirModal="()=> is_in_DeletModal = true"
@@ -278,13 +280,14 @@ export default defineComponent({
                         {'nome': 'Verção', 'key': 'versao'},
                   ]"
                   @deletarDadoPai="(arg) => deletar(arg)"
-                  :deletando="is_deletando"
                   @ordenarDadoPai="(arg) => {return null}"
                   @filtrarDadoPai="filtraAmbiente"
                   @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina"
-
+                  
+                  :deletando="is_deletando"
+                  :disabled_btn="disable_botao_delet"
                   :showDeletModal="is_in_DeletModal"
                   @fecharModal="()=> is_in_DeletModal = false"
                   @abrirModal="()=> is_in_DeletModal = true"
@@ -314,11 +317,12 @@ export default defineComponent({
                         {'nome': 'Verção', 'key': 'versao'},
                   ]"
                   @deletarDadoPai="(arg : any) => deletar(arg)"
-                  :deletando="is_deletando"
                   @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina"
-
+                  
+                  :deletando="is_deletando"
+                  :disabled_btn="disable_botao_delet"
                   :showDeletModal="is_in_DeletModal"
                   @fecharModal="()=> is_in_DeletModal = false"
                   @abrirModal="()=> is_in_DeletModal = true"
@@ -342,13 +346,14 @@ export default defineComponent({
                         {'nome': 'Verção', 'key': 'versao'},
                   ]"
                   @deletarDadoPai="(arg) => deletar(arg)"
-                  :deletando="is_deletando"
                   @ordenarDadoPai="(arg) => {return null}"
                   @filtrarDadoPai="filtraAmbiente"
                   @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
                   @avancar="avancaPagina" 
                   @recuar="recuarPagina"
-
+                  
+                  :deletando="is_deletando"
+                  :disabled_btn="disable_botao_delet"
                   :showDeletModal="is_in_DeletModal"
                   @fecharModal="()=> is_in_DeletModal = false"
                   @abrirModal="()=> is_in_DeletModal = true"

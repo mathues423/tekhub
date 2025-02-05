@@ -105,7 +105,7 @@ class MarketplaceEcommerce {
                   delete new_dado['atributosDefault' as keyof typeof new_dado];
             }
             
-            if(this.compObject(new_dado, old_dado)){
+            if(!this.compObject(new_dado, old_dado)){
                   erros_msg.push('igual');
             }
       }
@@ -121,7 +121,7 @@ class MarketplaceEcommerce {
                   return old_obj[chave as keyof typeof old_obj] !== new_ob[chave as keyof typeof new_ob];
             });
             
-            return !saoDiferentes
+            return saoDiferentes
       }
 }
 

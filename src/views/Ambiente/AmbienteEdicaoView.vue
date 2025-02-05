@@ -11,6 +11,7 @@ import fetch_ from '@/services/fetch/requisicao';
 import LoaderSkeleton from '@/components/util/Loaders/LoaderSkeleton.vue';
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
 import TimeMensageErroComponent from '@/components/mensagem/TimeMensageErroComponent.vue';
+import TimeMensageFormReturnComponent from '@/components/mensagem/TimeMensageFormReturnComponent.vue';
 
 export default defineComponent({
       data(){
@@ -37,7 +38,8 @@ export default defineComponent({
                   requested: false,
                   canais_requested: [] as Array<object>,
                   ambientes: [{name: 'Homologação', value: 'HOMOLOGACAO'}, {name: 'Produção', value: 'PRODUCAO'}],
-                  errors: []
+                  errors: [],
+                  editado:false
             }
       },
       components:{
@@ -46,7 +48,8 @@ export default defineComponent({
             LoaderSkeleton,
             ErroFormComponent,
             ErroResponseComponent,
-            TimeMensageErroComponent
+            TimeMensageErroComponent,
+            TimeMensageFormReturnComponent
       },
       methods:{
             async editRequest(){
@@ -62,9 +65,16 @@ export default defineComponent({
                   if (this.errors.length == 0) {
                         Promise.resolve(
                               store.dispatch('setDadosID', {'roter_externa': 'ambiente', 'id': id, 'roter_interna': 'ambientes', 'new_dado': this.ambiente}))
-                        .then(()=> 
-                              this.voltarAmbiente()
-                        ).catch((error_retorno)=> this.showError(error_retorno))
+                        .then((ret)=> {
+                              this.edit_ambiente_request = false;
+                              this.editado = true;
+                              this.old_ambiente.ambiente = this.ambiente.ambiente
+                              this.old_ambiente.canalAlias = this.ambiente.canalAlias
+                              this.old_ambiente.status = this.ambiente.status
+                              this.old_ambiente.url = this.ambiente.url
+                              this.old_ambiente.versao = this.ambiente.versao
+                              delete this.ambiente['codigo' as keyof typeof this.ambiente]
+                        }).catch((error_retorno)=> this.showError(error_retorno))
                   }else{
                         this.edit_ambiente_request = false;
                   }
@@ -118,10 +128,11 @@ export default defineComponent({
                   :user_type="auth_type"
             />
             <div class="col-12 col-lg-10" id="content">
+                  {{ ambiente }}
                   <span v-if="!have_fetch_error || fetch_error_msg['errors' as keyof typeof fetch_error_msg]">
                         <!-- ERRO no servidor mensagem -->
                         <TimeMensageErroComponent v-if="fetch_error_msg['errors' as keyof typeof fetch_error_msg]"
-                              :time_duration="5"      
+                              :time_duration="10"      
                               :mensagem="fetch_error_msg['errors' as keyof typeof fetch_error_msg][0]"
                               @fechar_erro="voltarErroServer"
                         />
@@ -206,7 +217,12 @@ export default defineComponent({
                                                 :mensagem="'Edite antes de salvar'"
                                                 :class="['alert-warning desativada',{'ativada' : errors.findIndex((x) => x =='igual') != -1}]"
                                                 />
-                                                <button class="btn btn-primary col-4 col-lg-2" :disabled="edit_ambiente_request || !requested">
+                                                <TimeMensageFormReturnComponent v-if="editado"
+                                                      :mensagem="'Alterado com sucesso'"
+                                                      :time_duration="5"
+                                                      @fechar_mensagem="editado = false"
+                                                />
+                                                <button class="btn btn-primary col-4 col-lg-2" :disabled="edit_ambiente_request || !requested || editado">
                                                       <span>Iditar</span>
                                                 </button>
                                                 <button class="btn btn-light col-4 col-lg-2" style="margin-left: 24px;" @click="voltarAmbiente()">
