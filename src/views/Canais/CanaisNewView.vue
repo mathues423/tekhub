@@ -194,7 +194,7 @@ export default defineComponent({
                   <span v-else>
                         <ErroResponseComponent
                               :error_msg="fetch_error_msg"
-                              @voltar="()=> voltarErro"
+                              @voltar="voltarErro"
                         />
                   </span>
             </div>

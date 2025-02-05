@@ -298,8 +298,8 @@ export default defineComponent({
 
                               :disable_botao_delet="disable_botao_delet"
                               :is_in_DeletModal="is_in_DeletModal"
-                              @fecharModalDelet="()=> is_in_DeletModal = false"
-                              @abrirModalDelet="()=> is_in_DeletModal = true"
+                              @fecharModalDelet="is_in_DeletModal = false"
+                              @abrirModalDelet="is_in_DeletModal = true"
                         />
                   </span>
                   <span v-else>

@@ -259,8 +259,8 @@ export default defineComponent({
                   :deletando="is_deletando"
                   :disabled_btn="disable_botao_delet"
                   :showDeletModal="is_in_DeletModal"
-                  @fecharModal="()=> is_in_DeletModal = false"
-                  @abrirModal="()=> is_in_DeletModal = true"
+                  @fecharModal="is_in_DeletModal = false"
+                  @abrirModal="is_in_DeletModal = true"
             />
             <!-- Lista Ambientes -->
             <ListaComponent  v-if="lista_estado == 'Lista' && !itsOnFilter && !its_card"
@@ -289,8 +289,8 @@ export default defineComponent({
                   :deletando="is_deletando"
                   :disabled_btn="disable_botao_delet"
                   :showDeletModal="is_in_DeletModal"
-                  @fecharModal="()=> is_in_DeletModal = false"
-                  @abrirModal="()=> is_in_DeletModal = true"
+                  @fecharModal="is_in_DeletModal = false"
+                  @abrirModal="is_in_DeletModal = true"
             />
 
 
@@ -324,8 +324,8 @@ export default defineComponent({
                   :deletando="is_deletando"
                   :disabled_btn="disable_botao_delet"
                   :showDeletModal="is_in_DeletModal"
-                  @fecharModal="()=> is_in_DeletModal = false"
-                  @abrirModal="()=> is_in_DeletModal = true"
+                  @fecharModal="is_in_DeletModal = false"
+                  @abrirModal="is_in_DeletModal = true"
             />
             <!-- Card Lista Ambientes -->
             <ListaCardComponent v-if="lista_estado == 'Lista' && !itsOnFilter && its_card"
@@ -355,8 +355,8 @@ export default defineComponent({
                   :deletando="is_deletando"
                   :disabled_btn="disable_botao_delet"
                   :showDeletModal="is_in_DeletModal"
-                  @fecharModal="()=> is_in_DeletModal = false"
-                  @abrirModal="()=> is_in_DeletModal = true"
+                  @fecharModal="is_in_DeletModal = false"
+                  @abrirModal="is_in_DeletModal = true"
             />
       </div>
 </template>

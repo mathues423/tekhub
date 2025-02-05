@@ -169,8 +169,8 @@ export default defineComponent({
                   :deletando="is_deletando"
                   :disabled_btn="disable_botao_delet"
                   :showDeletModal="is_in_DeletModal"
-                  @fecharModal="()=> $emit('fecharModal')"
-                  @abrirModal="()=> $emit('abrirModal')"
+                  @fecharModal="$emit('fecharModal')"
+                  @abrirModal="$emit('abrirModal')"
             />
             <!-- Lista fildrada -->
             <ListaComponent  v-if="lista_estado == 'Lista_filtrada' && itsOnFilter && !its_card"
@@ -196,8 +196,8 @@ export default defineComponent({
                   :deletando="is_deletando"
                   :disabled_btn="disable_botao_delet"
                   :showDeletModal="is_in_DeletModal"
-                  @fecharModal="()=> $emit('fecharModal')"
-                  @abrirModal="()=> $emit('abrirModal')"
+                  @fecharModal="$emit('fecharModal')"
+                  @abrirModal="$emit('abrirModal')"
             />
 
 
@@ -230,8 +230,8 @@ export default defineComponent({
                   :deletando="is_deletando"
                   :disabled_btn="disable_botao_delet"
                   :showDeletModal="is_in_DeletModal"
-                  @fecharModal="()=> $emit('fecharModal')"
-                  @abrirModal="()=> $emit('abrirModal')"
+                  @fecharModal="$emit('fecharModal')"
+                  @abrirModal="$emit('abrirModal')"
             />
             <!-- Card Lista Mapeamento -->
             <ListaCardComponent v-if="lista_estado == 'Lista' && !itsOnFilter && its_card"
@@ -260,8 +260,8 @@ export default defineComponent({
                   :deletando="is_deletando"
                   :disabled_btn="disable_botao_delet"
                   :showDeletModal="is_in_DeletModal"
-                  @fecharModal="()=> $emit('fecharModal')"
-                  @abrirModal="()=> $emit('abrirModal')"
+                  @fecharModal="$emit('fecharModal')"
+                  @abrirModal="$emit('abrirModal')"
             />
       </div>
       
