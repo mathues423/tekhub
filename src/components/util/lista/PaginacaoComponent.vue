@@ -28,7 +28,7 @@ export default defineComponent({
                   required: true
             },
             lista_opc_paginas:{
-                  type: Array as PropType<Array<object>>,
+                  type: Array as PropType<Array<{value: number, text: string}>>,
                   required: true
             }
       },
@@ -50,34 +50,25 @@ export default defineComponent({
 </script>
 
 <template>
-<div class="col-12 row" v-if="have_item_p_pagina">
+<div class="col-12 row" v-if="have_item_p_pagina" style="text-align: center; margin: 0px; padding-top: 15px; padding-bottom: 15px;">
       <div class="col-12 col-lg-6">
             Itens por pagina:
             <select class="custom-select" v-model.lazy="item_p_pagina">
                   <option v-for="(itempPag, index) in numero_itens_p_pagina" :key="index" :value="itempPag.value"> {{ itempPag.text }}</option>
             </select>
       </div>
-      <div class="col-12 col-lg-6 row">
+      <div class="col-12 col-lg-6 row" style="padding: 0px;">
             <div class="col-5 col-lg-3">
-                  <button class="btn btn-light col-12" :disabled="pagina_atual == 1" @click="down_paginacao"> Retroceder </button>
+                  <button class="btn btn-light col-12 w-100" :disabled="pagina_atual == 1" @click="down_paginacao"> Retroceder </button>
             </div>
             <div class="col-2 col-lg-6 info" > {{ pagina_atual }} </div>
             <div class="col-5 col-lg-3">
-                  <button class="btn btn-light col-12" :disabled="pagina_atual == pagina_max" @click="up_paginacao"> Avancar </button>
+                  <button class="btn btn-light col-12 w-100" :disabled="pagina_atual == pagina_max" @click="up_paginacao"> Avancar </button>
             </div>
       </div>
 </div>
 
 <div class="col-12 row" v-else>
-      <div class="col-12 row">
-            <div class="col-5 col-lg-3">
-                  <button class="btn btn-light col-12" :disabled="pagina_atual == 1" @click="down_paginacao"> Retroceder </button>
-            </div>
-            <div class="col-2 col-lg-6 info" > {{ pagina_atual }} </div>
-            <div class="col-5 col-lg-3">
-                  <button class="btn btn-light col-12" :disabled="pagina_atual == pagina_max" @click="up_paginacao"> Avancar </button>
-            </div>
-      </div>
 </div>
 </template>
 

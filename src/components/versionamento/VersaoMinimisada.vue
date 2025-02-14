@@ -12,7 +12,7 @@
 .versao_txt{
       color: var(--bs-white); 
       position: absolute; 
-      bottom: 15px; 
+      bottom: 5px; 
       right: 30px;
 }
 </style>

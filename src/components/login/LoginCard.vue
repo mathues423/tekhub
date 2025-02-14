@@ -1,6 +1,6 @@
 <template>
 <div class="row">
-      <div class="Card col-md-4 col-sm-10 border rounded">
+      <div class="Card col-lg-4 col-10 border rounded">
             <div class="Card-Header border-bottom">TekHub Integrações</div>
             <div>
                   <img src="@/assets/imagens/logo-tek-hub.png" alt="logo" width="300">
