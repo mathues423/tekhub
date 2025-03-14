@@ -45,7 +45,7 @@ export default defineComponent({
                               {'key': 0, 'text': 'HOMOLOGAÇÃO', isChecked: false},
                               {'key': 1, 'text': 'PRODUÇÃO', isChecked: false}
                         ],
-                        'isfiltrable': true, 'isordenable':false},
+                        'isfiltrable': false, 'isordenable':false},
 
                         {'header': 'Ações', 'key_body': 'button',
                         'isfiltrable': false, 'isordenable':false}

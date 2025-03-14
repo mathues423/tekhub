@@ -43,7 +43,7 @@ export default defineComponent({
 
                         {'header': 'Perfil', 'key_body': 'perfil',
                         'filtro':{'tipo_obj': 'String', 'tipo_filtro': 'pre'},
-                        'isfiltrable': true, 'isordenable':false},
+                        'isfiltrable': false, 'isordenable':false},
 
                         {'header': 'Empresa', 'key_body': 'empresaDescricao',
                         'filtro':{'tipo_obj': 'String', 'tipo_filtro': 'all'},

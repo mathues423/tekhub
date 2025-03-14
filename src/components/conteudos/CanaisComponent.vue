@@ -45,11 +45,11 @@ export default defineComponent({
 
                               {'header': 'TIPO', 'key_body': 'tipo',
                               'filtro':{'tipo_obj': 'String', 'tipo_filtro': 'pre'},
-                              'isfiltrable': true, 'isordenable':false},
+                              'isfiltrable': false, 'isordenable':false},
 
                               {'header': 'Canal associado', 'key_body': 'vazio',
                               'filtro':{'tipo_obj': '????', 'tipo_filtro': 'all'},
-                              'isfiltrable': true, 'isordenable':false},
+                              'isfiltrable': false, 'isordenable':false},
 
                               {'header': 'Ações', 'key_body': 'button',
                               'isfiltrable': false, 'isordenable':false}
