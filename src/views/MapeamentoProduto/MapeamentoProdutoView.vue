@@ -117,7 +117,7 @@ export default defineComponent({
             },
             deletar(objeto: {codigo: string}){
                   this.is_deletando =this.is_in_DeletModal = this.disable_botao_delet = true;
-                  const rota_interna = this.itsOnFilter ? 'mapeamentoprodudo_pesquisa' : 'mapeamentoprodudo';
+                  const rota_interna = this.itsOnFilter ? 'mapeamentoproduto_pesquisa' : 'mapeamentoproduto';
                   let aux = {'roter_externa': 'mapeamentoproduto', 'id': objeto.codigo, 'roter_interna': rota_interna}
                   Promise.resolve(store.dispatch('delDadosID', aux))
                   .then(
@@ -188,7 +188,7 @@ export default defineComponent({
                   this.inRequestPesquisa = true;
                   this.lista_estado = 'Loader'
                   store.dispatch('getDadosPaginados', {
-                        'roter_interna': 'mapeamentoprodudo',
+                        'roter_interna': 'mapeamentoproduto',
                         'roter_externa': 'mapeamentoproduto',
                         'request': pagina+porPagina+ordem+codigo_empresa+codigo_canal+erp+site,
                         'pagina_atual': this.pagina_atual,
@@ -253,8 +253,8 @@ export default defineComponent({
                         codigo_empresa = `&filtro=empresa.codigo==${this.dado_empresa_selected['codigo' as keyof typeof this.dado_empresa_selected]}`;
                   }
                   store.dispatch('getDadosPaginados', {
-                        'roter_interna': 'mapeamentoprodudo_pesquisa',
-                        'roter_externa': 'mapeamentoprodudo',
+                        'roter_interna': 'mapeamentoproduto_pesquisa',
+                        'roter_externa': 'mapeamentoproduto',
                         'request': `?pagina=${this.pagina_atual}&porPagina=${this.ITEM_PAGINA_MAX}&ordenacao=codigo&direcao=Asc`+codigo_empresa+`&`+this.request_pesquisa,
                         'pagina_atual': this.pagina_atual,
                         'item_page': this.ITEM_PAGINA_MAX
@@ -414,7 +414,6 @@ export default defineComponent({
                               @filtraMapeamentoProduto="filtraMapeamentoProduto"
                               @avancaPagina="avancaPagina"
                               @recuarPagina="recuarPagina"
-
                               
                               :disable_botao_delet="disable_botao_delet"
                               :showDeletModal="is_in_DeletModal"

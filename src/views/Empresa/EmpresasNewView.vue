@@ -9,6 +9,7 @@ import empresa from '@/services/regras_negocio/regras_empresa';
 import store from '@/store';
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
 import TimeMensageErroComponent from '@/components/mensagem/TimeMensageErroComponent.vue';
+import TimeMensageFormReturnComponent from '@/components/mensagem/TimeMensageFormReturnComponent.vue';
 
 export default defineComponent({
       data(){
@@ -33,7 +34,8 @@ export default defineComponent({
             VersaoMaximisada,
             ErroFormComponent,
             ErroResponseComponent,
-            TimeMensageErroComponent
+            TimeMensageErroComponent,
+            TimeMensageFormReturnComponent
       },
       methods:{
             async criacaoRequest(){

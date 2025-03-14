@@ -56,8 +56,6 @@ export default defineComponent({
                               :mensagem="fetch_error_msg['errors' as keyof typeof fetch_error_msg][0]"
                               @fechar_erro="voltarErroServer"
                         />
-                        Placeholder <br>
-                        {{ teste }}
                   </span>
                   <span v-else>
                         <ErroResponseComponent

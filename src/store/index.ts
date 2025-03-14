@@ -24,8 +24,8 @@ const store = createStore({
     marketplaceecommerce: Object,
     marketplaceecommerce_pesquisa: Object,
     
-    mapeamentoprodudo: Object,
-    mapeamentoprodudo_pesquisa: Object,
+    mapeamentoproduto: Object,
+    mapeamentoproduto_pesquisa: Object,
 
     log_req: Object,
     log_att: Object,
@@ -160,16 +160,16 @@ const store = createStore({
 
     //Mapeamento
     getMapeamentoProduto(state): object{
-      return state.mapeamentoprodudo['data' as keyof typeof state.mapeamentoprodudo]
+      return state.mapeamentoproduto['data' as keyof typeof state.mapeamentoproduto]
     },
     getMapeamentoProduto_pesquisa(state): object{
-      return state.mapeamentoprodudo_pesquisa['data' as keyof typeof state.mapeamentoprodudo_pesquisa]
+      return state.mapeamentoproduto_pesquisa['data' as keyof typeof state.mapeamentoproduto_pesquisa]
     },
     getMapeamentoProdutoLength(state): object{
-      return state.mapeamentoprodudo['totalRegistros' as keyof typeof state.mapeamentoprodudo]
+      return state.mapeamentoproduto['totalRegistros' as keyof typeof state.mapeamentoproduto]
     },
     getMapeamentoProduto_pesquisaLength(state): object{
-      return state.mapeamentoprodudo['totalRegistros' as keyof typeof state.mapeamentoprodudo_pesquisa]
+      return state.mapeamentoproduto['totalRegistros' as keyof typeof state.mapeamentoproduto_pesquisa]
     },
 
     //Market
@@ -230,7 +230,7 @@ const store = createStore({
     },
     getMapeamentoProdutosID(context, id: string){
       let retorno = undefined;
-      const aux = context.state.mapeamentoprodudo['data' as keyof typeof context.state.mapeamentoprodudo] as Array<object>;
+      const aux = context.state.mapeamentoproduto['data' as keyof typeof context.state.mapeamentoproduto] as Array<object>;
       aux.forEach((value) => {
         if (value['codigo' as keyof typeof value] == parseInt(id)) {
           retorno =  value;

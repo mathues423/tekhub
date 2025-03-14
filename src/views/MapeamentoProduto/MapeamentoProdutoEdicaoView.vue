@@ -100,7 +100,7 @@ export default defineComponent({
                               produtoPaiSite: this.mapeamentoproduto.produtoPai,
                               produtoSite: this.mapeamentoproduto.produtoSite
                         }
-                        store.dispatch('setDadosID_notCodigo', {'roter_externa': 'mapeamentoprodudo','id': id, 'new_dado': aux, 'roter_interna': 'mapeamentoprodudo'})
+                        store.dispatch('setDadosID_notCodigo', {'roter_externa': 'mapeamentoproduto','id': id, 'new_dado': aux, 'roter_interna': 'mapeamentoproduto'})
                         .then(()=> {
                               this.edit_mapProd_request = false;
                               this.editado = true;

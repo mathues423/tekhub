@@ -214,7 +214,7 @@ export default defineComponent({
             </div>
             
             <div v-else class="col-12">
-                  {{teste}}
+                  
             </div>
       </div>
 </template>
