@@ -74,9 +74,6 @@ export default defineComponent({
                                     </span>
                               </button>
                         </slot>
-                        Ativo: {{ isAtivo }}<br>
-                        inDelet: {{isInDelet}}<br>
-                        estado: {{estado_btn}}
                   </div>
             </div>
             </div>
