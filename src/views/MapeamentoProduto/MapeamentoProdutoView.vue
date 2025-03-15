@@ -120,18 +120,16 @@ export default defineComponent({
                   const rota_interna = this.itsOnFilter ? 'mapeamentoproduto_pesquisa' : 'mapeamentoproduto';
                   let aux = {'roter_externa': 'mapeamentoproduto', 'id': objeto.codigo, 'roter_interna': rota_interna}
                   Promise.resolve(store.dispatch('delDadosID', aux))
-                  .then(
-                        () => {
-                              if (this.itsOnFilter) {
-                                    this.getPesquisa_filtrada(this.request_pesquisa);
-                              }else{
-                                    this.requestDados();
-                              }
-                              this.is_deletando = true;
-                              this.is_in_DeletModal = false;
-                              this.disable_botao_delet = false;
+                  .then(() => {
+                        this.is_deletando = false;
+                        this.is_in_DeletModal = true;
+                        this.disable_botao_delet = false;
+                        if (this.itsOnFilter) {
+                              this.getPesquisa_filtrada(this.request_pesquisa);
+                        }else{
+                              this.requestDados();
                         }
-                  ).catch((error_retorno)=> {
+                  }).catch((error_retorno)=> {
                         this.showError(error_retorno)
                         this.is_deletando = false;
                         this.is_in_DeletModal = false;
@@ -232,7 +230,7 @@ export default defineComponent({
             },
             getPesquisa_filtrada(request: string){
                   this.request_pesquisa = request;
-                  
+                  this.is_in_DeletModal = false;
                   this.dado_parametro.header = this.dado_pesquisa.header;
                   this.erros_pesquisa = [];
                   if(!this.dado_empresa_selected['codigo' as keyof typeof this.dado_empresa_selected] || !this.canal_selected['codigo' as keyof typeof this.canal_selected]){

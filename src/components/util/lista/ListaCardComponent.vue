@@ -176,7 +176,7 @@ export default defineComponent({
             :isInDelet="deletando" 
             :isAtivo="showDeletModal" 
             @close="$emit('fecharModal')" 
-            @deletar_item="deletarDado">
+            @deletar_item="deletarDado()">
             <template v-slot:body> 
                   <div class="aviso">Atenção essa ação não poderá ser desfeita.</div>
                   <div style="padding-top: 5px;">Informações do item</div>

@@ -123,18 +123,16 @@ export default defineComponent({
                   const rota_interna = this.itsOnFilter ? 'canais_pesquisa' : 'canais';
                   let aux = {'roter_externa': 'canal', 'id': objeto.codigo, 'roter_interna': rota_interna}
                   store.dispatch('delDadosID', aux)
-                  .then(
-                        () =>  {
-                              if (this.itsOnFilter) {
-                                    this.getPesquisa(this.request_pesquisa);
-                              }else{
-                                    this.requestDados();
-                              }
-                              this.disable_botao_delet = false;
-                              this.is_deletando = true;
-                              this.is_in_DeletModal = false;
+                  .then(() =>  {
+                        this.disable_botao_delet = false;
+                        this.is_deletando = true;
+                        this.is_in_DeletModal = false;
+                        if (this.itsOnFilter) {
+                              this.getPesquisa(this.request_pesquisa);
+                        }else{
+                              this.requestDados();
                         }
-                  ).catch((error_retorno)=> {
+                  }).catch((error_retorno)=> {
                         this.is_deletando = false;
                         this.is_in_DeletModal = false;
                         this.disable_botao_delet = false;
@@ -163,6 +161,7 @@ export default defineComponent({
             },
             async requestDados(){
                   this.lista_estado = 'Loader'
+                  this.is_in_DeletModal = false;
                   store.dispatch('getDadosPaginados', {
                         'roter_interna': 'canais',
                         'roter_externa': 'canal',
@@ -192,6 +191,7 @@ export default defineComponent({
             getPesquisa(request: string){
                   this.request_pesquisa = request;
                   this.lista_estado = 'Loader'
+                  this.is_in_DeletModal = false;
                   store.dispatch('getDadosPaginados', {
                         'roter_interna': 'canais_pesquisa',
                         'roter_externa': 'canal',

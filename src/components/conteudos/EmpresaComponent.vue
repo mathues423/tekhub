@@ -130,14 +130,14 @@ export default defineComponent({
                   store.dispatch('delDadosID', aux)
                   .then(
                         () => {
+                              this.is_deletando = false;
+                              this.is_in_DeletModal = true;
+                              this.disable_botao_delet = false;
                               if (this.itsOnFilter) {
                                     this.getPesquisa(this.request_pesquisa);
                               }else{
                                     this.requestDados();
                               }
-                              this.is_deletando = false;
-                              this.is_in_DeletModal = true;
-                              this.disable_botao_delet = false;
                         }
                   ).catch((error_retorno)=> {
                         this.is_in_DeletModal = false;

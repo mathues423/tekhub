@@ -129,14 +129,14 @@ export default defineComponent({
                   let aux = {'roter_externa': 'integracaomarketplaceecommerce', 'id': objeto.codigo, 'roter_interna': rota_interna}
                   Promise.resolve(store.dispatch('delDadosID', aux))
                   .then(() => {
+                        this.is_deletando = false;
+                        this.is_in_DeletModal = true;
+                        this.disable_botao_delet = false;
                         if (this.itsOnFilter) {
                               this.getPesquisa(this.request_pesquisa)
                         }else{
                               this.requestDados()
                         }
-                        this.is_deletando = false;
-                        this.is_in_DeletModal = true;
-                        this.disable_botao_delet = false;
                   }).catch((error_retorno)=> {
                         this.is_deletando = false;
                         this.is_in_DeletModal = false;
@@ -166,6 +166,7 @@ export default defineComponent({
             },
             async requestDados(){
                   this.lista_estado = 'Loader'
+                  this.is_in_DeletModal = false;
                   store.dispatch('getDadosPaginados', {
                         'roter_interna': 'marketplaceecommerce',
                         'roter_externa': 'integracaomarketplaceecommerce',
@@ -213,6 +214,7 @@ export default defineComponent({
             getPesquisa(request: string){
                   this.lista_estado = 'Loader'
                   this.request_pesquisa = request;
+                  this.is_in_DeletModal = false;
                   store.dispatch('getDadosPaginados', {
                         'roter_interna': 'marketplaceecommerce_pesquisa',
                         'roter_externa': 'integracaomarketplaceecommerce',

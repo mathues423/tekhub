@@ -121,14 +121,14 @@ export default defineComponent({
                   let aux = {'roter_externa': 'ambiente', 'id': objeto.codigo, 'roter_interna': rota_interna}
                   store.dispatch('delDadosID', aux)
                   .then(() => {
+                              this.is_deletando = false;
+                              this.is_in_DeletModal = true;
+                              this.disable_botao_delet = false;
                               if (this.itsOnFilter) {
                                     this.getPesquisa(this.request_pesquisa);
                               }else{
                                     this.requestDados();
                               }
-                              this.is_deletando = false;
-                              this.is_in_DeletModal = true;
-                              this.disable_botao_delet = false;
                         }).catch((error_retorno)=> {
                         this.is_in_DeletModal = false;
                         this.is_deletando = false;
@@ -157,8 +157,8 @@ export default defineComponent({
                   }
             },
             async requestDados(){
-                  this.is_in_DeletModal = false;
                   this.lista_estado = 'Loader'
+                  this.is_in_DeletModal = false;
                   store.dispatch('getDadosPaginados', {
                         'roter_interna': 'ambientes',
                         'roter_externa': 'ambiente',
