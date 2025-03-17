@@ -58,14 +58,12 @@ export default defineComponent({
                   }
                   usuarios._add(this.usuario, this.errors)
                   if(this.errors.length == 0){
-                        Promise.resolve(
-                              store.dispatch('putDados', {'roter_externa': 'usuario', 'dado': this.usuario, 'roter_interna': 'usuarios'})
-                              .then((ret)=> {
-                                    this.token = ret.data.token;
-                                    this.new_user_reqest = false;
-                                    this.criando = true;
-                              })
-                        ).catch((error_retorno)=> this.showError(error_retorno));
+                        Promise.resolve(store.dispatch('postDados', {'roter_externa': 'usuario', 'dado': this.usuario, 'roter_interna': 'usuarios'}))
+                        .then((ret)=> {
+                              console.log("IN VIEW", ret)
+                              this.new_user_reqest = false;
+                              this.criando = true;
+                        }).catch((error_retorno)=> this.showError(error_retorno));
                   }else{
                         this.new_user_reqest = false;
                   }

@@ -58,7 +58,7 @@ export default defineComponent({
                         //       this.canal_new.codigo = this.canal_assossiado_req[this.canal_assossiado_req.length - 1]['codigo' as keyof typeof this.canal_assossiado_req[0]] + 1;
                         // }
                         Promise.resolve(
-                              store.dispatch('putDados', {'roter_externa': 'canal', 'dado': this.canal_new, 'roter_interna': 'canais'})
+                              store.dispatch('postDados', {'roter_externa': 'canal', 'dado': this.canal_new, 'roter_interna': 'canais'})
                               .then(()=> this.voltarCanal())
                         ).catch((error_retorno)=> this.showError(error_retorno))
                   }

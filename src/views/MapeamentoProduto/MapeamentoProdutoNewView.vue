@@ -70,7 +70,7 @@ export default defineComponent({
                               produtoSite: this.mapeamentoproduto.produtoSite,
                         }
                         Promise.resolve(
-                              store.dispatch('putDados', {'roter_externa': 'mapeamentoproduto/', 'dado': aux, 'roter_interna': 'mapeamentoproduto'})
+                              store.dispatch('postDados', {'roter_externa': 'mapeamentoproduto/', 'dado': aux, 'roter_interna': 'mapeamentoproduto'})
                               .then((ret)=> {
                                     console.log(ret);
                                     this.new_mapeamento_request = false;

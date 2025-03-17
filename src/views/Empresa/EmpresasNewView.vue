@@ -45,7 +45,7 @@ export default defineComponent({
                   }
                   empresa._add(this.empresa, this.errors)
                   if(this.errors.length == 0){
-                        store.dispatch('putDados', {'roter_externa': 'empresa', 'dado': this.empresa, 'roter_interna': 'empresas'})
+                        store.dispatch('postDados', {'roter_externa': 'empresa', 'dado': this.empresa, 'roter_interna': 'empresas'})
                         .then(()=>{
                               this.new_empresa_request = false;
                               this.criando = true;

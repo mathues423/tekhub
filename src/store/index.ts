@@ -268,9 +268,14 @@ const store = createStore({
         })
       })
     },
-    async putDados(context, obj : {roter_externa: string, dado: object, roter_interna: string}){
-      await fetch_.postDado('/'+obj.roter_externa, obj.dado)
-      .then(() => context.commit('resetDadosInterno', obj.roter_interna))
+    async postDados(context, obj : {roter_externa: string, dado: object, roter_interna: string}){
+      Promise.resolve(await fetch_.postDado('/'+obj.roter_externa, obj.dado))
+      .then((ret) => {
+        context.commit('resetDadosInterno', obj.roter_interna)
+        return ret
+      }).catch((error)=>{
+        throw error;
+      })
     },
     async getDadosPaginados(context, obj : {roter_interna: string, roter_externa: string, request: string, pagina_atual: number, item_page: number}){
       // context.commit('setPageDadosInterno', {'page': obj.pagina_atual,'roter_interna': obj.roter_interna})

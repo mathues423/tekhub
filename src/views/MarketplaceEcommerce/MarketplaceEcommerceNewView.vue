@@ -104,7 +104,7 @@ export default defineComponent({
                   this.errors = [];
                   regra_marketplace._add(this.marketplaceecommerce_new, this.errors)
                   if(this.errors.length == 0){
-                        store.dispatch('putDados', {'roter_externa': 'integracaomarketplaceecommerce/', 'dado': this.marketplaceecommerce_new, 'roter_interna': 'marketplaceecommerce'})
+                        store.dispatch('postDados', {'roter_externa': 'integracaomarketplaceecommerce/', 'dado': this.marketplaceecommerce_new, 'roter_interna': 'marketplaceecommerce'})
                         .then(()=> {
                               this.new_markEcom_request = false;
                               this.criando = true;

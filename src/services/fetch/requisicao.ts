@@ -53,6 +53,7 @@ class fetch_padrao{
       async postDado(path : string, dado : object){
             try {
                   const { data } = await http.post(path, dado);
+                  console.log("IN FETCH", data);
                   return data;
             } catch (error) {               
                   throw error;

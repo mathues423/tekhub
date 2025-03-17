@@ -67,7 +67,7 @@ export default defineComponent({
                   ambiente._add(this.ambiente, this.errors)
                   if(this.errors.length == 0){
                         Promise.resolve(
-                              store.dispatch('putDados', {'roter_externa': 'ambiente', 'dado': this.ambiente, 'roter_interna': 'ambientes'})
+                              store.dispatch('postDados', {'roter_externa': 'ambiente', 'dado': this.ambiente, 'roter_interna': 'ambientes'})
                               .then(()=> {
                                     this.criando = true;
                                     this.new_ambiente_request = false;
