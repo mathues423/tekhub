@@ -17,7 +17,7 @@ class UserDados {
       };
       user_type = '';
 
-      async loginReq(email: string, senha: string, erros : ERRO) {
+      async loginReq(email: string, senha: string, erros : ERRO, lembrar: Boolean) {
             if (email == '') {
                   erros.message = 'Forneça um email'
                   erros.vericação = true;
@@ -29,17 +29,22 @@ class UserDados {
                   return erros
             }
             this.usuario.email = email;
-            this.usuario.senha = senha;   
+            this.usuario.senha = senha;
+            console.log('S>', lembrar);
             try {
                   const { data } = await http.post('/auth', this.usuario);
                   
                   this.usuario.token = data.data.token;
                   this.usuario.perfilUsuario = data.data.perfilUsuario;
-                  localStorage.setItem("TOKEN", this.usuario.token);
+                  if (lembrar) {
+                        localStorage.setItem("TOKEN", this.usuario.token);
+                  }
                   APPCONFIG.authToken = this.usuario.token;
 
                   this.user_type = data.data.perfilUsuario;
-                  localStorage.setItem("USER_TYPE", this.user_type);
+                  if (lembrar) {
+                        localStorage.setItem("USER_TYPE", this.user_type);
+                  }
                   APPCONFIG.authType = this.user_type;
                   //Requisição dos dados                    //Avanço para a pagina inicial
                   // await this.getDados();

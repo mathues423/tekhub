@@ -37,11 +37,15 @@
                                     </button>
                               </span>
                         </div>
+                        <div class="col-12 my-3">
+                              <input v-model="lembrar" type="checkbox" aria-label="Checkbox for following text input">
+                              Lembrar-me
+                        </div>
                         <ErroFormComponent
                               :mensagem="erros.message"
                               :class="['my-2 alert-danger desativada',{'ativada' : erros.vericação == true}]"
                         />
-                        <button style="margin-top: 16px; margin-bottom: 16px;" class="btn btn-primary col-12" :disabled="isLogin">
+                        <button style="margin-bottom: 16px;" class="btn btn-primary col-12" :disabled="isLogin">
                               <span>
                                     <span v-if="isLogin">
                                           <!-- SVG OCUPANDO MUITO ESPAÇO -->
@@ -81,6 +85,7 @@
             data() {
                   return{
                         isLogin: ref(false),
+                        lembrar: ref(false),
                         user: ref({
                               email: '',
                               senha: ''
@@ -110,7 +115,7 @@
                   async loginReq(){
                         this.isLogin = true;
                         this.erros.vericação = false;
-                        await requisicaoLogin.loginReq(this.user.email, this.user.senha, this.erros)
+                        await requisicaoLogin.loginReq(this.user.email, this.user.senha, this.erros, this.lembrar)
                         .then((returno) =>{
                               if(this.erros.vericação)
                                     if(returno.response?.data?.errors)
