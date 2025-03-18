@@ -20,15 +20,15 @@ export default defineComponent({
                   auth_type: APPCONFIG.authType,
                   fetch_error_msg: {},
                   have_fetch_error: false,
-                  empresa_codigo: '-1',
                   mapeamentoproduto:{
-                        empresa: {},
+                        empresa: {} as Record<string, any>,
                         canal: {},
                         produtoErp: '',
                         produtoSite: '',
                         produtoPai: ''
                   },
                   usuarios: {},
+                  empresa_codigo: -1,
                   new_mapeamento_request: false,
                   canal_request:{},
                   inRequestCanal: false,
@@ -40,13 +40,15 @@ export default defineComponent({
       },
       watch:{
             'mapeamentoproduto.empresa'(newD){
-                  this.inRequestCanal = true;
-                  Promise.resolve(fetch_.getDado(`/integracaomarketplaceecommerce/?pagina=1&porPagina=0&ordenacao=codigo&direcao=ASC&filtro=empresa.codigo==${newD.codigo}`)).then(
-                        (canal)=>{
-                              this.canal_request = canal.data;
-                              this.inRequestCanal = false;
-                              this.escolheu_empresa = true;
-                  }).catch((error_retorno)=> this.showError(error_retorno))
+                  if(this.auth_type == 'ROLE_ADMIN'){
+                        this.inRequestCanal = true;
+                        Promise.resolve(fetch_.getDado(`/integracaomarketplaceecommerce/?pagina=1&porPagina=0&ordenacao=codigo&direcao=ASC&filtro=empresa.codigo==${newD.codigo}`)).then(
+                              (canal)=>{
+                                    this.canal_request = canal.data;
+                                    this.inRequestCanal = false;
+                                    this.escolheu_empresa = true;
+                        }).catch((error_retorno)=> this.showError(error_retorno))
+                  }
             }
       },
       components:{
@@ -60,35 +62,49 @@ export default defineComponent({
             TimeMensageFormReturnComponent
       },
       mounted(){
-            fetch_.getDado(`/integracaomarketplaceecommerce/?pagina=1&porPagina=0&ordenacao=codigo&direcao=ASC`)
-            .then((user)=>{
-                  this.usuarios = user.data;
-                  user.data.forEach((value: any, index: number) => {
-                        if( index == 0){
-                              this.empresa_codigo = value.empresaCodigo;
-                        }
-                  })
-                  if(this.auth_type == 'ROLE_USER'){
+            if(this.auth_type == 'ROLE_USER'){
+                  fetch_.getDado(`/integracaomarketplaceecommerce/?pagina=1&porPagina=0&ordenacao=codigo&direcao=ASC`)
+                  .then((user)=>{
+                        this.usuarios = user.data;
+                        user.data.forEach((value: any, index: number) => {
+                              if( index == 0){
+                                    this.empresa_codigo = parseInt(value.empresaCodigo);
+                                    this.mapeamentoproduto.empresa.codigo = value.empresaCodigo;
+                              }
+                        })
                         fetch_.getDado(`/integracaomarketplaceecommerce/?pagina=1&porPagina=0&ordenacao=codigo&direcao=ASC&filtro=empresa.codigo==${this.empresa_codigo}`)
                         .then((canal)=>{
                               this.canal_request = canal.data;
                               this.inRequestCanal = false;
                               this.escolheu_empresa = true;
                         }).catch((error_retorno)=> this.showError(error_retorno))
-                  }
-            }).catch((error_retorno)=> this.showError(error_retorno))
+                  }).catch((error_retorno)=> this.showError(error_retorno))
+            }
       },
       methods:{
             async criacaoRequest(){
                   this.new_mapeamento_request = true;
-                  regra_mapeamento._add(this.mapeamentoproduto, this.errors);
+                  regra_mapeamento._add(this.mapeamentoproduto, this.errors, this.auth_type);
                   if(this.errors.length == 0){
-                        const aux = {
-                              canalCodigo: this.mapeamentoproduto.canal['codigo' as keyof typeof this.mapeamentoproduto.canal],
+                        let aux: {
+                              canalCodigo: number,
+                              empresaCodigo?: number,
+                              produtoErp: string,
+                              produtoSite: string
+                              produtoPaiSite?: string,
+                        }={   
                               empresaCodigo: this.mapeamentoproduto.empresa['codigo' as keyof typeof this.mapeamentoproduto.empresa],
+                              canalCodigo: this.mapeamentoproduto.canal['ambienteCanalCodigo' as keyof typeof this.mapeamentoproduto.canal],
                               produtoErp: this.mapeamentoproduto.produtoErp,
-                              produtoPaiSite: this.mapeamentoproduto.produtoPai,
                               produtoSite: this.mapeamentoproduto.produtoSite,
+                              produtoPaiSite: this.mapeamentoproduto.produtoPai,
+                        }
+
+                        if (this.auth_type == 'ROLE_USER'){
+                              delete aux.empresaCodigo;
+                        }
+                        if(this.mapeamentoproduto.produtoPai == ''){
+                              delete aux.produtoPaiSite;
                         }
                         Promise.resolve(
                               store.dispatch('postDados', {'roter_externa': 'mapeamentoproduto/', 'dado': aux, 'roter_interna': 'mapeamentoproduto'})

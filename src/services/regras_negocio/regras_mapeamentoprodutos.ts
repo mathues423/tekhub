@@ -16,10 +16,13 @@ class DadoMapeamentoedit {
       produtoPai= '';
 }
 class Mapeamento {
-      public async _add(dado : DadoMapeamentonew, erros_msg : Array<string>){
+      public async _add(dado : DadoMapeamentonew, erros_msg : Array<string>, user_type: string){
             if(Object.keys(dado.empresa).length == 0){
                   erros_msg.push('empresa');
             }
+            // if (user_type == "ROLE_USER") {
+            //       delete dado['empresa' as keyof typeof dado];
+            // }
             if(Object.keys(dado.canal).length == 0){
                   erros_msg.push('canal');
             }
@@ -27,7 +30,8 @@ class Mapeamento {
                   erros_msg.push('produtoErp');
             }
             // if(dado.produtoPai == ''){
-            //       erros_msg.push('produtoPai');
+            //       delete dado['produtoPai' as keyof typeof dado];
+            //       // erros_msg.push('produtoPai');
             // }
             if(dado.produtoSite == ''){
                   erros_msg.push('produtoSite');
