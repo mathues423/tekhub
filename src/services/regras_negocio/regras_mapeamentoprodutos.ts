@@ -1,4 +1,4 @@
-class DadoMapeamento {
+class DadoMapeamentonew {
       empresa= {};
       canal= {};
       produtoErp= '';
@@ -6,8 +6,17 @@ class DadoMapeamento {
       produtoPai= '';
 }
 
+class DadoMapeamentoedit {
+      empresa= {};
+      canal= {};
+      empresa_codigo = -1;
+      canal_codigo = -1;
+      produtoErp= '';
+      produtoSite= '';
+      produtoPai= '';
+}
 class Mapeamento {
-      public async _add(dado : DadoMapeamento, erros_msg : Array<string>){
+      public async _add(dado : DadoMapeamentonew, erros_msg : Array<string>){
             if(Object.keys(dado.empresa).length == 0){
                   erros_msg.push('empresa');
             }
@@ -25,11 +34,11 @@ class Mapeamento {
             }
       }
 
-      public async _edit(old_dado : DadoMapeamento, new_dado : DadoMapeamento, erros_msg : Array<string>){
-            if(Object.keys(new_dado.empresa).length == 0){
+      public async _edit(old_dado : DadoMapeamentoedit, new_dado : DadoMapeamentoedit, erros_msg : Array<string>){
+            if(Object.keys(new_dado.empresa).length == 0 && new_dado.empresa_codigo == -1){
                   erros_msg.push('empresa');
             }
-            if(Object.keys(new_dado.canal).length == 0){
+            if(Object.keys(new_dado.canal).length == 0 && new_dado.canal_codigo == -1){
                   erros_msg.push('canal');
             }
             if(new_dado.produtoErp == ''){

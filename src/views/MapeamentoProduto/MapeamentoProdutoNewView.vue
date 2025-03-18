@@ -20,6 +20,7 @@ export default defineComponent({
                   auth_type: APPCONFIG.authType,
                   fetch_error_msg: {},
                   have_fetch_error: false,
+                  empresa_codigo: '-1',
                   mapeamentoproduto:{
                         empresa: {},
                         canal: {},
@@ -27,6 +28,7 @@ export default defineComponent({
                         produtoSite: '',
                         produtoPai: ''
                   },
+                  usuarios: {},
                   new_mapeamento_request: false,
                   canal_request:{},
                   inRequestCanal: false,
@@ -57,6 +59,25 @@ export default defineComponent({
             TimeMensageErroComponent,
             TimeMensageFormReturnComponent
       },
+      mounted(){
+            fetch_.getDado(`/integracaomarketplaceecommerce/?pagina=1&porPagina=0&ordenacao=codigo&direcao=ASC`)
+            .then((user)=>{
+                  this.usuarios = user.data;
+                  user.data.forEach((value: any, index: number) => {
+                        if( index == 0){
+                              this.empresa_codigo = value.empresaCodigo;
+                        }
+                  })
+                  if(this.auth_type == 'ROLE_USER'){
+                        fetch_.getDado(`/integracaomarketplaceecommerce/?pagina=1&porPagina=0&ordenacao=codigo&direcao=ASC&filtro=empresa.codigo==${this.empresa_codigo}`)
+                        .then((canal)=>{
+                              this.canal_request = canal.data;
+                              this.inRequestCanal = false;
+                              this.escolheu_empresa = true;
+                        }).catch((error_retorno)=> this.showError(error_retorno))
+                  }
+            }).catch((error_retorno)=> this.showError(error_retorno))
+      },
       methods:{
             async criacaoRequest(){
                   this.new_mapeamento_request = true;
@@ -72,7 +93,6 @@ export default defineComponent({
                         Promise.resolve(
                               store.dispatch('postDados', {'roter_externa': 'mapeamentoproduto/', 'dado': aux, 'roter_interna': 'mapeamentoproduto'})
                               .then((ret)=> {
-                                    console.log(ret);
                                     this.new_mapeamento_request = false;
                                     this.criando = true;
                               })
@@ -80,7 +100,6 @@ export default defineComponent({
                   }else{
                         this.new_mapeamento_request = false;
                   }
-                  
             },
             voltarMapeamentoProduto(){
                   router.push('/mapeamentoprodutos');
@@ -121,10 +140,10 @@ export default defineComponent({
                               <div class="Card-Body col-8">
                                     <form @submit.prevent="criacaoRequest()" class="row form_content" novalidate>
                                           <!-- Empresa -->
-                                          <div class="col-4 col-lg-2 form_text">
+                                          <div class="col-4 col-lg-2 form_text" v-if="auth_type != 'ROLE_USER'">
                                                 *Empresa:
                                           </div>
-                                          <div class="col-8">
+                                          <div class="col-8" v-if="auth_type != 'ROLE_USER'">
                                                 <EmpresaSelectComponent
                                                       :valor_inicial="{}"
                                                       :have_erro="errors.findIndex((x) => x =='empresa') != -1"
@@ -135,7 +154,7 @@ export default defineComponent({
                                                       :class="['my-1 alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='empresa') != -1}]"
                                                 />
                                           </div>
-                                          <div class="col-lg-2"></div>
+                                          <div class="col-lg-2" v-if="auth_type != 'ROLE_USER'"></div>
                                           <!-- Canal -->
                                           <div class="col-4 col-lg-2 form_text">
                                                 *Canal de Venda:

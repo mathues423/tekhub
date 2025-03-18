@@ -22,6 +22,8 @@ export default defineComponent({
                   mapeamentoproduto:{
                         empresa: {},
                         canal: {},
+                        empresa_codigo: -1,
+                        canal_codigo: -1,
                         produtoErp: '',
                         produtoSite: '',
                         produtoPai: ''
@@ -29,6 +31,8 @@ export default defineComponent({
                   mapeamentoproduto_old:{
                         empresa: {},
                         canal: {},
+                        empresa_codigo: -1,
+                        canal_codigo: -1,
                         produtoErp: '',
                         produtoSite: '',
                         produtoPai: ''
@@ -56,34 +60,51 @@ export default defineComponent({
             const rota_id = (this.$route.params['id'] || '-1') as string;
             store.dispatch('getMapeamentoProdutosID', rota_id)
             .then((value) => {
-                  fetch_.getDado_ID('/empresa', value.empresaCodigo)
-                  .then((empresa)=>{
-                        this.mapeamentoproduto.empresa = this.mapeamentoproduto_old.empresa = empresa.data;
-                        fetch_.getDado(`/integracaomarketplaceecommerce/?filtro=empresa.codigo==${value.empresaCodigo}`)
-                        .then((canal)=>{
-                              canal.data.forEach((dado: object)=>{
-                                    if (dado['ambienteCanalCodigo' as keyof typeof dado] == value.canalCodigo) {
-                                          this.mapeamentoproduto.canal = this.mapeamentoproduto_old.canal = dado;
-                                    }
-                              })
-                              this.inRequestCanal = false;
+                  if(this.auth_type != 'ROLE_USER'){
+                        fetch_.getDado_ID('/empresa', value.empresaCodigo)
+                        .then((empresa)=>{
+                              this.mapeamentoproduto.empresa = this.mapeamentoproduto_old.empresa = empresa.data;
+                              this.mapeamentoproduto.empresa_codigo = this.mapeamentoproduto_old.empresa_codigo = empresa.data.codigo;
+                              fetch_.getDado(`/integracaomarketplaceecommerce/?filtro=empresa.codigo==${value.empresaCodigo}`)
+                              .then((canal)=>{
+                                    canal.data.forEach((dado: object)=>{
+                                          if (dado['ambienteCanalCodigo' as keyof typeof dado] == value.canalCodigo) {
+                                                this.mapeamentoproduto.canal_codigo = this.mapeamentoproduto_old.canal_codigo = canal.data.codigo;
+                                                this.mapeamentoproduto.canal = this.mapeamentoproduto_old.canal = dado;
+                                          }
+                                    })
+                                    this.inRequestCanal = false;
+                              }).catch((error_retorno)=> this.showError(error_retorno))
                         }).catch((error_retorno)=> this.showError(error_retorno))
-                  }).catch((error_retorno)=> this.showError(error_retorno))
+                  }
+                  if(this.auth_type == 'ROLE_USER'){
+                        this.mapeamentoproduto.empresa_codigo = this.mapeamentoproduto_old.empresa_codigo = value.empresaCodigo;
+                        this.mapeamentoproduto.canal_codigo = this.mapeamentoproduto_old.canal_codigo = value.canalCodigo;      
+                  }
                   this.mapeamentoproduto.produtoErp = this.mapeamentoproduto_old.produtoErp = value.produtoErp;
                   this.mapeamentoproduto.produtoSite = this.mapeamentoproduto_old.produtoSite = value.produtoSite;
                   this.mapeamentoproduto.produtoPai = this.mapeamentoproduto_old.produtoPai = value.produtoPaiSite;
+            
             }).catch((error_retorno)=> this.showError(error_retorno));
 
-            this.inRequestEmpresa = true;
-            Promise.resolve(fetch_.getDado('/empresa')).then(
-                  (empresas)=>{
-                        this.empresa_request = empresas.data;
-                        this.inRequestEmpresa = false;
-            }).catch((error_retorno)=> this.showError(error_retorno))
+            if(this.auth_type != 'ROLE_USER'){
+                  this.inRequestEmpresa = true;
+                  Promise.resolve(fetch_.getDado('/empresa')).then(
+                        (empresas)=>{
+                              this.empresa_request = empresas.data;
+                              this.inRequestEmpresa = false;
+                  }).catch((error_retorno)=> this.showError(error_retorno))
+            }
             this.inRequestCanal = true;
             Promise.resolve(fetch_.getDado(`/integracaomarketplaceecommerce/?pagina=1&porPagina=0&ordenacao=codigo&direcao=ASC`)).then(
                   (canal)=>{
                         this.canal_request = canal.data;
+                        canal.data.forEach((dado: object)=>{
+                              if (dado['ambienteCanalCodigo' as keyof typeof dado] == this.mapeamentoproduto.canal_codigo) {
+                                    this.mapeamentoproduto.canal = this.mapeamentoproduto_old.canal = dado;
+                              }
+                        })
+                        this.inRequestCanal = false;
             }).catch((error_retorno)=> this.showError(error_retorno))
       },
       methods:{
@@ -94,12 +115,13 @@ export default defineComponent({
                   regra_mapeamento._edit(this.mapeamentoproduto_old ,this.mapeamentoproduto, this.errors)
                   if(this.errors.length == 0){
                         const aux = {
-                              canalCodigo: this.mapeamentoproduto.canal['ambienteCanalCodigo' as keyof typeof this.mapeamentoproduto.canal],
-                              empresaCodigo: this.mapeamentoproduto.empresa['codigo' as keyof typeof this.mapeamentoproduto.empresa],
+                              canalCodigo: (this.mapeamentoproduto.canal['ambienteCanalCodigo' as keyof typeof this.mapeamentoproduto.canal] || this.mapeamentoproduto.canal_codigo),
+                              empresaCodigo: (this.mapeamentoproduto.empresa['codigo' as keyof typeof this.mapeamentoproduto.empresa] || this.mapeamentoproduto.empresa_codigo),
                               produtoErp: this.mapeamentoproduto.produtoErp,
                               produtoPaiSite: this.mapeamentoproduto.produtoPai,
                               produtoSite: this.mapeamentoproduto.produtoSite
                         }
+                        
                         store.dispatch('setDadosID_notCodigo', {'roter_externa': 'mapeamentoproduto','id': id, 'new_dado': aux, 'roter_interna': 'mapeamentoproduto'})
                         .then(()=> {
                               this.edit_mapProd_request = false;
@@ -143,8 +165,6 @@ export default defineComponent({
                   :user_type="auth_type"
             />
             <div class="col-12 col-lg-10" id="content" style="padding-left: calc(var(--bs-gutter-x));">
-                  {{ mapeamentoproduto }} <br><br> 
-                  {{ mapeamentoproduto_old }}
                   <span v-if="!have_fetch_error || fetch_error_msg['errors' as keyof typeof fetch_error_msg]">
                         <!-- ERRO no servidor mensagem -->
                         <TimeMensageErroComponent v-if="fetch_error_msg['errors' as keyof typeof fetch_error_msg]"
@@ -157,10 +177,10 @@ export default defineComponent({
                               <div class="Card-Body col-8">
                                     <form @submit.prevent="editRequest()" class="row form_content" novalidate>
                                           <!-- Empresa -->
-                                          <div class="col-4 col-lg-2 form_text">
+                                          <div class="col-4 col-lg-2 form_text" v-if="auth_type != 'ROLE_USER'">
                                                 *Empresa:
                                           </div>
-                                          <div class="col-8">
+                                          <div class="col-8" v-if="auth_type != 'ROLE_USER'">
                                                 <div v-show="inRequestEmpresa">
                                                       <LoaderSkeleton 
                                                             :tipo_loader="'select'"
@@ -175,7 +195,7 @@ export default defineComponent({
                                                       :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='empresa') != -1}]"
                                                 />
                                           </div>
-                                          <div class="col-lg-2"></div>
+                                          <div class="col-lg-2" v-if="auth_type != 'ROLE_USER'"></div>
                                           <!-- Canal -->
                                           <div class="col-4 col-lg-2 form_text">
                                                 *Canal de Venda:
