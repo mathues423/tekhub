@@ -95,6 +95,7 @@ export default defineComponent({
       <div class="row">
             <div class="col-md-4 col-sm-12 my-1">
                   <EmpresaSelectComponent 
+                        :valor_inicial="{}"
                         :have_erro="empresa_erro"
                         @empresa_escolhida="(args: object)=> escolha_empresa(args)"
                         @erro_fetch="(arg)=> $emit('erro_fetch', arg)"

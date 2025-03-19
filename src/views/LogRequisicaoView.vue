@@ -152,7 +152,7 @@ export default defineComponent({
                               :mensagem="fetch_error_msg['errors' as keyof typeof fetch_error_msg][0]"
                               @fechar_erro="voltarErroServer"
                         />
-                        <BuscaEmpresaDateComponent
+                        <BuscaEmpresaDateComponent class="my-2"
                               :rota_externa="'logrequisicao'"
                               @request_filtro="(args: string)=> requisicao(args)"
                               @Erro_fetch="(arg)=> showError(arg)"
@@ -174,6 +174,8 @@ export default defineComponent({
                               :ModalContent_Remocao="[]"
                               :showDeletModal="false"
                               
+                              :deletando="false"
+                              :disabled_btn="false"
                               @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
                               @avancar="avancaPagina" 
                               @recuar="recuarPagina"
@@ -198,6 +200,8 @@ export default defineComponent({
                               :ModalContent_Remocao="[]"
                               :showDeletModal="false"
                               
+                              :deletando="false"
+                              :disabled_btn="false"
                               @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
                               @avancar="avancaPagina" 
                               @recuar="recuarPagina"
