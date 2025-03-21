@@ -10,7 +10,7 @@
 
 <style lang="css" scoped>
 .versao_txt{
-      color: var(--bs-white); 
+      color: var(--white); 
       position: absolute; 
       bottom: 5px; 
       right: 30px;

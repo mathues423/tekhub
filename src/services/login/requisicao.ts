@@ -20,13 +20,13 @@ class UserDados {
             if (email == '') {
                   erros.message = 'Forneça um email'
                   erros.vericação = true;
-                  erros.type = 'warning';
+                  erros.type = 'email';
                   return erros
             }
             if (senha == '') {
                   erros.message = 'Forneça uma senha'
                   erros.vericação = true;
-                  erros.type = 'warning';
+                  erros.type = 'senha';
                   return erros
             }
             this.usuario.email = email;

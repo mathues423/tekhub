@@ -5,15 +5,26 @@ export default defineComponent({
             mensagem: {
               type: String,
               required: true
-            }
+            },
+            tipo_mesnsagem: {
+              type: String,
+              required: true
+            },
       }
 })
 </script>
 
 <template>
-<span class="alert">
-      {{ mensagem }}
-</span>
+      <v-alert
+            class="pa-1"
+            title="ERRO"
+            border="start"
+            border-color="deep-red accent-4"
+            icon="mdi-alert-circle"
+            type="error"
+            :text="mensagem"
+      >
+      </v-alert>
 </template>
 
 <style scoped>
@@ -21,10 +32,6 @@ export default defineComponent({
       display: none;
 }
 .ativada{
-      display: block;
-}
-.alert{
-      margin-top: 5px;
-      padding: 5px;
+      display: flex;
 }
 </style>

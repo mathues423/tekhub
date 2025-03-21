@@ -24,21 +24,23 @@ export default defineComponent({
 <template>
   <v-app :theme="`${tema}`">
     <v-main>
-      <router-view id="template"/>
+      <router-view id="conteudo" class="row"/>
     </v-main>
   </v-app>
 </template>
 
 <style>
 
-#template.row{
+#conteudo.row{
   height: 100vh;
 }
-#template.row>div#content{
-  min-height: calc(100vh - calc( 78px + 50px));
+#conteudo.row>div#content{
+  min-height: 100vh;
+  /* height: 100vh; */
 }
 :root{
   --light-blue:#0595e9;
+  --white: #fff;
   --dark-blue:#002140;
   --black: #000;
 }
