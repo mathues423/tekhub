@@ -82,11 +82,13 @@ export default defineComponent({
       </v-col>
       <v-col class="v-col-3 v-col-md-2" v-if="!its_card">
             <v-row no-gutters class="h-100">
-                  <NavbarRotasVertical
-                        :have_fetch_erro="have_erro"
-                        :item_ativo="lateral"
-                        :user_type="user_type"
-                  />
+                  <v-sheet min-height="calc(100vh - 64px - 38px)" color="primary" class="v-col-12">
+                        <NavbarRotasVertical
+                              :have_fetch_erro="have_erro"
+                              :item_ativo="lateral"
+                              :user_type="user_type"
+                        />
+                  </v-sheet>
             </v-row>
       </v-col>
       <!-- Navbar para telas menores -->
