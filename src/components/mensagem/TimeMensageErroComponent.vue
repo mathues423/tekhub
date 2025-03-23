@@ -4,7 +4,7 @@ export default defineComponent({
       data() {
             return{
                   time_mensage: this.time_duration,
-                  is_closed: false
+                  is_open: true
             }
       },
       props:{
@@ -26,7 +26,7 @@ export default defineComponent({
                   setTimeout(()=> {
                         this.time_mensage --;
                         if (this.time_mensage <= 0) {
-                              this.is_closed = true;
+                              this.is_open = false;
                               this.$emit('fechar_erro')
                         }else{
                               this.close_component()
@@ -39,39 +39,33 @@ export default defineComponent({
 </script>
 
 <template>
-      <Teleport to="body">
-            <div class="page_mask" v-if="!is_closed">
-                  <div class="row">
-                        <div class="col-lg-2"></div>
-                        <div class="alert col-12 col-lg-8 alert-warning my-3 row">
-                              <div class="col" style="align-content: center;">
+      <v-dialog v-model="is_open" persistent max-width="500" transition="dialog-top-transition">
+            <v-card>
+                  <v-card-title class="headline px-0 pt-0 pb-2">
+                        <v-sheet color="red-darken-4">
+                              <div class="text-center">
+                                    Mensagem de Erro
+                              </div>
+                        </v-sheet>
+                  </v-card-title>
+                  <v-card-text>
+                        <v-row>
+                              <v-col class="v-col-12">
                                     {{ mensagem }}
-                              </div>
-                              <div class="col-12 col-lg-4" style="align-content: center;">
-                                    <button class="btn btn-info w-100" @click="()=>{
-                                          time_mensage = 0;
-                                          is_closed= true;
-                                          $emit('fechar_erro');
-                                    }">
-                                          Fechar ( {{ time_mensage }} )
-                                    </button>
-                              </div>
-                        </div>
-                        <div class="col-lg-2"></div>
-                  </div>
-            </div>
-      </Teleport>
+                              </v-col>
+                        </v-row>
+                  </v-card-text>
+                  <v-card-actions>
+                        <v-btn 
+                              variant="tonal"
+                              color="red-darken-4"
+                              :text="`Fechar ( ${time_mensage} )`"
+                              @click="()=>{
+                                    time_mensage = 0; 
+                                    is_open= false; 
+                                    $emit('fechar_erro')
+                              }"/>
+                  </v-card-actions>
+            </v-card>
+      </v-dialog>
 </template>
-
-<style scoped>
-.page_mask{
-      position: fixed;
-      z-index: 9998;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      transition: opacity 0.9s ease;
-}
-</style>

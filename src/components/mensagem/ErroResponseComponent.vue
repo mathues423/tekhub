@@ -24,24 +24,35 @@
 </script>
 
 <template>
-      <div class="row">
-            <div v-if="!error_msg.timestamp || !error_msg.path || !error_msg.message || !error_msg.status || !error_msg.error" 
-            class="content" style="text-align: center; margin-top: auto; margin-bottom: auto;">
+      <v-row no-gutters>
+            <v-col v-if="!error_msg.timestamp || !error_msg.path || !error_msg.message || !error_msg.status || !error_msg.error"
+            align="center"
+            >
                   {{ error_msg }}
-                  <div>
-                        <button class="btn btn-info" @click="backHome">Voltar</button>
-                  </div>
-            </div>
-            <div class="content" style="text-align: center; margin-top: auto; margin-bottom: auto;" v-else>
+                  <spacing/>
+                  <v-col>
+                        Click no botão abaixo para voltar a pagina inicial.<br>
+                        <v-btn 
+                              color="red-darken-4"
+                              prepend-icon="mdi mdi-logout"
+                              @click="backHome"
+                              text="Deslogar"
+                        />
+                  </v-col>
+            </v-col>
+            <v-col align="center" v-else>
                   Sua Requisição feita as: ({{ error_msg.timestamp }}) para a rotado servidor "...{{ error_msg.path }}" <br>
-                  teve o erro [mensagem: "{{ error_msg.message }}", status: "{{ error_msg.status }} {{ error_msg.error }}"].
-                  <div>
-                        <button class="btn btn-info" @click="$emit('voltar')">Voltar</button>
-                  </div>
-            </div>
+                  teve o erro [mensagem: "{{ error_msg.message }}", status: "{{ error_msg.status }} {{ error_msg.error }}"].<br><br>
+                  <spacing/>
+                  <v-col>
+                        Click no botão abaixo para pagina que estava.<br>
+                        <v-btn 
+                              color="info"
+                              @click="$emit('voltar')"
+                              text="Voltar"
+                        />
+                  </v-col>
+            </v-col>
             
-      </div>
+      </v-row>
 </template>
-
-<style scoped>
-</style>

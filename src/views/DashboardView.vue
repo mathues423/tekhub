@@ -36,46 +36,37 @@ export default defineComponent({
 </script>
 
 <template>
-      <div class="row">
-            <!-- ERRO USER LOGIN -->
+<div>
+      <v-row no-gutters>
             <NavbarComplet
                   :have_erro="have_erro"
                   :lateral="'dashboard'"
                   :user_type="auth_type"
             />
-            <div class="col-12 col-lg-10" id="content" style="padding-left: calc(var(--bs-gutter-x));">
-                  <span v-if="!have_erro || mensage_erro['errors' as keyof typeof mensage_erro]">
-                        <!-- ERRO no servidor mensagem -->
-                        <TimeMensageErroComponent v-if="mensage_erro['errors' as keyof typeof mensage_erro]"
-                              :time_duration="10"      
-                              :mensagem="mensage_erro['errors' as keyof typeof mensage_erro][0]"
-                              @fechar_erro="voltarErroServer"
-                        />
-                        <DashboardComponent 
-                              :user_type="auth_type"
-                              @Erro_fetch="(ret)=> checkErro(ret)"
-                        />
-                  </span>
-                  <span v-if="have_erro">
-                        <ErroResponseComponent
-                              :error_msg="mensage_erro"
-                              @voltar="have_erro = false"
-                        />
-                  </span>
-            </div>
-            <VersaoMaximisada />
-      </div>
+            <v-col class="v-col-12 v-col-md-10">
+                  <v-sheet> 
+                        <span v-if="!have_erro || mensage_erro['errors' as keyof typeof mensage_erro]">
+                              <TimeMensageErroComponent v-if="mensage_erro['errors' as keyof typeof mensage_erro]"
+                                    :time_duration="10"      
+                                    :mensagem="mensage_erro['errors' as keyof typeof mensage_erro][0]"
+                                    @fechar_erro="voltarErroServer"
+                              />
+                              <DashboardComponent 
+                                    :user_type="auth_type"
+                                    @Erro_fetch="(ret)=> checkErro(ret)"
+                              />
+                        </span>
+                        <span v-if="have_erro">
+                              <ErroResponseComponent
+                                    :error_msg="mensage_erro"
+                                    @voltar="have_erro = false"
+                              />
+                        </span>
+                  </v-sheet>
+            </v-col>
+            <v-row no-gutters>
+                  <VersaoMaximisada />
+            </v-row>
+      </v-row>
+</div>
 </template>
-
-<style scoped>
-#content{
-      background-color: var(--bs-white);
-      color: var(--bs-gray-600);
-}
-/* @media (prefers-color-scheme: dark) {
-      #content{
-            background-color: var(--dark-blue);
-            color: var(--bs-white);
-      }
-} */
-</style>

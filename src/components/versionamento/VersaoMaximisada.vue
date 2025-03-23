@@ -3,19 +3,15 @@
 </script>
 
 <template>
-      <div class="col-12 versao_txt">
-            <div style="text-align: center;">
-                  <span>Tek-System {{APPCONFIG.ano}} - Versão {{APPCONFIG.versao}}</span>
-            </div>
-      </div>
+      <v-col class="v-col-12 versao_txt" align="center">
+            <v-sheet color="light-blue-lighten-5" class="h-100" max-height="38" elevation="24">
+                  Tek-System {{APPCONFIG.ano}} - Versão {{APPCONFIG.versao}}
+            </v-sheet>
+      </v-col>
 </template>
 
 <style scoped>
 .versao_txt{
-      color: var(--bs-gray-600);
-      background-color: var(--bs-white);
       font-size: 25px;
-      padding: 10px;
-      max-height: 50px;
 }
 </style>

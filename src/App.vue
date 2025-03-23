@@ -9,11 +9,11 @@ export default defineComponent({
     }
   },
   async mounted(){
-    if(window.matchMedia('(prefers-color-scheme: dark)').matches){
-      this.tema = 'dark';
-    }else{
-      this.tema = 'light';
-    }
+    // if(window.matchMedia('(prefers-color-scheme: dark)').matches){
+    //   this.tema = 'dark';
+    // }else{
+    //   this.tema = 'light';
+    // }
     await user.getToken();
   }
 })
@@ -39,9 +39,10 @@ export default defineComponent({
   /* height: 100vh; */
 }
 :root{
-  --light-blue:#0595e9;
   --white: #fff;
-  --dark-blue:#002140;
   --black: #000;
+  --light-blue:#0595e9;
+  --light-blue2:#005281;
+  --dark-blue:#002140;
 }
 </style>
