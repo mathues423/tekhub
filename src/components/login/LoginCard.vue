@@ -10,11 +10,17 @@
                         </v-col>
                         <v-form @submit.prevent="loginReq" class="pr-4 pl-4 pb-4">
                               <v-text-field
+                                    prepend-inner-icon="mdi-email"
+                                    variant="outlined"
                                     v-model="user.email"
                                     label="Email" 
                                     :error-messages="erros.type == 'email' ? erros.message : undefined"
                               />
-                              <v-text-field
+                              <v-text-field id="userpass"
+                                    prepend-inner-icon="mdi-lock"
+                                    :append-inner-icon="is_show_password ? 'mdi mdi-eye-outline' : 'mdi mdi-eye-off-outline'"
+                                    @click:append-inner="showPassword"
+                                    variant="outlined"
                                     v-model="user.senha"
                                     label="Senha"
                                     type="password"
@@ -26,8 +32,7 @@
                                                 :mensagem="erros.message"
                                                 :tipo_mesnsagem="'error'"
                                                 :class="(erros.vericação == true && erros.type == 'error') ? 'ativada' : 'desativada'"
-                                                />
-                                                <!-- :class="(erros.vericação == true && erros.type == 'error') ? 'ativada' : 'desativada'" -->
+                                          />
                                     </v-col>
                                     <v-col class="v-col-6">
                                           <v-checkbox color="primary" label="Lembrar-me" class="" v-model="lembrar" hide-details/>
@@ -65,7 +70,8 @@
                               type: 'info',
                               vericação: false,
                               message: ''
-                        })
+                        }),
+                        is_show_password: ref(false)
                   }
             },
             components:{
@@ -74,14 +80,11 @@
             },
             methods:{
                   showPassword(){
-                        if(document.querySelector('#userpass')?.getAttribute('type') == 'password'){
+                        this.is_show_password = !this.is_show_password;
+                        if (this.is_show_password) {
                               document.querySelector('#userpass')?.setAttribute('type', 'text');
-                              document.querySelector('#eyeclose')?.setAttribute('display','none');
-                              document.querySelector('#eyeopen')?.setAttribute('display','inline');
                         }else{
                               document.querySelector('#userpass')?.setAttribute('type', 'password');
-                              document.querySelector('#eyeclose')?.setAttribute('display','inline'); 
-                              document.querySelector('#eyeopen')?.setAttribute('display','none');
                         }
                   },
                   async loginReq(){
