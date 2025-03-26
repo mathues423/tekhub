@@ -35,7 +35,7 @@ export default defineComponent({
 
 <template id="Dash_comp">
 <v-row no-gutters>
-      <v-col class="v-col-12 pl-2" v-if="is_user">
+      <v-col class="v-col-12" v-if="is_user">
             <!-- Titulo -->
             <div class="text-h5">Dúvidas frequentes</div>
             <div class="text-body-1">

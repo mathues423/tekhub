@@ -43,7 +43,7 @@ export default defineComponent({
                   :lateral="'dashboard'"
                   :user_type="auth_type"
             />
-            <v-col class="v-col-12 v-col-md-10">
+            <v-col class="v-col-12 v-col-md-10 pl-2 pt-2">
                   <v-sheet> 
                         <span v-if="!have_erro || mensage_erro['errors' as keyof typeof mensage_erro]">
                               <TimeMensageErroComponent v-if="mensage_erro['errors' as keyof typeof mensage_erro]"

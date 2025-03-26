@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, PropType } from 'vue';
 import store from '@/store';
 import ListaComponent from '@/components//util/lista/ListaComponent.vue';
 import LoaderListaComponent from '@/components/util/Loaders/LoaderListaComponent.vue';
@@ -88,7 +88,8 @@ export default defineComponent({
             request_pesquisa: '',
             is_in_DeletModal: false,
             is_deletando: false,
-            disable_botao_delet: false
+            disable_botao_delet: false,
+            opc_filtrot_selected: undefined,
           }
       },
       components:{
@@ -146,24 +147,12 @@ export default defineComponent({
                         this.$emit('erro_fetch', error_retorno);
                   })
             },
-            avancaPagina(){
-                  if (this.pagina_atual < this.NUMERO_PAGINA) {
-                        this.pagina_atual++;
-                        if (this.itsOnFilter) {
-                              this.getPesquisa(this.request_pesquisa);
-                        }else{
-                              this.requestDados();
-                        }
-                  }
-            },
-            recuarPagina(){
-                  if (this.pagina_atual > 1) {
-                        this.pagina_atual--;
-                        if (this.itsOnFilter) {
-                              this.getPesquisa(this.request_pesquisa);
-                        }else{
-                              this.requestDados();
-                        }
+            select_pag(value: number){
+                  this.pagina_atual = value;
+                  if (this.itsOnFilter) {
+                        this.getPesquisa(this.request_pesquisa);
+                  }else{
+                        this.requestDados();
                   }
             },
             async requestDados(){
@@ -205,9 +194,10 @@ export default defineComponent({
                         'tipo': title.ordem.tipo_obj
                   })
             },
-            filtraEmpresa(){
+            filtraEmpresa(title: any){
                   this.itsOnFilter = true;
                   this.lista_estado = 'Vazio'
+                  this.opc_filtrot_selected = title;
             },
             closefiltrarEmpresa(){
                   this.itsOnFilter = false;
@@ -250,10 +240,13 @@ export default defineComponent({
 </script>
 
 <template id="Empre_comp">
-      <div class="row">
+<div>
+      <v-row>
+            <!-- MODIFICADO -->
             <FiltroPaiComponent v-if="!its_card"
                   :itsOnFilter="itsOnFilter"
                   :header="dado_paginado.header"
+                  :opc_default="opc_filtrot_selected" 
                   @pesquisa_request="(args: string) => {
                         pagina_atual = 1
                         getPesquisa(args)
@@ -283,8 +276,7 @@ export default defineComponent({
                   ]"
                   @deletarDadoPai="(arg : any) => deletar(arg)"
                   @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
-                  @avancar="avancaPagina" 
-                  @recuar="recuarPagina"
+                  @select_paginacao="(value: number)=> select_pag(value)"
                   
                   :deletando="is_deletando"
                   :disabled_btn="disable_botao_delet"
@@ -311,10 +303,9 @@ export default defineComponent({
                   ]"
                   @deletarDadoPai="(arg : any) => deletar(arg)"
                   @ordenarDadoPai="(arg : any) => ordenaEmpresa(arg)"
-                  @filtrarDadoPai="filtraEmpresa"
+                  @filtrarDadoPai="(arg: object)=> filtraEmpresa(arg)"
                   @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
-                  @avancar="avancaPagina" 
-                  @recuar="recuarPagina"
+                  @select_paginacao="(value: number)=> select_pag(value)"
                   
                   :deletando="is_deletando"
                   :disabled_btn="disable_botao_delet"
@@ -346,8 +337,7 @@ export default defineComponent({
                   ]"
                   @deletarDadoPai="(arg : any) => deletar(arg)"
                   @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
-                  @avancar="avancaPagina" 
-                  @recuar="recuarPagina"
+                  @select_paginacao="(value: number)=> select_pag(value)"
                   
                   :deletando="is_deletando"
                   :disabled_btn="disable_botao_delet"
@@ -375,10 +365,9 @@ export default defineComponent({
                   ]"
                   @deletarDadoPai="(arg : any) => deletar(arg)"
                   @ordenarDadoPai="(arg : any) => ordenaEmpresa(arg)"
-                  @filtrarDadoPai="filtraEmpresa"
+                  @filtrarDadoPai="(arg: object)=> filtraEmpresa(dado_paginado.header[0])"
                   @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
-                  @avancar="avancaPagina" 
-                  @recuar="recuarPagina"
+                  @select_paginacao="(value: number)=> select_pag(value)"
                   
                   :deletando="is_deletando"
                   :disabled_btn="disable_botao_delet"
@@ -386,9 +375,6 @@ export default defineComponent({
                   @fecharModal="is_in_DeletModal = false"
                   @abrirModal="is_in_DeletModal = true"
             />
-      </div>
+      </v-row>
+</div>
 </template>
-
-<style scoped>
-
-</style>

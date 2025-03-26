@@ -5,7 +5,9 @@ export default defineComponent({
       data() {
           return{
             numero_itens_p_pagina: this.lista_opc_paginas,
-            item_p_pagina: this.item_p_pagina_old
+            item_p_pagina: this.item_p_pagina_old,
+
+            pagina_selecionada: this.pagina_atual
           }
       },
       props:{
@@ -15,12 +17,10 @@ export default defineComponent({
             },
             pagina_atual:{
                   type: Number,
-                  default: 1,
                   required: true
             },
             pagina_max:{
                   type: Number,
-                  default: 1,
                   required: true
             },
             item_p_pagina_old:{
@@ -35,63 +35,47 @@ export default defineComponent({
       watch:{
             item_p_pagina(){
                   this.$emit('trocar_quantidade', this.item_p_pagina)
+            },
+            pagina_selecionada(){
+                  this.$emit('select_paginacao', this.pagina_selecionada)
             }
       },
       methods:{
-            up_paginacao(){
-                  this.$emit('avancar');
-            },
-            down_paginacao(){
-                  this.$emit('recuar');
+            select_paginacao(value: number){
+                  this.pagina_selecionada = value;
             }
       },
-      emits:['avancar','recuar', 'trocar_quantidade']
+      emits:['trocar_quantidade', 'select_paginacao']
 })
 </script>
 
 <template>
-<div class="col-12 row" v-if="have_item_p_pagina" style="text-align: center; margin: 0px; padding-top: 15px; padding-bottom: 15px;">
-      <div class="col-12 col-lg-6">
-            Itens por pagina:
-            <select class="custom-select" v-model.lazy="item_p_pagina">
-                  <option v-for="(itempPag, index) in numero_itens_p_pagina" :key="index" :value="itempPag.value"> {{ itempPag.text }}</option>
-            </select>
-      </div>
-      <div class="col-12 col-lg-6 row" style="padding: 0px;">
-            <div class="col-5 col-lg-3">
-                  <button class="btn btn-light col-12 w-100" :disabled="pagina_atual == 1" @click="down_paginacao"> Retroceder </button>
-            </div>
-            <div class="col-2 col-lg-6 info" > {{ pagina_atual }} </div>
-            <div class="col-5 col-lg-3">
-                  <button class="btn btn-light col-12 w-100" :disabled="pagina_atual == pagina_max" @click="up_paginacao"> Avancar </button>
-            </div>
-      </div>
-</div>
-
-<div class="col-12 row" v-else>
-</div>
+<v-row no-gutters class="pt-5">
+      <v-col class="v-col-12" v-if="have_item_p_pagina">
+            <v-row no-gutters justify="center" align="center">
+                  <v-col class="px-2 v-col-12 v-col-md-4">
+                        <v-container class="max-width">
+                              <v-select v-model="item_p_pagina" 
+                                    :items="numero_itens_p_pagina" 
+                                    item-title="text" 
+                                    item-value="value" 
+                                    label="Itens por pagina" 
+                              density="compact" variant="outlined" hide-details />
+                        </v-container>
+                  </v-col>
+                  <v-col class="v-col-12 v-col-md-8">
+                        <v-container class="max-width">
+                              <v-pagination
+                                    v-model="pagina_selecionada"
+                                    :length="pagina_max" 
+                                    :total-visible="8"
+                                    @update:model-value="(value)=> select_paginacao(value)"
+                              />
+                        </v-container>
+                  </v-col>
+            </v-row>
+      </v-col>
+      <v-col class="v-col-12" v-else>
+      </v-col>
+</v-row>
 </template>
-
-<style scoped>
-.info{
-      font-size: 14px;
-      color:var(--bs-dark);
-      text-align: center;
-      margin-top: auto;
-      margin-bottom: auto;
-}
-.custom-select{
-      background: #fff url(data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E) no-repeat right .75rem center;
-      background-size: 8px 10px;
-      padding: .375rem .75rem .375rem .75rem;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
-      color: #495057;
-      vertical-align: middle;
-      border: 1px solid #ced4da;
-      border-radius: .25rem;
-      display: inline-block;
-      width: min(50%, 150px);
-}
-</style>

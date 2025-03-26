@@ -9,11 +9,17 @@ export default defineComponent({
                   request: 'filtro=',
                   filhos: [{id:0 , componete: FiltroComponent,
                         opcs:{
-                              campo: {key_body: '', config_filtro:[{}], filtro:{tipo_obj: '', tipo_filtro: ''}},
+                              campo: this.opc_default ? this.opc_default : this.header[0],
+                              // {'key_body': '', config_filtro: [{}], filtro:{tipo_obj: '', tipo_filtro: ''}}
                               operacao: {opc: '', nome: ''},
                               valor: ''
                         }, erros: [], error_obj: {campo: false, operacao: false, valor: false, valor_incompativel: false}
                   }]
+            }
+      },
+      watch:{
+            'opc_default'(valueNew, valueOld){
+                  this.filhos[this.filhos.length - 1].opcs.campo = valueNew;
             }
       },
       props:{
@@ -24,6 +30,10 @@ export default defineComponent({
             itsOnFilter:{
                   type: Boolean,
                   required: true
+            },
+            opc_default:{
+                  type: Object,
+                  default: undefined
             }
       },
       components:{
@@ -32,7 +42,7 @@ export default defineComponent({
       methods:{
             adiciona_condicao(){
                   const newId = this.filhos.length ? this.filhos[this.filhos.length - 1].id + 1 : 1;
-                  this.filhos.push({id: newId, componete: FiltroComponent, opcs:{campo: {key_body: '', config_filtro:[{}], filtro:{tipo_obj: '', tipo_filtro: ''}}, operacao: {opc: '', nome: ''}, valor: ''}, erros: [], error_obj:{campo: false, operacao: false, valor: false, valor_incompativel: false}});
+                  this.filhos.push({id: newId, componete: FiltroComponent, opcs:{campo: this.opc_default ? this.opc_default : this.header[0], operacao: {opc: '', nome: ''}, valor: ''}, erros: [], error_obj:{campo: false, operacao: false, valor: false, valor_incompativel: false}});
             },
             remove_condicao(index: number){
                   this.filhos.splice(index, 1);
@@ -74,44 +84,45 @@ export default defineComponent({
 </script>
 
 <template>
-      <div class="col-12" v-if="itsOnFilter">
-            <form>
-                  <div class="form-row align-items-center" v-for="(item, index) in filhos" :key="item.id">
-                        <div class="col-12 my-3" v-show="index >= 1"> AND </div>
-                        <FiltroComponent
-                              :index="index"
-                              :dado_header="header"
-                              :errors="item.error_obj"
-                              v-model:dados_usuario="item.opcs"
-                              @deletar="remove_condicao(index)" />
-                  </div>
-            </form>
-            <div class="row my-3" style="text-align: center;">
-                  <div class="col">
-                        <button class="btn btn-light add" @click="adiciona_condicao"> + </button>
-                  </div>
-                  <div class="col">
-                        <button class="btn btn-primary" @click="gerar_request" type="submit"> Pesquisar </button>
-                  </div>
-                  <div class="col">
-                        <button class="btn btn-danger" @click="$emit('close_pesquisa')"> Close</button>
-                  </div>
-                  <div class="col-9"></div>
-            </div>
-      </div>
+<div>
+      <v-row v-if="itsOnFilter" class="px-5">
+            <v-col class="v-col-12">
+                  <v-form>
+                        <v-row v-for="(item, index) in filhos" :key="item.id" no-gutters>
+                              <v-col class="v-col-12 pb-2" v-show="index >= 1"> 
+                                    <v-divider> AND </v-divider>
+                              </v-col>
+                              <v-col :class="['v-col-12', index == 0 ? 'pt-4' : 'pt-2']">
+                                    <FiltroComponent
+                                          :index="index"
+                                          :dado_header="header"
+                                          :errors="item.error_obj"
+                                          v-model:dados_usuario="item.opcs"
+                                          @deletar="remove_condicao(index)" 
+                                    />
+                              </v-col>
+                        </v-row>
+                  </v-form>
+            </v-col>
+            <v-col class="v-col-12">
+                  <v-row class="my-3" style="text-align: center;">
+                        <v-col class="v-col">
+                              <v-btn color="" @click="adiciona_condicao"><v-icon>mdi mdi-plus</v-icon></v-btn>
+                        </v-col>
+                        <v-col class="v-col">
+                              <v-btn color="info" @click="gerar_request" type="submit"> Pesquisar </v-btn>
+                        </v-col>
+                        <v-col class="v-col">
+                              <v-btn color="error" @click="$emit('close_pesquisa')"> Fechar </v-btn>
+                        </v-col>
+                  </v-row>
+            </v-col>
+      </v-row>
+</div>
 </template>
 
 
 <style lang="css" scoped>
-.form-row {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    margin-right: -5px;
-    margin-left: -5px;
-}
 .add{
       border-radius: 100%;
       border: 2px solid var(--bs-black);
