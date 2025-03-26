@@ -137,22 +137,22 @@ export default defineComponent({
             :isAtivo="showDeletModal" 
             @close="$emit('fecharModal')" 
             @deletar_item="deletarDado()">
-            <template v-slot:body>
-                  <v-row no-gutters>
-                        <v-col class="v-col-12" style="padding-bottom: 5px;">
-                              <v-icon color="warning" icon="mdi mdi-alert-circle-outline"/>Informações do item:
-                        </v-col>
-                        <v-col class="v-col-12" style="padding-top: 5px;" v-for="value in ModalContent_Remocao" :key="value['key' as keyof typeof value]">
-                              {{ value['nome' as keyof typeof value] }} : {{ dado_modal[value['key' as keyof typeof value] as keyof typeof dado_modal] }}
-                              <v-divider></v-divider>
-                        </v-col>
-                  </v-row>
-            </template>
+      <template v-slot:body>
+            <v-row no-gutters>
+                  <v-col class="v-col-12" style="padding-bottom: 5px;">
+                        <v-icon color="warning" icon="mdi mdi-alert-circle-outline"/>Informações do item:
+                  </v-col>
+                  <v-col class="v-col-12" style="padding-top: 5px;" v-for="value in ModalContent_Remocao" :key="value['key' as keyof typeof value]">
+                        {{ value['nome' as keyof typeof value] }} : {{ dado_modal[value['key' as keyof typeof value] as keyof typeof dado_modal] }}
+                        <v-divider></v-divider>
+                  </v-col>
+            </v-row>
+      </template>
       </ModalRemoçãoComponent>
 <div>
       <v-row no-gutters>
-            <v-col class="v-col-12 px-2">
-                  <v-table class="table-striped text-center">
+            <v-col class="v-col-12">
+                  <v-table density="compact" class="text-center">
                         <thead>
                               <tr>
                                     <th v-for="title in dados?.header" :key="title.header" scope="col">
@@ -252,19 +252,17 @@ export default defineComponent({
                   <v-divider></v-divider>
                   <v-spacer></v-spacer>
             </v-col>
-            <v-col cols="12">
-                  <PaginacaoComponent 
-                        :have_item_p_pagina="have_item_p_pagina"
-                        :have_pagination="have_pagination"
-                        :pagina_max="pagina_max"
-                        :pagina_atual="pagina"
-                        :item_p_pagina="item_p_pagina"
-                        :item_p_pagina_old="item_p_pagina"
-                        :lista_opc_paginas="lista_opc_paginas"
-                        @select_paginacao="(value)=> selecionar_pagina(value)"
-                        @trocar_quantidade="dado_quantidade"
-                  />
-            </v-col>
+            <PaginacaoComponent 
+                  :have_item_p_pagina="have_item_p_pagina"
+                  :have_pagination="have_pagination"
+                  :pagina_max="pagina_max"
+                  :pagina_atual="pagina"
+                  :item_p_pagina="item_p_pagina"
+                  :item_p_pagina_old="item_p_pagina"
+                  :lista_opc_paginas="lista_opc_paginas"
+                  @select_paginacao="(value)=> selecionar_pagina(value)"
+                  @trocar_quantidade="dado_quantidade"
+            />
       </v-row>
 </div>
 </template>

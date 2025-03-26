@@ -241,140 +241,143 @@ export default defineComponent({
 
 <template id="Empre_comp">
 <div>
-      <v-row>
-            <!-- MODIFICADO -->
-            <FiltroPaiComponent v-if="!its_card"
-                  :itsOnFilter="itsOnFilter"
-                  :header="dado_paginado.header"
-                  :opc_default="opc_filtrot_selected" 
-                  @pesquisa_request="(args: string) => {
-                        pagina_atual = 1
-                        getPesquisa(args)
-                  }"
-                  @close_pesquisa="closefiltrarEmpresa"
-            />
-            <LoaderListaComponent v-if="lista_estado == 'Loader' && !its_card"
-                  :header="dado_paginado.header"
-                  :quantidade_dados="ITEM_PAGINA_MAX"
-            />
-            <!-- Lista Empresas Pesquisa -->
-            <ListaComponent v-if="lista_estado == 'Lista' && itsOnFilter && !its_card"
-                  :lista_opc_paginas="lista_opc_pagina_not_card"
-                  :have_item_p_pagina="true"
-                  :have_pagination="true"
-                  :have_expancion="false"
-                  :dados="dado_pesquisa"
-                  :pagina="pagina_atual"
-                  :item_p_pagina="ITEM_PAGINA_MAX"
-                  :pagina_max="NUMERO_PAGINA"
-                  :rota_edicao="'empresas'"
-                  :ModalContent_Remocao="[
-                        {'nome': 'Código Tek', 'key': 'codigoTek'},
-                        {'nome': 'Razão Social', 'key': 'descricao'},
-                        {'nome': 'CNPJ', 'key': 'cnpj'},
-                        {'nome': 'Verção', 'key': 'versaoApiTek'},
-                  ]"
-                  @deletarDadoPai="(arg : any) => deletar(arg)"
-                  @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
-                  @select_paginacao="(value: number)=> select_pag(value)"
-                  
-                  :deletando="is_deletando"
-                  :disabled_btn="disable_botao_delet"
-                  :showDeletModal="is_in_DeletModal"
-                  @fecharModal="is_in_DeletModal = false"
-                  @abrirModal="is_in_DeletModal = true"
-            />
-            <!-- Lista Empresas -->
-            <ListaComponent v-if="lista_estado == 'Lista' && !itsOnFilter && !its_card"
-                  :lista_opc_paginas="lista_opc_pagina_not_card"
-                  :have_item_p_pagina="true"
-                  :have_pagination="true"
-                  :have_expancion="false"
-                  :dados="dado_paginado"
-                  :pagina="pagina_atual"
-                  :item_p_pagina="ITEM_PAGINA_MAX"
-                  :pagina_max="NUMERO_PAGINA"
-                  :rota_edicao="'empresas'"
-                  :ModalContent_Remocao="[
-                        {'nome': 'Código Tek', 'key': 'codigoTek'},
-                        {'nome': 'Razão Social', 'key': 'descricao'},
-                        {'nome': 'CNPJ', 'key': 'cnpj'},
-                        {'nome': 'Verção', 'key': 'versaoApiTek'},
-                  ]"
-                  @deletarDadoPai="(arg : any) => deletar(arg)"
-                  @ordenarDadoPai="(arg : any) => ordenaEmpresa(arg)"
-                  @filtrarDadoPai="(arg: object)=> filtraEmpresa(arg)"
-                  @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
-                  @select_paginacao="(value: number)=> select_pag(value)"
-                  
-                  :deletando="is_deletando"
-                  :disabled_btn="disable_botao_delet"
-                  :showDeletModal="is_in_DeletModal"
-                  @fecharModal="is_in_DeletModal = false"
-                  @abrirModal="is_in_DeletModal = true"
-            />
-            <LoaderListaCardComponent v-if="lista_estado == 'Loader' && its_card"
-                  :header="dado_paginado.header"
-                  :quantidade_dados="ITEM_PAGINA_MAX"
-            />
-            <!-- Card Lista Empresa Pesquisa -->
-            <ListaCardComponent v-if="lista_estado == 'Lista' && itsOnFilter && its_card"
-                  :lista_opc_paginas="lista_opc_pagina_card"
-                  :header_info="dado_paginado.header"
-                  :have_item_p_pagina="true"
-                  :have_pagination="true"
-                  :have_expancion="false"
-                  :dados="dado_pesquisa"
-                  :pagina="1"
-                  :item_p_pagina="ITEM_PAGINA_MAX"
-                  :pagina_max="NUMERO_PAGINA"
-                  :rota_edicao="'empresas'"
-                  :ModalContent_Remocao="[
-                        {'nome': 'Código Tek', 'key': 'codigoTek'},
-                        {'nome': 'Razão Social', 'key': 'descricao'},
-                        {'nome': 'CNPJ', 'key': 'cnpj'},
-                        {'nome': 'Verção', 'key': 'versaoApiTek'},
-                  ]"
-                  @deletarDadoPai="(arg : any) => deletar(arg)"
-                  @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
-                  @select_paginacao="(value: number)=> select_pag(value)"
-                  
-                  :deletando="is_deletando"
-                  :disabled_btn="disable_botao_delet"
-                  :showDeletModal="is_in_DeletModal"
-                  @fecharModal="is_in_DeletModal = false"
-                  @abrirModal="is_in_DeletModal = true"
-            />
-            <!-- Card Lista Empresa -->
-            <ListaCardComponent v-if="lista_estado == 'Lista' && !itsOnFilter && its_card"
-                  :lista_opc_paginas="lista_opc_pagina_card"
-                  :header_info="dado_paginado.header"
-                  :have_item_p_pagina="true"
-                  :have_pagination="true"
-                  :have_expancion="false"
-                  :dados="dado_paginado"
-                  :pagina="pagina_atual"
-                  :item_p_pagina="ITEM_PAGINA_MAX"
-                  :pagina_max="NUMERO_PAGINA"
-                  :rota_edicao="'empresas'"
-                  :ModalContent_Remocao="[
-                        {'nome': 'Código Tek', 'key': 'codigoTek'},
-                        {'nome': 'Razão Social', 'key': 'descricao'},
-                        {'nome': 'CNPJ', 'key': 'cnpj'},
-                        {'nome': 'Verção', 'key': 'versaoApiTek'},
-                  ]"
-                  @deletarDadoPai="(arg : any) => deletar(arg)"
-                  @ordenarDadoPai="(arg : any) => ordenaEmpresa(arg)"
-                  @filtrarDadoPai="(arg: object)=> filtraEmpresa(dado_paginado.header[0])"
-                  @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
-                  @select_paginacao="(value: number)=> select_pag(value)"
-                  
-                  :deletando="is_deletando"
-                  :disabled_btn="disable_botao_delet"
-                  :showDeletModal="is_in_DeletModal"
-                  @fecharModal="is_in_DeletModal = false"
-                  @abrirModal="is_in_DeletModal = true"
-            />
+      <v-row no-gutters>
+            <v-col class="v-col-1"></v-col>
+            <v-col class="v-col-10">
+                  <FiltroPaiComponent v-if="!its_card"
+                        :itsOnFilter="itsOnFilter"
+                        :header="dado_paginado.header"
+                        :opc_default="opc_filtrot_selected" 
+                        @pesquisa_request="(args: string) => {
+                              pagina_atual = 1
+                              getPesquisa(args)
+                        }"
+                        @close_pesquisa="closefiltrarEmpresa"
+                  />
+                  <LoaderListaComponent v-if="lista_estado == 'Loader' && !its_card"
+                        :header="dado_paginado.header"
+                        :quantidade_dados="ITEM_PAGINA_MAX"
+                  />
+                  <!-- Lista Empresas Pesquisa -->
+                  <ListaComponent v-if="lista_estado == 'Lista' && itsOnFilter && !its_card"
+                        :lista_opc_paginas="lista_opc_pagina_not_card"
+                        :have_item_p_pagina="true"
+                        :have_pagination="true"
+                        :have_expancion="false"
+                        :dados="dado_pesquisa"
+                        :pagina="pagina_atual"
+                        :item_p_pagina="ITEM_PAGINA_MAX"
+                        :pagina_max="NUMERO_PAGINA"
+                        :rota_edicao="'empresas'"
+                        :ModalContent_Remocao="[
+                              {'nome': 'Código Tek', 'key': 'codigoTek'},
+                              {'nome': 'Razão Social', 'key': 'descricao'},
+                              {'nome': 'CNPJ', 'key': 'cnpj'},
+                              {'nome': 'Verção', 'key': 'versaoApiTek'},
+                        ]"
+                        @deletarDadoPai="(arg : any) => deletar(arg)"
+                        @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
+                        @select_paginacao="(value: number)=> select_pag(value)"
+                        
+                        :deletando="is_deletando"
+                        :disabled_btn="disable_botao_delet"
+                        :showDeletModal="is_in_DeletModal"
+                        @fecharModal="is_in_DeletModal = false"
+                        @abrirModal="is_in_DeletModal = true"
+                  />
+                  <!-- Lista Empresas -->
+                  <ListaComponent v-if="lista_estado == 'Lista' && !itsOnFilter && !its_card"
+                        :lista_opc_paginas="lista_opc_pagina_not_card"
+                        :have_item_p_pagina="true"
+                        :have_pagination="true"
+                        :have_expancion="false"
+                        :dados="dado_paginado"
+                        :pagina="pagina_atual"
+                        :item_p_pagina="ITEM_PAGINA_MAX"
+                        :pagina_max="NUMERO_PAGINA"
+                        :rota_edicao="'empresas'"
+                        :ModalContent_Remocao="[
+                              {'nome': 'Código Tek', 'key': 'codigoTek'},
+                              {'nome': 'Razão Social', 'key': 'descricao'},
+                              {'nome': 'CNPJ', 'key': 'cnpj'},
+                              {'nome': 'Verção', 'key': 'versaoApiTek'},
+                        ]"
+                        @deletarDadoPai="(arg : any) => deletar(arg)"
+                        @ordenarDadoPai="(arg : any) => ordenaEmpresa(arg)"
+                        @filtrarDadoPai="(arg: object)=> filtraEmpresa(arg)"
+                        @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
+                        @select_paginacao="(value: number)=> select_pag(value)"
+                        
+                        :deletando="is_deletando"
+                        :disabled_btn="disable_botao_delet"
+                        :showDeletModal="is_in_DeletModal"
+                        @fecharModal="is_in_DeletModal = false"
+                        @abrirModal="is_in_DeletModal = true"
+                  />
+                  <LoaderListaCardComponent v-if="lista_estado == 'Loader' && its_card"
+                        :header="dado_paginado.header"
+                        :quantidade_dados="ITEM_PAGINA_MAX"
+                  />
+                  <!-- Card Lista Empresa Pesquisa -->
+                  <ListaCardComponent v-if="lista_estado == 'Lista' && itsOnFilter && its_card"
+                        :lista_opc_paginas="lista_opc_pagina_card"
+                        :header_info="dado_paginado.header"
+                        :have_item_p_pagina="true"
+                        :have_pagination="true"
+                        :have_expancion="false"
+                        :dados="dado_pesquisa"
+                        :pagina="1"
+                        :item_p_pagina="ITEM_PAGINA_MAX"
+                        :pagina_max="NUMERO_PAGINA"
+                        :rota_edicao="'empresas'"
+                        :ModalContent_Remocao="[
+                              {'nome': 'Código Tek', 'key': 'codigoTek'},
+                              {'nome': 'Razão Social', 'key': 'descricao'},
+                              {'nome': 'CNPJ', 'key': 'cnpj'},
+                              {'nome': 'Verção', 'key': 'versaoApiTek'},
+                        ]"
+                        @deletarDadoPai="(arg : any) => deletar(arg)"
+                        @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
+                        @select_paginacao="(value: number)=> select_pag(value)"
+                        
+                        :deletando="is_deletando"
+                        :disabled_btn="disable_botao_delet"
+                        :showDeletModal="is_in_DeletModal"
+                        @fecharModal="is_in_DeletModal = false"
+                        @abrirModal="is_in_DeletModal = true"
+                  />
+                  <!-- Card Lista Empresa -->
+                  <ListaCardComponent v-if="lista_estado == 'Lista' && !itsOnFilter && its_card"
+                        :lista_opc_paginas="lista_opc_pagina_card"
+                        :header_info="dado_paginado.header"
+                        :have_item_p_pagina="true"
+                        :have_pagination="true"
+                        :have_expancion="false"
+                        :dados="dado_paginado"
+                        :pagina="pagina_atual"
+                        :item_p_pagina="ITEM_PAGINA_MAX"
+                        :pagina_max="NUMERO_PAGINA"
+                        :rota_edicao="'empresas'"
+                        :ModalContent_Remocao="[
+                              {'nome': 'Código Tek', 'key': 'codigoTek'},
+                              {'nome': 'Razão Social', 'key': 'descricao'},
+                              {'nome': 'CNPJ', 'key': 'cnpj'},
+                              {'nome': 'Verção', 'key': 'versaoApiTek'},
+                        ]"
+                        @deletarDadoPai="(arg : any) => deletar(arg)"
+                        @ordenarDadoPai="(arg : any) => ordenaEmpresa(arg)"
+                        @filtrarDadoPai="(arg: object)=> filtraEmpresa(dado_paginado.header[0])"
+                        @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
+                        @select_paginacao="(value: number)=> select_pag(value)"
+                        
+                        :deletando="is_deletando"
+                        :disabled_btn="disable_botao_delet"
+                        :showDeletModal="is_in_DeletModal"
+                        @fecharModal="is_in_DeletModal = false"
+                        @abrirModal="is_in_DeletModal = true"
+                  />
+            </v-col>
+            <v-col class="v-col-1"></v-col>
       </v-row>
 </div>
 </template>

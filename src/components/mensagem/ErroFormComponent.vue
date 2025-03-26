@@ -8,7 +8,7 @@ export default defineComponent({
             },
             tipo_mesnsagem: {
               type: String,
-              required: true
+              default: 'warning'
             },
       }
 })
@@ -17,11 +17,11 @@ export default defineComponent({
 <template>
       <v-alert
             class="pa-1"
-            title="ERRO"
+            :title="tipo_mesnsagem == 'error' ? 'ERRO' : 'AVISO'"
             border="start"
             border-color="deep-red accent-4"
             icon="mdi-alert-circle"
-            type="error"
+            :type="tipo_mesnsagem"
             :text="mensagem"
       >
       </v-alert>

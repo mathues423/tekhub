@@ -79,7 +79,8 @@ export default defineComponent({
             request_pesquisa: '',
             is_in_DeletModal: false,
             is_deletando:false,
-            disable_botao_delet: false
+            disable_botao_delet: false,
+            opc_filtrot_selected: undefined,
           }
       },
       components:{
@@ -134,24 +135,12 @@ export default defineComponent({
                         this.disable_botao_delet = false;
                   })
             },
-            avancaPagina(){
-                  if (this.pagina_atual < this.NUMERO_PAGINA) {
-                        this.pagina_atual++;
-                        if (this.itsOnFilter) {
-                              this.getPesquisa(this.request_pesquisa)
-                        }else{
-                              this.requestDados()
-                        }
-                  }
-            },
-            recuarPagina(){
-                  if (this.pagina_atual > 1) {
-                        this.pagina_atual--;
-                        if (this.itsOnFilter) {
-                              this.getPesquisa(this.request_pesquisa)
-                        }else{
-                              this.requestDados()
-                        }
+            select_pag(value: number){
+                  this.pagina_atual = value;
+                  if (this.itsOnFilter) {
+                        this.getPesquisa(this.request_pesquisa);
+                  }else{
+                        this.requestDados();
                   }
             },
             async requestDados(){
@@ -238,137 +227,137 @@ export default defineComponent({
 </script>
 
 <template id="Usua_comp">
-      <div class="row">
-            <FiltroPaiComponent v-if="!its_card"
-                  :itsOnFilter="itsOnFilter"
-                  :header="dado_paginado.header"
-                  @pesquisa_request="(args: string) => getPesquisa(args)"
-                  @close_pesquisa="closefiltrarUsuario"
-            />
-            <LoaderListaComponent v-if="lista_estado == 'Loader' && !its_card"
-                  :header="dado_paginado.header"
-                  :quantidade_dados="ITEM_PAGINA_MAX"
-            />
-            <!-- Lista Usuarios Pesquisa -->
-            <ListaComponent v-if="lista_estado == 'Lista' && itsOnFilter && !its_card"
-                  :lista_opc_paginas="lista_opc_pagina_not_card"
-                  :have_item_p_pagina="true"
-                  :have_pagination="true"
-                  :have_expancion="false"
-                  :dados="dado_pesquisa"
-                  :pagina="pagina_atual"
-                  :item_p_pagina="ITEM_PAGINA_MAX"
-                  :pagina_max="NUMERO_PAGINA"
-                  :rota_edicao="'usuarios'"
-                  :ModalContent_Remocao="[
-                        {'nome': 'Email', 'key': 'email'},
-                        {'nome': 'Perfil', 'key': 'perfil'},
-                        {'nome': 'Empresa', 'key': 'empresaDescricao'},
-                  ]"
-                  @deletarDadoPai="(arg : any) => deletar(arg)"
-                  @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
-                  @avancar="avancaPagina" 
-                  @recuar="recuarPagina"
-                  
-                  :deletando="is_deletando"
-                  :disabled_btn="disable_botao_delet"
-                  :showDeletModal="is_in_DeletModal"
-                  @fecharModal="is_in_DeletModal = false"
-                  @abrirModal="is_in_DeletModal = true"
-            />
-            <!-- Lista Usuarios -->
-            <ListaComponent v-if="lista_estado == 'Lista' && !itsOnFilter && !its_card"
-                  :lista_opc_paginas="lista_opc_pagina_not_card"                  
-                  :have_item_p_pagina="true"
-                  :have_pagination="true"
-                  :have_expancion="false"
-                  :dados="dado_paginado"
-                  :pagina="pagina_atual"
-                  :item_p_pagina="ITEM_PAGINA_MAX"
-                  :pagina_max="NUMERO_PAGINA"
-                  :rota_edicao="'usuarios'"
-                  :ModalContent_Remocao="[
-                        {'nome': 'Email', 'key': 'email'},
-                        {'nome': 'Perfil', 'key': 'perfil'},
-                        {'nome': 'Empresa', 'key': 'empresaDescricao'},
-                  ]"
-                  @deletarDadoPai="(arg : any) => deletar(arg)"
-                  @ordenarDadoPai="(arg : any) => ordenaUsuario(arg)"
-                  @filtrarDadoPai="filtraUsuario"
-                  @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
-                  @avancar="avancaPagina" 
-                  @recuar="recuarPagina"
-                  
-                  :deletando="is_deletando"
-                  :disabled_btn="disable_botao_delet"
-                  :showDeletModal="is_in_DeletModal"
-                  @fecharModal="is_in_DeletModal = false"
-                  @abrirModal="is_in_DeletModal = true"
-            />
-
-            <LoaderListaCardComponent v-if="lista_estado == 'Loader' && its_card"
-                  :header="dado_paginado.header"
-                  :quantidade_dados="ITEM_PAGINA_MAX"
-            />
-            <!-- Card Lista Usuario Pesquisa -->
-            <ListaCardComponent v-if="lista_estado == 'Lista' && itsOnFilter && its_card"
-                  :lista_opc_paginas="lista_opc_pagina_card"
-                  :header_info="dado_paginado.header"
-                  :have_item_p_pagina="true"
-                  :have_pagination="true"
-                  :have_expancion="false"
-                  :dados="dado_pesquisa"
-                  :pagina="pagina_atual"
-                  :item_p_pagina="ITEM_PAGINA_MAX"
-                  :pagina_max="NUMERO_PAGINA"
-                  :rota_edicao="'usuarios'"
-                  :ModalContent_Remocao="[
-                        {'nome': 'Email', 'key': 'email'},
-                        {'nome': 'Perfil', 'key': 'perfil'},
-                        {'nome': 'Empresa', 'key': 'empresaDescricao'},
-                  ]"
-                  @deletarDadoPai="(arg : any) => deletar(arg)"
-                  @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
-                  @avancar="avancaPagina" 
-                  @recuar="recuarPagina"
-                  
-                  :deletando="is_deletando"
-                  :disabled_btn="disable_botao_delet"
-                  :showDeletModal="is_in_DeletModal"
-                  @fecharModal="is_in_DeletModal = false"
-                  @abrirModal="is_in_DeletModal = true"
-            />
-            <!-- Card Lista Usuario -->
-            <ListaCardComponent v-if="lista_estado == 'Lista' && !itsOnFilter && its_card"
-                  :lista_opc_paginas="lista_opc_pagina_card"
-                  :header_info="dado_paginado.header"
-                  :have_item_p_pagina="true"
-                  :have_pagination="true"
-                  :have_expancion="false"
-                  :dados="dado_paginado"
-                  :pagina="pagina_atual"
-                  :item_p_pagina="ITEM_PAGINA_MAX"
-                  :pagina_max="NUMERO_PAGINA"
-                  :rota_edicao="'usuarios'"
-                  :ModalContent_Remocao="[
-                        {'nome': 'Email', 'key': 'email'},
-                        {'nome': 'Perfil', 'key': 'perfil'},
-                        {'nome': 'Empresa', 'key': 'empresaDescricao'},
-                  ]"
-                  @deletarDadoPai="(arg : any) => deletar(arg)"
-                  @ordenarDadoPai="(arg : any) => ordenaUsuario(arg)"
-                  @filtrarDadoPai="filtraUsuario"
-                  @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
-                  @avancar="avancaPagina" 
-                  @recuar="recuarPagina"
-                  
-                  :deletando="is_deletando"
-                  :disabled_btn="disable_botao_delet"
-                  :showDeletModal="is_in_DeletModal"
-                  @fecharModal="is_in_DeletModal = false"
-                  @abrirModal="is_in_DeletModal = true"
-            />
-      </div>
+      <v-row no-gutters>
+            <v-col class="v-col-1"></v-col>
+            <v-col class="v-col-10">
+                  <FiltroPaiComponent v-if="!its_card"
+                        :itsOnFilter="itsOnFilter"
+                        :header="dado_paginado.header"
+                        :opc_default="opc_filtrot_selected" 
+                        @pesquisa_request="(args: string) => getPesquisa(args)"
+                        @close_pesquisa="closefiltrarUsuario"
+                  />
+                  <LoaderListaComponent v-if="lista_estado == 'Loader' && !its_card"
+                        :header="dado_paginado.header"
+                        :quantidade_dados="ITEM_PAGINA_MAX"
+                  />
+                  <!-- Lista Usuarios Pesquisa -->
+                  <ListaComponent v-if="lista_estado == 'Lista' && itsOnFilter && !its_card"
+                        :lista_opc_paginas="lista_opc_pagina_not_card"
+                        :have_item_p_pagina="true"
+                        :have_pagination="true"
+                        :have_expancion="false"
+                        :dados="dado_pesquisa"
+                        :pagina="pagina_atual"
+                        :item_p_pagina="ITEM_PAGINA_MAX"
+                        :pagina_max="NUMERO_PAGINA"
+                        :rota_edicao="'usuarios'"
+                        :ModalContent_Remocao="[
+                              {'nome': 'Email', 'key': 'email'},
+                              {'nome': 'Perfil', 'key': 'perfil'},
+                              {'nome': 'Empresa', 'key': 'empresaDescricao'},
+                        ]"
+                        @deletarDadoPai="(arg : any) => deletar(arg)"
+                        @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
+                        @select_paginacao="(value: number)=> select_pag(value)"
+                        
+                        :deletando="is_deletando"
+                        :disabled_btn="disable_botao_delet"
+                        :showDeletModal="is_in_DeletModal"
+                        @fecharModal="is_in_DeletModal = false"
+                        @abrirModal="is_in_DeletModal = true"
+                  />
+                  <!-- Lista Usuarios -->
+                  <ListaComponent v-if="lista_estado == 'Lista' && !itsOnFilter && !its_card"
+                        :lista_opc_paginas="lista_opc_pagina_not_card"                  
+                        :have_item_p_pagina="true"
+                        :have_pagination="true"
+                        :have_expancion="false"
+                        :dados="dado_paginado"
+                        :pagina="pagina_atual"
+                        :item_p_pagina="ITEM_PAGINA_MAX"
+                        :pagina_max="NUMERO_PAGINA"
+                        :rota_edicao="'usuarios'"
+                        :ModalContent_Remocao="[
+                              {'nome': 'Email', 'key': 'email'},
+                              {'nome': 'Perfil', 'key': 'perfil'},
+                              {'nome': 'Empresa', 'key': 'empresaDescricao'},
+                        ]"
+                        @deletarDadoPai="(arg : any) => deletar(arg)"
+                        @ordenarDadoPai="(arg : any) => ordenaUsuario(arg)"
+                        @filtrarDadoPai="filtraUsuario"
+                        @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
+                        @select_paginacao="(value: number)=> select_pag(value)"
+                        
+                        :deletando="is_deletando"
+                        :disabled_btn="disable_botao_delet"
+                        :showDeletModal="is_in_DeletModal"
+                        @fecharModal="is_in_DeletModal = false"
+                        @abrirModal="is_in_DeletModal = true"
+                  />
+                  <LoaderListaCardComponent v-if="lista_estado == 'Loader' && its_card"
+                        :header="dado_paginado.header"
+                        :quantidade_dados="ITEM_PAGINA_MAX"
+                  />
+                  <!-- Card Lista Usuario Pesquisa -->
+                  <ListaCardComponent v-if="lista_estado == 'Lista' && itsOnFilter && its_card"
+                        :lista_opc_paginas="lista_opc_pagina_card"
+                        :header_info="dado_paginado.header"
+                        :have_item_p_pagina="true"
+                        :have_pagination="true"
+                        :have_expancion="false"
+                        :dados="dado_pesquisa"
+                        :pagina="pagina_atual"
+                        :item_p_pagina="ITEM_PAGINA_MAX"
+                        :pagina_max="NUMERO_PAGINA"
+                        :rota_edicao="'usuarios'"
+                        :ModalContent_Remocao="[
+                              {'nome': 'Email', 'key': 'email'},
+                              {'nome': 'Perfil', 'key': 'perfil'},
+                              {'nome': 'Empresa', 'key': 'empresaDescricao'},
+                        ]"
+                        @deletarDadoPai="(arg : any) => deletar(arg)"
+                        @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
+                        @select_paginacao="(value: number)=> select_pag(value)"
+                        
+                        :deletando="is_deletando"
+                        :disabled_btn="disable_botao_delet"
+                        :showDeletModal="is_in_DeletModal"
+                        @fecharModal="is_in_DeletModal = false"
+                        @abrirModal="is_in_DeletModal = true"
+                  />
+                  <!-- Card Lista Usuario -->
+                  <ListaCardComponent v-if="lista_estado == 'Lista' && !itsOnFilter && its_card"
+                        :lista_opc_paginas="lista_opc_pagina_card"
+                        :header_info="dado_paginado.header"
+                        :have_item_p_pagina="true"
+                        :have_pagination="true"
+                        :have_expancion="false"
+                        :dados="dado_paginado"
+                        :pagina="pagina_atual"
+                        :item_p_pagina="ITEM_PAGINA_MAX"
+                        :pagina_max="NUMERO_PAGINA"
+                        :rota_edicao="'usuarios'"
+                        :ModalContent_Remocao="[
+                              {'nome': 'Email', 'key': 'email'},
+                              {'nome': 'Perfil', 'key': 'perfil'},
+                              {'nome': 'Empresa', 'key': 'empresaDescricao'},
+                        ]"
+                        @deletarDadoPai="(arg : any) => deletar(arg)"
+                        @ordenarDadoPai="(arg : any) => ordenaUsuario(arg)"
+                        @filtrarDadoPai="filtraUsuario"
+                        @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
+                        @select_paginacao="(value: number)=> select_pag(value)"
+                        
+                        :deletando="is_deletando"
+                        :disabled_btn="disable_botao_delet"
+                        :showDeletModal="is_in_DeletModal"
+                        @fecharModal="is_in_DeletModal = false"
+                        @abrirModal="is_in_DeletModal = true"
+                  />
+            </v-col>
+            <v-col class="v-col-1"></v-col>
+      </v-row>
 </template>
 
 <style scoped>

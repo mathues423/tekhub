@@ -22,7 +22,7 @@ export default defineComponent({
 
 <template>
 <div>
-      <v-row class="px-2">
+      <v-row>
             <v-col class="v-col-12">
                   <v-table class="table-striped text-center pb-5">
                         <thead>

@@ -104,8 +104,8 @@ export default defineComponent({
                         </v-row>
                   </v-form>
             </v-col>
-            <v-col class="v-col-12">
-                  <v-row class="my-3" style="text-align: center;">
+            <v-col class="v-col-12 mb-5">
+                  <v-row style="text-align: center;">
                         <v-col class="v-col">
                               <v-btn color="" @click="adiciona_condicao"><v-icon>mdi mdi-plus</v-icon></v-btn>
                         </v-col>
@@ -120,11 +120,3 @@ export default defineComponent({
       </v-row>
 </div>
 </template>
-
-
-<style lang="css" scoped>
-.add{
-      border-radius: 100%;
-      border: 2px solid var(--bs-black);
-}
-</style>

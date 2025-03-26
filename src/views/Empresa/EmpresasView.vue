@@ -49,7 +49,7 @@ export default defineComponent({
                   :lateral="'empresas'"
                   :user_type="auth_type"
             />
-            <v-col class="v-col-12 v-col-md-10 pl-2 pt-2" id="content" style="padding-left: calc(var(--bs-gutter-x));">
+            <v-col class="v-col-12 v-col-md-10">
                   <v-sheet> 
                         <span v-if="!have_fetch_error || fetch_error_msg['errors' as keyof typeof fetch_error_msg]">
                               <!-- ERRO no servidor mensagem -->
@@ -58,7 +58,7 @@ export default defineComponent({
                                     :mensagem="fetch_error_msg['errors' as keyof typeof fetch_error_msg][0]"
                                     @fechar_erro="voltarErroServer"
                               />
-                              <CriarBotao @criar="adicionarNewempresa" />
+                              <CriarBotao class="pl-4" @criar="adicionarNewempresa" />
                               <EmpresaComponent 
                                     @Erro_fetch="(ret)=> showError(ret)"
                               />
@@ -77,16 +77,3 @@ export default defineComponent({
       </v-row>
 </div>
 </template>
-
-<style scoped>
-#content{
-      background-color: var(--bs-white);
-      color: var(--bs-gray-600);
-}
-/* @media (prefers-color-scheme: dark) {
-      #content{
-            background-color: var(--dark-blue);
-            color: var(--bs-white);
-      }
-} */
-</style>

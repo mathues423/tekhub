@@ -39,24 +39,23 @@ export default defineComponent({
 </script>
 
 <template>
-      <div class="row">
-            <div class="col-lg-2"></div>
-            <div class="alert col-12 col-lg-8 alert-success my-3 row w-100">
-                  <div class="col" style="align-content: center;">
+      <v-row no-gutters>
+            <v-sheet color="success w-100 v-row px-2">
+                  <v-col class="v-col-12 v-col-md-8" style="align-content: center;">
                         {{ mensagem }}
-                  </div>
-                  <div class="col-12 col-lg-4" style="align-content: center;">
-                        <button class="btn btn-info w-100" @click="()=>{
-                              is_closed= true;
-                              $emit('fechar_mensagem');
-                              time_mensage = 0;
-                        }">
-                              Fechar ( {{ time_mensage }} )
-                        </button>
-                  </div>
-            </div>
-            <div class="col-lg-2"></div>
-      </div>
+                  </v-col>
+                  <v-col class="v-col-12 v-col-md-4" style="align-content: center;">
+                        <v-btn 
+                              color="red-darken-4"
+                              :text="`Fechar ( ${time_mensage} )`"
+                              @click="()=>{
+                                    is_closed= true;
+                                    $emit('fechar_mensagem');
+                                    time_mensage = 0;
+                        }"/>
+                  </v-col>
+            </v-sheet>
+      </v-row>
 </template>
 
 <style scoped>

@@ -77,104 +77,113 @@ export default defineComponent({
 </script>
 
 <template>
-      <div class="row">
-            <NavbarComplet 
-                  :have_erro="have_fetch_error"
-                  :lateral="'empresas'"
-                  :user_type="auth_type"
-            />
-            <div class="col-12 col-lg-10" id="content">
-                  <span v-if="!have_fetch_error || fetch_error_msg['errors' as keyof typeof fetch_error_msg]">
-                        <!-- ERRO no servidor mensagem -->
-                        <TimeMensageErroComponent v-if="fetch_error_msg['errors' as keyof typeof fetch_error_msg]"
-                              :time_duration="10"      
-                              :mensagem="fetch_error_msg['errors' as keyof typeof fetch_error_msg][0]"
-                              @fechar_erro="voltarErroServer"
-                        />
-                        <div class="row">
-                              <div class="col-lg-1"></div>
-                              <div class="Card-Body col-12 col-lg-8">
-                                    <form @submit.prevent="criacaoRequest()" class="row form_content" novalidate>
+<v-row no-gutters>
+      <NavbarComplet 
+            :have_erro="have_fetch_error"
+            :lateral="'empresas'"
+            :user_type="auth_type"
+      />
+      <v-col class="v-col-12 v-col-md-10">
+            <span v-if="!have_fetch_error || fetch_error_msg['errors' as keyof typeof fetch_error_msg]">
+                  <!-- ERRO no servidor mensagem -->
+                  <TimeMensageErroComponent v-if="fetch_error_msg['errors' as keyof typeof fetch_error_msg]"
+                        :time_duration="10"
+                        :mensagem="fetch_error_msg['errors' as keyof typeof fetch_error_msg][0]"
+                        @fechar_erro="voltarErroServer"
+                  />
+                  <v-row no-gutters>
+                        <v-col class="v-col-md-1"></v-col>
+                        <v-col class="v-col-12 v-col-md-8 pt-10">
+                              <v-form @submit.prevent="criacaoRequest">
+                                    <v-row no-gutters>
                                           <!-- Razao -->
-                                          <div class="col-4 col-lg-2 form_text">
-                                                *Razão social:
-                                          </div>
-                                          <div class="col-8">
-                                                <input type="text" class="form-control" v-model="empresa.descricao" required>
-                                                <ErroFormComponent
-                                                :mensagem="'Por favor informe a Razão social.'"
-                                                :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='razao') != -1}]"
-                                                />
-                                          </div>
-                                          <div class="col-lg-2"></div>
-                                          <!-- CNPJ -->
-                                          <div class="col-4 col-lg-2 form_text">
-                                                *CNPJ:
-                                          </div>
-                                          <div class="col-8">
-                                                <input type="text" class="form-control" v-model="empresa.cnpj" required>
-                                                <ErroFormComponent
-                                                :mensagem="'Por favor informe o CNPJ.'"
-                                                :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='cnpj') != -1}]"
-                                                />
-                                                <ErroFormComponent
-                                                :mensagem="'Por favor informe o CNPJ valido.'"
-                                                :class="['alert-warning desativada',{'ativada' : errors.findIndex((x) => x =='400') != -1}]"
-                                                />
-                                          </div>
-                                          <div class="col-lg-2"></div>
-                                          <!-- Codigo -->
-                                          <div class="col-4 col-lg-2 form_text">
-                                                *Codigo na Tek-System:
-                                          </div>
-                                          <div class="col-8">
-                                                <input type="number" class="form-control" v-model="empresa.codigoTek" required>
-                                                <ErroFormComponent
-                                                :mensagem="'Por favor informe um Codigo numerico.'"
-                                                :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='codigo') != -1}]"
-                                                />
-                                          </div>
-                                          <div class="col-lg-2"></div>
-                                          <!-- Versao -->
-                                          <div class="col-4 col-lg-2 form_text">
-                                                *Verção API:
-                                          </div>
-                                          <div class="col-8">
-                                                <input type="text" class="form-control" v-model="empresa.versaoApiTek" required>
-                                                <ErroFormComponent
-                                                :mensagem="'Por favor informe a Verção API.'"
-                                                :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='api') != -1}]"
-                                                />
-                                          </div>
-                                          <div class="col-lg-2"></div>
+                                          <v-col class="v-col-4 d-flex d-md-none"></v-col>
+                                          <v-col class="v-col-8 v-col-md-12">
+                                                <v-text-field
+                                                      variant="outlined"
+                                                      label="*Razão social:"
+                                                      v-model="empresa.descricao"
+                                                      :error-messages="errors.findIndex((x) => x =='razao') != -1 ? 'Por favor informe a Razão social.': undefined"
+                                                required/>
       
-                                          <div style="margin-top: 16px;" class="col-12">
-                                                <TimeMensageFormReturnComponent v-if="criando"
-                                                      :mensagem="'Empresa criada com sucesso'"
-                                                      :time_duration="5"
-                                                      @fechar_mensagem="criando = false"
-                                                />
-                                                <button class="btn btn-primary col-4 col-lg-2" style="margin-left: 24px;" :disabled="new_empresa_request || criando">
-                                                      <span>Criar</span>
-                                                </button>
-                                                <button class="btn btn-light col-4 col-lg-2" style="margin-left: 24px;" @click="voltarEmpresa()">
-                                                      <span>Voltar</span>
-                                                </button>
-                                          </div>
-                                    </form>
-                              </div>
-                              <div class="col-lg-3"></div>
-                        </div>
-                  </span>
-                  <span v-else>
-                        <ErroResponseComponent 
-                              :error_msg="fetch_error_msg"
-                              @voltar="voltarErro"
-                        />
-                  </span>
-            </div>
-            <VersaoMaximisada />
-      </div>
+                                          </v-col>
+                                          <!-- CNPJ -->
+                                          <v-col class="v-col-4 d-flex d-md-none"></v-col>
+                                          <v-col class="v-col-8 v-col-md-12">
+                                                <v-text-field
+                                                      variant="outlined"
+                                                      label="*CNPJ"
+                                                      v-model="empresa.cnpj"
+                                                      :error-messages="(errors.findIndex((x) => x =='cnpj') != -1 ? 'Por favor informe o CNPJ.': undefined) || (errors.findIndex((x) => x =='400') != -1 ? 'Por favor informe o CNPJ valido.': undefined)"
+                                                required/>
+                                          </v-col>
+                                          <!-- Codigo -->
+                                          <v-col class="v-col-4 d-flex d-md-none"></v-col>
+                                          <v-col class="v-col-8 v-col-md-12">
+                                                <v-text-field
+                                                      variant="outlined"
+                                                      label="*Codigo na Tek-System:"
+                                                      v-model="empresa.codigoTek"
+                                                      :error-messages="(errors.findIndex((x) => x =='codigo') != -1 ? 'Por favor informe o CNPJ.': undefined) || (errors.findIndex((x) => x =='400') != -1 ? 'Por favor informe o CNPJ valido.': undefined)"
+                                                required/>
+                                          </v-col>
+                                          <!-- Versao -->
+                                          <v-col class="v-col-4 d-flex d-md-none"></v-col>
+                                          <v-col class="v-col-8 v-col-md-12">
+                                                <v-text-field
+                                                      variant="outlined"
+                                                      label="*Verção API:"
+                                                      v-model="empresa.versaoApiTek"
+                                                      :error-messages="(errors.findIndex((x) => x =='api') != -1 ? 'Por favor informe o CNPJ.': undefined) || (errors.findIndex((x) => x =='400') != -1 ? 'Por favor informe o CNPJ valido.': undefined)"
+                                                required/>
+                                          </v-col>
+      
+                                          <v-col class="col-12">
+                                                <v-row no-gutters>
+                                                      <v-col :class="['v-col-12 pb-3', (errors.findIndex((x) => x =='igual') != -1 || editado) ? 'd-flex' : 'd-none']">
+                                                            <ErroFormComponent
+                                                                  :mensagem="'Edite antes de salvar'"
+                                                                  :class="['desativada py-3',{'ativada' : errors.findIndex((x) => x =='igual') != -1}]"
+                                                            />
+                                                            <TimeMensageFormReturnComponent v-if="criando"
+                                                                  :mensagem="'Empresa criada com sucesso'"
+                                                                  :time_duration="5"
+                                                                  @fechar_mensagem="criando = false"
+                                                            />
+                                                      </v-col>
+                                                      <v-col class="v-col-6 py-3" align-self="center">
+                                                            <v-btn
+                                                                  color="success"
+                                                                  prepend-icon="mdi mdi-store-plus"
+                                                                  text="Criar"
+                                                                  @click="criacaoRequest"
+                                                                  :disabled="new_empresa_request || criando"/>
+                                                      </v-col>
+                                                      <v-col class="v-col-6 py-3" align-self="center">
+                                                            <v-btn
+                                                                  color="error"
+                                                                  prepend-icon="mdi mdi-trash-can"
+                                                                  text="Cancelar"
+                                                                  @click="voltarEmpresa()"
+                                                            />
+                                                      </v-col>
+                                                </v-row>
+                                          </v-col>
+                                    </v-row>
+                              </v-form>
+                        </v-col>
+                        <v-col class="d-none d-md-flex v-col-md-3"></v-col>
+                  </v-row>
+            </span>
+            <span v-else>
+                  <ErroResponseComponent 
+                        :error_msg="fetch_error_msg"
+                        @voltar="have_fetch_error = false"
+                  />
+            </span>
+      </v-col>
+      <VersaoMaximisada />
+</v-row>
 </template>
 
 <style scoped>

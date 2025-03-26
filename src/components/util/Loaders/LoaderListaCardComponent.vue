@@ -22,8 +22,8 @@ export default defineComponent({
 <template>
 <div>
       <v-row no-gutters>
-            <v-col class="v-col-12 px-4 px-md-2">
-                  <v-row no-gutters class="px-2">
+            <v-col class="v-col-12">
+                  <v-row no-gutters>
                         <v-col class="v-col-6 py-2">
                               <v-btn color="info" variant="outlined" disabled>
                                     <v-icon icon="mdi mdi-filter-variant"/>
@@ -38,7 +38,7 @@ export default defineComponent({
                         </v-col>
                   </v-row>
             </v-col>
-            <v-col class="v-col-12 px-4 px-md-2">
+            <v-col class="v-col-12">
                   <v-row no-gutters>
                         <v-col class="v-col-12 v-col-sm-6" v-for="(index_dado) in quantidade_dados" :key="index_dado">
                               <v-card class="ma-2">
@@ -79,7 +79,7 @@ export default defineComponent({
                   <v-row no-gutters class="pt-5">
                         <v-col class="v-col-12" v-if="have_item_p_pagina">
                               <v-row no-gutters justify="center" align="center">
-                                    <v-col class="px-2 v-col-12 v-col-md-4">
+                                    <v-col class="v-col-12 v-col-md-4">
                                           <v-container class="max-width">
                                                 <v-select loading="lazy" label="Itens por pagina" density="compact" variant="outlined" hide-details disabled/>
                                           </v-container>

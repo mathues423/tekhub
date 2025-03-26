@@ -27,7 +27,8 @@ export default defineComponent({
             ],
             ITEM_PAGINA_MAX_local: this.ITEM_PAGINA_MAX,
             its_card: false,
-            largura: window.innerWidth
+            largura: window.innerWidth,
+            opc_filtrot_selected: undefined,
           }
       },
       props: {
@@ -113,160 +114,154 @@ export default defineComponent({
             filtraMapeamentoProduto(){
                   this.$emit('filtraMapeamentoProduto')
             },
-            avancaPagina(){
-                  this.$emit('avancaPagina')
-            },
-            recuarPagina(){
-                  this.$emit('recuarPagina')
+            select_pag(value: number){
+                  this.$emit('select_pag', value)
             },
             quantidadeItens(args: number){
                   this.$emit('quantidadeItens', args)
             }
       },
       emits:['getPesquisa','closefiltrarMapeamentoProduto','deletar', 'quantidadeItens',
-      'ordenaMapeamentoProduto','filtraMapeamentoProduto','avancaPagina','recuarPagina',
+      'ordenaMapeamentoProduto','filtraMapeamentoProduto','select_pag',
       'fecharModal', 'abrirModal']
 })
 </script>
 
 <template id="MapPro_comp">
-      <div class="row">
-            <FiltroPaiComponent v-if="!its_card"
-                  :itsOnFilter="itsOnFilter"
-                  :header="header_info"
-                  @pesquisa_request="(args: string) => getPesquisa(args)"
-                  @close_pesquisa="closefiltrarMapeamentoProduto"
-            />
-
-            <!-- Loader -->
-            <LoaderListaComponent v-if="lista_estado == 'Loader' && (itsOnRequestPesquisa || itsOnFilter) && !its_card" 
-                  :header="dado.header"
-                  :quantidade_dados="ITEM_PAGINA_MAX_local"
-            />
-            <!-- Lista Mapeamento não filtrada -->
-            <ListaComponent  v-if="lista_estado == 'Lista' && !itsOnFilter && !its_card"
-                  :lista_opc_paginas="lista_opc_pagina_not_card"
-                  :have_item_p_pagina="true"
-                  :have_pagination="true"
-                  :have_expancion="false"
-                  :dados="dado"
-                  :pagina="pagina_atual"
-                  :item_p_pagina="ITEM_PAGINA_MAX_local"
-                  :pagina_max="NUMERO_PAGINA"
-                  :rota_edicao="'mapeamentoprodutos'"
-                  :ModalContent_Remocao="[
-                        {'nome': 'Produto ERP', 'key': 'produtoErp'},
-                        {'nome': 'Produto Site', 'key': 'produtoSite'},
-                        {'nome': 'Produto Pai Site', 'key': 'produtoPaiSite'},
-                  ]"
-                  @deletarDadoPai="(arg) => deletar(arg)"
-                  @ordenarDadoPai="(arg) => ordenaMapeamentoProduto(arg)"
-                  @filtrarDadoPai="filtraMapeamentoProduto"
-                  @trocarQuandidadeDadoPai="(args: number)=> quantidadeItens(args)"
-                  @avancar="avancaPagina" 
-                  @recuar="recuarPagina" 
-                  
-                  :deletando="is_deletando"
-                  :disabled_btn="disable_botao_delet"
-                  :showDeletModal="is_in_DeletModal"
-                  @fecharModal="$emit('fecharModal')"
-                  @abrirModal="$emit('abrirModal')"
-            />
-            <!-- Lista fildrada -->
-            <ListaComponent  v-if="lista_estado == 'Lista_filtrada' && itsOnFilter && !its_card"
-                  :lista_opc_paginas="lista_opc_pagina_not_card"
-                  :have_item_p_pagina="true"
-                  :have_pagination="true"
-                  :have_expancion="false"
-                  :dados="dado"
-                  :pagina="pagina_atual"
-                  :item_p_pagina="ITEM_PAGINA_MAX_local"
-                  :pagina_max="NUMERO_PAGINA"
-                  :rota_edicao="'mapeamentoprodutos'"
-                  :ModalContent_Remocao="[
-                        {'nome': 'Produto ERP', 'key': 'produtoErp'},
-                        {'nome': 'Produto Site', 'key': 'produtoSite'},
-                        {'nome': 'Produto Pai Site', 'key': 'produtoPaiSite'},
-                  ]"
-                  @deletarDadoPai="(arg: object) => deletar(arg)"
-                  @trocarQuandidadeDadoPai="(args: number)=> quantidadeItens(args)"
-                  @avancar="avancaPagina" 
-                  @recuar="recuarPagina" 
-                  
-                  :deletando="is_deletando"
-                  :disabled_btn="disable_botao_delet"
-                  :showDeletModal="is_in_DeletModal"
-                  @fecharModal="$emit('fecharModal')"
-                  @abrirModal="$emit('abrirModal')"
-            />
-
-
-            <LoaderListaCardComponent v-if="lista_estado == 'Loader' && (itsOnRequestPesquisa || itsOnFilter) && its_card"
-                  :header="dado.header"
-                  :quantidade_dados="ITEM_PAGINA_MAX_local"
-            />
-            <!-- Card Lista Mapeamento Pesquisa -->
-            <ListaCardComponent v-if="lista_estado == 'Lista_filtrada' && itsOnFilter && its_card"
-                  :lista_opc_paginas="lista_opc_pagina_card"
-                  :header_info="header_info"
-                  :have_item_p_pagina="true"
-                  :have_pagination="true"
-                  :have_expancion="false"
-                  :dados="dado"
-                  :pagina="pagina_atual"
-                  :item_p_pagina="ITEM_PAGINA_MAX_local"
-                  :pagina_max="NUMERO_PAGINA"
-                  :rota_edicao="'mapeamentoprodutos'"
-                  :ModalContent_Remocao="[
-                        {'nome': 'Produto ERP', 'key': 'produtoErp'},
-                        {'nome': 'Produto Site', 'key': 'produtoSite'},
-                        {'nome': 'Produto Pai Site', 'key': 'produtoPaiSite'},
-                  ]"
-                  @deletarDadoPai="(arg: object) => deletar(arg)"
-                  @trocarQuandidadeDadoPai="(args: number)=> quantidadeItens(args)"
-                  @avancar="avancaPagina" 
-                  @recuar="recuarPagina" 
-                  
-                  :deletando="is_deletando"
-                  :disabled_btn="disable_botao_delet"
-                  :showDeletModal="is_in_DeletModal"
-                  @fecharModal="$emit('fecharModal')"
-                  @abrirModal="$emit('abrirModal')"
-            />
-            <!-- Card Lista Mapeamento -->
-            <ListaCardComponent v-if="lista_estado == 'Lista' && !itsOnFilter && its_card"
-                  :lista_opc_paginas="lista_opc_pagina_card"
-                  :header_info="header_info"
-                  :have_item_p_pagina="true"
-                  :have_pagination="true"
-                  :have_expancion="false"
-                  :dados="dado"
-                  :pagina="pagina_atual"
-                  :item_p_pagina="ITEM_PAGINA_MAX_local"
-                  :pagina_max="NUMERO_PAGINA"
-                  :rota_edicao="'mapeamentoprodutos'"
-                  :ModalContent_Remocao="[
-                        {'nome': 'Produto ERP', 'key': 'produtoErp'},
-                        {'nome': 'Produto Site', 'key': 'produtoSite'},
-                        {'nome': 'Produto Pai Site', 'key': 'produtoPaiSite'},
-                  ]"
-                  @deletarDadoPai="(arg: object) => deletar(arg)"
-                  @ordenarDadoPai="(arg: object) => ordenaMapeamentoProduto(arg)"
-                  @filtrarDadoPai="filtraMapeamentoProduto"
-                  @trocarQuandidadeDadoPai="(args: number)=> quantidadeItens(args)"
-                  @avancar="avancaPagina" 
-                  @recuar="recuarPagina" 
-                  
-                  :deletando="is_deletando"
-                  :disabled_btn="disable_botao_delet"
-                  :showDeletModal="is_in_DeletModal"
-                  @fecharModal="$emit('fecharModal')"
-                  @abrirModal="$emit('abrirModal')"
-            />
-      </div>
+      <v-row no-gutters>
+            <v-col class="v-col-1"></v-col>
+            <v-col class="v-col-10">
+                  <FiltroPaiComponent v-if="!its_card"
+                        :itsOnFilter="itsOnFilter"
+                        :header="header_info"
+                        :opc_default="opc_filtrot_selected"
+                        @pesquisa_request="(args: string) => getPesquisa(args)"
+                        @close_pesquisa="closefiltrarMapeamentoProduto"
+                  />
+      
+                  <!-- Loader -->
+                  <LoaderListaComponent v-if="lista_estado == 'Loader' && (itsOnRequestPesquisa || itsOnFilter) && !its_card" 
+                        :header="dado.header"
+                        :quantidade_dados="ITEM_PAGINA_MAX_local"
+                  />
+                  <!-- Lista Mapeamento não filtrada -->
+                  <ListaComponent  v-if="lista_estado == 'Lista' && !itsOnFilter && !its_card"
+                        :lista_opc_paginas="lista_opc_pagina_not_card"
+                        :have_item_p_pagina="true"
+                        :have_pagination="true"
+                        :have_expancion="false"
+                        :dados="dado"
+                        :pagina="pagina_atual"
+                        :item_p_pagina="ITEM_PAGINA_MAX_local"
+                        :pagina_max="NUMERO_PAGINA"
+                        :rota_edicao="'mapeamentoprodutos'"
+                        :ModalContent_Remocao="[
+                              {'nome': 'Produto ERP', 'key': 'produtoErp'},
+                              {'nome': 'Produto Site', 'key': 'produtoSite'},
+                              {'nome': 'Produto Pai Site', 'key': 'produtoPaiSite'},
+                        ]"
+                        @deletarDadoPai="(arg) => deletar(arg)"
+                        @ordenarDadoPai="(arg) => ordenaMapeamentoProduto(arg)"
+                        @filtrarDadoPai="filtraMapeamentoProduto"
+                        @trocarQuandidadeDadoPai="(args: number)=> quantidadeItens(args)"
+                        @select_paginacao="(value: number)=> select_pag(value)" 
+                        
+                        :deletando="is_deletando"
+                        :disabled_btn="disable_botao_delet"
+                        :showDeletModal="is_in_DeletModal"
+                        @fecharModal="$emit('fecharModal')"
+                        @abrirModal="$emit('abrirModal')"
+                  />
+                  <!-- Lista fildrada -->
+                  <ListaComponent  v-if="lista_estado == 'Lista_filtrada' && itsOnFilter && !its_card"
+                        :lista_opc_paginas="lista_opc_pagina_not_card"
+                        :have_item_p_pagina="true"
+                        :have_pagination="true"
+                        :have_expancion="false"
+                        :dados="dado"
+                        :pagina="pagina_atual"
+                        :item_p_pagina="ITEM_PAGINA_MAX_local"
+                        :pagina_max="NUMERO_PAGINA"
+                        :rota_edicao="'mapeamentoprodutos'"
+                        :ModalContent_Remocao="[
+                              {'nome': 'Produto ERP', 'key': 'produtoErp'},
+                              {'nome': 'Produto Site', 'key': 'produtoSite'},
+                              {'nome': 'Produto Pai Site', 'key': 'produtoPaiSite'},
+                        ]"
+                        @deletarDadoPai="(arg: object) => deletar(arg)"
+                        @trocarQuandidadeDadoPai="(args: number)=> quantidadeItens(args)"
+                        @select_paginacao="(value: number)=> select_pag(value)"
+                        
+                        :deletando="is_deletando"
+                        :disabled_btn="disable_botao_delet"
+                        :showDeletModal="is_in_DeletModal"
+                        @fecharModal="$emit('fecharModal')"
+                        @abrirModal="$emit('abrirModal')"
+                  />
+      
+      
+                  <LoaderListaCardComponent v-if="lista_estado == 'Loader' && (itsOnRequestPesquisa || itsOnFilter) && its_card"
+                        :header="dado.header"
+                        :quantidade_dados="ITEM_PAGINA_MAX_local"
+                  />
+                  <!-- Card Lista Mapeamento Pesquisa -->
+                  <ListaCardComponent v-if="lista_estado == 'Lista_filtrada' && itsOnFilter && its_card"
+                        :lista_opc_paginas="lista_opc_pagina_card"
+                        :header_info="header_info"
+                        :have_item_p_pagina="true"
+                        :have_pagination="true"
+                        :have_expancion="false"
+                        :dados="dado"
+                        :pagina="pagina_atual"
+                        :item_p_pagina="ITEM_PAGINA_MAX_local"
+                        :pagina_max="NUMERO_PAGINA"
+                        :rota_edicao="'mapeamentoprodutos'"
+                        :ModalContent_Remocao="[
+                              {'nome': 'Produto ERP', 'key': 'produtoErp'},
+                              {'nome': 'Produto Site', 'key': 'produtoSite'},
+                              {'nome': 'Produto Pai Site', 'key': 'produtoPaiSite'},
+                        ]"
+                        @deletarDadoPai="(arg: object) => deletar(arg)"
+                        @trocarQuandidadeDadoPai="(args: number)=> quantidadeItens(args)"
+                        @select_paginacao="(value: number)=> select_pag(value)" 
+                        
+                        :deletando="is_deletando"
+                        :disabled_btn="disable_botao_delet"
+                        :showDeletModal="is_in_DeletModal"
+                        @fecharModal="$emit('fecharModal')"
+                        @abrirModal="$emit('abrirModal')"
+                  />
+                  <!-- Card Lista Mapeamento -->
+                  <ListaCardComponent v-if="lista_estado == 'Lista' && !itsOnFilter && its_card"
+                        :lista_opc_paginas="lista_opc_pagina_card"
+                        :header_info="header_info"
+                        :have_item_p_pagina="true"
+                        :have_pagination="true"
+                        :have_expancion="false"
+                        :dados="dado"
+                        :pagina="pagina_atual"
+                        :item_p_pagina="ITEM_PAGINA_MAX_local"
+                        :pagina_max="NUMERO_PAGINA"
+                        :rota_edicao="'mapeamentoprodutos'"
+                        :ModalContent_Remocao="[
+                              {'nome': 'Produto ERP', 'key': 'produtoErp'},
+                              {'nome': 'Produto Site', 'key': 'produtoSite'},
+                              {'nome': 'Produto Pai Site', 'key': 'produtoPaiSite'},
+                        ]"
+                        @deletarDadoPai="(arg: object) => deletar(arg)"
+                        @ordenarDadoPai="(arg: object) => ordenaMapeamentoProduto(arg)"
+                        @filtrarDadoPai="filtraMapeamentoProduto"
+                        @trocarQuandidadeDadoPai="(args: number)=> quantidadeItens(args)"
+                        @select_paginacao="(value: number)=> select_pag(value)" 
+                        
+                        :deletando="is_deletando"
+                        :disabled_btn="disable_botao_delet"
+                        :showDeletModal="is_in_DeletModal"
+                        @fecharModal="$emit('fecharModal')"
+                        @abrirModal="$emit('abrirModal')"
+                  />
+            </v-col>
+            <v-col class="v-col-1"></v-col>
+      </v-row>
       
 </template>
-
-<style scoped>
-
-</style>

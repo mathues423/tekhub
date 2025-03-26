@@ -25,8 +25,9 @@
 
 <template>
       <v-row no-gutters>
+            <v-col class="v-col-1"></v-col>
             <v-col v-if="!error_msg.timestamp || !error_msg.path || !error_msg.message || !error_msg.status || !error_msg.error"
-            align="center"
+            align="center" class="v-col-10"
             >
                   {{ error_msg }}
                   <spacing/>
@@ -40,7 +41,7 @@
                         />
                   </v-col>
             </v-col>
-            <v-col align="center" v-else>
+            <v-col class="v-col-10" align="center" v-else>
                   Sua Requisição feita as: ({{ error_msg.timestamp }}) para a rotado servidor "...{{ error_msg.path }}" <br>
                   teve o erro [mensagem: "{{ error_msg.message }}", status: "{{ error_msg.status }} {{ error_msg.error }}"].<br><br>
                   <spacing/>
@@ -53,6 +54,6 @@
                         />
                   </v-col>
             </v-col>
-            
+            <v-col class="v-col-1"></v-col>
       </v-row>
 </template>
