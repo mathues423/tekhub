@@ -30,13 +30,6 @@ export default defineComponent({
             }
       },
       watch:{
-            empresa_select(codigo_empresa){
-                  this.empresa_request.forEach((empresa)=>{
-                        if(empresa['codigo' as keyof typeof empresa] == codigo_empresa){
-                              this.$emit('empresa_escolhida', empresa)
-                        }
-                  })
-            },
             valor_inicial(empresa_new){
                   this.empresa_select = empresa_new
             }
@@ -49,6 +42,14 @@ export default defineComponent({
             this.requested = true;
             }).catch((error_retorno)=> this.$emit('erro_fetch', error_retorno))
       },
+      methods:{
+            empresa_select_props(item: any){
+                  return{
+                        title : item['descricao' as keyof typeof item],
+                        value : item
+                  }
+            }
+      },
       emits:['empresa_escolhida', 'erro_fetch']
 })
 </script>
@@ -58,8 +59,7 @@ export default defineComponent({
             v-model="empresa_select"
             :items="empresa_request"
             :label="is_required ? '*Empresa' : 'Empresa'"
-            item-title="descricao"
-            item-value="codigo"
+            :item-props="empresa_select_props"
             :loading="!requested"
             :error-messages="have_erro ? 'Houve um erro ao buscar as empresas' : ''"
       density="compact" variant="outlined" :focused="is_focused"/>
