@@ -8,7 +8,6 @@ import { defineComponent } from 'vue';
 import ambiente from '@/services/regras_negocio/regras_ambientes';
 import store from '@/store';
 import fetch_ from '@/services/fetch/requisicao';
-import LoaderSkeleton from '@/components/util/Loaders/LoaderSkeleton.vue';
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
 import TimeMensageErroComponent from '@/components/mensagem/TimeMensageErroComponent.vue';
 import TimeMensageFormReturnComponent from '@/components/mensagem/TimeMensageFormReturnComponent.vue';
@@ -37,6 +36,7 @@ export default defineComponent({
                   status_aux: false,
                   requested: false,
                   canais_requested: [] as Array<object>,
+                  canal_inicial: {},
                   ambientes: [{name: 'Homologação', value: 'HOMOLOGACAO'}, {name: 'Produção', value: 'PRODUCAO'}],
                   errors: [],
                   editado:false
@@ -45,22 +45,21 @@ export default defineComponent({
       components:{
             NavbarComplet,
             VersaoMaximisada,
-            LoaderSkeleton,
             ErroFormComponent,
             ErroResponseComponent,
             TimeMensageErroComponent,
             TimeMensageFormReturnComponent
       },
       methods:{
+            canalToString(item: any){
+                  return {
+                        title: item.descricao + ' | ' + item.tipo,
+                  }
+            },
             async editRequest(){
                   this.edit_ambiente_request = true;
                   this.errors = [];
                   const id = (this.$route.params['id'] || '-1') as string;
-                  if (this.status_aux) {
-                        this.ambiente.status = 'ATIVO'
-                  }else{
-                        this.ambiente.status = 'INATIVO'
-                  }
                   ambiente._edit(this.old_ambiente, this.ambiente, this.errors)
                   if (this.errors.length == 0) {
                         Promise.resolve(
@@ -98,36 +97,85 @@ export default defineComponent({
       async mounted(){
             this.requested = false;
             const rota_id = (this.$route.params['id'] || '-1') as string;
-            Promise.resolve(store.dispatch('getAmbientesID', rota_id))
-            .then((value) => {
-                  this.old_ambiente.ambiente = this.ambiente.ambiente = value.ambiente;
-                  this.old_ambiente.canalAlias = this.ambiente.canalAlias = value.canalAlias;
-                  this.old_ambiente.status = this.ambiente.status = value.status;
-                  if (this.old_ambiente.status == 'ATIVO') {
-                        this.status_aux = true;
-                  }else{
-                        this.status_aux = false;
+            if(store.getters.getAmbientesLenght){
+                  Promise.resolve(store.dispatch('getAmbientesID', rota_id))
+                  .then((value) => {
+                        this.old_ambiente.ambiente = this.ambiente.ambiente = value.ambiente;
+                        this.old_ambiente.canalAlias = this.ambiente.canalAlias = value.canalAlias;
+                        this.old_ambiente.status = this.ambiente.status = value.status;
+                        if (this.old_ambiente.status == 'ATIVO') {
+                              this.status_aux = true;
+                        }else{
+                              this.status_aux = false;
+                        }
+                        this.old_ambiente.url = this.ambiente.url = value.url;
+                        this.old_ambiente.versao = this.ambiente.versao = value.versao;
+                        Promise.resolve(fetch_.getDado('/canal'))
+                        .then((args)=> {
+                              this.requested = true;
+                              this.canais_requested = args.data;
+                              this.canais_requested.forEach((item: any)=> {
+                                    if (item.alias == value.data.canalAlias) {
+                                          this.canal_inicial = item;
+                                    }
+                              });
+                        }).catch((error_retorno)=> this.showError(error_retorno))
+                  }).catch((error_retorno)=> this.showError(error_retorno));
+            }else{
+                  Promise.resolve(fetch_.getDado_ID('/ambiente', rota_id))
+                  .then((value) => {
+                        console.log('IN STORE ', value);
+                        
+                        this.old_ambiente.ambiente = this.ambiente.ambiente = value.data.ambiente;
+                        this.old_ambiente.canalAlias = this.ambiente.canalAlias = value.data.canalAlias;
+                        this.old_ambiente.status = this.ambiente.status = value.data.status;
+                        if (this.old_ambiente.status == 'ATIVO') {
+                              this.status_aux = true;
+                        }else{
+                              this.status_aux = false;
+                        }
+                        this.old_ambiente.url = this.ambiente.url = value.data.url;
+                        this.old_ambiente.versao = this.ambiente.versao = value.data.versao;
+                        Promise.resolve(fetch_.getDado('/canal'))
+                        .then((args)=> {
+                              console.log("IN Store> Canal ", args)
+
+                              this.requested = true;
+                              this.canais_requested = args.data
+                              this.canais_requested.forEach((item: any)=> {
+                                    if (item.alias == value.data.canalAlias) {
+                                          this.canal_inicial = item;
+                                    }
+                              });
+                        }).catch((error_retorno)=> this.showError(error_retorno))
+                  }).catch((error_retorno)=> this.showError(error_retorno));
+            }
+      },
+      watch: {
+            canal_inicial(value){
+                  if(value){
+                        this.ambiente.canalAlias = value.alias;
                   }
-                  this.old_ambiente.url = this.ambiente.url = value.url;
-                  this.old_ambiente.versao = this.ambiente.versao = value.versao;
-                  Promise.resolve(fetch_.getDado('/canal'))
-                  .then((args)=> {
-                        this.requested = true;
-                        this.canais_requested = args.data
-                  }).catch((error_retorno)=> this.showError(error_retorno))
-            }).catch((error_retorno)=> this.showError(error_retorno));
-      }
+            },
+            status_aux(value){
+                  if (value) {
+                        this.ambiente.status = 'ATIVO'
+                  }else{
+                        this.ambiente.status = 'INATIVO'
+                  }
+            }
+      },
 })
 </script>
 
 <template>
-      <div class="row">
+      <v-row no-gutters>
             <NavbarComplet 
                   :lateral="'ambiente'"
                   :have_erro="have_fetch_error"
                   :user_type="auth_type"
             />
-            <div class="col-12 col-lg-10" id="content">
+            <v-col class="v-col-12 v-col-md-10">
                   <span v-if="!have_fetch_error || fetch_error_msg['errors' as keyof typeof fetch_error_msg]">
                         <!-- ERRO no servidor mensagem -->
                         <TimeMensageErroComponent v-if="fetch_error_msg['errors' as keyof typeof fetch_error_msg]"
@@ -135,103 +183,98 @@ export default defineComponent({
                               :mensagem="fetch_error_msg['errors' as keyof typeof fetch_error_msg][0]"
                               @fechar_erro="voltarErroServer"
                         />
-                        <div class="row">
-                              <div class="col-1"></div>
-                              <div class="Card-Body col-8">
-                                    <form @submit.prevent="editRequest" class="row form_content" novalidate>
-                                         <!-- Canal -->
-                                         <div class="col-4 col-lg-2 form_text">
-                                                *Canal:
-                                          </div>
-                                          <div class="col-8">
-                                                <span v-if="requested">
-                                                      <select class="custom-select" v-model="ambiente.canalAlias">
-                                                            <option selected disabled :value="{}"> Selecione o campo</option>
-                                                            <option v-for="header in canais_requested" :key="header['codigo' as keyof typeof header]" :value="header['alias' as keyof typeof header]"> {{ header['descricao' as keyof typeof header] }} | {{ header['tipo' as keyof typeof header] }}</option>
-                                                      </select>
-                                                </span>
-                                                <span v-else>
-                                                      <LoaderSkeleton 
-                                                            :tipo_loader="'select'"
+                        <v-row no-gutters>
+                              <v-col class="v-col-1"></v-col>
+                              <v-col class="v-col-10 pt-10">
+                                    <v-form @submit.prevent="editRequest" novalidate>
+                                          <v-row no-gutters>
+                                                <!-- Canal -->
+                                                <v-col class="v-col-12">
+                                                      <v-select
+                                                            variant="outlined"
+                                                            label="*Canal:"
+                                                            v-model="canal_inicial"
+                                                            :items="canais_requested"
+                                                            :item-props="canalToString"
+                                                            :loaded="requested"
+                                                            :erros-text="errors.findIndex((x) => x =='canalAlias') != -1 ? 'Selecione um canal valido' : undefined"
                                                       />
-                                                </span>
-                                                <ErroFormComponent
-                                                :mensagem="'Por favor informe o canal.'"
-                                                :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='canalAlias') != -1}]"
-                                                />
-                                          </div>
-                                          <div class="col-lg-2"></div>
-                                          <!-- Url -->
-                                          <div class="col-4 col-lg-2 form_text">
-                                                *Url:
-                                          </div>
-                                          <div class="col-8">
-                                                <input type="text" class="form-control" v-model="ambiente.url">
-                                                <ErroFormComponent
-                                                :mensagem="'Por favor informe o URL.'"
-                                                :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='url') != -1}]"
-                                                />
-                                          </div>
-                                          <div class="col-lg-2"></div>
-                                          <!-- Versão -->
-                                          <div class="col-4 col-lg-2 form_text">
-                                                *Versão:
-                                          </div>
-                                          <div class="col-8">
-                                                <input type="text" class="form-control" v-model="ambiente.versao">
-                                                <ErroFormComponent
-                                                :mensagem="'Por favor informe o versão.'"
-                                                :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='versao') != -1}]"
-                                                />
-                                          </div>
-                                          <div class="col-lg-2"></div>
-                                          <!-- Ambiente -->
-                                          <div class="col-4 col-lg-2 form_text">
-                                                *Ambiente:
-                                          </div>
-                                          <div class="col-8">
-                                                <select class="custom-select" v-model="ambiente.ambiente">
-                                                      <option selected disabled :value="{}"> Selecione o campo</option>
-                                                      <option v-for="header in ambientes" :key="header.name" :value="header.value"> {{ header.name }}</option>
-                                                </select>
-                                                <ErroFormComponent
-                                                :mensagem="'Por favor informe o ambiente.'"
-                                                :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='ambiente') != -1}]"
-                                                />
-                                          </div>
-                                          <div class="col-lg-2"></div>
-                                          <!-- Status -->
-                                          <div class="col-4 col-lg-2 form_text">
-                                                *Status:
-                                          </div>
-                                          <div class="col-8">
-                                                <div class="form-check form-switch">
-                                                      <input style="height: 1.75em; width: 3.5em;" class="form-check-input" type="checkbox" role="switch" v-model="status_aux" aria-checked="mixed">
-                                                </div>
-                                          </div>
-                                          <div class="col-lg-2"></div>
-      
-                                          <div style="margin-top: 16px;" class="col-12">
-                                                <ErroFormComponent
-                                                :mensagem="'Edite antes de salvar'"
-                                                :class="['alert-warning desativada',{'ativada' : errors.findIndex((x) => x =='igual') != -1}]"
-                                                />
-                                                <TimeMensageFormReturnComponent v-if="editado"
-                                                      :mensagem="'Ambiente alterado com sucesso'"
-                                                      :time_duration="5"
-                                                      @fechar_mensagem="editado = false"
-                                                />
-                                                <button class="btn btn-primary col-4 col-lg-2" :disabled="edit_ambiente_request || !requested || editado">
-                                                      <span>Iditar</span>
-                                                </button>
-                                                <button class="btn btn-light col-4 col-lg-2" style="margin-left: 24px;" @click="voltarAmbiente()">
-                                                      <span>Cancelar</span>
-                                                </button>
-                                          </div>
-                                    </form>
-                              </div>
-                              <div class="col-3"></div>
-                        </div>
+                                                </v-col>
+                                                <!-- ULR -->
+                                                <v-col class="v-col-12">
+                                                      <v-text-field
+                                                            variant="outlined"
+                                                            label="*URL:"
+                                                            v-model="ambiente.url"
+                                                            :erros-text="errors.findIndex((x) => x =='url') != -1 ? 'Digite uma ULR' : undefined"
+                                                      />
+                                                </v-col>
+                                                <!-- Versão -->
+                                                <v-col class="v-col-12">
+                                                      <v-text-field
+                                                            variant="outlined"
+                                                            label="*Versão:"
+                                                            v-model="ambiente.versao"
+                                                            :erros-text="errors.findIndex((x) => x =='versao') != -1 ? 'Digite uma versão' : undefined"
+                                                      />
+                                                </v-col>
+                                                <!-- Ambiente -->
+                                                <v-col class="v-col-12">
+                                                      <v-select
+                                                            variant="outlined"
+                                                            label="*Ambiente:"
+                                                            v-model="ambiente.ambiente"
+                                                            :items="ambientes"
+                                                            item-title="name"
+                                                            item-value="value"
+                                                            :erros-text="errors.findIndex((x) => x =='ambiente') != -1 ? 'Selecione um ambiente' : undefined"
+                                                      />
+                                                </v-col>
+                                                <!-- Status -->
+                                                <v-col class="v-col-12">
+                                                      <v-switch 
+                                                            label="*Status"
+                                                            color="info"
+                                                            v-model="status_aux"
+                                                      />
+                                                </v-col>
+                                                <!-- Ação -->
+                                                <v-col class="v-col-12">
+                                                      <v-row no-gutters>
+                                                            <v-col :class="['v-col-12 pb-3', (errors.findIndex((x) => x =='igual') != -1 || editado) ? 'd-flex' : 'd-none']">
+                                                                  <ErroFormComponent
+                                                                        :mensagem="'Edite antes de salvar'"
+                                                                        :class="['desativada py-3',{'ativada' : errors.findIndex((x) => x =='igual') != -1}]"
+                                                                  />
+                                                                  <TimeMensageFormReturnComponent v-if="editado"
+                                                                        :mensagem="'Empresa alterado com sucesso'"
+                                                                        :time_duration="5"
+                                                                        @fechar_mensagem="editado = false"
+                                                                  />
+                                                            </v-col>
+                                                            <v-col class="v-col-6 py-3" align-self="center">
+                                                                  <v-btn
+                                                                        color="success"
+                                                                        prepend-icon="mdi mdi-square-edit-outline"
+                                                                        text="Editar"
+                                                                        @click="editRequest"
+                                                                        :disabled="edit_ambiente_request || editado"/>
+                                                            </v-col>
+                                                            <v-col class="v-col-6 py-3" align-self="center">
+                                                                  <v-btn
+                                                                        color="error"
+                                                                        prepend-icon="mdi mdi-trash-can"
+                                                                        text="Cancelar"
+                                                                        @click="voltarAmbiente()"
+                                                                  />
+                                                            </v-col>
+                                                      </v-row>
+                                                </v-col>
+                                          </v-row>
+                                    </v-form>
+                              </v-col>
+                              <v-col class="v-col-1"></v-col>
+                        </v-row>
                   </span>
                   <span v-else>
                         <ErroResponseComponent 
@@ -239,46 +282,7 @@ export default defineComponent({
                               @voltar="voltarErro"
                         />
                   </span>
-            </div>
+            </v-col>
             <VersaoMaximisada />
-      </div>
+      </v-row>
 </template>
-
-<style scoped>
-#content{
-      background-color: var(--bs-white);
-      color: var(--bs-gray-600);
-      padding-top: 24px;
-}
-
-.form_text{
-      font-size: 14px;
-      color: var(--bs-black);
-      text-align: right;
-}
-.form_content > div{
-      padding-top: 10px;
-}
-.custom-select {
-    display: inline-block;
-    width: 100%;
-    height: calc(2.25rem + 2px);
-    padding: .375rem 1.75rem .375rem .75rem;
-    line-height: 1.5;
-    color: #495057;
-    vertical-align: middle;
-    background: #fff url(data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E) no-repeat right .75rem center;
-    background-size: 8px 10px;
-    border: 1px solid #ced4da;
-    border-radius: .25rem;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-}
-/* @media (prefers-color-scheme: dark) {
-      #content{
-            background-color: var(--dark-blue);
-            color: var(--bs-white);
-      }
-} */
-</style>
