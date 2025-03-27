@@ -235,7 +235,7 @@ export default defineComponent({
                                                             <v-col class="v-col-6 py-3" align-self="center">
                                                                   <v-btn
                                                                         color="success"
-                                                                        prepend-icon="mdi mdi-account-edit"
+                                                                        prepend-icon="mdi mdi-square-edit-outline"
                                                                         text="Editar"
                                                                         @click="edicaoRequest"
                                                                         :disabled="edit_user_reqest || editado"/>

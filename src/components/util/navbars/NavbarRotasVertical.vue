@@ -62,7 +62,7 @@ export default defineComponent({
                         <!-- Ambientes -->
                         <v-list-item v-show="user_type == 'ROLE_ADMIN'"      
                               :active="item_ativo === 'ambiente'"
-                              prepend-icon="mdi mdi-cloud-outline"
+                              prepend-icon="mdi mdi-cloud"
                               title="Ambientes"
                               @click="changePage('ambientes')"
                         />
