@@ -1,4 +1,5 @@
 <script lang="ts">
+// Descontinuado
 import { APPCONFIG } from '@/components/constants/Config';
 import router from '@/router';
 import NavbarComplet from '@/components/util/navbars/NavbarComplet.vue';
