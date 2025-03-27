@@ -13,17 +13,18 @@
                                     prepend-inner-icon="mdi-email"
                                     variant="outlined"
                                     v-model="user.email"
-                                    label="Email" 
-                                    :error-messages="erros.type == 'email' ? erros.message : undefined"
-                              />
-                              <v-text-field id="userpass"
+                                    label="Email"
+                                    :rules="[rule_email]"
+                                    :error-messages="(erros.type == 'email' ? erros.message : undefined)"
+                              focused />
+                              <v-text-field
                                     prepend-inner-icon="mdi-lock"
                                     :append-inner-icon="is_show_password ? 'mdi mdi-eye-outline' : 'mdi mdi-eye-off-outline'"
-                                    @click:append-inner="showPassword"
+                                    @click:append-inner="is_show_password = !is_show_password"
                                     variant="outlined"
                                     v-model="user.senha"
                                     label="Senha"
-                                    type="password"
+                                    :type="is_show_password ? 'text' : 'password'"
                                     :error-messages="erros.type == 'senha' ? erros.message : undefined"
                               />
                               <v-row align="center">
@@ -56,7 +57,6 @@
       import requisicaoLogin from '@/services/login/requisicao';
       import VersaoMinimisada from '../versionamento/VersaoMinimisada.vue';
       import ErroFormComponent from '../mensagem/ErroFormComponent.vue';
-
       export default defineComponent({
             data() {
                   return{
@@ -71,7 +71,11 @@
                               vericação: false,
                               message: ''
                         }),
-                        is_show_password: ref(false)
+                        is_show_password: ref(false),
+                        rule_email: (value : string) => {
+                              const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                              return pattern.test(value) || 'Email inválido.'
+                        },
                   }
             },
             components:{
@@ -80,12 +84,12 @@
             },
             methods:{
                   showPassword(){
-                        this.is_show_password = !this.is_show_password;
-                        if (this.is_show_password) {
-                              document.querySelector('#userpass')?.setAttribute('type', 'text');
-                        }else{
-                              document.querySelector('#userpass')?.setAttribute('type', 'password');
-                        }
+                        // this.is_show_password = !this.is_show_password;
+                        // if (this.is_show_password) {
+                        //       document.querySelector('#userpass')?.setAttribute('type', 'text');
+                        // }else{
+                        //       document.querySelector('#userpass')?.setAttribute('type', 'password');
+                        // }
                   },
                   async loginReq(){
                         this.isLogin = true;
