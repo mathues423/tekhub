@@ -200,6 +200,7 @@ export default defineComponent({
                                                 <!-- Perfil -->
                                                 <v-col class="v-col-12">
                                                       <v-select
+                                                            variant="outlined"
                                                             label="*Perfil"
                                                             v-model="usuario.perfil"
                                                             item-title="name"
@@ -212,7 +213,7 @@ export default defineComponent({
                                                 <!-- Empresa -->
                                                 <v-col class="v-col-12">
                                                       <EmpresaSelectComponent
-                                                            :valor_inicial="empresa_aux['codigo' as keyof typeof empresa_aux]"
+                                                            :valor_inicial="empresa_aux"
                                                             :have_erro="errors.findIndex((x) => x =='empresa') != -1"
                                                             @empresa_escolhida="(arg)=> empresa_escolhida = arg"
                                                             @Erro_fetch="(arg)=> showError(arg)"
