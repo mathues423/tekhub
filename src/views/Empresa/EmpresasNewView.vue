@@ -92,52 +92,53 @@ export default defineComponent({
                         @fechar_erro="voltarErroServer"
                   />
                   <v-row no-gutters>
-                        <v-col class="v-col-md-1"></v-col>
-                        <v-col class="v-col-12 v-col-md-8 pt-10">
+                        <v-col class="v-col-1"></v-col>
+                        <v-col class="v-col-10 pt-10">
                               <v-form @submit.prevent="criacaoRequest">
                                     <v-row no-gutters>
                                           <!-- Razao -->
-                                          <v-col class="v-col-4 d-flex d-md-none"></v-col>
-                                          <v-col class="v-col-8 v-col-md-12">
+                                          <v-col class="v-col-12">
                                                 <v-text-field
                                                       variant="outlined"
                                                       label="*Razão social:"
+                                                      placeholder="Razão social"
                                                       v-model="empresa.descricao"
                                                       :error-messages="errors.findIndex((x) => x =='razao') != -1 ? 'Por favor informe a Razão social.': undefined"
                                                 required/>
       
                                           </v-col>
                                           <!-- CNPJ -->
-                                          <v-col class="v-col-4 d-flex d-md-none"></v-col>
-                                          <v-col class="v-col-8 v-col-md-12">
+                                           <!-- ### Codigo para maskara fazer -->
+                                          <v-col class="v-col-12">
                                                 <v-text-field
                                                       variant="outlined"
                                                       label="*CNPJ"
+                                                      placeholder="86.682.093/0001-05"
                                                       v-model="empresa.cnpj"
                                                       :error-messages="(errors.findIndex((x) => x =='cnpj') != -1 ? 'Por favor informe o CNPJ.': undefined) || (errors.findIndex((x) => x =='400') != -1 ? 'Por favor informe o CNPJ valido.': undefined)"
                                                 required/>
                                           </v-col>
                                           <!-- Codigo -->
-                                          <v-col class="v-col-4 d-flex d-md-none"></v-col>
-                                          <v-col class="v-col-8 v-col-md-12">
+                                          <v-col class="v-col-12">
                                                 <v-text-field
                                                       variant="outlined"
                                                       label="*Codigo na Tek-System:"
+                                                      placeholder="1"
                                                       v-model="empresa.codigoTek"
                                                       :error-messages="(errors.findIndex((x) => x =='codigo') != -1 ? 'Por favor informe o CNPJ.': undefined) || (errors.findIndex((x) => x =='400') != -1 ? 'Por favor informe o CNPJ valido.': undefined)"
                                                 required/>
                                           </v-col>
                                           <!-- Versao -->
-                                          <v-col class="v-col-4 d-flex d-md-none"></v-col>
-                                          <v-col class="v-col-8 v-col-md-12">
+                                          <v-col class="v-col-12">
                                                 <v-text-field
                                                       variant="outlined"
                                                       label="*Verção API:"
+                                                      placeholder="V 1.0.0"
                                                       v-model="empresa.versaoApiTek"
                                                       :error-messages="(errors.findIndex((x) => x =='api') != -1 ? 'Por favor informe o CNPJ.': undefined) || (errors.findIndex((x) => x =='400') != -1 ? 'Por favor informe o CNPJ valido.': undefined)"
                                                 required/>
                                           </v-col>
-      
+                                          <!-- Ação -->
                                           <v-col class="col-12">
                                                 <v-row no-gutters>
                                                       <v-col :class="['v-col-12 pb-3', (errors.findIndex((x) => x =='igual') != -1 || editado) ? 'd-flex' : 'd-none']">
@@ -172,7 +173,7 @@ export default defineComponent({
                                     </v-row>
                               </v-form>
                         </v-col>
-                        <v-col class="d-none d-md-flex v-col-md-3"></v-col>
+                        <v-col class="v-col-1"></v-col>
                   </v-row>
             </span>
             <span v-else>
