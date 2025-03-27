@@ -151,7 +151,7 @@ export default defineComponent({
                                                             v-model="canal.descricao"
                                                             label="*Descrição"
                                                             :erros-mensage="errors.findIndex((x) => x =='descricao') != -1 ? 'Informe a descrição do canal' : undefined"
-                                                      required focused/>
+                                                      focused/>
                                                 </v-col>
                                                 <!-- Alias -->
                                                 <v-col class="v-col-12">

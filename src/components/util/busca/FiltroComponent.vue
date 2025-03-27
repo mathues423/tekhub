@@ -143,7 +143,7 @@ export default defineComponent({
                         label="Campo" 
                         :error-messages="errors.campo ? 'Campo inválido' : ''"
                         no-data-text="Não há campos disponíveis"
-                  density="compact" variant="outlined" required />
+                  density="compact" variant="outlined" />
             </v-col>
             <v-col class="v-col-6 v-col-md-4 pl-2">
                   <v-select 
@@ -153,21 +153,21 @@ export default defineComponent({
                         label="Operação"
                         :error-messages="errors.operacao ? 'Operação inválida' : ''"
                         no-data-text="Não há operações disponíveis"
-                        density="compact" variant="outlined" required />
+                        density="compact" variant="outlined" />
             </v-col>
             <v-col class="v-col-12 v-col-md-4 px-0 px-md-2">
                   <v-text-field v-if="escolha.campo.filtro.tipo_obj == 'String'" 
                   v-model="escolha_valor_str"
                   label="Valor"
                   :error-messages="errors.valor ? 'Informe o valor' : ''"
-                  density="compact" variant="outlined" required />
+                  density="compact" variant="outlined" />
 
                   <v-number-input v-if="escolha.campo.filtro.tipo_obj == 'Number'"
                         v-model="escolha_valor_num"
                         label="Valor"
                         :precision="0"
                         :error-messages="(errors.valor ? ' Informe o valor' : '') + (errors.valor_incompativel ? ' Valor incompatível' : '')"
-                  controlVariant="hidden" density="compact" variant="outlined" required focused />   
+                  controlVariant="hidden" density="compact" variant="outlined" focused />   
             </v-col>
       </v-row>
 </template>

@@ -19,6 +19,14 @@ export default defineComponent({
             valor_inicial:{
                   type: Object,
                   default: undefined
+            },
+            is_focused:{
+                  type: Boolean,
+                  default: undefined
+            },
+            is_required:{
+                  type: Boolean,
+                  default: false
             }
       },
       watch:{
@@ -46,14 +54,13 @@ export default defineComponent({
 </script>
 
 <template>
-      {{ empresa_select }} || {{ valor_inicial }} <br><br>
       <v-select
             v-model="empresa_select"
             :items="empresa_request"
-            label="Empresa"
+            :label="is_required ? '*Empresa' : 'Empresa'"
             item-title="descricao"
             item-value="codigo"
             :loading="!requested"
             :error-messages="have_erro ? 'Houve um erro ao buscar as empresas' : ''"
-      density="compact" variant="outlined"/>
+      density="compact" variant="outlined" :focused="is_focused"/>
 </template>
