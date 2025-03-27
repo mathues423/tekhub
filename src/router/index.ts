@@ -64,15 +64,15 @@ const routes: Array<RouteRecordRaw> = [
       user_type: ['ROLE_ADMIN']
     }
   },
-  {
-    path: '/canais/0',
-    name: 'canais_criacao',
-    component: () => import ('@/views/Canais/CanaisNewView.vue'),
-    meta:{
-      auth: true,
-      user_type: ['ROLE_ADMIN']
-    }
-  },
+  // { // Não permitido criar canal 
+  //   path: '/canais/0',
+  //   name: 'canais_criacao',
+  //   component: () => import ('@/views/Canais/CanaisNewView.vue'),
+  //   meta:{
+  //     auth: true,
+  //     user_type: ['ROLE_ADMIN']
+  //   }
+  // },
   {
     path: '/canais/:id',
     name: 'canais_edicao',
