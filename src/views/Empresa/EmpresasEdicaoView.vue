@@ -10,6 +10,7 @@ import store from '@/store';
 import TimeMensageErroComponent from '@/components/mensagem/TimeMensageErroComponent.vue';
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
 import TimeMensageFormReturnComponent from '@/components/mensagem/TimeMensageFormReturnComponent.vue';
+import fetch_ from '@/services/fetch/requisicao';
 
 export default defineComponent({
       data(){
@@ -85,14 +86,25 @@ export default defineComponent({
       },
       async mounted(){
             const rota_id = (this.$route.params['id'] || '-1') as string;
-            Promise.resolve(store.dispatch('getEmpresasID', rota_id))
-            .then((value) => {
-                  this.old_empresa.descricao = this.empresa.descricao = value.descricao;
-                  this.old_empresa.cnpj = this.empresa.cnpj = value.cnpj;
-                  this.old_empresa.codigoTek = this.empresa.codigoTek = value.codigoTek;
-                  this.old_empresa.versaoApiTek = this.empresa.versaoApiTek = value.versaoApiTek;
-                  this.old_empresa.integracoes = this.empresa.integracoes = value.integracoes;
-            }).catch((error_retorno)=> this.showError(error_retorno));
+            if(store.getters.getEmpresasLength){
+                  Promise.resolve(store.dispatch('getEmpresasID', rota_id))
+                  .then((value) => {
+                        this.old_empresa.descricao = this.empresa.descricao = value.descricao;
+                        this.old_empresa.cnpj = this.empresa.cnpj = value.cnpj;
+                        this.old_empresa.codigoTek = this.empresa.codigoTek = value.codigoTek;
+                        this.old_empresa.versaoApiTek = this.empresa.versaoApiTek = value.versaoApiTek;
+                        this.old_empresa.integracoes = this.empresa.integracoes = value.integracoes;
+                  }).catch((error_retorno)=> this.showError(error_retorno));
+            }else{
+                  Promise.resolve(fetch_.getDado_ID('/empresa', rota_id))
+                  .then((value) => {
+                        this.old_empresa.descricao = this.empresa.descricao = value.data.descricao;
+                        this.old_empresa.cnpj = this.empresa.cnpj = value.data.cnpj;
+                        this.old_empresa.codigoTek = this.empresa.codigoTek = value.data.codigoTek;
+                        this.old_empresa.versaoApiTek = this.empresa.versaoApiTek = value.data.versaoApiTek;
+                        this.old_empresa.integracoes = this.empresa.integracoes = value.data.integracoes;
+                  }).catch((error_retorno)=> this.showError(error_retorno));
+            }
       }
 })
 </script>

@@ -65,21 +65,41 @@ export default defineComponent({
       mounted() {
             this.in_request = true;
             const rota_id = (this.$route.params['id'] || '-1') as string;
-            Promise.resolve(store.dispatch('getUsuariosID', rota_id))
-            .then((value) => {
-                  this.usuario_old.email = this.usuario.email = value.email;
-                  Promise.resolve(fetch_.getDado('/empresa/'+value.empresaCodigo))
-                  .then((empresa)=> {
-                        this.empresa_aux = empresa.data;
-                        this.empresa_escolhida = empresa.data;
-                        this.in_request = false;
-                  }).catch((error_retorno)=> this.showError(error_retorno))
-                  this.usuario_old.empresaCodigo = value.empresaCodigo;
-                  this.usuario_old.perfil = this.usuario.perfil = value.perfil;
-                  this.usuario_old.senha = this.usuario.senha = value.senha;
-                  this.usuario_old.token = this.usuario.token = value.token;
-                  
-            }).catch((error_retorno)=> this.showError(error_retorno));
+            console.log(store.getters);
+            if(store.getters.getUsuariosLength){
+                  Promise.resolve(store.dispatch('getUsuariosID', rota_id))
+                  .then((value) => {
+                        this.usuario_old.email = this.usuario.email = value.email;
+                        Promise.resolve(fetch_.getDado('/empresa/'+value.empresaCodigo))
+                        .then((empresa)=> {
+                              this.empresa_aux = empresa.data;
+                              this.empresa_escolhida = empresa.data;
+                              this.in_request = false;
+                        }).catch((error_retorno)=> this.showError(error_retorno))
+                        this.usuario_old.empresaCodigo = value.empresaCodigo;
+                        this.usuario_old.perfil = this.usuario.perfil = value.perfil;
+                        this.usuario_old.senha = this.usuario.senha = value.senha;
+                        this.usuario_old.token = this.usuario.token = value.token;
+                        
+                  }).catch((error_retorno)=> this.showError(error_retorno));
+            }else{
+                  Promise.resolve(fetch_.getDado('/usuario/'+rota_id))
+                  .then((value) => {
+                        console.log('Ret', value);
+                        this.usuario_old.email = this.usuario.email = value.data.email;
+                        Promise.resolve(fetch_.getDado('/empresa/'+value.data.empresaCodigo))
+                        .then((empresa)=> {
+                              this.empresa_aux = empresa.data;
+                              this.empresa_escolhida = empresa.data;
+                              this.in_request = false;
+                        }).catch((error_retorno)=> this.showError(error_retorno))
+                        this.usuario_old.empresaCodigo = value.empresaCodigo;
+                        this.usuario_old.perfil = this.usuario.perfil = value.data.perfil;
+                        this.usuario_old.senha = this.usuario.senha = value.data.senha;
+                        this.usuario_old.token = this.usuario.token = value.data.token;
+                        
+                  }).catch((error_retorno)=> this.showError(error_retorno));  
+            }
       },
       methods:{
             voltarUsuario(){
@@ -185,6 +205,7 @@ export default defineComponent({
                                                             item-title="name"
                                                             item-value="value"
                                                             :items="perfil"
+                                                            :loading="in_request"
                                                             :error-messages="errors.findIndex((x) => x =='perfil') != -1 ? 'Informe um perfil.' : undefined"
                                                       />
                                                 </v-col>
