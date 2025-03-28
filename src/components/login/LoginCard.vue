@@ -83,14 +83,6 @@
                   ErroFormComponent
             },
             methods:{
-                  showPassword(){
-                        // this.is_show_password = !this.is_show_password;
-                        // if (this.is_show_password) {
-                        //       document.querySelector('#userpass')?.setAttribute('type', 'text');
-                        // }else{
-                        //       document.querySelector('#userpass')?.setAttribute('type', 'password');
-                        // }
-                  },
                   async loginReq(){
                         this.isLogin = true;
                         this.erros.vericação = false;

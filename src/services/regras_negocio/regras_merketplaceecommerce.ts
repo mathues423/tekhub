@@ -1,37 +1,3 @@
-// class DadoMarketplaceEcommerce {
-//       // codigo= -1; //codigo do dado
-
-//       empresaCodigo= -1;
-
-//       ambienteCodigo= -1;
-
-//       usuario= "";
-
-//       senha= "";
-
-//       token= "";
-
-//       appClienteId= "";
-
-//       appClienteSecret= "";
-
-//       urlRedirecionamento= "";
-      
-//       webserviceApi= "";
-
-//       variacaoPrincipal= "";
-
-//       transformaVariacaoEmProdutoSimples= false;
-
-//       modoDebug= false;
-
-//       versaoEcommerce= "";
-      
-//       usuarioApiCodigo= -1;
-
-//       atributosDefault= "";
-// }
-
 class MarketplaceEcommerce {
       public async _add(dado : object, erros_msg : Array<string>){
             if(dado['empresaCodigo' as keyof typeof dado] == -1){

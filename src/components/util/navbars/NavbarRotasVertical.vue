@@ -79,7 +79,7 @@ export default defineComponent({
                               <v-list-item v-show="user_type == 'ROLE_ADMIN'"
                                     class="pl-4"
                                     :active="item_ativo === 'mark_ecom'"
-                                    prepend-icon="mdi mdi-database-outline"
+                                    prepend-icon="mdi mdi-database"
                                     title="Marketplace/Ecommerce"
                                     @click="changePage('integracoesmarketplacesecommerces')"
                               />
