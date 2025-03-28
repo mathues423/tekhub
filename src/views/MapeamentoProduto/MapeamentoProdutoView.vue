@@ -132,13 +132,12 @@ export default defineComponent({
                         this.disable_botao_delet = false;
                   })
             },
-            changeItemPagina(quantidade: number){
-                  this.pagina_atual = 1;
-                  this.ITEM_PAGINA_MAX = quantidade;
+            select_pag(value: number){
+                  this.pagina_atual = value;
                   if (this.itsOnFilter) {
-                        this.getPesquisa_filtrada(this.request_pesquisa)
+                        this.getPesquisa_filtrada(this.request_pesquisa);
                   }else{
-                        this.requestDados()
+                        this.requestDados();
                   }
             },
             async requestDados(){
@@ -250,6 +249,15 @@ export default defineComponent({
                         this.dado_parametro.body = store.getters.getMapeamentoProduto_pesquisa;
                         this.lista_estado = 'Lista_filtrada'
                   }).catch((error_retorno)=> this.showError(error_retorno))
+            },
+            changeItemPagina(quantidade: number){
+                  this.pagina_atual = 1;
+                  this.ITEM_PAGINA_MAX = quantidade;
+                  if (this.itsOnFilter) {
+                        this.getPesquisa_filtrada(this.request_pesquisa)
+                  }else{
+                        this.requestDados()
+                  }
             },
             quantidadeItens(args: number){
                   this.pagina_atual = 1;
@@ -373,10 +381,10 @@ export default defineComponent({
                                     }"
                               @closefiltrarMapeamentoProduto="closefiltrarMapeamentoProduto"
                               @deletar="(arg: any)=> deletar(arg)"
-                              @quantidadeItens="(arg: number)=> quantidadeItens(arg)"
                               @ordenaMapeamentoProduto="(arg: any)=> ordenaMapeamentoProduto(arg)"
                               @filtraMapeamentoProduto="filtraMapeamentoProduto"
-                              @select_paginacao="(value: number)=> changeItemPagina(value)" 
+                              @quantidadeItens="(value: number)=> changeItemPagina(value)"
+                              @select_pag="(value: number)=> select_pag(value)" 
                               
                               :disable_botao_delet="disable_botao_delet"
                               :showDeletModal="is_in_DeletModal"
