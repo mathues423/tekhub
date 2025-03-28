@@ -4,12 +4,10 @@ import NavbarComplet from '@/components/util/navbars/NavbarComplet.vue';
 import VersaoMaximisada from '@/components/versionamento/VersaoMaximisada.vue';
 import router from '@/router';
 import CriarBotaoComponent from '@/components/util/CriarBotaoComponent.vue'
-import LoaderSkeleton from '@/components/util/Loaders/LoaderSkeleton.vue'
 import fetch_ from '@/services/fetch/requisicao';
 import { defineComponent } from 'vue';
 import store from '@/store';
 import MapeamentoProdutoComponent from '@/components/conteudos/MapeamentoProdutoComponent.vue';
-import ErroFormComponent from '@/components/mensagem/ErroFormComponent.vue';
 import regra_map from '@/services/regras_negocio/regras_mapeamentoprodutos'
 import EmpresaSelectComponent from '@/components/util/selects/EmpresaSelectComponent.vue';
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
@@ -70,7 +68,7 @@ export default defineComponent({
                         body: [] as Array<object>
                   },
                   dado_parametro:{'header': [{}], 'body': [{}]},
-                  dado_canais:{},
+                  dado_canais:[{}],
                   dado_empresa_selected:{},
                   canal_selected:{},
                   escolheu_empresa: false,
@@ -86,10 +84,8 @@ export default defineComponent({
       },
       components:{
             NavbarComplet,
-            ErroFormComponent,
             MapeamentoProdutoComponent,
             CriarBotaoComponent,
-            LoaderSkeleton,
             EmpresaSelectComponent,
             VersaoMaximisada,
             ErroResponseComponent,
@@ -136,24 +132,13 @@ export default defineComponent({
                         this.disable_botao_delet = false;
                   })
             },
-            avancaPagina(){
-                  if (this.pagina_atual < this.NUMERO_PAGINA) {
-                        this.pagina_atual++;
-                        if (this.itsOnFilter) {
-                              this.getPesquisa_filtrada(this.request_pesquisa);
-                        }else{
-                              this.requestDados();
-                        }
-                  }
-            },
-            recuarPagina(){
-                  if (this.pagina_atual > 1) {
-                        this.pagina_atual--;
-                        if (this.itsOnFilter) {
-                              this.getPesquisa_filtrada(this.request_pesquisa);
-                        }else{
-                              this.requestDados();
-                        }
+            changeItemPagina(quantidade: number){
+                  this.pagina_atual = 1;
+                  this.ITEM_PAGINA_MAX = quantidade;
+                  if (this.itsOnFilter) {
+                        this.getPesquisa_filtrada(this.request_pesquisa)
+                  }else{
+                        this.requestDados()
                   }
             },
             async requestDados(){
@@ -283,19 +268,25 @@ export default defineComponent({
                   this.inRequestPesquisa = false;
                   this.fetch_error_msg = {};
                   this.have_fetch_error = false;
+            },
+            canal_toString(item: any){
+                  return{
+                        title : item['ambienteCanalAlias' as keyof typeof item],
+                        value : item
+                  }
             }
       }
 })
 </script>
 
 <template>
-      <div class="row">
+      <v-row no-gutters>
             <NavbarComplet 
                   :have_erro="have_fetch_error"
                   :lateral="'map_pro'"
                   :user_type="auth_type"
             />
-            <div class="col-12 col-lg-10" id="content">
+            <v-col class="v-col-12 v-col-md-10">
                   <span v-if="!have_fetch_error || fetch_error_msg['errors' as keyof typeof fetch_error_msg]">
                         <!-- ERRO no servidor mensagem -->
                         <TimeMensageErroComponent v-if="fetch_error_msg['errors' as keyof typeof fetch_error_msg]"
@@ -304,90 +295,65 @@ export default defineComponent({
                               @fechar_erro="voltarErroServer"
                         />
                         <!-- Pesquisa Card -->
-                        <div :class="['row', 'my-1']">
-                              <div class="col-lg-1"></div>
-                              <div class="Card-Body col-10 row">
-                                    <div class="col-4 col-lg-2 form_text" v-if="auth_type != 'ROLE_USER'">
-                                          *Empresa: 
-                                    </div>
-                                    <div class="col-8" v-if="auth_type != 'ROLE_USER'">
+                        <v-row no-gutters>
+                              <v-col class="v-col-1"></v-col>
+                              <v-col class="col-10 pt-10">
+                                    <!-- Empresa Select -->
+                                    <v-col class="v-col-12" v-if="auth_type != 'ROLE_USER'">
                                           <EmpresaSelectComponent
-                                                :valor_inicial="{}"
+                                                :is_required="true"
                                                 :have_erro="erros_pesquisa.findIndex((x) => x =='empresa') != -1"
+                                                :mensagem_erro="'Selecione a empresa antes da busca.'"
                                                 @empresa_escolhida="(arg: object)=> dado_empresa_selected = arg"
                                                 @erro_fetch="(ret)=> showError(ret)"
+                                          /> 
+                                    </v-col>
+                                    <!-- Canal Select -->
+                                    <v-col class="col-12">
+                                          <v-select
+                                                variant="outlined"
+                                                v-model="canal_selected"
+                                                :items="dado_canais"
+                                                label="*Canal de venda"
+                                                :item-props="canal_toString"
+                                                :loading="inRequestCanal"
+                                                :no-data-text="dado_canais ? 'Nenhum Canal de Venda encontrado' : 'Selecione primeiro a Empresa'"
+                                                :error-messages="erros_pesquisa.indexOf('canal') != -1 ? 'Informe a Canal antes da busca.' : undefined"
                                           />
-                                    </div>
-                                    <div class="col-12 col-lg-2" v-if="auth_type != 'ROLE_USER'">
-                                          <ErroFormComponent
-                                                :mensagem="'Informe a Empresa'"
-                                                :class="['alert-danger desativada',{'ativada' : erros_pesquisa.indexOf('empresa') != -1 }]"
-                                          />
-                                    </div>
-      
-                                    <div class="col-4 col-lg-2 form_text">
-                                          *Canal de venda:
-                                    </div>
-                                    <div class="col-8">
-                                          <div v-show="inRequestCanal">
-                                                <LoaderSkeleton 
-                                                      :tipo_loader="'select'"
-                                                />
-                                          </div>
-                                          <select class="custom-select w-100" v-model="canal_selected" required v-show="!inRequestCanal">
-                                                <option selected disabled :value="{}"> Selecione o campo</option>
-                                                <option v-for="canal in dado_canais" :key="canal" :value="canal"> {{ canal['ambienteCanalAlias' as keyof typeof canal] }}</option>
-                                          </select>
-                                    </div>
-                                    <div class="col-12 col-lg-2">
-                                          <ErroFormComponent
-                                                :mensagem="'Informe a Canal'"
-                                                :class="['alert-danger desativada',{'ativada' : erros_pesquisa.indexOf('canal') != -1 }]"
-                                          />
-                                    </div>
-                                    <div class="divider">
-                                          <hr class="divider">
-                                          <span>Filtros</span>
-                                    </div>
+                                    </v-col>
+                                    <!-- Filtros -->
+                                    <v-divider> Filtros </v-divider>
                                     <!-- Produto Erp -->
-                                    <div class="col-4 col-lg-2 form_text">
-                                          Produto Erp:
-                                    </div>
-                                    <div class="col-8">
-                                          <input type="text" class="form-control" v-model="filtro_erp">
-                                          <!-- <ErroFormComponent
-                                          :mensagem="''"
-                                          :class="['alert-danger desativada',{'ativada' : erros_pesquisa.indexOf('filtro_erp') != -1}]"
-                                          /> -->
-                                    </div>
-                                    <div class="col-12"></div>
+                                    <v-col class="v-col-12">
+                                          <v-text-field
+                                                variant="outlined"
+                                                v-model="filtro_erp"
+                                                label="Produto Erp"
+                                          />
+                                    </v-col>
                                     <!-- Produto Site -->
-                                    <div class="col-4 col-lg-2 form_text">
-                                          Produto Site:
-                                    </div>
-                                    <div class="col-8">
-                                          <input type="text" class="form-control" v-model="filtro_site">
-                                          <!-- <ErroFormComponent
-                                          :mensagem="''"
-                                          :class="['alert-danger desativada',{'ativada' : erros_pesquisa.indexOf('filtro_site') != -1}]"
-                                          /> -->
-                                    </div>
-                                    <div class="col-12"></div>
-
-                                    <div class="col-2 col-lg-1"></div>
-                                    <div class="col">
-                                          <button class="btn btn-light" @click="requestDados" :disabled="inRequestPesquisa">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                                                      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-                                                </svg>
-                                                Pesquisa 
-                                          </button>
-                                    </div>
-                              </div>
-                              
-                        </div>
+                                    <v-col class="v-col-12">
+                                          <v-text-field
+                                                variant="outlined"
+                                                v-model="filtro_site"
+                                                label="Produto Site"
+                                          />
+                                    </v-col>
+                                    <!-- Ação -->
+                                    <v-col class="v-col-12">
+                                          <v-btn
+                                                color="info"
+                                                @click="requestDados"
+                                                prepend-icon="mdi-magnify"
+                                                text="Pesquisar"
+                                                :disabled="inRequestPesquisa"
+                                          />
+                                    </v-col>
+                              </v-col>
+                              <v-col class="v-col-1"></v-col>
+                        </v-row>
       
-                        <CriarBotaoComponent @criar="adicionarMapeamentoProduto"/>
+                        <CriarBotaoComponent class="pl-4" @criar="adicionarMapeamentoProduto"/>
                         <MapeamentoProdutoComponent
                               :is_deletando="is_deletando"
                               :is_in_DeletModal="is_in_DeletModal"
@@ -410,8 +376,7 @@ export default defineComponent({
                               @quantidadeItens="(arg: number)=> quantidadeItens(arg)"
                               @ordenaMapeamentoProduto="(arg: any)=> ordenaMapeamentoProduto(arg)"
                               @filtraMapeamentoProduto="filtraMapeamentoProduto"
-                              @avancaPagina="avancaPagina"
-                              @recuarPagina="recuarPagina"
+                              @select_paginacao="(value: number)=> changeItemPagina(value)" 
                               
                               :disable_botao_delet="disable_botao_delet"
                               :showDeletModal="is_in_DeletModal"
@@ -425,54 +390,7 @@ export default defineComponent({
                               @voltar="have_fetch_error = false"
                         />
                   </span>
-            </div>
+            </v-col>
             <VersaoMaximisada />
-      </div>
+      </v-row>
 </template>
-
-<style scoped>
-#content{
-      background-color: var(--bs-white);
-      color: var(--bs-gray-600);
-}
-div.divider{
-      text-align: center;
-      display: table;
-}
-div.divider > span{
-      display: inline-block;
-      color:black;
-      font-size: 20px;
-}
-hr.divider{
-      margin: auto;
-}
-.form_text{
-      font-size: 14px;
-      color: var(--bs-black);
-      text-align: right;
-}
-.Card-Body >div{
-      padding-top: 10px;
-}
-.custom-select{
-      background: #fff url(data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E) no-repeat right .75rem center;
-      background-size: 8px 10px;
-      padding: .375rem .75rem .375rem .75rem;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
-      color: #495057;
-      vertical-align: middle;
-      border: 1px solid #ced4da;
-      border-radius: .25rem;
-      display: inline-block;
-      
-}
-/* @media (prefers-color-scheme: dark) {
-      #content{
-            background-color: var(--dark-blue);
-            color: var(--bs-white);
-      }
-} */
-</style>

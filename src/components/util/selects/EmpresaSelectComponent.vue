@@ -16,6 +16,10 @@ export default defineComponent({
                   type: Boolean,
                   required: true
             },
+            mensagem_erro:{
+                  type: String,
+                  default: 'Houve um erro ao buscar as empresas'
+            },
             valor_inicial:{
                   type: Object,
                   default: undefined
@@ -32,6 +36,9 @@ export default defineComponent({
       watch:{
             valor_inicial(empresa_new){
                   this.empresa_select = empresa_new
+            },
+            empresa_select(empresa_new){
+                  this.$emit('empresa_escolhida', empresa_new)
             }
       },
       mounted() {
@@ -61,6 +68,6 @@ export default defineComponent({
             :label="is_required ? '*Empresa' : 'Empresa'"
             :item-props="empresa_select_props"
             :loading="!requested"
-            :error-messages="have_erro ? 'Houve um erro ao buscar as empresas' : ''"
+            :error-messages="have_erro ? mensagem_erro : undefined"
       density="compact" variant="outlined" :focused="is_focused"/>
 </template>

@@ -19,12 +19,10 @@ export default defineComponent({
             class="pa-1"
             :title="tipo_mesnsagem == 'error' ? 'ERRO' : 'AVISO'"
             border="start"
-            border-color="deep-red accent-4"
             icon="mdi-alert-circle"
             :type="tipo_mesnsagem"
             :text="mensagem"
-      >
-      </v-alert>
+      />
 </template>
 
 <style scoped>
