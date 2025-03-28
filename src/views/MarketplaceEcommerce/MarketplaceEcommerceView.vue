@@ -144,24 +144,12 @@ export default defineComponent({
                         this.showError(error_retorno)
                   })
             },
-            avancaPagina(){
-                  if (this.pagina_atual < this.NUMERO_PAGINA) {
-                        this.pagina_atual++;
-                        if (this.itsOnFilter) {
-                              this.getPesquisa(this.request_pesquisa)
-                        }else{
-                              this.requestDados()
-                        }
-                  }
-            },
-            recuarPagina(){
-                  if (this.pagina_atual > 1) {
-                        this.pagina_atual--;
-                        if (this.itsOnFilter) {
-                              this.getPesquisa(this.request_pesquisa)
-                        }else{
-                              this.requestDados()
-                        }
+            select_pag(value: number){
+                  this.pagina_atual = value;
+                  if (this.itsOnFilter) {
+                        this.getPesquisa(this.request_pesquisa);
+                  }else{
+                        this.requestDados();
                   }
             },
             async requestDados(){
@@ -268,6 +256,7 @@ export default defineComponent({
                               :mensagem="fetch_error_msg['errors' as keyof typeof fetch_error_msg][0]"
                               @fechar_erro="voltarErroServer"
                         />
+                        <CriarBotaoComponent class="pl-4" @criar="adicionarNewmarketplaceecommerce"/>
                         <v-row no-gutters>
                               <v-col class="v-col-1"></v-col>
                               <v-col class="v-col-10">
@@ -279,7 +268,6 @@ export default defineComponent({
                               </v-col>
                               <v-col class="v-col-1"></v-col>
                         </v-row>
-                        <CriarBotaoComponent class="pl-4" @criar="adicionarNewmarketplaceecommerce"/>
                         <MarketplaceEcommerceComponent
                               :is_deletando="is_deletando"
                               :header_info="dado_paginado.header"
@@ -297,8 +285,7 @@ export default defineComponent({
                               @closefiltrarMarketplaceEcommerce="closefiltrarMarketplaceEcommerce"
                               @ordenaMarketplaceEcommerce="(arg : any) => ordenaMarketplaceEcommerce(arg)"
                               @quantidadeItens="(args: number)=> quantidadeItens(args)"
-                              @avancaPagina="avancaPagina" 
-                              @recuarPagina="recuarPagina"
+                              @select_pag="(args: number)=> select_pag(args)"
                               @getPesquisa="(args: string) => {
                                                 pagina_atual = 1
                                                 getPesquisa(args)

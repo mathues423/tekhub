@@ -8,10 +8,10 @@ import ErroFormComponent from '@/components/mensagem/ErroFormComponent.vue';
 import regra_marketplace from '@/services/regras_negocio/regras_merketplaceecommerce';
 import store from '@/store';
 import fetch_ from '@/services/fetch/requisicao';
-import LoaderSkeleton from '@/components/util/Loaders/LoaderSkeleton.vue';
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue'
 import TimeMensageErroComponent from '@/components/mensagem/TimeMensageErroComponent.vue';
 import TimeMensageFormReturnComponent from '@/components/mensagem/TimeMensageFormReturnComponent.vue';
+import EmpresaSelectComponent from '@/components/util/selects/EmpresaSelectComponent.vue';
 
 export default defineComponent({
       data(){
@@ -84,15 +84,16 @@ export default defineComponent({
                   },
                   empresa_aux:{},
                   ambiente_aux:{},
-                  empresas_select:{},
+                  empresas_select:[{}],
                   inRequestEmpresa:false,
-                  ambiente_select:{},
+                  ambiente_select:[{}],
                   inRequestAmbiente:false,
                   edit_markEcom_request:false,
-                  usuario_select:{},
+                  usuario_select:[{}],
                   usuarioApi_aux:{},
                   errors: [] as Array<string>,
-                  editado: false
+                  editado: false,
+                  is_show_password : true
             }
       },
       watch:{
@@ -113,11 +114,11 @@ export default defineComponent({
       components:{
             NavbarComplet,
             VersaoMaximisada,
-            LoaderSkeleton,
-            ErroFormComponent,
+            // ErroFormComponent,
             ErroResponseComponent,
             TimeMensageErroComponent,
-            TimeMensageFormReturnComponent
+            EmpresaSelectComponent,
+            // TimeMensageFormReturnComponent
       },
       mounted(){
             // get Empresa e ambiente dps get usuario filtro empresa.codigo == empresa
@@ -196,17 +197,6 @@ export default defineComponent({
             voltarMarktplaceEcommerce(){
                   router.push('/integracoesmarketplacesecommerces');
             },
-            showPassword(){
-                  if(document.querySelector('#integra_pass')?.getAttribute('type') == 'password'){
-                        document.querySelector('#integra_pass')?.setAttribute('type', 'text');
-                        document.querySelector('#eyeclose')?.setAttribute('display','none');
-                        document.querySelector('#eyeopen')?.setAttribute('display','inline');
-                  }else{
-                        document.querySelector('#integra_pass')?.setAttribute('type', 'password');
-                        document.querySelector('#eyeclose')?.setAttribute('display','inline'); 
-                        document.querySelector('#eyeopen')?.setAttribute('display','none');
-                  }
-            },
             showError(objeto_erro: object){
                   this.fetch_error_msg = objeto_erro;
                   this.have_fetch_error = true;
@@ -218,19 +208,31 @@ export default defineComponent({
             voltarErroServer(){
                   this.fetch_error_msg = {};
                   this.voltarErro();
-            }
+            },
+            ambiente_select_props(item: any){
+                  return{
+                        title : item['canalAlias' as keyof typeof item],
+                        value : item
+                  }
+            },
+            usuario_select_props(item: any){
+                  return{
+                        title : item['email' as keyof typeof item],
+                        value : item
+                  }
+            },
       }
 })
 </script>
 
 <template>
-      <div class="row">
+      <v-row no-gutters>
             <NavbarComplet 
                   :have_erro="have_fetch_error"
                   :lateral="'mark_ecom'"
                   :user_type="auth_type"
             />
-            <div class="col-12 col-lg-10" id="content">
+            <v-col class="v-col-12 v-col-md-10 pt-10">
                   <span v-if="!have_fetch_error || fetch_error_msg['errors' as keyof typeof fetch_error_msg]">
                         <!-- ERRO no servidor mensagem -->
                         <TimeMensageErroComponent v-if="fetch_error_msg['errors' as keyof typeof fetch_error_msg]"
@@ -238,193 +240,181 @@ export default defineComponent({
                               :mensagem="fetch_error_msg['errors' as keyof typeof fetch_error_msg][0]"
                               @fechar_erro="voltarErroServer"
                         />
-                        <div class="row">
-                              <div class="col-1"></div>
-                              <div class="Card-Body col-8">
-                                    <form @submit.prevent="edicaoRequest()" class="row form_content" novalidate>
-                                          <!-- Empresa -->
-                                          <div class="col-4 col-lg-2 form_text">
-                                                *Empresa:
-                                          </div>
-                                          <div class="col-8">
-                                                <LoaderSkeleton v-if="inRequestEmpresa"
-                                                      :tipo_loader="'select'"
-                                                />
-                                                <select class="custom-select w-100" v-model="empresa_aux" required v-if="!inRequestEmpresa">
-                                                      <option selected disabled :value="{}"> Selecione o campo</option>
-                                                      <option v-for="empresa in empresas_select" :key="empresa" :value="empresa"> {{ empresa['descricao' as keyof typeof empresa] }}</option>
-                                                </select>
-                                                <ErroFormComponent
-                                                      :mensagem="'Informe a empresa'"
-                                                      :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='empresa') != -1}]"
-                                                />
-                                          </div>
-                                          <div class="col-lg-2"></div>
-                                          <!-- Ambiente -->
-                                          <div class="col-4 col-lg-2 form_text">
-                                                *Ambiente:
-                                          </div>
-                                          <div class="col-8">
-                                                <LoaderSkeleton v-if="inRequestAmbiente"
-                                                      :tipo_loader="'select'"
-                                                />
-                                                <select class="custom-select w-100" v-model="ambiente_aux" required v-if="!inRequestAmbiente">
-                                                      <option selected disabled :value="{}"> Selecione o campo</option>
-                                                      <option v-for="ambiente in ambiente_select" :key="ambiente" :value="ambiente"> {{ ambiente['canalAlias' as keyof typeof ambiente] }} | {{ ambiente['canalTipo' as keyof typeof ambiente] }}</option>
-                                                </select>
-                                                <ErroFormComponent
-                                                      :mensagem="'Informe a ambiente'"
-                                                      :class="['alert-danger desativada',{'ativada' : errors.findIndex((x) => x =='ambiente') != -1}]"
-                                                />
-                                          </div>
-                                          <div class="col-lg-2"></div>
-                                          <!-- Usuario -->
-                                          <div class="col-4 col-lg-2 form_text">
-                                                Usuario:
-                                          </div>
-                                          <div class="col-8">
-                                                <input type="text" class="form-control" v-model="marketplaceecommerce_new.usuario">
-                                          </div>
-                                          <div class="col-lg-2"></div>
-                                          <!-- Senha -->
-                                          <div class="col-4 col-lg-2 form_text">
-                                                Senha:
-                                          </div>
-                                          <div class="col-8">
-                                                <div class="input-group">
-                                                      <input type="password" id="integra_pass" class="form-control" v-model="marketplaceecommerce_new.senha">
-                                                      <span class="input-group-text">
-                                                            <button type="button" class="btn" @click="showPassword()">
-                                                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-slash-fill visible" viewBox="0 0 16 16" display="inline" id="eyeclose">
-                                                                        <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7 7 0 0 0 2.79-.588M5.21 3.088A7 7 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474z"/>
-                                                                        <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z"/>
-                                                                  </svg>
-                                                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16" display="none" id="eyeopen">
-                                                                        <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
-                                                                        <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
-                                                                  </svg>
-                                                            </button>
-                                                      </span>
-                                                </div>
-                                          </div>
-                                          <div class="col-lg-2"></div>
-                                          <!-- Token -->
-                                          <div class="col-4 col-lg-2 form_text">
-                                                Token:
-                                          </div>
-                                          <div class="col-8">
-                                                <input type="text" class="form-control" v-model="marketplaceecommerce_new.token">
-                                          </div>
-                                          <div class="col-lg-2"></div>
-                                          <!-- ClienteId -->
-                                          <div class="col-4 col-lg-2 form_text">
-                                                ClienteId:
-                                          </div>
-                                          <div class="col-8">
-                                                <input type="text" class="form-control" v-model="marketplaceecommerce_new.appClienteId">
-                                          </div>
-                                          <div class="col-lg-2"></div>
-                                          <!-- ClienteSecret -->
-                                          <div class="col-4 col-lg-2 form_text">
-                                                ClienteSecret:
-                                          </div>
-                                          <div class="col-8">
-                                                <input type="text" class="form-control" v-model="marketplaceecommerce_new.appClienteSecret">
-                                          </div>
-                                          <div class="col-lg-2"></div>
-                                          <!-- URL redirecionamento -->
-                                          <div class="col-4 col-lg-2 form_text">
-                                                URL redirecionamento:
-                                          </div>
-                                          <div class="col-8">
-                                                <input type="text" class="form-control" v-model="marketplaceecommerce_new.urlRedirecionamento">
-                                          </div>
-                                          <div class="col-lg-2"></div>
-                                          <!-- Webservice Api -->
-                                          <div class="col-4 col-lg-2 form_text">
-                                                Webservice Api:
-                                          </div>
-                                          <div class="col-8">
-                                                <input type="text" class="form-control" v-model="marketplaceecommerce_new.webserviceApi">
-                                          </div>
-                                          <div class="col-lg-2"></div>
-                                          <!-- Variação Principal -->
-                                          <div class="col-4 col-lg-2 form_text">
-                                                Variação Principal:
-                                          </div>
-                                          <div class="col-8">
-                                                <input type="text" class="form-control" v-model="marketplaceecommerce_new.variacaoPrincipal">
-                                          </div>
-                                          <div class="col-lg-2"></div>
-                                          <!-- Det. em Produto Simpres -->
-                                          <div class="col-4 col-lg-2 form_text">
-                                                Det. em Produto Simpres:
-                                          </div>
-                                          <div class="col-8">
-                                                <div class="form-check form-switch">
-                                                      <input style="height: 1.75em; width: 3.5em;" class="form-check-input" type="checkbox" role="switch" v-model="marketplaceecommerce_new.transformaVariacaoEmProdutoSimples" aria-checked="mixed">
-                                                </div>
-                                          </div>
-                                          <div class="col-lg-2"></div>
-                                          <!-- Modo Dbug -->
-                                          <div class="col-4 col-lg-2 form_text">
-                                                Modo Dbug:
-                                          </div>
-                                          <div class="col-8">
-                                                <div class="form-check form-switch">
-                                                      <input style="height: 1.75em; width: 3.5em;" class="form-check-input" type="checkbox" role="switch" v-model="marketplaceecommerce_new.modoDebug" aria-checked="mixed">
-                                                </div>
-                                          </div>
-                                          <div class="col-lg-2"></div>
-                                          <!-- Versão -->
-                                          <div class="col-4 col-lg-2 form_text">
-                                                Versão:
-                                          </div>
-                                          <div class="col-8">
-                                                <input type="text" class="form-control" v-model="marketplaceecommerce_new.versaoEcommerce">
-                                          </div>
-                                          <div class="col-lg-2"></div>
-                                          <!-- Usuário Api -->
-                                          <div class="col-4 col-lg-2 form_text">
-                                                Usuário Api:
-                                          </div>
-                                          <div class="col-8">
-                                                <select class="custom-select w-100" v-model="usuarioApi_aux" required>
-                                                      <option selected disabled :value="{}"> Selecione o campo</option>
-                                                      <option v-for="usuario in usuario_select" :key="usuario" :value="usuario"> {{ usuario['email' as keyof typeof usuario] }}</option>
-                                                </select>
-                                          </div>
-                                          <div class="col-lg-2"></div>
-                                          <!-- Atributos defaut(json) -->
-                                          <div class="col-4 col-lg-2 form_text">
-                                                Atributos defaut(json):
-                                          </div>
-                                          <div class="col-8">
-                                                <textarea type="text" class="form-control" v-model="marketplaceecommerce_new.atributosDefault"></textarea>
-                                          </div>
-      
-                                          <!-- Botões -->
-                                          <div style="margin-top: 16px;" class="col-12">
-                                                <ErroFormComponent
-                                                      :mensagem="'Edite antes de salvar.'"
-                                                      :class="['alert-warning desativada',{'ativada' : errors.findIndex((x) => x =='igual') != -1}]"
-                                                />
-                                                <TimeMensageFormReturnComponent v-if="editado"
-                                                      :mensagem="'Integração alterado com sucesso'"
-                                                      :time_duration="5"
-                                                      @fechar_mensagem="editado = false"
-                                                />
-                                                <button class="btn btn-primary col-4 col-lg-2" :disabled="inRequestEmpresa || inRequestAmbiente || edit_markEcom_request || editado" >
-                                                      <span>Editar</span>
-                                                </button>
-                                                <button class="btn btn-light col-4 col-lg-2" style="margin-left: 24px;" @click="voltarMarktplaceEcommerce()">
-                                                      <span>Voltar</span>
-                                                </button>
-                                          </div>
-                                    </form>
-                              </div>
-                              <div class="col"></div>
-                        </div>
+                        <v-row no-gutters>
+                              <v-col class="v-col-1"></v-col>
+                              <v-col class="v-col-10">
+                                    <v-form @submit.prevent="edicaoRequest()" novalidate>
+                                          <v-row no-gutters>
+                                                <!-- Empresa -->
+                                                <v-col class="v-col-12">
+                                                      <EmpresaSelectComponent
+                                                            :have_erro="errors.findIndex((x) => x =='empresa') != -1"
+                                                            :is_required="true"
+                                                            :valor_inicial="empresa_aux"
+                                                            @empresa_escolhida="(arg: object)=> empresa_aux = arg"
+                                                            @Erro_fetch="(arg: object)=> $emit('erro_fetch', arg)"
+                                                      />
+                                                </v-col>
+                                                <!-- Ambiente -->
+                                                <v-col class="v-col-12">
+                                                      <v-select
+                                                            variant="outlined"
+                                                            v-model="ambiente_aux"
+                                                            label="*Ambiente:"
+                                                            :items="ambiente_select"
+                                                            :item-props="ambiente_select_props"
+                                                            :loading="inRequestAmbiente"
+                                                            :error-messages="errors.findIndex((x) => x =='ambiente') != -1 ? 'Informe o ambiente' : undefined"
+                                                      />
+                                                </v-col>
+                                                <!-- Usuario -->
+                                                <v-col class="v-col-12">
+                                                      <v-text-field
+                                                            variant="outlined"
+                                                            label="Usuario:"
+                                                            v-model="marketplaceecommerce_new.usuario"
+                                                      />
+                                                </v-col>
+                                                <!-- Senha -->
+                                                <v-col class="v-col-12">
+                                                      <v-text-field
+                                                            variant="outlined"
+                                                            label="Senha:"
+                                                            v-model="marketplaceecommerce_new.senha"
+                                                            :append-inner-icon="is_show_password ? 'mdi mdi-eye-outline' : 'mdi mdi-eye-off-outline'"
+                                                            @click:append-inner="is_show_password = !is_show_password"
+                                                            :type="is_show_password ? 'text' : 'password'"
+                                                      />
+                                                </v-col>
+                                                <!-- Token -->
+                                                <v-col class="v-col-12">
+                                                      <v-text-field
+                                                            variant="outlined"
+                                                            label="Token:"
+                                                            v-model="marketplaceecommerce_new.token"
+                                                      />
+                                                </v-col>
+                                                <!-- ClientId -->
+                                                <v-col class="v-col-12">
+                                                      <v-text-field
+                                                            variant="outlined"
+                                                            label="ClientId:"
+                                                            v-model="marketplaceecommerce_new.appClienteId"
+                                                      />
+                                                </v-col>
+                                                <!-- ClientSecret -->
+                                                <v-col class="v-col-12">
+                                                      <v-text-field
+                                                            variant="outlined"
+                                                            label="ClientSecret:"
+                                                            v-model="marketplaceecommerce_new.appClienteSecret"
+                                                      />
+                                                </v-col>
+                                                <!-- UrlRedirecionamento -->
+                                                <v-col class="v-col-12">
+                                                      <v-text-field
+                                                            variant="outlined"
+                                                            label="Url redirecionamento:"
+                                                            v-model="marketplaceecommerce_new.urlRedirecionamento"
+                                                      />
+                                                </v-col>
+                                                <!-- WebServiceApi -->
+                                                <v-col class="v-col-12">
+                                                      <v-text-field
+                                                            variant="outlined"
+                                                            label="WebService Api:"
+                                                            v-model="marketplaceecommerce_new.webserviceApi"
+                                                      />
+                                                </v-col>
+                                                <!-- VariacaoPrincipal -->
+                                                <v-col class="v-col-12">
+                                                      <v-text-field
+                                                            variant="outlined"
+                                                            label="Variacao Principal:"
+                                                            v-model="marketplaceecommerce_new.variacaoPrincipal"
+                                                      />
+                                                </v-col>
+                                                <!-- Det. Produto Simples -->
+                                                <v-col class="v-col-12">
+                                                      <v-switch 
+                                                            color="info"
+                                                            label="Det. Produto Simples"
+                                                            v-model="marketplaceecommerce_new.transformaVariacaoEmProdutoSimples"
+                                                      />
+                                                </v-col>
+                                                <!-- Modo Debug -->
+                                                <v-col class="v-col-12">
+                                                      <v-switch 
+                                                            color="info"
+                                                            label="Modo Debug"
+                                                            v-model="marketplaceecommerce_new.modoDebug"
+                                                      />
+                                                </v-col>
+                                                <!-- Versao -->
+                                                <v-col class="v-col-12">
+                                                      <v-text-field
+                                                            variant="outlined"
+                                                            label="Versão:"
+                                                            v-model="marketplaceecommerce_new.versaoEcommerce"
+                                                      />
+                                                </v-col>
+                                                <!-- UsuarioApi -->
+                                                <v-col class="v-col-12">
+                                                      <v-select
+                                                            variant="outlined"
+                                                            label="Usuário Api:"
+                                                            v-model="usuarioApi_aux"
+                                                            :items="usuario_select"
+                                                            :item-props="usuario_select_props"
+                                                            :loading="inRequestAmbiente"
+                                                      />
+                                                </v-col>
+                                                <!-- Atributos Default -->
+                                                <v-col class="v-col-12">
+                                                      <v-textarea
+                                                            variant="outlined"
+                                                            v-model="marketplaceecommerce_new.atributosDefault"
+                                                            label="Atributos default(json):"
+                                                            auto-grow
+                                                      />
+                                                 </v-col>
+                                                <!-- Ação -->
+                                                <v-col class="col-12">
+                                                      <v-row no-gutters>
+                                                            <v-col :class="['v-col-12 pb-3', (errors.findIndex((x) => x =='igual') != -1 || editado) ? 'd-flex' : 'd-none']">
+                                                                  <ErroFormComponent
+                                                                        :mensagem="'Edite antes de salvar'"
+                                                                        :class="['desativada py-3',{'ativada' : errors.findIndex((x) => x =='igual') != -1}]"
+                                                                  />
+                                                                  <TimeMensageFormReturnComponent v-if="editado"
+                                                                        :mensagem="'Marketplace Ecommerce alterado com sucesso'"
+                                                                        :time_duration="5"
+                                                                        @fechar_mensagem="editado = false"
+                                                                  />
+                                                            </v-col>
+                                                            <v-col class="v-col-6 py-3" align-self="center">
+                                                                  <v-btn
+                                                                        color="success"
+                                                                        prepend-icon="mdi mdi-square-edit-outline"
+                                                                        text="Editar"
+                                                                        @click="edicaoRequest"
+                                                                        :disabled="edit_markEcom_request || editado"/>
+                                                            </v-col>
+                                                            <v-col class="v-col-6 py-3" align-self="center">
+                                                                  <v-btn
+                                                                        color="error"
+                                                                        prepend-icon="mdi mdi-trash-can"
+                                                                        text="Cancelar"
+                                                                        @click="voltarMarktplaceEcommerce()"
+                                                                  />
+                                                            </v-col>
+                                                      </v-row>
+                                                </v-col>
+                                          </v-row>
+                                    </v-form>
+                              </v-col>
+                              <v-col class="v-col-1"></v-col>
+                        </v-row>
                   </span>
                   <span v-else>
                         <ErroResponseComponent 
@@ -432,48 +422,7 @@ export default defineComponent({
                               @voltar="voltarErro"
                         />
                   </span>
-            </div>
+            </v-col>
             <VersaoMaximisada />
-      </div>
+      </v-row>
 </template>
-
-<style scoped>
-#content{
-      background-color: var(--bs-white);
-      color: var(--bs-gray-600);
-      padding-top: 24px;
-}
-
-.form_text{
-      font-size: 14px;
-      color: var(--bs-black);
-      text-align: right;
-}
-.form_content > div{
-      padding-top: 10px;
-      align-content: center;
-}
-.input-group-text{
-      padding: 0;
-}
-.custom-select{
-      background: #fff url(data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E) no-repeat right .75rem center;
-      background-size: 8px 10px;
-      padding: .375rem .75rem .375rem .75rem;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
-      color: #495057;
-      vertical-align: middle;
-      border: 1px solid #ced4da;
-      border-radius: .25rem;
-      display: inline-block;
-      
-}
-/* @media (prefers-color-scheme: dark) {
-      #content{
-            background-color: var(--dark-blue);
-            color: var(--bs-white);
-      }
-} */
-</style>

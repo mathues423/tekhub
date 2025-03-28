@@ -31,6 +31,11 @@ export default defineComponent({
             opc_filtrot_selected: undefined,
           }
       },
+      watch:{
+            ITEM_PAGINA_MAX(value: number){
+                  this.ITEM_PAGINA_MAX_local = value
+            },
+      },
       props: {
             lista_estado:{
                   type: String,
