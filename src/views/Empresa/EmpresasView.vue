@@ -50,26 +50,24 @@ export default defineComponent({
                   :user_type="auth_type"
             />
             <v-col class="v-col-12 v-col-md-10">
-                  <v-sheet> 
-                        <span v-if="!have_fetch_error || fetch_error_msg['errors' as keyof typeof fetch_error_msg]">
-                              <!-- ERRO no servidor mensagem -->
-                              <TimeMensageErroComponent v-if="fetch_error_msg['errors' as keyof typeof fetch_error_msg]"
-                                    :time_duration="10"
-                                    :mensagem="fetch_error_msg['errors' as keyof typeof fetch_error_msg][0]"
-                                    @fechar_erro="voltarErroServer"
-                              />
-                              <CriarBotao class="pl-4" @criar="adicionarNewempresa" />
-                              <EmpresaComponent 
-                                    @Erro_fetch="(ret)=> showError(ret)"
-                              />
-                        </span>
-                        <span v-else>
-                              <ErroResponseComponent 
-                                    :error_msg="fetch_error_msg"
-                                    @voltar="have_fetch_error = false"
-                              />
-                        </span>
-                  </v-sheet>
+                  <span v-if="!have_fetch_error || fetch_error_msg['errors' as keyof typeof fetch_error_msg]">
+                        <!-- ERRO no servidor mensagem -->
+                        <TimeMensageErroComponent v-if="fetch_error_msg['errors' as keyof typeof fetch_error_msg]"
+                              :time_duration="10"
+                              :mensagem="fetch_error_msg['errors' as keyof typeof fetch_error_msg][0]"
+                              @fechar_erro="voltarErroServer"
+                        />
+                        <CriarBotao class="pl-4" @criar="adicionarNewempresa" />
+                        <EmpresaComponent 
+                              @Erro_fetch="(ret)=> showError(ret)"
+                        />
+                  </span>
+                  <span v-else>
+                        <ErroResponseComponent 
+                              :error_msg="fetch_error_msg"
+                              @voltar="have_fetch_error = false"
+                        />
+                  </span>
             </v-col>
             <v-row no-gutters>
                   <VersaoMaximisada />

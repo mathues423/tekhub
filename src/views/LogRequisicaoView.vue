@@ -138,13 +138,13 @@ export default defineComponent({
 </script>
 
 <template>
-      <div class="row">
+      <v-row no-gutters>
             <NavbarComplet 
                   :have_erro="have_fetch_error"
                   :lateral="'log_req'"
                   :user_type="auth_type"
             />
-            <div class="col-12 col-lg-10" id="content">
+            <v-col class="v-col-12 v-col-md-10 pt-10">
                   <span v-if="!have_fetch_error || fetch_error_msg['errors' as keyof typeof fetch_error_msg]">
                         <!-- ERRO no servidor mensagem -->
                         <TimeMensageErroComponent v-if="fetch_error_msg['errors' as keyof typeof fetch_error_msg]"
@@ -213,20 +213,7 @@ export default defineComponent({
                               @voltar="have_fetch_error = false"
                         />
                   </span>
-            </div>
+            </v-col>
             <VersaoMaximisada />
-      </div>
+      </v-row>
 </template>
-
-<style scoped>
-#content{
-      background-color: var(--bs-white);
-      color: var(--bs-gray-600);
-}
-/* @media (prefers-color-scheme: dark) {
-      #content{
-            background-color: var(--dark-blue);
-            color: var(--bs-white);
-      }
-} */
-</style>

@@ -157,28 +157,8 @@ export default defineComponent({
                               <tr>
                                     <th v-for="title in dados?.header" :key="title.header" scope="col">
                                           <v-row no-gutters>
-                                                <v-col class="v-col-12 text-center">
-                                                      <v-sheet rounded="xs" elevation="2" class="span-position" :color="title.ordem?.on === true  ? 'info' : undefined" role="button" @click="title.isordenable ? ordenarDado(title) : undefined">
-                                                            <div justify="center">
-                                                                  <span v-if="title.isordenable && title.ordem.on" class="left">
-                                                                        <span v-if="title.ordem.tipo_obj === 'String'">
-                                                                              <v-icon>{{ title.ordem.tipo_ordenacao === 'Asc' ? 'mdi-sort-alphabetical-ascending' : 'mdi-sort-alphabetical-descending' }}</v-icon>
-                                                                        </span>
-                                                                        <span v-else-if="title.ordem.tipo_obj === 'Number'">
-                                                                              <v-icon>{{ title.ordem.tipo_ordenacao === 'Asc' ? 'mdi-sort-numeric-ascending' : 'mdi-sort-numeric-descending' }}</v-icon>
-                                                                        </span>
-                                                                  </span>
-                                                                  {{ title.header }}
-                                                                  <span v-if="title.isfiltrable" class="right">
-                                                                        <v-btn v-if="title.filtro.tipo_filtro == 'all'" @click="filtrarDado(title)" :color="title.ordem?.on === true  ? 'black' : undefined" variant="outlined">
-                                                                              <v-icon>mdi-magnify</v-icon>
-                                                                        </v-btn>
-                                                                        <v-btn v-else-if="title.filtro.tipo_filtro == 'pre'" @click="filtrarDado(title)" :color="title.ordem?.on === true  ? 'black' : undefined" variant="outlined">
-                                                                              <v-icon>mdi-filter</v-icon>
-                                                                        </v-btn>
-                                                                  </span>
-                                                            </div>
-                                                      </v-sheet>
+                                                <v-col class="v-col-12 mb-2">
+                                                      {{ title.header }}
                                                 </v-col>
                                           </v-row>
                                     </th>
@@ -217,18 +197,21 @@ export default defineComponent({
                                                 </span>
                                           </td> 
                                           <td v-show="dado_expandido[index_dado]" :colspan="dados?.header.length">
-                                                <v-btn @click="fechar(index_dado)">
-                                                      -
-                                                </v-btn>
-<pre style="padding-left:30px" v-show="dado_json[index_dado] != ''">
+                                                <v-row no-gutters>
+                                                      <v-col class="v-col-1 content_center">
+                                                            <v-btn @click="fechar(index_dado)" text="-"/>
+                                                      </v-col>
+                                                      <v-col>
+                                                            <pre style="padding-left:30px" v-show="dado_json[index_dado] != ''">
 {{ dado_json[index_dado] }}
-</pre>
-<pre v-show="dado_json[index_dado] == ''">
+                                                            </pre>
+                                                            <pre v-show="dado_json[index_dado] == ''">
 <!-- {} -->
 {{ dado_json[index_dado] }}
-</pre>
+                                                            </pre>
+                                                      </v-col>
+                                                </v-row>
                                           </td>
-                                    
                               </tr>
                         </tbody>
                         <tbody v-else>
@@ -248,33 +231,142 @@ export default defineComponent({
                               </tr>
                         </tbody>
                   </v-table>
-                  <v-spacer></v-spacer>
-                  <v-divider></v-divider>
-                  <v-spacer></v-spacer>
             </v-col>
-            <PaginacaoComponent 
-                  :have_item_p_pagina="have_item_p_pagina"
-                  :have_pagination="have_pagination"
-                  :pagina_max="pagina_max"
-                  :pagina_atual="pagina"
-                  :item_p_pagina="item_p_pagina"
-                  :item_p_pagina_old="item_p_pagina"
-                  :lista_opc_paginas="lista_opc_paginas"
-                  @select_paginacao="(value)=> selecionar_pagina(value)"
-                  @trocar_quantidade="dado_quantidade"
-            />
+            <v-col class="v-col-12">
+                  <v-divider class="mt-4"> Paginação </v-divider>
+                  <PaginacaoComponent 
+                        :have_item_p_pagina="have_item_p_pagina"
+                        :have_pagination="have_pagination"
+                        :pagina_max="pagina_max"
+                        :pagina_atual="pagina"
+                        :item_p_pagina="item_p_pagina"
+                        :item_p_pagina_old="item_p_pagina"
+                        :lista_opc_paginas="lista_opc_paginas"
+                        @select_paginacao="(value)=> selecionar_pagina(value)"
+                        @trocar_quantidade="dado_quantidade"
+                  />
+            </v-col>
+
+            <v-col class="v-col-12 mt-20">
+                  <v-data-table 
+                        :loading="Object.keys(dados).length == 0"
+                  />
+            </v-col>
+
+            <v-col class="v-col-12">
+                  <v-table density="compact" class="text-center">
+                        <thead>
+                              <tr>
+                                    <th v-for="title in dados?.header" :key="title.header" scope="col">
+                                          <v-row no-gutters>
+                                                <v-col class="v-col-12">
+                                                      <v-sheet rounded="xs" elevation="2" class="span-position h-100" :color="title.ordem?.on  ? 'info' : 'red'" role="button" @click="title.isordenable ? ordenarDado(title) : undefined">
+                                                            <div class="w-100 h-100 d-grid" align="center">
+                                                                  <span v-if="title.isordenable && title.ordem.on" class="left">
+                                                                        <span v-if="title.ordem.tipo_obj === 'String'">
+                                                                              <v-icon>{{ title.ordem.tipo_ordenacao === 'Asc' ? 'mdi-sort-alphabetical-ascending' : 'mdi-sort-alphabetical-descending' }}</v-icon>
+                                                                        </span>
+                                                                        <span v-else-if="title.ordem.tipo_obj === 'Number'">
+                                                                              <v-icon>{{ title.ordem.tipo_ordenacao === 'Asc' ? 'mdi-sort-numeric-ascending' : 'mdi-sort-numeric-descending' }}</v-icon>
+                                                                        </span>
+                                                                  </span>
+                                                                  {{ title.header }}
+                                                                  <span v-if="title.isfiltrable" class="right">
+                                                                        <v-btn v-if="title.filtro?.tipo_filtro == 'all'" @click="filtrarDado(title)" :color="title.ordem?.on === true  ? 'black' : undefined" variant="outlined">
+                                                                              <v-icon>mdi-magnify</v-icon>
+                                                                        </v-btn>
+                                                                        <v-btn v-else-if="title.filtro?.tipo_filtro == 'pre'" @click="filtrarDado(title)" :color="title.ordem?.on === true  ? 'black' : undefined" variant="outlined">
+                                                                              <v-icon>mdi-filter</v-icon>
+                                                                        </v-btn>
+                                                                  </span>
+                                                            </div>
+                                                      </v-sheet>
+                                                </v-col>
+                                          </v-row>
+                                    </th>
+                              </tr>
+                        </thead>
+                        <tbody v-if="dados?.body.length > 0">
+                              <tr v-for="(dado,index_dado) in dados?.body" :key="index_dado">
+                                          <td v-show="!dado_expandido[index_dado]" v-for="traduzido in dados?.header" :key="traduzido">
+                                                <span v-if="traduzido.key_body != 'button' && traduzido.key_body != 'vazio'">
+                                                      <v-btn v-if="traduzido['expandible' as keyof typeof traduzido]" @click="expandir(index_dado)" text="+"/>
+                                                      {{ dado[traduzido.key_body as keyof typeof dado] }}
+                                                </span>
+                                                <span v-else-if="traduzido.key_body == 'button'">
+                                                      <v-row no-gutters>
+                                                            <v-col class="v-col-12">
+                                                                  <EdiçãoBotaoComponent
+                                                                        :nome_rota_para_edicao="rota_edicao"
+                                                                        :id_item="dado['codigo' as keyof typeof dado]"
+                                                                  />
+                                                            </v-col>
+                                                            <v-col class="v-col-12">
+                                                                  <RemoçãoBotaoComponent
+                                                                        :dado="dado"
+                                                                        @deletarModal="(arg: any) => mountDeletModal(arg)"
+                                                                  />
+                                                            </v-col>
+                                                      </v-row>
+                                                </span>
+                                                <span v-else-if="traduzido.key_body == 'vazio'"/>
+                                                <span v-else>
+                                                      404
+                                                </span>
+                                          </td> 
+                                          <td v-show="dado_expandido[index_dado]" :colspan="dados?.header.length">
+                                                <v-row no-gutters>
+                                                      <v-col class="v-col-1 content_center">
+                                                            <v-btn @click="fechar(index_dado)" text="-"/>
+                                                      </v-col>
+                                                      <v-col>
+                                                            <pre style="padding-left:30px" v-show="dado_json[index_dado] != ''">
+{{ dado_json[index_dado] }}
+                                                            </pre>
+                                                            <pre v-show="dado_json[index_dado] == ''">
+<!-- {} -->
+{{ dado_json[index_dado] }}
+                                                            </pre>
+                                                      </v-col>
+                                                </v-row>
+                                          </td>
+                              </tr>
+                        </tbody>
+                        <tbody v-else>
+                              <tr>
+                                    <td :colspan="dados.header.length">
+                                          <v-sheet>
+                                                <v-row no-gutters class="align-center flex-column py-16">
+                                                      <div>
+                                                            <v-icon size="62px" icon="mdi mdi-basket-fill"/>
+                                                      </div>
+                                                      <div>
+                                                            Não ha dados
+                                                      </div>
+                                                </v-row>
+                                          </v-sheet>
+                                    </td>
+                              </tr>
+                        </tbody>
+                  </v-table>
+            </v-col>
       </v-row>
 </div>
 </template>
 
 <style lang="css" scoped>
+.content_center{
+      align-content: center;
+}
 .span-position>*>span.right{
       float: right;
 }
 .span-position>*>span.left{
       float: left;
 }
-
+.v-hidden{
+      visibility: hidden;
+}
 pre{
       background-color: #222;
       color: white;

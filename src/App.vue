@@ -31,13 +31,12 @@ export default defineComponent({
 
 <style>
 
-#conteudo.row{
+/* #conteudo.row{
   height: 100vh;
 }
 #conteudo.row>div#content{
   min-height: 100vh;
-  /* height: 100vh; */
-}
+} */
 :root{
   --white: #fff;
   --black: #000;

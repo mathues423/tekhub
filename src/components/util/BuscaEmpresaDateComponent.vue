@@ -12,7 +12,9 @@ export default defineComponent({
                   data_inicio_erro:false,
 
                   data_final: '',
-                  data_final_erro:false
+                  data_final_erro:false,
+
+                  is_in_select_date: false
             }
       },
       components:{
@@ -85,6 +87,9 @@ export default defineComponent({
             escolha_empresa(empresa: object){
                   this.empresa_erro = false;
                   this.empresa_select = empresa
+            },
+            changeStateDialog(){
+                  this.is_in_select_date != this.is_in_select_date;
             }
       },
       emits:['request_filtro', 'erro_fetch']
@@ -92,39 +97,50 @@ export default defineComponent({
 </script>
 
 <template>
-      <div class="row">
-            <div class="col-md-4 col-sm-12 my-1">
+<v-dialog v-model="is_in_select_date" max-width="350" transition="dialog-top-transition">
+      <v-date-picker
+            title="Selecione a data para a pesquisa"
+            header="Escolha a data"
+            multiple="range"
+            minWidth="350"
+      />
+      <v-btn 
+            variant="tonal"
+            class="w-100"
+            color="red-darken-4"
+            :text="`Fechar`"
+            @click="is_in_select_date = false"/>
+</v-dialog>
+      <v-row no-gutters>
+            <v-col class="v-col-12 v-col-md-4 px-2">
                   <EmpresaSelectComponent 
                         :have_erro="empresa_erro"
                         @empresa_escolhida="(args: object)=> escolha_empresa(args)"
                         @erro_fetch="(arg)=> $emit('erro_fetch', arg)"
                   />
-            </div>
-            <div class="col-md-6 col row my-1">
-                  <div :class="['col-6', {'invalido': data_inicio_erro}]">
-                        <input class="form-control" type="datetime-local" v-model="data_inicio"/>
-                  </div>
-                  <div :class="['col-6', {'invalido': data_final_erro}]">
-                        <!-- datetime-local -->
-                        <input class="form-control" type="datetime-local" v-model="data_final"/>
-                  </div>
-            </div>
-            <div class="col-md-2 my-1">
-                  <button class="w-100 btn btn-primary" @click="buscar">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                              <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-                        </svg>
-                  </button>
-            </div>
-      </div>
+            </v-col>
+            <!-- datetime-local -->
+            <v-col class="v-col-md-6 v-col v-row px-2">
+                  <!-- <v-btn
+                        color="error"
+                        @click="is_in_select_date = true"
+                  >X</v-btn> -->
+                  <v-col class="v-col-6">
+                        <v-sheet :color="data_inicio_erro ? 'error': undefined">
+                              <input class="form-control" type="datetime-local" v-model="data_inicio"/>
+                        </v-sheet>
+                  </v-col>
+                  <v-col class="v-col-6">
+                        <v-sheet :color="data_final_erro ? 'error': undefined">
+                              <input class="form-control" type="datetime-local" v-model="data_final"/>
+                        </v-sheet>
+                  </v-col>
+            </v-col>
+            <v-col class="v-col v-col-md-2 px-2">
+                  <v-btn
+                        color="info"
+                        @click="buscar"
+                  ><v-icon>mdi mdi-magnify</v-icon></v-btn>
+            </v-col>
+      </v-row>
 </template>
-
-<style scoped>
-.invalido > input{
-      border-color: var(--bs-form-invalid-border-color);
-}
-.invalido > input:focus{
-      border-color: var(--bs-form-invalid-border-color);
-      box-shadow: 0 0 0 .25rem rgba(var(--bs-danger-rgb), .25);
-}
-</style>
