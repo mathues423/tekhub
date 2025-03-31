@@ -1,6 +1,5 @@
 <template>
-<div class="body-login" id='content'>
-      <v-row  style="margin: 0;">
+      <v-row no-gutters class="body-login">
             <v-col class="v-col-sm-10 v-col-md-4 offset-sm-1 offset-md-4">
                   <v-sheet>
                         <v-col class="v-col-12 pb-1 Card-Header"> TekHub Integrações </v-col>
@@ -47,9 +46,8 @@
                         </v-form>
                   </v-sheet>
             </v-col>
+            <VersaoMinimisada />
       </v-row>
-</div>
-<VersaoMinimisada />
 </template>
 
 <script lang="ts">
@@ -122,5 +120,6 @@
       background-position: right;
       background-repeat: repeat-x;
       background-blend-mode: overlay;
+      min-height: 100vh;
 }
 </style>
