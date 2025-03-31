@@ -152,60 +152,66 @@ export default defineComponent({
                               :mensagem="fetch_error_msg['errors' as keyof typeof fetch_error_msg][0]"
                               @fechar_erro="voltarErroServer"
                         />
-                        <BuscaEmpresaDateComponent class="my-2"
-                              :rota_externa="'logrequisicao'"
-                              @request_filtro="(args: string)=> requisicao(args)"
-                              @Erro_fetch="(arg)=> showError(arg)"
-                        />
-                        <LoaderListaComponent v-if="lista_estado == 'Loader' && !its_card" 
-                              :header="dado_paginado.header"
-                              :quantidade_dados="ITEM_PAGINA_MAX"
-                        />
-                        <ListaComponent v-if="lista_estado == 'Lista' && !its_card"
-                              :lista_opc_paginas="lista_opc_pagina_not_card"
-                              :have_item_p_pagina="true"
-                              :have_pagination="true" 
-                              :have_expancion="true"    
-                              :dados="dado_paginado"
-                              :pagina="pagina_atual"
-                              :item_p_pagina="ITEM_PAGINA_MAX"
-                              :pagina_max="NUMERO_PAGINA"
-                              :rota_edicao="''"
-                              :ModalContent_Remocao="[]"
-                              :showDeletModal="false"
-                              
-                              :deletando="false"
-                              :disabled_btn="false"
-                              @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
-                              @avancar="avancaPagina" 
-                              @recuar="recuarPagina"
-                        />
-      
-                        <LoaderListaCardComponent v-if="lista_estado == 'Loader' && its_card"
-                              :header="dado_paginado.header"
-                              :quantidade_dados="ITEM_PAGINA_MAX"
-                        />
-                        <!-- Card Lista Canais -->
-                        <ListaCardComponent v-if="lista_estado == 'Lista' && its_card"
-                              :lista_opc_paginas="lista_opc_pagina_card"
-                              :header_info="dado_paginado.header"
-                              :have_item_p_pagina="true"
-                              :have_pagination="true"
-                              :have_expancion="true"
-                              :dados="dado_paginado"
-                              :pagina="pagina_atual"
-                              :item_p_pagina="ITEM_PAGINA_MAX"
-                              :pagina_max="NUMERO_PAGINA"
-                              :rota_edicao="''"
-                              :ModalContent_Remocao="[]"
-                              :showDeletModal="false"
-                              
-                              :deletando="false"
-                              :disabled_btn="false"
-                              @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
-                              @avancar="avancaPagina" 
-                              @recuar="recuarPagina"
-                        />
+                        <v-row no-gutters>
+                              <v-col class="v-col-1"></v-col>
+                              <v-col class="v-col-10">
+                                    <BuscaEmpresaDateComponent class="my-2"
+                                          :rota_externa="'logrequisicao'"
+                                          @request_filtro="(args: string)=> requisicao(args)"
+                                          @Erro_fetch="(arg)=> showError(arg)"
+                                    />
+                                    <LoaderListaComponent v-if="lista_estado == 'Loader' && !its_card" 
+                                          :header="dado_paginado.header"
+                                          :quantidade_dados="ITEM_PAGINA_MAX"
+                                    />
+                                    <ListaComponent v-if="lista_estado == 'Lista' && !its_card"
+                                          :lista_opc_paginas="lista_opc_pagina_not_card"
+                                          :have_item_p_pagina="true"
+                                          :have_pagination="true" 
+                                          :have_expancion="true"    
+                                          :dados="dado_paginado"
+                                          :pagina="pagina_atual"
+                                          :item_p_pagina="ITEM_PAGINA_MAX"
+                                          :pagina_max="NUMERO_PAGINA"
+                                          :rota_edicao="''"
+                                          :ModalContent_Remocao="[]"
+                                          :showDeletModal="false"
+                                          
+                                          :deletando="false"
+                                          :disabled_btn="false"
+                                          @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
+                                          @avancar="avancaPagina" 
+                                          @recuar="recuarPagina"
+                                    />
+                  
+                                    <LoaderListaCardComponent v-if="lista_estado == 'Loader' && its_card"
+                                          :header="dado_paginado.header"
+                                          :quantidade_dados="ITEM_PAGINA_MAX"
+                                    />
+                                    <!-- Card Lista Canais -->
+                                    <ListaCardComponent v-if="lista_estado == 'Lista' && its_card"
+                                          :lista_opc_paginas="lista_opc_pagina_card"
+                                          :header_info="dado_paginado.header"
+                                          :have_item_p_pagina="true"
+                                          :have_pagination="true"
+                                          :have_expancion="true"
+                                          :dados="dado_paginado"
+                                          :pagina="pagina_atual"
+                                          :item_p_pagina="ITEM_PAGINA_MAX"
+                                          :pagina_max="NUMERO_PAGINA"
+                                          :rota_edicao="''"
+                                          :ModalContent_Remocao="[]"
+                                          :showDeletModal="false"
+                                          
+                                          :deletando="false"
+                                          :disabled_btn="false"
+                                          @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
+                                          @avancar="avancaPagina" 
+                                          @recuar="recuarPagina"
+                                    />
+                              </v-col>
+                              <v-col class="v-col-1"></v-col>
+                        </v-row>
                   </span>
                   <span v-else>
                         <ErroResponseComponent 
