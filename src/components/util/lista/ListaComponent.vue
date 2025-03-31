@@ -166,52 +166,52 @@ export default defineComponent({
                         </thead>
                         <tbody v-if="dados?.body.length > 0">
                               <tr v-for="(dado,index_dado) in dados?.body" :key="index_dado">
-                                          <td v-show="!dado_expandido[index_dado]" v-for="traduzido in dados?.header" :key="traduzido">
-                                                <span v-if="traduzido.key_body != 'button' && traduzido.key_body != 'vazio'">
-                                                      <v-btn v-if="traduzido['expandible' as keyof typeof traduzido]" @click="expandir(index_dado)">
-                                                            +
-                                                      </v-btn>
-                                                      {{ dado[traduzido.key_body as keyof typeof dado] }}
-                                                </span>
-                                                <span v-else-if="traduzido.key_body == 'button'">
-                                                      <v-row no-gutters>
-                                                            <v-col class="v-col-12">
-                                                                  <EdiçãoBotaoComponent
-                                                                        :nome_rota_para_edicao="rota_edicao"
-                                                                        :id_item="dado['codigo' as keyof typeof dado]"
-                                                                  />
-                                                            </v-col>
-                                                            <v-col class="v-col-12">
-                                                                  <RemoçãoBotaoComponent
-                                                                        :dado="dado"
-                                                                        @deletarModal="(arg: any) => mountDeletModal(arg)"
-                                                                  />
-                                                            </v-col>
-                                                      </v-row>
-                                                </span>
-                                                <span v-else-if="traduzido.key_body == 'vazio'">
-                                                      
-                                                </span>
-                                                <span v-else>
-                                                      404
-                                                </span>
-                                          </td> 
-                                          <td v-show="dado_expandido[index_dado]" :colspan="dados?.header.length">
+                                    <td v-show="!dado_expandido[index_dado]" v-for="traduzido in dados?.header" :key="traduzido">
+                                          <span v-if="traduzido.key_body != 'button' && traduzido.key_body != 'vazio'">
+                                                <v-btn v-if="traduzido['expandible' as keyof typeof traduzido]" @click="expandir(index_dado)">
+                                                      +
+                                                </v-btn>
+                                                {{ dado[traduzido.key_body as keyof typeof dado] }}
+                                          </span>
+                                          <span v-else-if="traduzido.key_body == 'button'">
                                                 <v-row no-gutters>
-                                                      <v-col class="v-col-1 content_center">
-                                                            <v-btn @click="fechar(index_dado)" text="-"/>
+                                                      <v-col class="v-col-12">
+                                                            <EdiçãoBotaoComponent
+                                                                  :nome_rota_para_edicao="rota_edicao"
+                                                                  :id_item="dado['codigo' as keyof typeof dado]"
+                                                            />
                                                       </v-col>
-                                                      <v-col>
-                                                            <pre style="padding-left:30px" v-show="dado_json[index_dado] != ''">
-{{ dado_json[index_dado] }}
-                                                            </pre>
-                                                            <pre v-show="dado_json[index_dado] == ''">
-<!-- {} -->
-{{ dado_json[index_dado] }}
-                                                            </pre>
+                                                      <v-col class="v-col-12">
+                                                            <RemoçãoBotaoComponent
+                                                                  :dado="dado"
+                                                                  @deletarModal="(arg: any) => mountDeletModal(arg)"
+                                                            />
                                                       </v-col>
                                                 </v-row>
-                                          </td>
+                                          </span>
+                                          <span v-else-if="traduzido.key_body == 'vazio'">
+                                                
+                                          </span>
+                                          <span v-else>
+                                                404
+                                          </span>
+                                    </td> 
+                                    <td v-show="dado_expandido[index_dado]" :colspan="dados?.header.length">
+                                          <v-row no-gutters>
+                                                <v-col class="v-col-1 content_center">
+                                                      <v-btn @click="fechar(index_dado)" text="-"/>
+                                                </v-col>
+                                                <v-col>
+                                                      <pre style="padding-left:30px" v-show="dado_json[index_dado] != ''">
+{{ dado_json[index_dado] }}
+                                                      </pre>
+                                                      <pre v-show="dado_json[index_dado] == ''">
+<!-- {} -->
+{{ dado_json[index_dado] }}
+                                                      </pre>
+                                                </v-col>
+                                          </v-row>
+                                    </td>
                               </tr>
                         </tbody>
                         <tbody v-else>
