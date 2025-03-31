@@ -1,6 +1,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import EmpresaSelectComponent from './selects/EmpresaSelectComponent.vue';
+import DataSelectComponent from './selects/DataSelectComponent.vue';
 
 export default defineComponent({
       data() {
@@ -9,16 +10,21 @@ export default defineComponent({
                   empresa_erro: false,
 
                   data_inicio: '',
+                  data_inicial: undefined as object | undefined,
                   data_inicio_erro:false,
 
                   data_final: '',
                   data_final_erro:false,
 
-                  is_in_select_date: false
+                  select_data_ini: false
             }
       },
       components:{
-            EmpresaSelectComponent,
+            // EmpresaSelectComponent,
+            DataSelectComponent
+      },
+      mounted() {
+          this.select_data_ini = false
       },
       watch:{
             data_inicio(){
@@ -69,7 +75,7 @@ export default defineComponent({
                         this.data_inicio_erro = true
                   else{
                         r_data_inicio = `&dataInicial=${data_inicio_aux.getUTCFullYear()}-${data_inicio_aux.getUTCMonth()+1}-${data_inicio_aux.getUTCDate()}`
-                        r_data_inicio += ` ${data_inicio_aux.getUTCHours()}:${data_inicio_aux.getUTCMinutes()}:${data_inicio_aux.getUTCSeconds()}`
+                        r_data_inicio += `${data_inicio_aux.getUTCHours()}:${data_inicio_aux.getUTCMinutes()}:${data_inicio_aux.getUTCSeconds()}`
                   }
                   if(this.data_final == '')
                         this.data_final_erro = true
@@ -87,9 +93,6 @@ export default defineComponent({
             escolha_empresa(empresa: object){
                   this.empresa_erro = false;
                   this.empresa_select = empresa
-            },
-            changeStateDialog(){
-                  this.is_in_select_date != this.is_in_select_date;
             }
       },
       emits:['request_filtro', 'erro_fetch']
@@ -97,43 +100,28 @@ export default defineComponent({
 </script>
 
 <template>
-<v-dialog v-model="is_in_select_date" max-width="350" transition="dialog-top-transition">
-      <v-date-picker
-            title="Selecione a data para a pesquisa"
-            header="Escolha a data"
-            multiple="range"
-            minWidth="350"
-      />
-      <v-btn 
-            variant="tonal"
-            class="w-100"
-            color="red-darken-4"
-            :text="`Fechar`"
-            @click="is_in_select_date = false"/>
-</v-dialog>
+
       <v-row no-gutters>
             <v-col class="v-col-12 v-col-md-4 px-2">
-                  <EmpresaSelectComponent 
+                  <!-- <EmpresaSelectComponent 
                         :have_erro="empresa_erro"
                         @empresa_escolhida="(args: object)=> escolha_empresa(args)"
                         @erro_fetch="(arg)=> $emit('erro_fetch', arg)"
-                  />
+                  /> -->
             </v-col>
             <!-- datetime-local -->
             <v-col class="v-col-md-6 v-col v-row px-2">
-                  <!-- <v-btn
-                        color="error"
-                        @click="is_in_select_date = true"
-                  >X</v-btn> -->
                   <v-col class="v-col-6">
-                        <v-sheet :color="data_inicio_erro ? 'error': undefined">
-                              <input class="form-control" type="datetime-local" v-model="data_inicio"/>
-                        </v-sheet>
+                        <DataSelectComponent 
+                              :is_in_select_date_prop="select_data_ini"
+                              texto_select="Data Inicial"
+                              @saida="(arg: object | undefined)=> {data_inicial = arg}"
+                              @isOpen="(arg)=> select_data_ini = arg"
+                        />
+                        <br> TESA {{ data_inicial }}
                   </v-col>
                   <v-col class="v-col-6">
-                        <v-sheet :color="data_final_erro ? 'error': undefined">
-                              <input class="form-control" type="datetime-local" v-model="data_final"/>
-                        </v-sheet>
+                        {{ select_data_ini }}
                   </v-col>
             </v-col>
             <v-col class="v-col v-col-md-2 px-2">
