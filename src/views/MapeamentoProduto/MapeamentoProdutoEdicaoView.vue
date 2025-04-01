@@ -224,40 +224,36 @@ export default defineComponent({
                                                 <!-- Canal de Venda -->
                                                 <v-col class="v-col-12">
                                                       <v-select
-                                                            variant="outlined"
                                                             v-model="mapeamentoproduto.canal"
                                                             :items="canal_request"
                                                             :loading="inRequestCanal"
                                                             label="*Canal de Venda"
                                                             :item-props="canal_toString"
                                                             :error-messages="fetch_error_msg['canal' as keyof typeof fetch_error_msg]"
-                                                      />
+                                                      density="compact" variant="outlined"/>
                                                 </v-col>
                                                 <!-- Produto Erp -->
                                                 <v-col class="v-col-12">
                                                       <v-text-field
-                                                            variant="outlined"
                                                             v-model="mapeamentoproduto.produtoErp"
                                                             label="*Produto Erp"
                                                             :error-messages="fetch_error_msg['produtoErp' as keyof typeof fetch_error_msg]"
-                                                      />
+                                                      density="compact" variant="outlined"/>
                                                 </v-col>
                                                 <!-- Produto Site -->
                                                 <v-col class="v-col-12">
                                                       <v-text-field
-                                                            variant="outlined"
                                                             v-model="mapeamentoproduto.produtoSite"
                                                             label="*Produto Site"
                                                             :error-messages="fetch_error_msg['produtoSite' as keyof typeof fetch_error_msg]"
-                                                      />
+                                                      density="compact" variant="outlined"/>
                                                 </v-col>
                                                 <!-- Produto Pai Site -->
                                                 <v-col class="v-col-12">
                                                       <v-text-field
-                                                            variant="outlined"
                                                             v-model="mapeamentoproduto.produtoPai"
                                                             label="Produto Pai Site"
-                                                      />
+                                                      density="compact" variant="outlined"/>
                                                 </v-col>
                                                 <!-- Ação -->
                                                 <v-col class="col-12">

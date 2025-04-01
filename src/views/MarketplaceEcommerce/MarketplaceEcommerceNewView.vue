@@ -184,81 +184,72 @@ export default defineComponent({
                                                 <!-- Ambiente -->
                                                 <v-col class="v-col-12">
                                                       <v-select
-                                                            variant="outlined"
                                                             v-model="ambiente_aux"
                                                             label="*Ambiente:"
                                                             :items="ambiente_select"
                                                             :item-props="ambiente_select_props"
                                                             :loading="inRequestAmbiente"
                                                             :error-messages="errors.findIndex((x) => x =='ambiente') != -1 ? 'Informe o ambiente' : undefined"
-                                                      />
+                                                      density="compact" variant="outlined"/>
                                                 </v-col>
                                                 <!-- Usuario -->
                                                 <v-col class="v-col-12">
                                                       <v-text-field
-                                                            variant="outlined"
                                                             label="Usuario:"
                                                             v-model="marketplaceecommerce_new.usuario"
-                                                      />
+                                                      density="compact" variant="outlined"/>
                                                 </v-col>
                                                 <!-- Senha -->
                                                 <v-col class="v-col-12">
                                                       <v-text-field
-                                                            variant="outlined"
                                                             label="Senha:"
                                                             v-model="marketplaceecommerce_new.senha"
                                                             :append-inner-icon="is_show_password ? 'mdi mdi-eye-outline' : 'mdi mdi-eye-off-outline'"
                                                             @click:append-inner="is_show_password = !is_show_password"
                                                             :type="is_show_password ? 'text' : 'password'"
-                                                      />
+                                                      density="compact" variant="outlined"/>
                                                 </v-col>
                                                 <!-- Token -->
                                                 <v-col class="v-col-12">
                                                       <v-text-field
-                                                            variant="outlined"
                                                             label="Token:"
                                                             v-model="marketplaceecommerce_new.token"
-                                                      />
+                                                      density="compact" variant="outlined"/>
                                                 </v-col>
                                                 <!-- ClientId -->
                                                 <v-col class="v-col-12">
                                                       <v-text-field
-                                                            variant="outlined"
                                                             label="ClientId:"
                                                             v-model="marketplaceecommerce_new.appClienteId"
-                                                      />
+                                                      density="compact" variant="outlined"/>
                                                 </v-col>
                                                 <!-- ClientSecret -->
                                                 <v-col class="v-col-12">
                                                       <v-text-field
-                                                            variant="outlined"
                                                             label="ClientSecret:"
                                                             v-model="marketplaceecommerce_new.appClienteSecret"
-                                                      />
+                                                      density="compact" variant="outlined"/>
                                                 </v-col>
                                                 <!-- UrlRedirecionamento -->
                                                 <v-col class="v-col-12">
                                                       <v-text-field
-                                                            variant="outlined"
                                                             label="Url redirecionamento:"
                                                             v-model="marketplaceecommerce_new.urlRedirecionamento"
-                                                      />
+                                                      density="compact" variant="outlined"/>
                                                 </v-col>
                                                 <!-- WebServiceApi -->
                                                 <v-col class="v-col-12">
                                                       <v-text-field
-                                                            variant="outlined"
                                                             label="WebService Api:"
                                                             v-model="marketplaceecommerce_new.webserviceApi"
-                                                      />
+                                                      density="compact" variant="outlined"/>
                                                 </v-col>
                                                 <!-- VariacaoPrincipal -->
                                                 <v-col class="v-col-12">
                                                       <v-text-field
-                                                            variant="outlined"
                                                             label="Variacao Principal:"
                                                             v-model="marketplaceecommerce_new.variacaoPrincipal"
-                                                      />
+                                                      density="compact" variant="outlined"/>
                                                 </v-col>
                                                 <!-- Det. Produto Simples -->
                                                 <v-col class="v-col-12">
@@ -279,30 +270,27 @@ export default defineComponent({
                                                 <!-- Versao -->
                                                 <v-col class="v-col-12">
                                                       <v-text-field
-                                                            variant="outlined"
                                                             label="Versão:"
                                                             v-model="marketplaceecommerce_new.versaoEcommerce"
-                                                      />
+                                                      density="compact" variant="outlined"/>
                                                 </v-col>
                                                 <!-- UsuarioApi -->
                                                 <v-col class="v-col-12">
                                                       <v-select
-                                                            variant="outlined"
                                                             label="Usuário Api:"
                                                             v-model="usuarioApi_aux"
                                                             :items="usuario_select"
                                                             :item-props="usuario_select_props"
                                                             :loading="inRequestAmbiente"
-                                                      />
+                                                      density="compact" variant="outlined"/>
                                                 </v-col>
                                                 <!-- Atributos Default -->
                                                 <v-col class="v-col-12">
                                                       <v-textarea
-                                                            variant="outlined"
                                                             v-model="marketplaceecommerce_new.atributosDefault"
                                                             label="Atributos default(json):"
                                                             auto-grow
-                                                      />
+                                                      density="compact" variant="outlined"/>
                                                  </v-col>
                                                 <!-- Ação -->
                                                 <v-col class="col-12">

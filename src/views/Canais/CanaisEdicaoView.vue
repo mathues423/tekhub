@@ -141,55 +141,49 @@ export default defineComponent({
                         <v-row no-gutters>
                               <v-col class="v-col-1"></v-col>
                               <v-col class="v-col-10 pt-10">
-                                    {{ canal }}
                                     <v-form @submit.prevent="editRequest" class="row form_content" novalidate>
                                           <v-row no-gutters>
                                                 <!-- Descrição -->
                                                 <v-col class="v-col-12">
                                                       <v-text-field
-                                                            variant="outlined"
                                                             v-model="canal.descricao"
                                                             label="*Descrição"
                                                             :erros-mensage="errors.findIndex((x) => x =='descricao') != -1 ? 'Informe a descrição do canal' : undefined"
-                                                      focused/>
+                                                      density="compact" variant="outlined" focused/>
                                                 </v-col>
                                                 <!-- Alias -->
                                                 <v-col class="v-col-12">
                                                       <v-text-field
-                                                            variant="outlined"
                                                             v-model="canal.alias"
                                                             label="*Alias"
                                                             :erros-mensage="errors.findIndex((x) => x =='alias') != -1 ? 'Informe o alias do canal' : undefined"
-                                                      required/>
+                                                      density="compact" variant="outlined" required/>
                                                 </v-col>
                                                 <!-- AliasTekProt -->
                                                 <v-col class="v-col-12">
                                                       <v-text-field
-                                                            variant="outlined"
                                                             v-model="canal.aliastekprot"
                                                             label="Alias TekProt"
-                                                      required/>
+                                                      density="compact" variant="outlined" required/>
                                                 </v-col>
                                                 <!-- Tipo -->
                                                 <v-col class="v-col-12">
                                                       <v-select
-                                                            variant="outlined"
                                                             v-model="canal.tipo"
                                                             :items="tipo_canal"
                                                             label="*Tipo"
                                                             :erros-mensage="errors.findIndex((x) => x =='tipo') != -1 ? 'Informe o tipo do canal' : undefined"
-                                                      required/>
+                                                      density="compact" variant="outlined" required/>
                                                 </v-col>
                                                 <!-- Canal Associado -->
                                                 <v-col class="v-col-12">
                                                       <v-select
-                                                            variant="outlined"
                                                             v-model="canal.canalAssociado"
                                                             label="Canal Associado"
                                                             :items="canal_assossiado_req"
                                                             item-title="descricao"
                                                             :loading="!requested"
-                                                      />
+                                                      density="compact" variant="outlined"/>
                                                 </v-col>
                                                 <!-- Ação -->
                                                 <v-col class="col-12">

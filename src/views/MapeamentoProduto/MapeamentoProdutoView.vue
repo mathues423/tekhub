@@ -319,7 +319,6 @@ export default defineComponent({
                                     <!-- Canal Select -->
                                     <v-col class="col-12">
                                           <v-select
-                                                variant="outlined"
                                                 v-model="canal_selected"
                                                 :items="dado_canais"
                                                 label="*Canal de venda"
@@ -327,25 +326,23 @@ export default defineComponent({
                                                 :loading="inRequestCanal"
                                                 :no-data-text="dado_canais ? 'Nenhum Canal de Venda encontrado' : 'Selecione primeiro a Empresa'"
                                                 :error-messages="erros_pesquisa.indexOf('canal') != -1 ? 'Informe a Canal antes da busca.' : undefined"
-                                          />
+                                          density="compact" variant="outlined"/>
                                     </v-col>
                                     <!-- Filtros -->
                                     <v-divider> Filtros </v-divider>
                                     <!-- Produto Erp -->
                                     <v-col class="v-col-12">
                                           <v-text-field
-                                                variant="outlined"
                                                 v-model="filtro_erp"
                                                 label="Produto Erp"
-                                          />
+                                          density="compact" variant="outlined"/>
                                     </v-col>
                                     <!-- Produto Site -->
                                     <v-col class="v-col-12">
                                           <v-text-field
-                                                variant="outlined"
                                                 v-model="filtro_site"
                                                 label="Produto Site"
-                                          />
+                                          density="compact" variant="outlined"/>
                                     </v-col>
                                     <!-- Ação -->
                                     <v-col class="v-col-12">

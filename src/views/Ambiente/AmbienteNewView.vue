@@ -136,44 +136,40 @@ export default defineComponent({
                                                 <!-- Canal -->
                                                 <v-col class="v-col-12">
                                                       <v-select
-                                                            variant="outlined"
                                                             label="*Canal:"
                                                             v-model="canal_inicial"
                                                             :items="canais_requested"
                                                             :item-props="canalToString"
                                                             :loaded="requested"
                                                             :erros-text="errors.findIndex((x) => x =='canalAlias') != -1 ? 'Selecione um canal valido' : undefined"
-                                                      focused />
+                                                      density="compact" variant="outlined" focused />
                                                 </v-col>
                                                 <!-- ULR -->
                                                 <v-col class="v-col-12">
                                                       <v-text-field
-                                                            variant="outlined"
                                                             label="*URL:"
                                                             v-model="ambiente.url"
                                                             :erros-text="errors.findIndex((x) => x =='url') != -1 ? 'Digite uma ULR' : undefined"
-                                                      />
+                                                      density="compact" variant="outlined"/>
                                                 </v-col>
                                                 <!-- Versão -->
                                                 <v-col class="v-col-12">
                                                       <v-text-field
-                                                            variant="outlined"
                                                             label="*Versão:"
                                                             v-model="ambiente.versao"
                                                             :erros-text="errors.findIndex((x) => x =='versao') != -1 ? 'Digite uma versão' : undefined"
-                                                      />
+                                                      density="compact" variant="outlined"/>
                                                 </v-col>
                                                 <!-- Ambiente -->
                                                 <v-col class="v-col-12">
                                                       <v-select
-                                                            variant="outlined"
                                                             label="*Ambiente:"
                                                             v-model="ambiente.ambiente"
                                                             :items="ambientes"
                                                             item-title="name"
                                                             item-value="value"
                                                             :erros-text="errors.findIndex((x) => x =='ambiente') != -1 ? 'Selecione um ambiente' : undefined"
-                                                      />
+                                                      density="compact" variant="outlined"/>
                                                 </v-col>
                                                 <!-- Status -->
                                                 <v-col class="v-col-12">

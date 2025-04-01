@@ -132,39 +132,35 @@ export default defineComponent({
                                                 <!-- Razao -->
                                                 <v-col class="v-col-12">
                                                       <v-text-field
-                                                            variant="outlined"
                                                             label="*Razão social:"
                                                             v-model="empresa.descricao"
                                                             :error-messages="errors.findIndex((x) => x =='razao') != -1 ? 'Por favor informe a Razão social.': undefined"
-                                                      required/>
+                                                      density="compact" variant="outlined" required/>
             
                                                 </v-col>
                                                 <!-- CNPJ -->
                                                 <v-col class="v-col-12">
                                                       <v-text-field
-                                                            variant="outlined"
                                                             label="*CNPJ"
                                                             v-model="empresa.cnpj"
                                                             :error-messages="(errors.findIndex((x) => x =='cnpj') != -1 ? 'Por favor informe o CNPJ.': undefined) || (errors.findIndex((x) => x =='400') != -1 ? 'Por favor informe o CNPJ valido.': undefined)"
-                                                      required/>
+                                                      density="compact" variant="outlined" required/>
                                                 </v-col>
                                                 <!-- Codigo -->
                                                 <v-col class="v-col-12">
                                                       <v-text-field
-                                                            variant="outlined"
                                                             label="*Codigo na Tek-System:"
                                                             v-model="empresa.codigoTek"
                                                             :error-messages="(errors.findIndex((x) => x =='codigo') != -1 ? 'Por favor informe o CNPJ.': undefined) || (errors.findIndex((x) => x =='400') != -1 ? 'Por favor informe o CNPJ valido.': undefined)"
-                                                      required/>
+                                                      density="compact" variant="outlined" required/>
                                                 </v-col>
                                                 <!-- Versao -->
                                                 <v-col class="v-col-12">
                                                       <v-text-field
-                                                            variant="outlined"
                                                             label="*Verção API:"
                                                             v-model="empresa.versaoApiTek"
                                                             :error-messages="(errors.findIndex((x) => x =='api') != -1 ? 'Por favor informe o CNPJ.': undefined) || (errors.findIndex((x) => x =='400') != -1 ? 'Por favor informe o CNPJ valido.': undefined)"
-                                                      required/>
+                                                      density="compact" variant="outlined" required/>
                                                 </v-col>
                                                 <!-- Ação -->
                                                 <v-col class="col-12">

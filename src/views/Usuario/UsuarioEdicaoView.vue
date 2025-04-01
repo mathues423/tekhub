@@ -170,37 +170,33 @@ export default defineComponent({
                                                 <!-- Email -->
                                                 <v-col class="v-col-12">
                                                       <v-text-field
-                                                            variant="outlined"
                                                             label="*Email"
                                                             v-model="usuario.email"
                                                             :rules="[rule_email]"
                                                             :error-messages="errors.findIndex((x) => x =='email') != -1 ? 'Informe um email.' : undefined"
-                                                      required/>
+                                                      density="compact" variant="outlined" required/>
                                                 </v-col>
                                                 <!-- Senha -->
                                                 <v-col class="v-col-12">
                                                       <v-text-field
                                                             :append-inner-icon="is_show_password ? 'mdi mdi-eye-outline' : 'mdi mdi-eye-off-outline'"
                                                             @click:append-inner="is_show_password = !is_show_password"
-                                                            variant="outlined"
                                                             v-model="usuario.senha"
                                                             label="*Senha"
                                                             :type="is_show_password ? 'text' : 'password'"
                                                             :error-messages="errors.findIndex((x) => x =='senha') != -1 ? 'Informe uma senha.' : undefined"
-                                                      />
+                                                      density="compact" variant="outlined"/>
                                                 </v-col>
                                                 <!-- Token -->
                                                 <v-col class="v-col-12">
                                                       <v-text-field
-                                                            variant="outlined"
                                                             label="Token"
                                                             v-model="usuario.token"
-                                                      disabled />
+                                                      density="compact" variant="outlined" disabled/>
                                                 </v-col>
                                                 <!-- Perfil -->
                                                 <v-col class="v-col-12">
                                                       <v-select
-                                                            variant="outlined"
                                                             label="*Perfil"
                                                             v-model="usuario.perfil"
                                                             item-title="name"
@@ -208,7 +204,7 @@ export default defineComponent({
                                                             :items="perfil"
                                                             :loading="in_request"
                                                             :error-messages="errors.findIndex((x) => x =='perfil') != -1 ? 'Informe um perfil.' : undefined"
-                                                      />
+                                                      density="compact" variant="outlined"/>
                                                 </v-col>
                                                 <!-- Empresa -->
                                                 <v-col class="v-col-12">

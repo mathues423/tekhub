@@ -4,7 +4,6 @@ import router from '@/router';
 import NavbarComplet from '@/components/util/navbars/NavbarComplet.vue';
 import VersaoMaximisada from '@/components/versionamento/VersaoMaximisada.vue';
 import { defineComponent } from 'vue';
-import ErroFormComponent from '@/components/mensagem/ErroFormComponent.vue';
 import store from '@/store';
 import regra_mapeamento from '@/services/regras_negocio/regras_mapeamentoprodutos';
 import fetch_ from '@/services/fetch/requisicao';
@@ -54,7 +53,6 @@ export default defineComponent({
             NavbarComplet,
             VersaoMaximisada,
             EmpresaSelectComponent,
-            ErroFormComponent,
             ErroResponseComponent,
             TimeMensageErroComponent,
             TimeMensageFormReturnComponent
@@ -173,7 +171,6 @@ export default defineComponent({
                                                 <!-- Canal de Venda -->
                                                 <v-col class="v-col-12">
                                                       <v-select
-                                                            variant="outlined"
                                                             v-model="mapeamentoproduto.canal"
                                                             :items="canal_request"
                                                             :loading="inRequestCanal"
@@ -181,7 +178,7 @@ export default defineComponent({
                                                             :item-props="canal_toString"
                                                             :no-data-text="canal_request ? 'Nenhum Canal de Venda encontrado' : 'Selecione primeiro a Empresa'"
                                                             :error-messages="fetch_error_msg['canal' as keyof typeof fetch_error_msg]"
-                                                      />
+                                                      density="compact" variant="outlined"/>
                                                 </v-col>
                                                 <!-- Produto Erp -->
                                                 <v-col class="v-col-12">
@@ -195,28 +192,22 @@ export default defineComponent({
                                                 <!-- Produto Site -->
                                                 <v-col class="v-col-12">
                                                       <v-text-field
-                                                            variant="outlined"
                                                             v-model="mapeamentoproduto.produtoSite"
                                                             label="*Produto Site"
                                                             :error-messages="fetch_error_msg['produtoSite' as keyof typeof fetch_error_msg]"
-                                                      />
+                                                      density="compact" variant="outlined"/>
                                                 </v-col>
                                                 <!-- Produto Pai Site -->
                                                 <v-col class="v-col-12">
                                                       <v-text-field
-                                                            variant="outlined"
                                                             v-model="mapeamentoproduto.produtoPai"
                                                             label="Produto Pai Site"
-                                                      />
+                                                      density="compact" variant="outlined"/>
                                                 </v-col>
                                                 <!-- Ação -->
                                                 <v-col class="col-12">
                                                       <v-row no-gutters>
-                                                            <v-col :class="['v-col-12 pb-3', (errors.findIndex((x) => x =='igual') != -1 || editado) ? 'd-flex' : 'd-none']">
-                                                                  <ErroFormComponent
-                                                                        :mensagem="'Edite antes de salvar'"
-                                                                        :class="['desativada py-3',{'ativada' : errors.findIndex((x) => x =='igual') != -1}]"
-                                                                  />
+                                                            <v-col :class="['v-col-12 pb-3', (errors.findIndex((x) => x =='igual') != -1 || criando) ? 'd-flex' : 'd-none']">
                                                                   <TimeMensageFormReturnComponent v-if="criando"
                                                                         :mensagem="'Produto criado com sucesso'"
                                                                         :time_duration="5"
@@ -267,40 +258,3 @@ export default defineComponent({
             <VersaoMaximisada />
       </v-row>
 </template>
-
-<style scoped>
-#content{
-      background-color: var(--bs-white);
-      color: var(--bs-gray-600);
-      padding-top: 24px;
-}
-
-.form_text{
-      font-size: 14px;
-      color: var(--bs-black);
-      text-align: right;
-}
-.form_content > div{
-      padding-top: 10px;
-}
-.custom-select{
-      background: #fff url(data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E) no-repeat right .75rem center;
-      background-size: 8px 10px;
-      padding: .375rem .75rem .375rem .75rem;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
-      color: #495057;
-      vertical-align: middle;
-      border: 1px solid #ced4da;
-      border-radius: .25rem;
-      display: inline-block;
-      
-}
-/* @media (prefers-color-scheme: dark) {
-      #content{
-            background-color: var(--dark-blue);
-            color: var(--bs-white);
-      }
-} */
-</style>
