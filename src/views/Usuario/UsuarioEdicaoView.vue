@@ -65,7 +65,6 @@ export default defineComponent({
       mounted() {
             this.in_request = true;
             const rota_id = (this.$route.params['id'] || '-1') as string;
-            console.log(store.getters);
             if(store.getters.getUsuariosLength){
                   Promise.resolve(store.dispatch('getUsuariosID', rota_id))
                   .then((value) => {
@@ -85,7 +84,6 @@ export default defineComponent({
             }else{
                   Promise.resolve(fetch_.getDado('/usuario/'+rota_id))
                   .then((value) => {
-                        console.log('Ret', value);
                         this.usuario_old.email = this.usuario.email = value.data.email;
                         Promise.resolve(fetch_.getDado('/empresa/'+value.data.empresaCodigo))
                         .then((empresa)=> {

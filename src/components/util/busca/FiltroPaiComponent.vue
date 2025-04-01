@@ -20,7 +20,6 @@ export default defineComponent({
       watch:{
             opc_default:{
                   handler(){
-                        console.log(this.opc_default)
                         this.filhos[this.filhos.length - 1].opcs.campo = undefined;
                         this.filhos[this.filhos.length - 1].opcs.campo = this.opc_default;
                   },

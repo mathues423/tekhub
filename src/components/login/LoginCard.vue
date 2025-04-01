@@ -86,7 +86,6 @@
                         this.erros.vericação = false;
                         await requisicaoLogin.loginReq(this.user.email, this.user.senha, this.erros, this.lembrar)
                         .then((returno) =>{
-                              console.log(returno);
                               if(this.erros.vericação)
                                     if(returno.response?.data?.errors)
                                           this.erros.message = returno.response.data.errors[0]
