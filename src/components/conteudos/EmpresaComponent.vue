@@ -89,7 +89,7 @@ export default defineComponent({
             is_in_DeletModal: false,
             is_deletando: false,
             disable_botao_delet: false,
-            opc_filtrot_selected: undefined,
+            opc_filtrot_selected: undefined as object | undefined,
           }
       },
       components:{
@@ -194,7 +194,7 @@ export default defineComponent({
                         'tipo': title.ordem.tipo_obj
                   })
             },
-            filtraEmpresa(title: any){
+            filtraEmpresa(title: object){
                   this.itsOnFilter = true;
                   this.lista_estado = 'Vazio'
                   this.opc_filtrot_selected = title;
@@ -366,7 +366,7 @@ export default defineComponent({
                         ]"
                         @deletarDadoPai="(arg : any) => deletar(arg)"
                         @ordenarDadoPai="(arg : any) => ordenaEmpresa(arg)"
-                        @filtrarDadoPai="(arg: object)=> filtraEmpresa(dado_paginado.header[0])"
+                        @filtrarDadoPai="(arg: object)=> filtraEmpresa(arg)"
                         @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
                         @select_paginacao="(value: number)=> select_pag(value)"
                         

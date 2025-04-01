@@ -152,13 +152,43 @@ export default defineComponent({
 <div>
       <v-row no-gutters>
             <v-col class="v-col-12">
+                  <v-row no-gutters>
+                        <span v-for="title in dados?.header" :key="title.header" class="px-4 pb-3">
+                              <v-btn v-if="title.isfiltrable"
+                                    color="info"
+                                    :text="title.header"
+                                    :prepend-icon="title.filtro?.tipo_filtro == 'all' ? 'mdi-magnify' : title.filtro?.tipo_filtro == 'pre'? 'mdi-filter' : undefined"
+                                    @click="filtrarDado(title)"
+                              />
+                        </span>
+                  </v-row>
                   <v-table density="compact" class="text-center">
                         <thead>
                               <tr>
                                     <th v-for="title in dados?.header" :key="title.header" scope="col">
-                                          <v-row no-gutters>
+                                          <v-row no-gutters class="text-center">
                                                 <v-col class="v-col-12 mb-2">
-                                                      {{ title.header }}
+                                                      <v-sheet rounded="xs" elevation="2" class="span-position h-100" :color="title.ordem?.on  ? 'info' : undefined" role="button" @click="title.isordenable ? ordenarDado(title) : undefined">
+                                                            <div class="w-100 h-100 d-grid" align="center">
+                                                                  <span v-if="title.isordenable && title.ordem.on" class="left">
+                                                                        <span v-if="title.ordem.tipo_obj === 'String'">
+                                                                              <v-icon>{{ title.ordem.tipo_ordenacao === 'Asc' ? 'mdi-sort-alphabetical-ascending' : 'mdi-sort-alphabetical-descending' }}</v-icon>
+                                                                        </span>
+                                                                        <span v-else-if="title.ordem.tipo_obj === 'Number'">
+                                                                              <v-icon>{{ title.ordem.tipo_ordenacao === 'Asc' ? 'mdi-sort-numeric-ascending' : 'mdi-sort-numeric-descending' }}</v-icon>
+                                                                        </span>
+                                                                  </span>
+                                                                  <span v-if="title.isordenable && !title.ordem.on" class="left">
+                                                                        <span v-if="title.ordem.tipo_obj === 'String'">
+                                                                              <v-icon>{{ title.ordem.tipo_ordenacao === 'Asc' ? 'mdi-sort-alphabetical-ascending' : 'mdi-sort-alphabetical-descending' }}</v-icon>
+                                                                        </span>
+                                                                        <span v-else-if="title.ordem.tipo_obj === 'Number'">
+                                                                              <v-icon>{{ title.ordem.tipo_ordenacao === 'Asc' ? 'mdi-sort-numeric-ascending' : 'mdi-sort-numeric-descending' }}</v-icon>
+                                                                        </span>
+                                                                  </span>
+                                                                  {{ title.header }}
+                                                            </div>
+                                                      </v-sheet>
                                                 </v-col>
                                           </v-row>
                                     </th>
@@ -247,20 +277,20 @@ export default defineComponent({
                   />
             </v-col>
 
-            <v-col class="v-col-12 mt-20">
+            <!-- <v-col class="v-col-12 my-20">
                   <v-data-table 
                         :loading="Object.keys(dados).length == 0"
                   />
-            </v-col>
+            </v-col> -->
 
-            <v-col class="v-col-12">
+            <v-col class="v-col-12 my-20">
                   <v-table density="compact" class="text-center">
                         <thead>
                               <tr>
                                     <th v-for="title in dados?.header" :key="title.header" scope="col">
                                           <v-row no-gutters>
                                                 <v-col class="v-col-12">
-                                                      <v-sheet rounded="xs" elevation="2" class="span-position h-100" :color="title.ordem?.on  ? 'info' : 'red'" role="button" @click="title.isordenable ? ordenarDado(title) : undefined">
+                                                      <v-sheet rounded="xs" elevation="2" class="span-position h-100" :color="title.ordem?.on  ? 'info' : undefined" role="button" @click="title.isordenable ? ordenarDado(title) : undefined">
                                                             <div class="w-100 h-100 d-grid" align="center">
                                                                   <span v-if="title.isordenable && title.ordem.on" class="left">
                                                                         <span v-if="title.ordem.tipo_obj === 'String'">

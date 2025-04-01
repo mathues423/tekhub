@@ -85,7 +85,7 @@ export default defineComponent({
                   is_in_DeletModal: false,
                   is_deletando: false,
                   disable_botao_delet: false,
-                  opc_filtrot_selected: undefined,
+                  opc_filtrot_selected: undefined as object | undefined,
             }
       },
       components:{
@@ -167,9 +167,10 @@ export default defineComponent({
                         this.lista_estado = 'Lista'
                   }).catch((error_retorno)=> this.$emit('erro_fetch', error_retorno))
             },
-            filtraCanais(){
+            filtraCanais(title: object){
                   this.itsOnFilter = true;
                   this.lista_estado = 'Vazio'
+                  this.opc_filtrot_selected = title
             },
             closefiltrarCanais(){
                   this.itsOnFilter = false;
@@ -273,7 +274,7 @@ export default defineComponent({
                         ]"
                         @deletarDadoPai="(arg) => deletar(arg)"
                         @ordenarDadoPai="(arg) => {return null}"
-                        @filtrarDadoPai="filtraCanais"
+                        @filtrarDadoPai="(arg: object)=> filtraCanais(arg)"
                         @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
                         @select_paginacao="(value: number)=> select_pag(value)"
                         
@@ -333,7 +334,7 @@ export default defineComponent({
                         ]"
                         @deletarDadoPai="(arg) => deletar(arg)"
                         @ordenarDadoPai="(arg) => {return null}"
-                        @filtrarDadoPai="filtraCanais"
+                        @filtrarDadoPai="(arg: object)=> filtraCanais(arg)"
                         @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
                         @select_paginacao="(value: number)=> select_pag(value)"
                         

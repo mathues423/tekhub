@@ -28,7 +28,7 @@ export default defineComponent({
             ITEM_PAGINA_MAX_local: this.ITEM_PAGINA_MAX,
             its_card: false,
             largura: window.innerWidth,
-            opc_filtrot_selected: undefined,
+            opc_filtrot_selected: undefined as object | undefined,
           }
       },
       watch:{
@@ -116,8 +116,9 @@ export default defineComponent({
             ordenaMapeamentoProduto(arg: object){
                   this.$emit('ordenaMapeamentoProduto', arg)
             },
-            filtraMapeamentoProduto(){
-                  this.$emit('filtraMapeamentoProduto')
+            filtraMapeamentoProduto(title: object){
+                  this.opc_filtrot_selected = title
+                  this.$emit('filtraMapeamentoProduto', title)
             },
             select_pag(value: number){
                   this.$emit('select_pag', value)
@@ -167,7 +168,7 @@ export default defineComponent({
                         ]"
                         @deletarDadoPai="(arg) => deletar(arg)"
                         @ordenarDadoPai="(arg) => ordenaMapeamentoProduto(arg)"
-                        @filtrarDadoPai="filtraMapeamentoProduto"
+                        @filtrarDadoPai="(arg: object)=> filtraMapeamentoProduto(arg)"
                         @trocarQuandidadeDadoPai="(args: number)=> quantidadeItens(args)"
                         @select_paginacao="(value: number)=> select_pag(value)" 
                         
@@ -255,7 +256,7 @@ export default defineComponent({
                         ]"
                         @deletarDadoPai="(arg: object) => deletar(arg)"
                         @ordenarDadoPai="(arg: object) => ordenaMapeamentoProduto(arg)"
-                        @filtrarDadoPai="filtraMapeamentoProduto"
+                        @filtrarDadoPai="(arg: object)=> filtraMapeamentoProduto(arg)"
                         @trocarQuandidadeDadoPai="(args: number)=> quantidadeItens(args)"
                         @select_paginacao="(value: number)=> select_pag(value)" 
                         

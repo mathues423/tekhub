@@ -28,7 +28,7 @@ export default defineComponent({
             ITEM_PAGINA_MAX_local: this.ITEM_PAGINA_MAX,
             its_card: false,
             largura: window.innerWidth,
-            opc_filtrot_selected: undefined,
+            opc_filtrot_selected: undefined as object | undefined,
           }
       },
       watch:{
@@ -112,8 +112,9 @@ export default defineComponent({
             ordenaMarketplaceEcommerce(arg: object){
                   this.$emit('ordenaMarketplaceEcommerce', arg)
             },
-            filtraMarketplaceEcommerce(){
-                  this.$emit('filtraMarketplaceEcommerce')
+            filtraMarketplaceEcommerce(title: object){
+                  this.opc_filtrot_selected = title
+                  this.$emit('filtraMarketplaceEcommerce', title)
             },
             select_pag(arg: number){
                   this.$emit('select_pag', arg)
@@ -195,7 +196,7 @@ export default defineComponent({
                         ]"
                         @deletarDadoPai="(arg : any) => deletar(arg)"
                         @ordenarDadoPai="(arg : any) => ordenaMarketplaceEcommerce(arg)"
-                        @filtrarDadoPai="filtraMarketplaceEcommerce"
+                        @filtrarDadoPai="(arg: object)=> filtraMarketplaceEcommerce(arg)"
                         @trocarQuandidadeDadoPai="(args: number)=> quantidadeItens(args)"
                         @select_paginacao="(value: number)=> select_pag(value)"
                         
@@ -257,7 +258,7 @@ export default defineComponent({
                         ]"
                         @deletarDadoPai="(arg : any) => deletar(arg)"
                         @ordenarDadoPai="(arg : any) => ordenaMarketplaceEcommerce(arg)"
-                        @filtrarDadoPai="filtraMarketplaceEcommerce"
+                        @filtrarDadoPai="(arg: object)=> filtraMarketplaceEcommerce(arg)"
                         @trocarQuandidadeDadoPai="(args: number)=> quantidadeItens(args)"
                         @select_paginacao="(value: number)=> select_pag(value)"
                         

@@ -80,7 +80,7 @@ export default defineComponent({
             is_in_DeletModal: false,
             is_deletando:false,
             disable_botao_delet: false,
-            opc_filtrot_selected: undefined,
+            opc_filtrot_selected: undefined as object | undefined,
           }
       },
       components:{
@@ -182,9 +182,10 @@ export default defineComponent({
                         'tipo': title.ordem.tipo_obj
                   })
             },
-            filtraUsuario(){
+            filtraUsuario(title: object){
                   this.itsOnFilter = true;
                   this.lista_estado = 'Vazio'
+                  this.opc_filtrot_selected = title
             },
             closefiltrarUsuario(){
                   this.itsOnFilter = false;
@@ -285,7 +286,7 @@ export default defineComponent({
                         ]"
                         @deletarDadoPai="(arg : any) => deletar(arg)"
                         @ordenarDadoPai="(arg : any) => ordenaUsuario(arg)"
-                        @filtrarDadoPai="filtraUsuario"
+                        @filtrarDadoPai="(arg: object)=> filtraUsuario(arg)"
                         @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
                         @select_paginacao="(value: number)=> select_pag(value)"
                         
@@ -345,7 +346,7 @@ export default defineComponent({
                         ]"
                         @deletarDadoPai="(arg : any) => deletar(arg)"
                         @ordenarDadoPai="(arg : any) => ordenaUsuario(arg)"
-                        @filtrarDadoPai="filtraUsuario"
+                        @filtrarDadoPai="(arg: object)=> filtraUsuario(arg)"
                         @trocarQuandidadeDadoPai="(args: number)=> changeItemPagina(args)"
                         @select_paginacao="(value: number)=> select_pag(value)"
                         

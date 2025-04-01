@@ -144,7 +144,6 @@ export default defineComponent({
             dado_quantidade(args: number){
                   this.$emit('trocarQuandidadeDadoPai', args)
             },
-
             Filtro(){
                   if(this.its_OnFilter){
                         this.animation = true;
@@ -162,6 +161,14 @@ export default defineComponent({
                   }
                   this.its_OnOrder = !this.its_OnOrder;
                   this.its_OnFilter = false;
+            },
+            type_icon(title: object): string | undefined{
+                  if(title['ordem' as keyof typeof title]['tipo_obj' as keyof typeof Object] === 'String'){
+                        return title['ordem' as keyof typeof title]['tipo_ordenacao' as keyof typeof Object] === 'Asc' ? 'mdi-sort-alphabetical-ascending' : 'mdi-sort-alphabetical-descending'
+                  }else if(title['ordem' as keyof typeof title]['tipo_obj' as keyof typeof Object] === 'Number'){
+                        return title['ordem' as keyof typeof title]['tipo_ordenacao' as keyof typeof Object] === 'Asc' ? 'mdi-sort-numeric-ascending' : 'mdi-sort-numeric-descending'
+                  }
+                  return undefined
             }
       },
       emits: ['select_paginacao', 'deletarDadoPai', 'ordenarDadoPai', 'filtrarDadoPai', 'trocarQuandidadeDadoPai', 
@@ -206,13 +213,26 @@ export default defineComponent({
                                     Ordenar
                               </v-btn>
                         </v-col>
-                        <v-row :class="['conteudo_pesquisa', (its_OnFilter || its_OnOrder) ? 'open' : '']">
+                        <v-row :class="['conteudo_pesquisa', (its_OnFilter || its_OnOrder) ? 'open' : '']" no-gutters>
+                              <v-col class="v-col-12" v-show="its_OnFilter || its_OnOrder">
+                                    <v-divider class="my-2"> {{ its_OnFilter ? 'Filtro' : its_OnOrder ? 'Ordenação' : undefined }} </v-divider>
+                              </v-col>
                               <FiltroPaiComponent
                                     :itsOnFilter="its_OnFilter"
                                     :header="header_info"
                                     @pesquisa_request="(args: string) => filtrarDado(args)"
                                     @close_pesquisa="Filtro"
                               />
+                              <v-row no-gutters v-show="its_OnOrder">
+                                    <span v-for="title in dados?.header" :key="title.header" class="px-4 pb-3">
+                                          <v-btn v-if="title.isordenable"
+                                                :color="title.ordem.on ? 'success' : 'info'"
+                                                :text="title.header"
+                                                :prepend-icon="type_icon(title)"
+                                                @click="ordenarDado(title)"
+                                          />
+                                    </span>
+                              </v-row>
                         </v-row>
                   </v-row>
                   <v-divider></v-divider>
