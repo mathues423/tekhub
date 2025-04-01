@@ -52,6 +52,7 @@ export default defineComponent({
             VersaoMaximisada,
             EmpresaSelectComponent,
             ErroResponseComponent,
+            ErroFormComponent,
             TimeMensageErroComponent,
             TimeMensageFormReturnComponent
       },
@@ -111,7 +112,6 @@ export default defineComponent({
                         this.mapeamentoproduto.produtoErp = this.mapeamentoproduto_old.produtoErp = value.data.produtoErp;
                         this.mapeamentoproduto.produtoSite = this.mapeamentoproduto_old.produtoSite = value.data.produtoSite;
                         this.mapeamentoproduto.produtoPai = this.mapeamentoproduto_old.produtoPai = value.data.produtoPaiSite;
-                        console.log('Map > ', value.data)
                   }).catch((error_retorno)=> this.showError(error_retorno));
             }
             if(this.auth_type != 'ROLE_USER'){

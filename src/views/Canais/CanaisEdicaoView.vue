@@ -43,10 +43,10 @@ export default defineComponent({
       components:{
             NavbarComplet,
             VersaoMaximisada,
-            // ErroFormComponent,
+            ErroFormComponent,
             ErroResponseComponent,
             TimeMensageErroComponent,
-            // TimeMensageFormReturnComponent
+            TimeMensageFormReturnComponent
       },
       methods:{
             async editRequest(){

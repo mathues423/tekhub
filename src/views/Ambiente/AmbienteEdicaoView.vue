@@ -124,8 +124,6 @@ export default defineComponent({
             }else{
                   Promise.resolve(fetch_.getDado_ID('/ambiente', rota_id))
                   .then((value) => {
-                        console.log('IN STORE ', value);
-                        
                         this.old_ambiente.ambiente = this.ambiente.ambiente = value.data.ambiente;
                         this.old_ambiente.canalAlias = this.ambiente.canalAlias = value.data.canalAlias;
                         this.old_ambiente.status = this.ambiente.status = value.data.status;
@@ -138,8 +136,6 @@ export default defineComponent({
                         this.old_ambiente.versao = this.ambiente.versao = value.data.versao;
                         Promise.resolve(fetch_.getDado('/canal'))
                         .then((args)=> {
-                              console.log("IN Store> Canal ", args)
-
                               this.requested = true;
                               this.canais_requested = args.data
                               this.canais_requested.forEach((item: any)=> {

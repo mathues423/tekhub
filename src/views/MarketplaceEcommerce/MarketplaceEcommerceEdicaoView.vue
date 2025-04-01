@@ -114,11 +114,11 @@ export default defineComponent({
       components:{
             NavbarComplet,
             VersaoMaximisada,
-            // ErroFormComponent,
+            ErroFormComponent,
             ErroResponseComponent,
             TimeMensageErroComponent,
             EmpresaSelectComponent,
-            // TimeMensageFormReturnComponent
+            TimeMensageFormReturnComponent
       },
       mounted(){
             // get Empresa e ambiente dps get usuario filtro empresa.codigo == empresa
