@@ -36,6 +36,22 @@ export default defineComponent({
             texto_select:{
                   type: String,
                   default: 'Selecione a data'
+            },
+            is_disabled:{
+                  type: Boolean,
+                  default: false
+            },
+            date_aux:{
+                  type: Date,
+                  default: undefined
+            },
+            erro_verify:{
+                  type: Boolean,
+                  required: true
+            },
+            erro_mensagem:{
+                  type: String,
+                  required: true
             }
       },
       watch:{
@@ -43,33 +59,54 @@ export default defineComponent({
                   this.is_in_select_date = is_in_select_date_new
             },
             date_picker(date_picker_new: Date){
-                  this.data_saida.data.ano = date_picker_new.getUTCFullYear();
-                  this.data_saida.data.mes = date_picker_new.getUTCMonth()+1;
-                  this.data_saida.data.dia = date_picker_new.getUTCDate();
-                  if (this.data_show != undefined) {
-                        this.data_show.setUTCFullYear(this.data_saida.data.ano);
-                        this.data_show.setUTCMonth(this.data_saida.data.mes);
-                        this.data_show.setUTCDate(this.data_saida.data.dia);
-                        // this.data_show.setUTCFullYear(date_picker_new.getUTCFullYear(), date_picker_new.getUTCMonth(), date_picker_new.getUTCDate());
+                  this.data_show = undefined;
+
+                  this.data_saida.data.ano = date_picker_new.getFullYear();
+                  this.data_saida.data.mes = date_picker_new.getMonth() + 1;
+                  this.data_saida.data.dia = date_picker_new.getDate();
+                  if (this.data_show == undefined) {
+                        this.data_show = new Date(this.data_saida.data.ano,
+                              this.data_saida.data.mes - 1,
+                              this.data_saida.data.dia,
+                              this.data_saida.tempo.hora,
+                              this.data_saida.tempo.minuto,
+                              this.data_saida.tempo.segundo
+                        );
                   }
-                  console.log('DATE_PICKER ', this.data_show)
             },
             time_picker(time_picker_new){
+                  this.data_show = undefined;
+
                   const timer = time_picker_new.split(':', 3)
                   this.data_saida.tempo.hora = timer[0];
                   this.data_saida.tempo.minuto = timer[1];
                   this.data_saida.tempo.segundo = timer[2] ? timer[2] : 0;
-                  if (this.data_show != undefined) {
-                        this.data_show.setUTCHours(timer[0]);
-                        this.data_show.setUTCMinutes(timer[1]);
-                        this.data_show.setUTCSeconds(timer[2] ? timer[2] : 0);
-                        // this.data_show.setUTCHours(timer[0], timer[1], timer[2] ? timer[2] : 0);
+                  if (this.data_show == undefined) {
+                        this.data_show = new Date(this.data_saida.data.ano, 
+                              this.data_saida.data.mes - 1,
+                              this.data_saida.data.dia,
+                              this.data_saida.tempo.hora,
+                              this.data_saida.tempo.minuto,
+                              this.data_saida.tempo.segundo
+                        );
                   }
-                  console.log('TIME_PICKER ', this.data_show)
+            },
+            date_aux(date_new: Date){
+                  this.data_show = undefined
+                  this.data_show = new Date(
+                        date_new.getFullYear(),
+                        date_new.getMonth(),
+                        date_new.getDate(),
+                        date_new.getHours(),
+                        date_new.getMinutes(),
+                        date_new.getSeconds()
+                  )
+                  this.date_picker = this.data_show
+                  this.time_picker = format(this.data_show, 'HH:mm:ss')
             }
       },
       computed:{
-            DataFormatada(): string|undefined{
+            DataFormatadaValue(): string|undefined{
                   if(this.data_show != undefined)
                         return format(this.data_show, 'dd/MM/yyyy HH:mm:ss')
                   else
@@ -98,8 +135,6 @@ export default defineComponent({
 </script>
 
 <template>
-      <!-- @update:model-value="$emit('isOpen', false)" -->
-
 <v-dialog 
       v-model="is_in_select_date"
       @update:model-value="trocaEstado(false)"
@@ -148,15 +183,13 @@ export default defineComponent({
       </v-sheet>
 </v-dialog>
 
-      <button class="w-100" @click="trocaEstado(true)">
+      <button class="w-100" @click="trocaEstado(true)" :disabled="is_disabled">
             <v-text-field
                   :label="texto_select"
                   prepend-icon=""
-                  prepend-inner-icon="mdi-calendar"
-                  v-model="DataFormatada"
+                  :prepend-inner-icon="!is_disabled ? 'mdi mdi-calendar' : 'mdi mdi-calendar-remove'"
+                  v-model="DataFormatadaValue"
+                  :error-messages="erro_verify ? erro_mensagem : undefined"
             variant="outlined" density="compact" disabled/>
       </button>
-      Date {{ date_picker }} <br>
-      Time {{ time_picker }} <br>
-      teste {{ data_show }}<br>
 </template>
