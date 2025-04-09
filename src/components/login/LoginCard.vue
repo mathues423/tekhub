@@ -30,8 +30,8 @@
                                     <v-col class="v-col-12" v-if="erros.vericação == true">
                                           <ErroFormComponent 
                                                 :mensagem="erros.message"
-                                                :tipo_mesnsagem="'error'"
-                                                :class="(erros.vericação == true && erros.type == 'error') ? 'ativada' : 'desativada'"
+                                                :tipo_mesnsagem="erros.type"
+                                                :class="(erros.vericação == true && erros.type == 'error' || erros.type == 'warning') ? 'ativada' : 'desativada'"
                                           />
                                     </v-col>
                                     <v-col class="v-col-6">
@@ -65,7 +65,7 @@
                               senha: ''
                         }),
                         erros: ref({
-                              type: 'info',
+                              type: 'warning',
                               vericação: false,
                               message: ''
                         }),
@@ -96,6 +96,10 @@
                               if (erro.errors) {
                                     this.erros.message = erro.errors[0];
                                     this.erros.type = 'error';
+                                    this.isLogin = false;
+                              }else if(erro.code == "ERR_NETWORK"){
+                                    this.erros.message = "Não foi possível se conectar ao servidor, tente novamente mais tarde.";
+                                    this.erros.type = 'warning';
                                     this.isLogin = false;
                               }
                         });
