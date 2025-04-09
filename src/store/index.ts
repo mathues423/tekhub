@@ -52,24 +52,56 @@ const store = createStore({
       const aux = state[obj.rota_interna as keyof typeof state]['data' as keyof typeof Object] as Array<object>;
       if (obj.tipo == 'Number') {
         if(obj.ordem == 'Asc'){ // Ascendente
-          aux.sort((a: object , b: object) => 
-            a[obj.nome_dado as keyof typeof a] - b[obj.nome_dado as keyof typeof b]
-          )
+          aux.sort((a, b) =>{
+            if (b[obj.nome_dado as keyof typeof b] == undefined && a[obj.nome_dado as keyof typeof a] == undefined) {
+              return 0;
+            }else if(a[obj.nome_dado as keyof typeof a] == undefined){
+              return 1;
+            }else if(b[obj.nome_dado as keyof typeof b] == undefined){
+              return -1;
+            }else{
+              return (a[obj.nome_dado as keyof typeof a] - b[obj.nome_dado as keyof typeof b])
+            }
+          })
         }else{ //Decrescente
-          aux.sort((a: object , b: object) => 
-            b[obj.nome_dado as keyof typeof b] - a[obj.nome_dado as keyof typeof a]
-          )
+          aux.sort((a, b) =>{
+            if (b[obj.nome_dado as keyof typeof b] == undefined && a[obj.nome_dado as keyof typeof a] == undefined) {
+              return 0;
+            }else if(b[obj.nome_dado as keyof typeof b] == undefined){
+              return 1;
+            }else if(a[obj.nome_dado as keyof typeof a] == undefined){
+              return -1;
+            }else{
+              return (b[obj.nome_dado as keyof typeof b] - a[obj.nome_dado as keyof typeof a])
+            }
+          })
         }
       }
       if(obj.tipo == 'String'){
         if(obj.ordem == 'Asc'){ // Ascendente
-          aux.sort((a, b) => 
-            (a[obj.nome_dado as keyof typeof a] as string).localeCompare(b[obj.nome_dado as keyof typeof b])
-          )
+          aux.sort((a, b) =>{
+            if (b[obj.nome_dado as keyof typeof b] == undefined && a[obj.nome_dado as keyof typeof a] == undefined) {
+              return 0;
+            }else if(a[obj.nome_dado as keyof typeof a] == undefined){
+              return 1;
+            }else if(b[obj.nome_dado as keyof typeof b] == undefined){
+              return -1;
+            }else{
+              return (a[obj.nome_dado as keyof typeof a] as string).localeCompare(b[obj.nome_dado as keyof typeof b])
+            }
+          })
         }else{ //Decrescente
-        aux.sort((a, b) =>
-          (b[obj.nome_dado as keyof typeof b] as string).localeCompare(a[obj.nome_dado as keyof typeof a])
-        )
+          aux.sort((a, b) =>{
+            if (b[obj.nome_dado as keyof typeof b] == undefined && a[obj.nome_dado as keyof typeof a] == undefined) {
+              return 0;
+            }else if(b[obj.nome_dado as keyof typeof b] == undefined){
+              return 1;
+            }else if(a[obj.nome_dado as keyof typeof a] == undefined){
+              return -1;
+            }else{
+              return (b[obj.nome_dado as keyof typeof b] as string).localeCompare(a[obj.nome_dado as keyof typeof a])
+            }
+          })
         }
       }
     },
