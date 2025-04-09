@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, PropType } from 'vue';
 export default defineComponent({
       props:{
             mensagem: {
@@ -7,7 +7,7 @@ export default defineComponent({
               required: true
             },
             tipo_mesnsagem: {
-              type: String,
+              type: String as PropType<'error' | 'warning'>,
               default: 'warning'
             },
       }

@@ -195,9 +195,11 @@ export default defineComponent({
                         title.ordem.tipo_ordenacao = 'Asc'
                   }
                   title.ordem.on = true;
+                  
+                  const rota_interna = this.itsOnFilter ? 'mapeamentoproduto_pesquisa' : 'mapeamentoproduto';
                   store.commit('ordenarDadosInterno', {
                         'ordem': title.ordem.tipo_ordenacao,
-                        'rota_interna': 'marketplaceecommerce',
+                        'rota_interna': rota_interna,
                         'nome_dado': title.key_body,
                         'tipo': title.ordem.tipo_obj
                   })

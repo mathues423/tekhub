@@ -223,10 +223,10 @@ export default defineComponent({
                                                                         :disabled="new_mapeamento_request || criando"/>
                                                             </v-col>
                                                             <v-col class="v-col-6 py-3" align-self="center">
+                                                                  <!-- color="error" -->
                                                                   <v-btn
-                                                                        color="error"
-                                                                        prepend-icon="mdi mdi-trash-can"
-                                                                        text="Cancelar"
+                                                                        prepend-icon="mdi mdi-arrow-left"
+                                                                        text="Voltar"
                                                                         @click="voltarMapeamentoProduto()"
                                                                   />
                                                             </v-col>

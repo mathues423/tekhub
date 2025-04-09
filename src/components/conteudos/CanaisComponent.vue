@@ -213,9 +213,9 @@ export default defineComponent({
 </script>
 
 <template id="Canl_comp">
-      <v-row>
+      <v-row no-gutters>
             <v-col class="v-col-1"></v-col>
-            <v-col class="v-col-10">
+            <v-col class="v-col-10 pt-10">
                   <FiltroPaiComponent v-if="!its_card"
                         :itsOnFilter="itsOnFilter"
                         :header="dado_paginado.header"
