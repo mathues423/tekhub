@@ -11,6 +11,8 @@ import fetch_ from '@/services/fetch/requisicao';
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
 import TimeMensageErroComponent from '@/components/mensagem/TimeMensageErroComponent.vue';
 import TimeMensageFormReturnComponent from '@/components/mensagem/TimeMensageFormReturnComponent.vue';
+import VoltarBotaoComponent from '@/components/util/Botoes/VoltarBotaoComponent.vue';
+import EdiçãoBotaoComponent from '@/components/util/Botoes/EdiçãoBotaoComponent.vue';
 
 export default defineComponent({
       data(){
@@ -46,7 +48,8 @@ export default defineComponent({
             ErroFormComponent,
             ErroResponseComponent,
             TimeMensageErroComponent,
-            TimeMensageFormReturnComponent
+            TimeMensageFormReturnComponent,
+            EdiçãoBotaoComponent, VoltarBotaoComponent
       },
       methods:{
             async editRequest(){
@@ -200,19 +203,16 @@ export default defineComponent({
                                                                   />
                                                             </v-col>
                                                             <v-col class="v-col-6 py-3" align-self="center">
-                                                                  <v-btn
-                                                                        color="success"
-                                                                        prepend-icon="mdi mdi-square-edit-outline"
-                                                                        text="Editar"
-                                                                        @click="editRequest"
-                                                                        :disabled="edit_canal_request || editado"/>
+                                                                  <EdiçãoBotaoComponent
+                                                                        :is_disabled="edit_canal_request || editado"
+                                                                        :icone="'mdi mdi-square-edit-outline'"
+                                                                        @editar="editRequest"
+                                                                  />
                                                             </v-col>
                                                             <v-col class="v-col-6 py-3" align-self="center">
-                                                                  <v-btn
-                                                                        color="error"
-                                                                        prepend-icon="mdi mdi-trash-can"
-                                                                        text="Cancelar"
-                                                                        @click="voltarCanal()"
+                                                                  <VoltarBotaoComponent
+                                                                        :icone="'mdi mdi-arrow-left'"
+                                                                        @voltar="voltarCanal"
                                                                   />
                                                             </v-col>
                                                       </v-row>

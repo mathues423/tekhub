@@ -10,6 +10,8 @@ import fetch_ from '@/services/fetch/requisicao';
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
 import TimeMensageErroComponent from '@/components/mensagem/TimeMensageErroComponent.vue';
 import TimeMensageFormReturnComponent from '@/components/mensagem/TimeMensageFormReturnComponent.vue';
+import VoltarBotaoComponent from '@/components/util/Botoes/VoltarBotaoComponent.vue';
+import AdiçãoBotaoComponent from '@/components/util/Botoes/AdiçãoBotaoComponent.vue';
 
 export default defineComponent({
       data(){
@@ -39,7 +41,8 @@ export default defineComponent({
             VersaoMaximisada,
             ErroResponseComponent,
             TimeMensageErroComponent,
-            TimeMensageFormReturnComponent
+            TimeMensageFormReturnComponent,
+            AdiçãoBotaoComponent, VoltarBotaoComponent
       },
       mounted() {
             this.requested = false;
@@ -141,7 +144,7 @@ export default defineComponent({
                                                             :items="canais_requested"
                                                             :item-props="canalToString"
                                                             :loaded="requested"
-                                                            :erros-text="errors.findIndex((x) => x =='canalAlias') != -1 ? 'Selecione um canal valido' : undefined"
+                                                            :error-messages="errors.findIndex((x) => x =='canalAlias') != -1 ? 'Selecione um canal valido' : undefined"
                                                       density="compact" variant="outlined" focused />
                                                 </v-col>
                                                 <!-- ULR -->
@@ -149,7 +152,7 @@ export default defineComponent({
                                                       <v-text-field
                                                             label="*URL:"
                                                             v-model="ambiente.url"
-                                                            :erros-text="errors.findIndex((x) => x =='url') != -1 ? 'Digite uma ULR' : undefined"
+                                                            :error-messages="errors.findIndex((x) => x =='url') != -1 ? 'Digite uma ULR' : undefined"
                                                       density="compact" variant="outlined"/>
                                                 </v-col>
                                                 <!-- Versão -->
@@ -157,7 +160,7 @@ export default defineComponent({
                                                       <v-text-field
                                                             label="*Versão:"
                                                             v-model="ambiente.versao"
-                                                            :erros-text="errors.findIndex((x) => x =='versao') != -1 ? 'Digite uma versão' : undefined"
+                                                            :error-messages="errors.findIndex((x) => x =='versao') != -1 ? 'Digite uma versão' : undefined"
                                                       density="compact" variant="outlined"/>
                                                 </v-col>
                                                 <!-- Ambiente -->
@@ -168,7 +171,7 @@ export default defineComponent({
                                                             :items="ambientes"
                                                             item-title="name"
                                                             item-value="value"
-                                                            :erros-text="errors.findIndex((x) => x =='ambiente') != -1 ? 'Selecione um ambiente' : undefined"
+                                                            :error-messages="errors.findIndex((x) => x =='ambiente') != -1 ? 'Selecione um ambiente' : undefined"
                                                       density="compact" variant="outlined"/>
                                                 </v-col>
                                                 <!-- Status -->
@@ -190,19 +193,16 @@ export default defineComponent({
                                                                   />
                                                             </v-col>
                                                             <v-col class="v-col-6 py-3" align-self="center">
-                                                                  <v-btn
-                                                                        color="success"
-                                                                        prepend-icon="mdi mdi-cloud-plus"
-                                                                        text="Criar"
-                                                                        @click="criacaoRequest"
-                                                                        :disabled="new_ambiente_request || criando"/>
+                                                                  <AdiçãoBotaoComponent
+                                                                        :icone="'mdi mdi-cloud-plus'"
+                                                                        :is_disabled="new_ambiente_request || criando"
+                                                                        @criar="criacaoRequest"
+                                                                  />
                                                             </v-col>
                                                             <v-col class="v-col-6 py-3" align-self="center">
-                                                                  <!-- color="error" -->
-                                                                  <v-btn
-                                                                        prepend-icon="mdi mdi-arrow-left"
-                                                                        text="Voltar"
-                                                                        @click="voltarAmbiente()"
+                                                                  <VoltarBotaoComponent
+                                                                        :icone="'mdi mdi-arrow-left'"
+                                                                        @voltar="voltarAmbiente()"
                                                                   />
                                                             </v-col>
                                                       </v-row>

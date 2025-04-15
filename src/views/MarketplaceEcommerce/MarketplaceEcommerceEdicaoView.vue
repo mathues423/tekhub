@@ -12,6 +12,8 @@ import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.v
 import TimeMensageErroComponent from '@/components/mensagem/TimeMensageErroComponent.vue';
 import TimeMensageFormReturnComponent from '@/components/mensagem/TimeMensageFormReturnComponent.vue';
 import EmpresaSelectComponent from '@/components/util/selects/EmpresaSelectComponent.vue';
+import VoltarBotaoComponent from '@/components/util/Botoes/VoltarBotaoComponent.vue';
+import EdiçãoBotaoComponent from '@/components/util/Botoes/EdiçãoBotaoComponent.vue';
 
 export default defineComponent({
       data(){
@@ -118,7 +120,8 @@ export default defineComponent({
             ErroResponseComponent,
             TimeMensageErroComponent,
             EmpresaSelectComponent,
-            TimeMensageFormReturnComponent
+            TimeMensageFormReturnComponent,
+            EdiçãoBotaoComponent, VoltarBotaoComponent
       },
       mounted(){
             // get Empresa e ambiente dps get usuario filtro empresa.codigo == empresa
@@ -381,19 +384,16 @@ export default defineComponent({
                                                                   />
                                                             </v-col>
                                                             <v-col class="v-col-6 py-3" align-self="center">
-                                                                  <v-btn
-                                                                        color="success"
-                                                                        prepend-icon="mdi mdi-square-edit-outline"
-                                                                        text="Editar"
-                                                                        @click="edicaoRequest"
-                                                                        :disabled="edit_markEcom_request || editado"/>
+                                                                  <EdiçãoBotaoComponent
+                                                                        :is_disabled="edit_markEcom_request || editado"
+                                                                        :icone="'mdi mdi-square-edit-outline'"
+                                                                        @editar="edicaoRequest"
+                                                                  />
                                                             </v-col>
                                                             <v-col class="v-col-6 py-3" align-self="center">
-                                                                  <v-btn
-                                                                        color="error"
-                                                                        prepend-icon="mdi mdi-trash-can"
-                                                                        text="Cancelar"
-                                                                        @click="voltarMarktplaceEcommerce()"
+                                                                  <VoltarBotaoComponent
+                                                                        :icone="'mdi mdi-arrow-left'"
+                                                                        @voltar="voltarMarktplaceEcommerce()"
                                                                   />
                                                             </v-col>
                                                       </v-row>

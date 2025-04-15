@@ -10,6 +10,8 @@ import usuarios from '@/services/regras_negocio/regras_usuarios';
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
 import TimeMensageErroComponent from '@/components/mensagem/TimeMensageErroComponent.vue';
 import TimeMensageFormReturnComponent from '@/components/mensagem/TimeMensageFormReturnComponent.vue';
+import VoltarBotaoComponent from '@/components/util/Botoes/VoltarBotaoComponent.vue';
+import AdiçãoBotaoComponent from '@/components/util/Botoes/AdiçãoBotaoComponent.vue';
 
 export default defineComponent({
       data(){
@@ -43,7 +45,8 @@ export default defineComponent({
             VersaoMaximisada,
             ErroResponseComponent,
             TimeMensageErroComponent,
-            TimeMensageFormReturnComponent
+            TimeMensageFormReturnComponent,
+            AdiçãoBotaoComponent, VoltarBotaoComponent
       },
       watch:{
             empresa_escolhida(){
@@ -164,19 +167,16 @@ export default defineComponent({
                                                                   />
                                                             </v-col>
                                                             <v-col class="v-col-6 py-3" align-self="center">
-                                                                  <v-btn
-                                                                        color="success"
-                                                                        prepend-icon="mdi mdi-account-plus"
-                                                                        text="Criar"
-                                                                        @click="criacaoRequest"
-                                                                        :disabled="new_user_reqest || criando"/>
+                                                                  <AdiçãoBotaoComponent
+                                                                        :icone="'mdi mdi-account-plus'"
+                                                                        :is_disabled="new_user_reqest || criando"
+                                                                        @criar="criacaoRequest"
+                                                                  />
                                                             </v-col>
                                                             <v-col class="v-col-6 py-3" align-self="center">
-                                                                  <!-- color="error" -->
-                                                                  <v-btn
-                                                                        prepend-icon="mdi mdi-arrow-left"
-                                                                        text="Voltar"
-                                                                        @click="voltarUsuario()"
+                                                                  <VoltarBotaoComponent
+                                                                        :icone="'mdi mdi-arrow-left'"
+                                                                        @voltar="voltarUsuario()"
                                                                   />
                                                             </v-col>
                                                       </v-row>

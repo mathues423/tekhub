@@ -3,7 +3,7 @@ import { APPCONFIG } from '@/components/constants/Config';
 import NavbarComplet from '@/components/util/navbars/NavbarComplet.vue';
 import VersaoMaximisada from '@/components/versionamento/VersaoMaximisada.vue';
 import router from '@/router';
-import CriarBotaoComponent from '@/components/util/CriarBotaoComponent.vue'
+import CriarBotaoComponent from '@/components/util/Botoes/CriarBotaoComponent.vue'
 import fetch_ from '@/services/fetch/requisicao';
 import { defineComponent } from 'vue';
 import store from '@/store';

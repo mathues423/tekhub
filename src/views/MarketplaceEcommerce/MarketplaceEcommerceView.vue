@@ -4,7 +4,7 @@ import MarketplaceEcommerceComponent from '@/components/conteudos/MarketplaceEco
 import NavbarComplet from '@/components/util/navbars/NavbarComplet.vue';
 import VersaoMaximisada from '@/components/versionamento/VersaoMaximisada.vue';
 import router from '@/router';
-import CriarBotaoComponent from '@/components/util/CriarBotaoComponent.vue'
+import CriarBotaoComponent from '@/components/util/Botoes/CriarBotaoComponent.vue'
 import BuscaEmpresaComponent from '@/components/util/BuscaEmpresaComponent.vue';
 import fetch_ from '@/services/fetch/requisicao';
 import { defineComponent } from 'vue';

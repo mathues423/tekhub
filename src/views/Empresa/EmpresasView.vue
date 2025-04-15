@@ -2,7 +2,7 @@
 import { APPCONFIG } from '@/components/constants/Config';
 import EmpresaComponent from "@/components/conteudos/EmpresaComponent.vue";
 import NavbarComplet from '@/components/util/navbars/NavbarComplet.vue';
-import CriarBotao from '@/components/util/CriarBotaoComponent.vue';
+import CriarBotao from '@/components/util/Botoes/CriarBotaoComponent.vue';
 import VersaoMaximisada from '@/components/versionamento/VersaoMaximisada.vue';
 import router from '@/router';
 import { defineComponent } from 'vue';

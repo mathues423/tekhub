@@ -9,6 +9,8 @@ import store from '@/store';
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
 import TimeMensageErroComponent from '@/components/mensagem/TimeMensageErroComponent.vue';
 import TimeMensageFormReturnComponent from '@/components/mensagem/TimeMensageFormReturnComponent.vue';
+import VoltarBotaoComponent from '@/components/util/Botoes/VoltarBotaoComponent.vue';
+import AdiçãoBotaoComponent from '@/components/util/Botoes/AdiçãoBotaoComponent.vue';
 
 export default defineComponent({
       data(){
@@ -33,7 +35,8 @@ export default defineComponent({
             VersaoMaximisada,
             ErroResponseComponent,
             TimeMensageErroComponent,
-            TimeMensageFormReturnComponent
+            TimeMensageFormReturnComponent,
+            AdiçãoBotaoComponent, VoltarBotaoComponent
       },
       methods:{
             async criacaoRequest(){
@@ -143,19 +146,16 @@ export default defineComponent({
                                                             />
                                                       </v-col>
                                                       <v-col class="v-col-6 py-3" align-self="center">
-                                                            <v-btn
-                                                                  color="success"
-                                                                  prepend-icon="mdi mdi-store-plus"
-                                                                  text="Criar"
-                                                                  @click="criacaoRequest"
-                                                                  :disabled="new_empresa_request || criando"/>
+                                                            <AdiçãoBotaoComponent
+                                                                  :icone="'mdi mdi-store-plus'"
+                                                                  :is_disabled="new_empresa_request || criando"
+                                                                  @criar="criacaoRequest"
+                                                            />
                                                       </v-col>
                                                       <v-col class="v-col-6 py-3" align-self="center">
-                                                            <!-- color="error" -->
-                                                            <v-btn
-                                                                  prepend-icon="mdi mdi-arrow-left"
-                                                                  text="Voltar"
-                                                                  @click="voltarEmpresa()"
+                                                            <VoltarBotaoComponent
+                                                                  :icone="'mdi mdi-arrow-left'"
+                                                                  @voltar="voltarEmpresa()"
                                                             />
                                                       </v-col>
                                                 </v-row>
@@ -176,26 +176,3 @@ export default defineComponent({
       <VersaoMaximisada />
 </v-row>
 </template>
-
-<style scoped>
-#content{
-      background-color: var(--bs-white);
-      color: var(--bs-gray-600);
-      padding-top: 24px;
-}
-
-.form_text{
-      font-size: 14px;
-      color: var(--bs-black);
-      text-align: right;
-}
-.form_content > div{
-      padding-top: 10px;
-}
-/* @media (prefers-color-scheme: dark) {
-      #content{
-            background-color: var(--dark-blue);
-            color: var(--bs-white);
-      }
-} */
-</style>

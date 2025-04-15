@@ -12,6 +12,8 @@ import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.v
 import fetch_ from '@/services/fetch/requisicao';
 import TimeMensageErroComponent from '@/components/mensagem/TimeMensageErroComponent.vue';
 import TimeMensageFormReturnComponent from '@/components/mensagem/TimeMensageFormReturnComponent.vue';
+import VoltarBotaoComponent from '@/components/util/Botoes/VoltarBotaoComponent.vue';
+import EdiçãoBotaoComponent from '@/components/util/Botoes/EdiçãoBotaoComponent.vue';
 
 export default defineComponent({
       data(){
@@ -55,7 +57,8 @@ export default defineComponent({
             ErroFormComponent,
             ErroResponseComponent,
             TimeMensageErroComponent,
-            TimeMensageFormReturnComponent
+            TimeMensageFormReturnComponent,
+            EdiçãoBotaoComponent, VoltarBotaoComponent
       },
       watch:{
             empresa_escolhida(){
@@ -228,19 +231,16 @@ export default defineComponent({
                                                                   />
                                                             </v-col>
                                                             <v-col class="v-col-6 py-3" align-self="center">
-                                                                  <v-btn
-                                                                        color="success"
-                                                                        prepend-icon="mdi mdi-square-edit-outline"
-                                                                        text="Editar"
-                                                                        @click="edicaoRequest"
-                                                                        :disabled="edit_user_reqest || editado"/>
+                                                                  <EdiçãoBotaoComponent
+                                                                        :icone="'mdi mdi-square-edit-outline'"
+                                                                        :is_disabled="edit_user_reqest || editado"
+                                                                        @editar="edicaoRequest"
+                                                                  />
                                                             </v-col>
                                                             <v-col class="v-col-6 py-3" align-self="center">
-                                                                  <v-btn
-                                                                        color="error"
-                                                                        prepend-icon="mdi mdi-trash-can"
-                                                                        text="Cancelar"
-                                                                        @click="voltarUsuario()"
+                                                                  <VoltarBotaoComponent
+                                                                        :icone="'mdi mdi-arrow-left'"
+                                                                        @voltar="voltarUsuario()"
                                                                   />
                                                             </v-col>
                                                       </v-row>

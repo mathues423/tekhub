@@ -11,6 +11,8 @@ import fetch_ from '@/services/fetch/requisicao';
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
 import TimeMensageErroComponent from '@/components/mensagem/TimeMensageErroComponent.vue';
 import TimeMensageFormReturnComponent from '@/components/mensagem/TimeMensageFormReturnComponent.vue';
+import VoltarBotaoComponent from '@/components/util/Botoes/VoltarBotaoComponent.vue';
+import EdiçãoBotaoComponent from '@/components/util/Botoes/EdiçãoBotaoComponent.vue';
 
 export default defineComponent({
       data(){
@@ -48,7 +50,8 @@ export default defineComponent({
             ErroFormComponent,
             ErroResponseComponent,
             TimeMensageErroComponent,
-            TimeMensageFormReturnComponent
+            TimeMensageFormReturnComponent,
+            EdiçãoBotaoComponent, VoltarBotaoComponent
       },
       methods:{
             canalToString(item: any){
@@ -245,19 +248,16 @@ export default defineComponent({
                                                                   />
                                                             </v-col>
                                                             <v-col class="v-col-6 py-3" align-self="center">
-                                                                  <v-btn
-                                                                        color="success"
-                                                                        prepend-icon="mdi mdi-square-edit-outline"
-                                                                        text="Editar"
-                                                                        @click="editRequest"
-                                                                        :disabled="edit_ambiente_request || editado"/>
+                                                                  <EdiçãoBotaoComponent
+                                                                        :icone="'mdi mdi-square-edit-outline'"
+                                                                        :is_disabled="edit_ambiente_request || editado"
+                                                                        @editar="editRequest"
+                                                                  />
                                                             </v-col>
                                                             <v-col class="v-col-6 py-3" align-self="center">
-                                                                  <v-btn
-                                                                        color="error"
-                                                                        prepend-icon="mdi mdi-trash-can"
-                                                                        text="Cancelar"
-                                                                        @click="voltarAmbiente()"
+                                                                  <VoltarBotaoComponent
+                                                                        :icone="'mdi mdi-arrow-left'"
+                                                                        @voltar="voltarAmbiente"
                                                                   />
                                                             </v-col>
                                                       </v-row>

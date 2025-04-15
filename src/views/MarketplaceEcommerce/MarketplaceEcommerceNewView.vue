@@ -11,6 +11,8 @@ import EmpresaSelectComponent from '@/components/util/selects/EmpresaSelectCompo
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
 import TimeMensageErroComponent from '@/components/mensagem/TimeMensageErroComponent.vue';
 import TimeMensageFormReturnComponent from '@/components/mensagem/TimeMensageFormReturnComponent.vue';
+import VoltarBotaoComponent from '@/components/util/Botoes/VoltarBotaoComponent.vue';
+import AdiçãoBotaoComponent from '@/components/util/Botoes/AdiçãoBotaoComponent.vue';
 
 export default defineComponent({
       data(){
@@ -85,7 +87,8 @@ export default defineComponent({
             EmpresaSelectComponent,
             ErroResponseComponent,
             TimeMensageErroComponent,
-            TimeMensageFormReturnComponent
+            TimeMensageFormReturnComponent,
+            AdiçãoBotaoComponent, VoltarBotaoComponent
       },
       mounted(){
             this.inRequestAmbiente = true;
@@ -303,19 +306,16 @@ export default defineComponent({
                                                                   />
                                                             </v-col>
                                                             <v-col class="v-col-6 py-3" align-self="center">
-                                                                  <v-btn
-                                                                        color="success"
-                                                                        prepend-icon="mdi mdi-database-plus"
-                                                                        text="Criar"
-                                                                        @click="criacaoRequest"
-                                                                        :disabled="new_markEcom_request || criando"/>
+                                                                  <AdiçãoBotaoComponent
+                                                                        :icone="'mdi mdi-database-plus'"
+                                                                        :is_disabled="new_markEcom_request || criando"
+                                                                        @criar="criacaoRequest"
+                                                                  />
                                                             </v-col>
                                                             <v-col class="v-col-6 py-3" align-self="center">
-                                                                  <!-- color="error" -->
-                                                                  <v-btn
-                                                                        prepend-icon="mdi mdi-arrow-left"
-                                                                        text="Voltar"
-                                                                        @click="voltarMarktplaceEcommerce()"
+                                                                  <VoltarBotaoComponent
+                                                                        :icone="'mdi mdi-arrow-left'"
+                                                                        @voltar="voltarMarktplaceEcommerce()"
                                                                   />
                                                             </v-col>
                                                       </v-row>

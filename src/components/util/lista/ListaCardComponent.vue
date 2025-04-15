@@ -1,8 +1,8 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 import PaginacaoComponent from './PaginacaoComponent.vue';
-import EdiçãoBotaoComponent from '../EdiçãoBotaoComponent.vue';
-import RemoçãoBotaoComponent from '../RemoçãoBotaoComponent.vue';
+import EdiçãoBotaoTabelaComponent from '@/components/util/Botoes/EdiçãoBotaoTabelaComponent.vue';
+import RemoçãoBotaoTabelaComponent from '@/components/util/Botoes/RemoçãoBotaoTabelaComponent.vue';
 import ModalRemoçãoComponent from '../ModalRemoçãoComponent.vue';
 import FiltroPaiComponent from '../busca/FiltroPaiComponent.vue';
 
@@ -25,8 +25,8 @@ export default defineComponent({
       components:{
             PaginacaoComponent,
             FiltroPaiComponent,
-            EdiçãoBotaoComponent,
-            RemoçãoBotaoComponent,
+            EdiçãoBotaoTabelaComponent,
+            RemoçãoBotaoTabelaComponent,
             ModalRemoçãoComponent
       },
       mounted() {
@@ -284,7 +284,7 @@ export default defineComponent({
                                     <v-card-actions>
                                           <v-row class="text-center">
                                                 <v-col class="v-col-4">
-                                                      <EdiçãoBotaoComponent 
+                                                      <EdiçãoBotaoTabelaComponent 
                                                             :nome_rota_para_edicao="rota_edicao"
                                                             :id_item="corpo['codigo' as keyof typeof corpo]"
                                                       />
@@ -298,7 +298,7 @@ export default defineComponent({
                                                       </v-btn>
                                                 </v-col>
                                                 <v-col class="v-col-4">
-                                                      <RemoçãoBotaoComponent 
+                                                      <RemoçãoBotaoTabelaComponent 
                                                             :dado="corpo"
                                                             @deletarModal="(arg: any) => mountDeletModal(arg)"
                                                       />

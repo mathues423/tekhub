@@ -70,4 +70,14 @@ export default defineComponent({
             :loading="!requested"
             :error-messages="have_erro ? mensagem_erro : undefined"
       density="compact" variant="outlined" :focused="is_focused"/>
+
+      <!-- <v-combobox
+            v-model="empresa_name"
+            :items="empresa_request"
+            auto-select-first="exact"
+            :label="is_required ? '*Empresa' : 'Empresa'"
+            :item-props="empresa_select_props"
+            :loading="!requested"
+            :error-messages="have_erro ? mensagem_erro : undefined" 
+      density="compact" variant="outlined" :focused="is_focused"/> -->
 </template>
