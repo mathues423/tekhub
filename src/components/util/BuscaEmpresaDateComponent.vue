@@ -1,7 +1,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
-import EmpresaSelectComponent from './selects/EmpresaSelectComponent.vue';
-import DataSelectComponent from './selects/DataSelectComponent.vue';
+import EmpresaSelectComponent from './inputs/EmpresaSelectComponent.vue';
+import DataSelectComponent from './inputs/DataSelectComponent.vue';
 
 export default defineComponent({
       data() {

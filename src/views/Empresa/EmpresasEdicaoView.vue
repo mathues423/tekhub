@@ -13,6 +13,7 @@ import TimeMensageFormReturnComponent from '@/components/mensagem/TimeMensageFor
 import fetch_ from '@/services/fetch/requisicao';
 import VoltarBotaoComponent from '@/components/util/Botoes/VoltarBotaoComponent.vue';
 import EdiçãoBotaoComponent from '@/components/util/Botoes/EdiçãoBotaoComponent.vue';
+import TextoEntradaComponent from '@/components/util/inputs/TextoEntradaComponent.vue';
 
 export default defineComponent({
       data(){
@@ -46,6 +47,7 @@ export default defineComponent({
             ErroResponseComponent,
             TimeMensageErroComponent,
             TimeMensageFormReturnComponent,
+            TextoEntradaComponent,
             EdiçãoBotaoComponent, VoltarBotaoComponent
       },
       methods:{
@@ -134,36 +136,42 @@ export default defineComponent({
                                           <v-row no-gutters>
                                                 <!-- Razao -->
                                                 <v-col class="v-col-12">
-                                                      <v-text-field
-                                                            label="*Razão social:"
-                                                            v-model="empresa.descricao"
+                                                      <TextoEntradaComponent 
+                                                            :texto_label="'Razão social'"
                                                             :error-messages="errors.findIndex((x) => x =='razao') != -1 ? 'Por favor informe a Razão social.': undefined"
-                                                      density="compact" variant="outlined" required/>
-            
+                                                            @update:dado="empresa.descricao = $event"
+                                                            :dado_inicial="old_empresa.descricao"
+                                                      :obrigatorio="true"/>
                                                 </v-col>
                                                 <!-- CNPJ -->
                                                 <v-col class="v-col-12">
-                                                      <v-text-field
-                                                            label="*CNPJ"
-                                                            v-model="empresa.cnpj"
+                                                      <TextoEntradaComponent 
+                                                            :texto_label="'CNPJ'"
+                                                            placeholder="86.682.093/0001-05"
                                                             :error-messages="(errors.findIndex((x) => x =='cnpj') != -1 ? 'Por favor informe o CNPJ.': undefined) || (errors.findIndex((x) => x =='400') != -1 ? 'Por favor informe o CNPJ valido.': undefined)"
-                                                      density="compact" variant="outlined" required/>
+                                                            @update:dado="empresa.cnpj = $event"
+                                                            :dado_inicial="old_empresa.cnpj"
+                                                      :obrigatorio="true"/>
                                                 </v-col>
                                                 <!-- Codigo -->
                                                 <v-col class="v-col-12">
-                                                      <v-text-field
-                                                            label="*Codigo na Tek-System:"
-                                                            v-model="empresa.codigoTek"
-                                                            :error-messages="(errors.findIndex((x) => x =='codigo') != -1 ? 'Por favor informe o CNPJ.': undefined) || (errors.findIndex((x) => x =='400') != -1 ? 'Por favor informe o CNPJ valido.': undefined)"
-                                                      density="compact" variant="outlined" required/>
+                                                      <TextoEntradaComponent 
+                                                            :texto_label="'Codigo na Tek-System'"
+                                                            type="number"
+                                                            :error-messages="errors.findIndex((x) => x =='codigo') != -1 ? 'Por favor informe o codigo identificador que sera usado na Tek-System.': undefined"
+                                                            @update:dado="empresa.codigoTek = $event"
+                                                            :dado_inicial="old_empresa.codigoTek"
+                                                      :obrigatorio="true"/>
                                                 </v-col>
                                                 <!-- Versao -->
                                                 <v-col class="v-col-12">
-                                                      <v-text-field
-                                                            label="*Verção API:"
-                                                            v-model="empresa.versaoApiTek"
-                                                            :error-messages="(errors.findIndex((x) => x =='api') != -1 ? 'Por favor informe o CNPJ.': undefined) || (errors.findIndex((x) => x =='400') != -1 ? 'Por favor informe o CNPJ valido.': undefined)"
-                                                      density="compact" variant="outlined" required/>
+                                                      <TextoEntradaComponent 
+                                                            :texto_label="'Verção API'"
+                                                            placeholder="V 1.0.0"
+                                                            :error-messages="errors.findIndex((x) => x =='api') != -1 ? 'Por favor informe o verção da Api usada.': undefined"
+                                                            @update:dado="empresa.codigoTek = $event"
+                                                            :dado_inicial="old_empresa.codigoTek"
+                                                      :obrigatorio="true"/>
                                                 </v-col>
                                                 <!-- Ação -->
                                                 <v-col class="col-12">

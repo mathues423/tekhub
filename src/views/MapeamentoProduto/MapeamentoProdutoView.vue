@@ -9,7 +9,7 @@ import { defineComponent } from 'vue';
 import store from '@/store';
 import MapeamentoProdutoComponent from '@/components/conteudos/MapeamentoProdutoComponent.vue';
 import regra_map from '@/services/regras_negocio/regras_mapeamentoprodutos'
-import EmpresaSelectComponent from '@/components/util/selects/EmpresaSelectComponent.vue';
+import EmpresaSelectComponent from '@/components/util/inputs/EmpresaSelectComponent.vue';
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
 import TimeMensageErroComponent from '@/components/mensagem/TimeMensageErroComponent.vue';
 

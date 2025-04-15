@@ -13,6 +13,7 @@ import TimeMensageErroComponent from '@/components/mensagem/TimeMensageErroCompo
 import TimeMensageFormReturnComponent from '@/components/mensagem/TimeMensageFormReturnComponent.vue';
 import VoltarBotaoComponent from '@/components/util/Botoes/VoltarBotaoComponent.vue';
 import EdiçãoBotaoComponent from '@/components/util/Botoes/EdiçãoBotaoComponent.vue';
+import TextoEntradaComponent from '@/components/util/inputs/TextoEntradaComponent.vue';
 
 export default defineComponent({
       data(){
@@ -49,6 +50,7 @@ export default defineComponent({
             ErroResponseComponent,
             TimeMensageErroComponent,
             TimeMensageFormReturnComponent,
+            TextoEntradaComponent,
             EdiçãoBotaoComponent, VoltarBotaoComponent
       },
       methods:{
@@ -148,26 +150,29 @@ export default defineComponent({
                                           <v-row no-gutters>
                                                 <!-- Descrição -->
                                                 <v-col class="v-col-12">
-                                                      <v-text-field
-                                                            v-model="canal.descricao"
-                                                            label="*Descrição"
+                                                      <TextoEntradaComponent 
+                                                            :texto_label="'Descrição'"
                                                             :erros-mensage="errors.findIndex((x) => x =='descricao') != -1 ? 'Informe a descrição do canal' : undefined"
-                                                      density="compact" variant="outlined" focused/>
+                                                            @update:dado="canal.descricao = $event"
+                                                            :dado_inicial="old_canal.descricao"
+                                                      :obrigatorio="true"/>
                                                 </v-col>
                                                 <!-- Alias -->
                                                 <v-col class="v-col-12">
-                                                      <v-text-field
-                                                            v-model="canal.alias"
-                                                            label="*Alias"
+                                                      <TextoEntradaComponent 
+                                                            :texto_label="'Descrição'"
                                                             :erros-mensage="errors.findIndex((x) => x =='alias') != -1 ? 'Informe o alias do canal' : undefined"
-                                                      density="compact" variant="outlined" required/>
+                                                            @update:dado="canal.alias = $event"
+                                                            :dado_inicial="old_canal.alias"
+                                                      :obrigatorio="true"/>
                                                 </v-col>
                                                 <!-- AliasTekProt -->
                                                 <v-col class="v-col-12">
-                                                      <v-text-field
-                                                            v-model="canal.aliastekprot"
-                                                            label="Alias TekProt"
-                                                      density="compact" variant="outlined" required/>
+                                                      <TextoEntradaComponent 
+                                                            :texto_label="'Alias TekProt'"
+                                                            @update:dado="canal.aliastekprot = $event"
+                                                            :dado_inicial="old_canal.aliastekprot"
+                                                      />
                                                 </v-col>
                                                 <!-- Tipo -->
                                                 <v-col class="v-col-12">

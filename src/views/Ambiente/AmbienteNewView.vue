@@ -12,6 +12,7 @@ import TimeMensageErroComponent from '@/components/mensagem/TimeMensageErroCompo
 import TimeMensageFormReturnComponent from '@/components/mensagem/TimeMensageFormReturnComponent.vue';
 import VoltarBotaoComponent from '@/components/util/Botoes/VoltarBotaoComponent.vue';
 import AdiçãoBotaoComponent from '@/components/util/Botoes/AdiçãoBotaoComponent.vue';
+import TextoEntradaComponent from '@/components/util/inputs/TextoEntradaComponent.vue';
 
 export default defineComponent({
       data(){
@@ -42,6 +43,7 @@ export default defineComponent({
             ErroResponseComponent,
             TimeMensageErroComponent,
             TimeMensageFormReturnComponent,
+            TextoEntradaComponent,
             AdiçãoBotaoComponent, VoltarBotaoComponent
       },
       mounted() {
@@ -149,19 +151,19 @@ export default defineComponent({
                                                 </v-col>
                                                 <!-- ULR -->
                                                 <v-col class="v-col-12">
-                                                      <v-text-field
-                                                            label="*URL:"
-                                                            v-model="ambiente.url"
+                                                      <TextoEntradaComponent 
+                                                            :texto_label="'URL'"
                                                             :error-messages="errors.findIndex((x) => x =='url') != -1 ? 'Digite uma ULR' : undefined"
-                                                      density="compact" variant="outlined"/>
+                                                            @update:dado="ambiente.url = $event"
+                                                      :obrigatorio="true"/>
                                                 </v-col>
                                                 <!-- Versão -->
                                                 <v-col class="v-col-12">
-                                                      <v-text-field
-                                                            label="*Versão:"
-                                                            v-model="ambiente.versao"
+                                                      <TextoEntradaComponent 
+                                                            :texto_label="'Versão'"
                                                             :error-messages="errors.findIndex((x) => x =='versao') != -1 ? 'Digite uma versão' : undefined"
-                                                      density="compact" variant="outlined"/>
+                                                            @update:dado="ambiente.versao = $event"
+                                                      :obrigatorio="true"/>
                                                 </v-col>
                                                 <!-- Ambiente -->
                                                 <v-col class="v-col-12">

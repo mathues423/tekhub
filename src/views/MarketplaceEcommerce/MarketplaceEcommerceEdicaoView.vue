@@ -11,7 +11,7 @@ import fetch_ from '@/services/fetch/requisicao';
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue'
 import TimeMensageErroComponent from '@/components/mensagem/TimeMensageErroComponent.vue';
 import TimeMensageFormReturnComponent from '@/components/mensagem/TimeMensageFormReturnComponent.vue';
-import EmpresaSelectComponent from '@/components/util/selects/EmpresaSelectComponent.vue';
+import EmpresaSelectComponent from '@/components/util/inputs/EmpresaSelectComponent.vue';
 import VoltarBotaoComponent from '@/components/util/Botoes/VoltarBotaoComponent.vue';
 import EdiçãoBotaoComponent from '@/components/util/Botoes/EdiçãoBotaoComponent.vue';
 
@@ -271,62 +271,70 @@ export default defineComponent({
                                                 </v-col>
                                                 <!-- Usuario -->
                                                 <v-col class="v-col-12">
-                                                      <v-text-field
-                                                            label="Usuario:"
-                                                            v-model="marketplaceecommerce_new.usuario"
-                                                      density="compact" variant="outlined"/>
+                                                      <TextoEntradaComponent 
+                                                            :texto_label="'Email'"
+                                                            @update:dado="marketplaceecommerce_new.usuario = $event"
+                                                            :dado_inicial="marketplaceecommerce_old.usuario"
+                                                      />
                                                 </v-col>
                                                 <!-- Senha -->
                                                 <v-col class="v-col-12">
-                                                      <v-text-field
-                                                            label="Senha:"
-                                                            v-model="marketplaceecommerce_new.senha"
+                                                      <TextoEntradaComponent 
+                                                            :texto_label="'Senha'"
                                                             :append-inner-icon="is_show_password ? 'mdi mdi-eye-outline' : 'mdi mdi-eye-off-outline'"
                                                             @click:append-inner="is_show_password = !is_show_password"
                                                             :type="is_show_password ? 'text' : 'password'"
-                                                      density="compact" variant="outlined"/>
+                                                            @update:dado="marketplaceecommerce_new.senha = $event"
+                                                            :dado_inicial="marketplaceecommerce_old.senha"
+                                                      />
                                                 </v-col>
                                                 <!-- Token -->
                                                 <v-col class="v-col-12">
-                                                      <v-text-field
-                                                            label="Token:"
-                                                            v-model="marketplaceecommerce_new.token"
-                                                      density="compact" variant="outlined"/>
+                                                      <TextoEntradaComponent 
+                                                            :texto_label="'Token'"
+                                                            @update:dado="marketplaceecommerce_new.token = $event"
+                                                            :dado_inicial="marketplaceecommerce_old.token"
+                                                      />
                                                 </v-col>
                                                 <!-- ClientId -->
                                                 <v-col class="v-col-12">
-                                                      <v-text-field
-                                                            label="ClientId:"
-                                                            v-model="marketplaceecommerce_new.appClienteId"
-                                                      density="compact" variant="outlined"/>
+                                                      <TextoEntradaComponent 
+                                                            :texto_label="'ClientId'"
+                                                            @update:dado="marketplaceecommerce_new.appClienteId = $event"
+                                                            :dado_inicial="marketplaceecommerce_old.appClienteId"
+                                                      />
                                                 </v-col>
                                                 <!-- ClientSecret -->
                                                 <v-col class="v-col-12">
-                                                      <v-text-field
-                                                            label="ClientSecret:"
-                                                            v-model="marketplaceecommerce_new.appClienteSecret"
-                                                      density="compact" variant="outlined"/>
+                                                      <TextoEntradaComponent 
+                                                            :texto_label="'ClientSecret'"
+                                                            @update:dado="marketplaceecommerce_new.appClienteSecret = $event"
+                                                            :dado_inicial="marketplaceecommerce_old.appClienteSecret"
+                                                      />
                                                 </v-col>
                                                 <!-- UrlRedirecionamento -->
                                                 <v-col class="v-col-12">
-                                                      <v-text-field
-                                                            label="Url redirecionamento:"
-                                                            v-model="marketplaceecommerce_new.urlRedirecionamento"
-                                                      density="compact" variant="outlined"/>
+                                                      <TextoEntradaComponent 
+                                                            :texto_label="'Url redirecionamento'"
+                                                            @update:dado="marketplaceecommerce_new.urlRedirecionamento = $event"
+                                                            :dado_inicial="marketplaceecommerce_old.urlRedirecionamento"
+                                                      />
                                                 </v-col>
                                                 <!-- WebServiceApi -->
                                                 <v-col class="v-col-12">
-                                                      <v-text-field
-                                                            label="WebService Api:"
-                                                            v-model="marketplaceecommerce_new.webserviceApi"
-                                                      density="compact" variant="outlined"/>
+                                                      <TextoEntradaComponent 
+                                                            :texto_label="'WebService Api'"
+                                                            @update:dado="marketplaceecommerce_new.webserviceApi = $event"
+                                                            :dado_inicial="marketplaceecommerce_old.webserviceApi"
+                                                      />
                                                 </v-col>
                                                 <!-- VariacaoPrincipal -->
                                                 <v-col class="v-col-12">
-                                                      <v-text-field
-                                                            label="Variacao Principal:"
-                                                            v-model="marketplaceecommerce_new.variacaoPrincipal"
-                                                      density="compact" variant="outlined"/>
+                                                      <TextoEntradaComponent 
+                                                            :texto_label="'Variacao Principal'"
+                                                            @update:dado="marketplaceecommerce_new.variacaoPrincipal = $event"
+                                                            :dado_inicial="marketplaceecommerce_old.variacaoPrincipal"
+                                                      />
                                                 </v-col>
                                                 <!-- Det. Produto Simples -->
                                                 <v-col class="v-col-12">
@@ -346,10 +354,11 @@ export default defineComponent({
                                                 </v-col>
                                                 <!-- Versao -->
                                                 <v-col class="v-col-12">
-                                                      <v-text-field
-                                                            label="Versão:"
-                                                            v-model="marketplaceecommerce_new.versaoEcommerce"
-                                                      density="compact" variant="outlined"/>
+                                                      <TextoEntradaComponent 
+                                                            :texto_label="'Versão'"
+                                                            @update:dado="marketplaceecommerce_new.versaoEcommerce = $event"
+                                                            :dado_inicial="marketplaceecommerce_old.versaoEcommerce"
+                                                      />
                                                 </v-col>
                                                 <!-- UsuarioApi -->
                                                 <v-col class="v-col-12">
@@ -359,6 +368,7 @@ export default defineComponent({
                                                             :items="usuario_select"
                                                             :item-props="usuario_select_props"
                                                             :loading="inRequestAmbiente"
+                                                            :no-data-text="Object.keys(empresas_select).length == 0 ? 'Selecione a empresa primeiro' : 'Nem um usuario foi encontrado'"
                                                       density="compact" variant="outlined"/>
                                                 </v-col>
                                                 <!-- Atributos Default -->

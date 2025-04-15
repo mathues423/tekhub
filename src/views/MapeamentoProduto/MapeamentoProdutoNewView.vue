@@ -7,12 +7,13 @@ import { defineComponent } from 'vue';
 import store from '@/store';
 import regra_mapeamento from '@/services/regras_negocio/regras_mapeamentoprodutos';
 import fetch_ from '@/services/fetch/requisicao';
-import EmpresaSelectComponent from '@/components/util/selects/EmpresaSelectComponent.vue';
+import EmpresaSelectComponent from '@/components/util/inputs/EmpresaSelectComponent.vue';
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
 import TimeMensageErroComponent from '@/components/mensagem/TimeMensageErroComponent.vue';
 import TimeMensageFormReturnComponent from '@/components/mensagem/TimeMensageFormReturnComponent.vue';
 import VoltarBotaoComponent from '@/components/util/Botoes/VoltarBotaoComponent.vue';
 import AdiçãoBotaoComponent from '@/components/util/Botoes/AdiçãoBotaoComponent.vue';
+import TextoEntradaComponent from '@/components/util/inputs/TextoEntradaComponent.vue';
 
 export default defineComponent({
       data(){
@@ -58,6 +59,7 @@ export default defineComponent({
             ErroResponseComponent,
             TimeMensageErroComponent,
             TimeMensageFormReturnComponent,
+            TextoEntradaComponent,
             AdiçãoBotaoComponent, VoltarBotaoComponent  
       },
       mounted(){
@@ -180,32 +182,31 @@ export default defineComponent({
                                                             label="*Canal de Venda"
                                                             :item-props="canal_toString"
                                                             :no-data-text="canal_request ? 'Nenhum Canal de Venda encontrado' : 'Selecione primeiro a Empresa'"
-                                                            :error-messages="fetch_error_msg['canal' as keyof typeof fetch_error_msg]"
+                                                            :error-messages="errors.findIndex((x) => x =='canal') != -1 ? 'Informe o canal' : undefined"
                                                       density="compact" variant="outlined"/>
                                                 </v-col>
                                                 <!-- Produto Erp -->
                                                 <v-col class="v-col-12">
-                                                      <v-text-field
-                                                            variant="outlined"
-                                                            v-model="mapeamentoproduto.produtoErp"
-                                                            label="*Produto Erp"
-                                                            :error-messages="fetch_error_msg['produtoErp' as keyof typeof fetch_error_msg]"
-                                                      />
+                                                      <TextoEntradaComponent 
+                                                            :texto_label="'Produto Erp'"
+                                                            @update:dado="mapeamentoproduto.produtoErp = $event"
+                                                            :error-messages="errors.findIndex((x) => x =='produtoErp') != -1 ? 'Informe o produto Erp' : undefined"
+                                                      :obrigatorio="true"/>
                                                 </v-col>
                                                 <!-- Produto Site -->
                                                 <v-col class="v-col-12">
-                                                      <v-text-field
-                                                            v-model="mapeamentoproduto.produtoSite"
-                                                            label="*Produto Site"
-                                                            :error-messages="fetch_error_msg['produtoSite' as keyof typeof fetch_error_msg]"
-                                                      density="compact" variant="outlined"/>
+                                                      <TextoEntradaComponent 
+                                                            :texto_label="'Produto Site'"
+                                                            @update:dado="mapeamentoproduto.produtoSite = $event"
+                                                            :error-messages="errors.findIndex((x) => x =='produtoSite') != -1 ? 'Informe o produto site' : undefined"
+                                                      :obrigatorio="true"/>
                                                 </v-col>
                                                 <!-- Produto Pai Site -->
                                                 <v-col class="v-col-12">
-                                                      <v-text-field
-                                                            v-model="mapeamentoproduto.produtoPai"
-                                                            label="Produto Pai Site"
-                                                      density="compact" variant="outlined"/>
+                                                      <TextoEntradaComponent 
+                                                            :texto_label="'Produto Pai Site'"
+                                                            @update:dado="mapeamentoproduto.produtoPai = $event"
+                                                      />
                                                 </v-col>
                                                 <!-- Ação -->
                                                 <v-col class="col-12">

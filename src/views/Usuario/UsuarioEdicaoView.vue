@@ -4,7 +4,7 @@ import NavbarComplet from '@/components/util/navbars/NavbarComplet.vue';
 import VersaoMaximisada from '@/components/versionamento/VersaoMaximisada.vue';
 import router from '@/router';
 import { defineComponent } from 'vue';
-import EmpresaSelectComponent from '@/components/util/selects/EmpresaSelectComponent.vue';
+import EmpresaSelectComponent from '@/components/util/inputs/EmpresaSelectComponent.vue';
 import store from '@/store';
 import usuarios from '@/services/regras_negocio/regras_usuarios';
 import ErroFormComponent from '@/components/mensagem/ErroFormComponent.vue'
@@ -14,6 +14,7 @@ import TimeMensageErroComponent from '@/components/mensagem/TimeMensageErroCompo
 import TimeMensageFormReturnComponent from '@/components/mensagem/TimeMensageFormReturnComponent.vue';
 import VoltarBotaoComponent from '@/components/util/Botoes/VoltarBotaoComponent.vue';
 import EdiçãoBotaoComponent from '@/components/util/Botoes/EdiçãoBotaoComponent.vue';
+import TextoEntradaComponent from '@/components/util/inputs/TextoEntradaComponent.vue';
 
 export default defineComponent({
       data(){
@@ -58,6 +59,7 @@ export default defineComponent({
             ErroResponseComponent,
             TimeMensageErroComponent,
             TimeMensageFormReturnComponent,
+            TextoEntradaComponent,
             EdiçãoBotaoComponent, VoltarBotaoComponent
       },
       watch:{
@@ -170,30 +172,32 @@ export default defineComponent({
                                           <v-row no-gutters>
                                                 <!-- Email -->
                                                 <v-col class="v-col-12">
-                                                      <v-text-field
-                                                            label="*Email"
-                                                            v-model="usuario.email"
-                                                            :rules="[rule_email]"
+                                                      <TextoEntradaComponent 
+                                                            :texto_label="'Email'"
                                                             :error-messages="errors.findIndex((x) => x =='email') != -1 ? 'Informe um email.' : undefined"
-                                                      density="compact" variant="outlined" required/>
+                                                            :rules="[rule_email]"
+                                                            @update:dado="usuario.email = $event"
+                                                            :dado_inicial="usuario_old.email"
+                                                      :obrigatorio="true"/>
                                                 </v-col>
                                                 <!-- Senha -->
                                                 <v-col class="v-col-12">
-                                                      <v-text-field
+                                                      <TextoEntradaComponent 
+                                                            :texto_label="'Senha'"
                                                             :append-inner-icon="is_show_password ? 'mdi mdi-eye-outline' : 'mdi mdi-eye-off-outline'"
                                                             @click:append-inner="is_show_password = !is_show_password"
-                                                            v-model="usuario.senha"
-                                                            label="*Senha"
                                                             :type="is_show_password ? 'text' : 'password'"
                                                             :error-messages="errors.findIndex((x) => x =='senha') != -1 ? 'Informe uma senha.' : undefined"
-                                                      density="compact" variant="outlined"/>
+                                                            @update:dado="usuario.senha = $event"
+                                                            :dado_inicial="usuario_old.senha"
+                                                      :obrigatorio="true"/>
                                                 </v-col>
                                                 <!-- Token -->
                                                 <v-col class="v-col-12">
-                                                      <v-text-field
-                                                            label="Token"
-                                                            v-model="usuario.token"
-                                                      density="compact" variant="outlined" disabled/>
+                                                      <TextoEntradaComponent 
+                                                            :texto_label="'Token'"
+                                                            :dado_inicial="usuario.token"
+                                                      disabled/>
                                                 </v-col>
                                                 <!-- Perfil -->
                                                 <v-col class="v-col-12">
@@ -212,8 +216,8 @@ export default defineComponent({
                                                       <EmpresaSelectComponent
                                                             :valor_inicial="empresa_aux"
                                                             :have_erro="errors.findIndex((x) => x =='empresa') != -1"
-                                                            @empresa_escolhida="(arg)=> empresa_escolhida = arg"
-                                                            @Erro_fetch="(arg)=> showError(arg)"
+                                                            @empresa_escolhida="(arg: any)=> empresa_escolhida = arg"
+                                                            @Erro_fetch="(arg: any)=> showError(arg)"
                                                       />
                                                 </v-col>
                                                 <!-- Ação -->

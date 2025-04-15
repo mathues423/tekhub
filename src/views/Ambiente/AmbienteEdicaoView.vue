@@ -13,6 +13,7 @@ import TimeMensageErroComponent from '@/components/mensagem/TimeMensageErroCompo
 import TimeMensageFormReturnComponent from '@/components/mensagem/TimeMensageFormReturnComponent.vue';
 import VoltarBotaoComponent from '@/components/util/Botoes/VoltarBotaoComponent.vue';
 import EdiçãoBotaoComponent from '@/components/util/Botoes/EdiçãoBotaoComponent.vue';
+import TextoEntradaComponent from '@/components/util/inputs/TextoEntradaComponent.vue';
 
 export default defineComponent({
       data(){
@@ -51,12 +52,14 @@ export default defineComponent({
             ErroResponseComponent,
             TimeMensageErroComponent,
             TimeMensageFormReturnComponent,
+            TextoEntradaComponent,
             EdiçãoBotaoComponent, VoltarBotaoComponent
       },
       methods:{
             canalToString(item: any){
                   return {
                         title: item.descricao + ' | ' + item.tipo,
+                        value: item
                   }
             },
             async editRequest(){
@@ -194,25 +197,27 @@ export default defineComponent({
                                                             v-model="canal_inicial"
                                                             :items="canais_requested"
                                                             :item-props="canalToString"
-                                                            :loaded="requested"
+                                                            :loading="!requested"
                                                             :erros-text="errors.findIndex((x) => x =='canalAlias') != -1 ? 'Selecione um canal valido' : undefined"
                                                       density="compact" variant="outlined"/>
                                                 </v-col>
                                                 <!-- ULR -->
                                                 <v-col class="v-col-12">
-                                                      <v-text-field
-                                                            label="*URL:"
-                                                            v-model="ambiente.url"
-                                                            :erros-text="errors.findIndex((x) => x =='url') != -1 ? 'Digite uma ULR' : undefined"
-                                                      density="compact" variant="outlined"/>
+                                                      <TextoEntradaComponent 
+                                                            :texto_label="'URL'"
+                                                            :error-messages="errors.findIndex((x) => x =='url') != -1 ? 'Digite uma ULR' : undefined"
+                                                            @update:dado="ambiente.url = $event"
+                                                            :dado_inicial="old_ambiente.url"
+                                                      :obrigatorio="true"/>
                                                 </v-col>
                                                 <!-- Versão -->
                                                 <v-col class="v-col-12">
-                                                      <v-text-field
-                                                            label="*Versão:"
-                                                            v-model="ambiente.versao"
-                                                            :erros-text="errors.findIndex((x) => x =='versao') != -1 ? 'Digite uma versão' : undefined"
-                                                      density="compact" variant="outlined"/>
+                                                      <TextoEntradaComponent 
+                                                            :texto_label="'Versão'"
+                                                            :error-messages="errors.findIndex((x) => x =='versao') != -1 ? 'Digite uma versão' : undefined"
+                                                            @update:dado="ambiente.versao = $event"
+                                                            :dado_inicial="old_ambiente.versao"
+                                                      :obrigatorio="true"/>
                                                 </v-col>
                                                 <!-- Ambiente -->
                                                 <v-col class="v-col-12">

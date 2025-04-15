@@ -1,6 +1,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
-import EmpresaSelectComponent from './selects/EmpresaSelectComponent.vue';
+import EmpresaSelectComponent from './inputs/EmpresaSelectComponent.vue';
 
 export default defineComponent({
       name: 'FiltroEmpresaComponent',

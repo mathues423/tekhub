@@ -11,9 +11,10 @@ import fetch_ from '@/services/fetch/requisicao';
 import ErroResponseComponent from '@/components/mensagem/ErroResponseComponent.vue';
 import TimeMensageErroComponent from '@/components/mensagem/TimeMensageErroComponent.vue';
 import TimeMensageFormReturnComponent from '@/components/mensagem/TimeMensageFormReturnComponent.vue';
-import EmpresaSelectComponent from '@/components/util/selects/EmpresaSelectComponent.vue';
+import EmpresaSelectComponent from '@/components/util/inputs/EmpresaSelectComponent.vue';
 import VoltarBotaoComponent from '@/components/util/Botoes/VoltarBotaoComponent.vue';
 import EdiçãoBotaoComponent from '@/components/util/Botoes/EdiçãoBotaoComponent.vue';
+import TextoEntradaComponent from '@/components/util/inputs/TextoEntradaComponent.vue';
 
 export default defineComponent({
       data(){
@@ -57,6 +58,7 @@ export default defineComponent({
             ErroFormComponent,
             TimeMensageErroComponent,
             TimeMensageFormReturnComponent,
+            TextoEntradaComponent,
             EdiçãoBotaoComponent, VoltarBotaoComponent
       },
       mounted() {
@@ -232,31 +234,34 @@ export default defineComponent({
                                                             :loading="inRequestCanal"
                                                             label="*Canal de Venda"
                                                             :item-props="canal_toString"
-                                                            :error-messages="fetch_error_msg['canal' as keyof typeof fetch_error_msg]"
+                                                            :error-messages="errors.findIndex((x) => x =='canal') != -1 ? 'Informe o canal' : undefined"
                                                       density="compact" variant="outlined"/>
                                                 </v-col>
                                                 <!-- Produto Erp -->
                                                 <v-col class="v-col-12">
-                                                      <v-text-field
-                                                            v-model="mapeamentoproduto.produtoErp"
-                                                            label="*Produto Erp"
-                                                            :error-messages="fetch_error_msg['produtoErp' as keyof typeof fetch_error_msg]"
-                                                      density="compact" variant="outlined"/>
+                                                      <TextoEntradaComponent 
+                                                            :texto_label="'Produto Erp'"
+                                                            :error-messages="errors.findIndex((x) => x =='produtoErp') != -1 ? 'Informe o produto Erp' : undefined"
+                                                            @update:dado="mapeamentoproduto.produtoErp = $event"
+                                                            :dado_inicial="mapeamentoproduto_old.produtoErp"
+                                                      :obrigatorio="true"/>
                                                 </v-col>
                                                 <!-- Produto Site -->
                                                 <v-col class="v-col-12">
-                                                      <v-text-field
-                                                            v-model="mapeamentoproduto.produtoSite"
-                                                            label="*Produto Site"
-                                                            :error-messages="fetch_error_msg['produtoSite' as keyof typeof fetch_error_msg]"
-                                                      density="compact" variant="outlined"/>
+                                                      <TextoEntradaComponent 
+                                                            :texto_label="'Produto site'"
+                                                            :error-messages="errors.findIndex((x) => x =='produtoSite') != -1 ? 'Informe o produto site' : undefined"
+                                                            @update:dado="mapeamentoproduto.produtoSite = $event"
+                                                            :dado_inicial="mapeamentoproduto_old.produtoSite"
+                                                      :obrigatorio="true"/>
                                                 </v-col>
                                                 <!-- Produto Pai Site -->
                                                 <v-col class="v-col-12">
-                                                      <v-text-field
-                                                            v-model="mapeamentoproduto.produtoPai"
-                                                            label="Produto Pai Site"
-                                                      density="compact" variant="outlined"/>
+                                                      <TextoEntradaComponent 
+                                                            :texto_label="'Produto Pai Site'"
+                                                            @update:dado="mapeamentoproduto.produtoPai = $event"
+                                                            :dado_inicial="mapeamentoproduto_old.produtoPai"
+                                                      />
                                                 </v-col>
                                                 <!-- Ação -->
                                                 <v-col class="col-12">
