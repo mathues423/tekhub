@@ -148,6 +148,7 @@ export default defineComponent({
                                                       <TextoEntradaComponent 
                                                             :texto_label="'CNPJ'"
                                                             placeholder="86.682.093/0001-05"
+                                                            v-mask="'##.###.###/####-##'"
                                                             :error-messages="(errors.findIndex((x) => x =='cnpj') != -1 ? 'Por favor informe o CNPJ.': undefined) || (errors.findIndex((x) => x =='400') != -1 ? 'Por favor informe o CNPJ valido.': undefined)"
                                                             @update:dado="empresa.cnpj = $event"
                                                             :dado_inicial="old_empresa.cnpj"

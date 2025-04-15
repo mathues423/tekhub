@@ -2,6 +2,8 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+// eslint-disable-next-line
+import VueTheMask from 'vue-the-mask' // acusa de erro de localização mais o funcionamento é correto
 
 // Vuetify
 import 'vuetify/styles'
@@ -33,4 +35,10 @@ const vuetify = createVuetify({
             },
       }
 })
-createApp(App).use(vuetify).use(store).use(router).mount('#app')
+const app = createApp(App)
+      .use(VueTheMask as any)
+      .use(vuetify)
+      .use(store)
+      .use(router)
+
+app.mount('#app')      
